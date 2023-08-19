@@ -1,0 +1,89 @@
+{
+  "accepted": "The {{key}} must be accepted.",
+  "active_url": "The {{key}} is not a valid URL.",
+  "after": "The {{key}} must be a date after :date.",
+  "after_or_equal": "The {{key}} must be a date after or equal to :date.",
+  "alpha": "The {{key}} may only contain letters.",
+  "alpha_dash": "The {{key}} may only contain letters, numbers, dashes and underscores.",
+  "alpha_num": "The {{key}} may only contain letters and numbers.",
+  "array": "The {{key}} must be an array.",
+  "before": "The {{key}} must be a date before :date.",
+  "before_or_equal": "The {{key}} must be a date before or equal to :date.",
+  "between": {
+    "numeric": "The {{key}} must be between {{value1}} and {{value2}}.",
+    "file": "The {{key}} must be between {{value1}} and {{value2}} kilobytes.",
+    "string": "The {{key}} must be between {{value1}} and {{value2}} characters.",
+    "array": "The {{key}} must have between {{value1}} and {{value2}} items."
+  },
+  "boolean": "The {{key}} field must be true or false.",
+  "confirmed": "The {{key}} confirmation does not match.",
+  "date": "The {{key}} is not a valid date.",
+  "date_format": "The {{key}} does not match the format :format.",
+  "different": "The {{key}} and :other must be different.",
+  "digits": "The {{key}} must be :digits digits.",
+  "digits_between": "The {{key}} must be between {{value1}} and {{value2}} digits.",
+  "dimensions": "The {{key}} has invalid image dimensions.",
+  "distinct": "The {{key}} field has a duplicate value.",
+  "email": "The {{key}} must be a valid email address.",
+  "file": "The {{key}} must be a file.",
+  "gt": {
+    "numeric": "The {{key}} must be greater than {{value2}}.",
+    "file": "The {{key}} must be greater than {{value1}} kilobytes.",
+    "string": "The {{key}} must be greater than {{value1}} characters.",
+    "array": "The {{key}} must have more than {{value1}} items."
+  },
+  "gte": {
+    "numeric": "The {{key}} must be greater than or equal {{value2}}.",
+    "file": "The {{key}} must be greater than or equal {{value1}} kilobytes.",
+    "string": "The {{key}} must be greater than or equal {{value1}} characters.",
+    "array": "The {{key}} must have {{value1}} items or more."
+  },
+  "image": "The {{key}} must be an image.",
+  "in": "The selected {{key}} is invalid.",
+  "in_array": "The {{key}} field does not exist in :other.",
+  "integer": "The {{key}} must be an integer.",
+  "ip": "The {{key}} must be a valid IP address.",
+  "ipv4": "The {{key}} must be a valid IPv4 address.",
+  "ipv6": "The {{key}} must be a valid IPv6 address.",
+  "json": "The {{key}} must be a valid JSON string.",
+  "lt": {
+    "numeric": "The {{key}} must be less than {{value2}}.",
+    "file": "The {{key}} must be less than {{value1}} kilobytes.",
+    "string": "The {{key}} must be less than {{value1}} characters.",
+    "array": "The {{key}} must have less than {{value1}} items."
+  },
+  "lte": {
+    "numeric": "The {{key}} must be less than or equal {{value2}}.",
+    "file": "The {{key}} must be less than or equal {{value1}} kilobytes.",
+    "string": "The {{key}} must be less than or equal {{value1}} characters.",
+    "array": "The {{key}} must not have more than {{value1}} items."
+  },
+  "max": {
+    "numeric": "The {{key}} may not be greater than {{value2}}.",
+    "file": "The {{key}} may not be greater than {{value}} kilobytes.",
+    "string": "The {{key}} may not be greater than {{value}} characters.",
+    "array": "The {{key}} may not have more than {{value}} items."
+  },
+  "mimes": "The {{key}} must be a file of type: {{value}}s.",
+  "mimetypes": "The {{key}} must be a file of type: {{value}}s.",
+  "min": {
+    "numeric": "The {{key}} must be at least {{value2}}.",
+    "file": "The {{key}} must be at least {{value}} kilobytes.",
+    "string": "The {{key}} must be at least {{value}} characters.",
+    "array": "The {{key}} must have at least {{value}} items."
+  },
+  "not_in": "The selected {{key}} is invalid.",
+  "not_regex": "The {{key}} format is invalid.",
+  "numeric": "The {{key}} must be a number.",
+  "regex": "The {{key}} format is invalid.",
+  "required": "The {{key}} field is required.",
+  "size": {
+    "numeric": "The {{key}} must be {{value2}}.",
+    "file": "The {{key}} must be {{value1}} MB.",
+    "string": "The {{key}} must be {{value1}} characters.",
+    "array": "The {{key}} must contain {{value1}} items."
+  },
+  "string": "The {{key}} must be a string.",
+  "uploaded": "The {{key}} failed to upload.",
+  "url": "The {{key}} format is invalid."
+}

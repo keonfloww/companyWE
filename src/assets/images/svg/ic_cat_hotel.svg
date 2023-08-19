@@ -1,0 +1,36 @@
+<svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0.5" y="0.5" width="51" height="51" rx="25.5" fill="url(#paint0_linear_2966_11871)" fill-opacity="0.1"
+        stroke="#3C3C3C" />
+    <g clip-path="url(#clip0_2966_11871)">
+        <path d="M38.5 13.5H23.5V36.5H38.5V13.5Z" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M23.5 19.5H15.5V36.5H23.5V19.5Z" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M23.5 22.5H18.5V25.5H23.5V22.5Z" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M23.5 28.5H18.5V31.5H23.5V28.5Z" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M30.5 31.5H31.5C32.6 31.5 33.5 32.4 33.5 33.5V36.5H28.5V33.5C28.5 32.4 29.4 31.5 30.5 31.5Z"
+            stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M26.5 16.5H27.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M30.5 16.5H31.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M34.5 16.5H35.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M26.5 19.5H27.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M30.5 19.5H31.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M34.5 19.5H35.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M26.5 22.5H27.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M30.5 22.5H31.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M34.5 22.5H35.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M26.5 25.5H27.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M30.5 25.5H31.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M34.5 25.5H35.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M26.5 28.5H27.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M30.5 28.5H31.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M34.5 28.5H35.5" stroke="#3C3C3C" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+    <defs>
+        <linearGradient id="paint0_linear_2966_11871" x1="0" y1="0" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+            <stop stop-color="white" />
+            <stop offset="1" stop-color="white" />
+        </linearGradient>
+        <clipPath id="clip0_2966_11871">
+            <rect width="24" height="24" fill="white" transform="translate(15 13)" />
+        </clipPath>
+    </defs>
+</svg>

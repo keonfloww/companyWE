@@ -1,0 +1,89 @@
+import {scale} from '@utils/mixins';
+import React, {FC} from 'react';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import useHome from '../hooks/useHome';
+import FastImage from 'react-native-fast-image';
+import CommonStyles from '@screens/styles';
+import {Text as RText} from '@rneui/themed';
+import {useTranslation} from 'react-i18next';
+
+interface Props {
+  title: string;
+}
+const HomeSection: FC<Props> = ({title}) => {
+  const {t} = useTranslation();
+  const {sectionList} = useHome();
+
+  return (
+    <View style={style.container}>
+      <View style={style.containerHeader}>
+        <RText numberOfLines={1} h4>
+          {title}
+        </RText>
+        <Pressable onPress={() => {}}>
+          <RText style={CommonStyles.font.regular12} numberOfLines={1}>
+            {t('See all')}
+          </RText>
+        </Pressable>
+      </View>
+      <View style={{height: scale(12)}} />
+      <FlatList
+        contentContainerStyle={style.containerHeaderContentList}
+        showsHorizontalScrollIndicator={false}
+        horizontal={true}
+        data={sectionList}
+        ItemSeparatorComponent={() => (
+          <View
+            style={{
+              width: 12,
+            }}
+          />
+        )}
+        renderItem={({item}: any) => {
+          return (
+            <View style={{width: scale(160)}}>
+              <FastImage
+                style={{height: scale(160), borderRadius: 5}}
+                source={{
+                  uri: 'https://unsplash.it/400/400?image=1',
+                  headers: {Authorization: 'someAuthToken'},
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+              <View style={{height: scale(8)}} />
+              <RText numberOfLines={1} style={CommonStyles.font.semiBold14}>
+                {item?.title}
+              </RText>
+              <RText numberOfLines={1} style={CommonStyles.font.regular10}>
+                {item?.date}
+              </RText>
+              <RText numberOfLines={3} style={CommonStyles.font.regular12}>
+                {item?.description}
+              </RText>
+            </View>
+          );
+        }}
+      />
+    </View>
+  );
+};
+
+const style = StyleSheet.create({
+  container: {
+    paddingVertical: scale(16),
+  },
+  containerHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: scale(25),
+  },
+  containerHeaderContentList: {
+    paddingVertical: scale(1),
+    paddingRight: scale(25),
+  },
+});
+
+export default React.memo(HomeSection);
