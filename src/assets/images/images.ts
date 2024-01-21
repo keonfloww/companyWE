@@ -22,6 +22,13 @@ import icM5 from './svg/ic_cat_gaming.svg';
 import icM6 from './svg/ic_cat_hotel.svg';
 import bgDontMissout from './svg/bg_dont_miss_out.svg';
 
+//Welcome
+import welcomeCircle from './svg/welcome_circle.svg'
+import welcomeTroove from './svg/welcome_troove.svg'
+import welcomeBenefit1 from './svg/welcome_benefit1.svg'
+import welcomeBenefit2 from './svg/welcome_benefit2.svg'
+import arrowLeft from './svg/arrow_left.svg'
+
 const IMAGES = {
   icEdit,
   icCircleOk,
@@ -43,6 +50,13 @@ const IMAGES = {
   icM5,
   icM6,
   bgDontMissout,
+
+  //Welcome,
+  welcomeCircle,
+  welcomeTroove,
+  welcomeBenefit1,
+  welcomeBenefit2,
+  arrowLeft,
 };
 
 export default IMAGES;

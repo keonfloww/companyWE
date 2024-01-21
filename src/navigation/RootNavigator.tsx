@@ -84,7 +84,7 @@ const RootNavigator: FC = () => {
           <Stack.Screen
             name={Screen.IntroScreen}
             component={IntroScreen}
-            options={{title: t('screen:intro')}}
+            options={{title: t('screen:intro'), headerShown: false}}
           />
         </Stack.Group>
 

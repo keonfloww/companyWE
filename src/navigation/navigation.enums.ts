@@ -1,5 +1,7 @@
 export enum Screen {
   IntroScreen = 'IntroScreen',
+  IntroScreenTwo = 'IntroScreenTwo',
+  IntroScreenThree = 'IntroScreenThree',
   // Auth
   Auth = 'Auth',
   Login = 'Login',

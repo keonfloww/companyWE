@@ -23,6 +23,7 @@ const FontSizeStyles = {
   size12: scale(12),
   size14: scale(14),
   size16: scale(16),
+  size30: scale(30),
 };
 
 const FontFamilyStyles = {
@@ -59,6 +60,10 @@ const FontStyles = StyleSheet.create({
   },
   bold16: {
     fontSize: FontSizeStyles.size16,
+    fontFamily: FontFamilyStyles.bold,
+  },
+  bold30: {
+    fontSize: FontSizeStyles.size30,
     fontFamily: FontFamilyStyles.bold,
   },
 
