@@ -33,7 +33,7 @@ yarn && yarn ios
 - [ ] Handle theme provider from rneui for StyleSheet
 - [ ] MKKV mix Redux Persit
 - [ ] Form items validation utils
-- [ ] Splash screen with react native bootsplash
+- ✅ Splash screen with react native bootsplash
 - [ ] Init react-native-modalize common component(modal, bottom sheet)
 - [ ] Fastlane CI/CD to distribute IPA to testflight, apk to Slack/Firebase project
 - [ ] Create common component in Troove design
