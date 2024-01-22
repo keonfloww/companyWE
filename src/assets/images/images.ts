@@ -1,6 +1,10 @@
 const icCircleOk = require('../images/ic_circle_ok.png');
 const icEdit = require('../images/ic_edit.png');
 const icAddContact = require('../images/ic_add_contact.png');
+const icAppleSrc = require('../images/ic_apple.png');
+const icMicrosoftSrc = require('../images/ic_microsoft.png');
+const icYahooSrc = require('../images/ic_yahoo.png');
+const icGoogleSrc = require('../images/ic_google.png');
 
 // SVG
 import IcHome from './svg/ic_home.svg';
@@ -23,11 +27,11 @@ import icM6 from './svg/ic_cat_hotel.svg';
 import bgDontMissout from './svg/bg_dont_miss_out.svg';
 
 //Welcome
-import welcomeCircle from './svg/welcome_circle.svg'
-import welcomeTroove from './svg/welcome_troove.svg'
-import welcomeBenefit1 from './svg/welcome_benefit1.svg'
-import welcomeBenefit2 from './svg/welcome_benefit2.svg'
-import arrowLeft from './svg/arrow_left.svg'
+import welcomeCircle from './svg/welcome_circle.svg';
+import welcomeTroove from './svg/welcome_troove.svg';
+import welcomeBenefit1 from './svg/welcome_benefit1.svg';
+import welcomeBenefit2 from './svg/welcome_benefit2.svg';
+import arrowLeft from './svg/arrow_left.svg';
 
 const IMAGES = {
   icEdit,
@@ -57,6 +61,12 @@ const IMAGES = {
   welcomeBenefit1,
   welcomeBenefit2,
   arrowLeft,
+
+  // URI/ Source
+  icAppleSrc,
+  icMicrosoftSrc,
+  icYahooSrc,
+  icGoogleSrc,
 };
 
 export default IMAGES;

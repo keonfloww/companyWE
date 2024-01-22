@@ -1,4 +1,6 @@
 export enum Screen {
+  StoryBookScreen = 'StoryBookScreen',
+
   IntroScreen = 'IntroScreen',
   IntroScreenTwo = 'IntroScreenTwo',
   IntroScreenThree = 'IntroScreenThree',
