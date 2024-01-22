@@ -25,6 +25,10 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
+
+# Firebase
+pod 'GoogleUtilities', :modular_headers => true
+
 target 'AwesomeProject' do
   config = use_native_modules!
 
