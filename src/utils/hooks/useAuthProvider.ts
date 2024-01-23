@@ -1,22 +1,17 @@
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import InAppBrowserUtils from '@utils/inAppBrowserUtils';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 
 /**
  * Just keep this hook inside the utils. Then we can easily to migrate, pack the package
  */
 const useAuthProvider = () => {
-  const retrieveGoogleToken = async () => {
+  const signInByGoogle = async () => {
     // Check if your device supports Google Play
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
     // Get the users ID token
     const {idToken} = await GoogleSignin.signIn();
-
-    return idToken;
-  };
-
-  const signInByGoogle = async () => {
-    // Get the users ID token
-    const idToken = await retrieveGoogleToken();
 
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
@@ -24,13 +19,26 @@ const useAuthProvider = () => {
     return auth().signInWithCredential(googleCredential);
   };
 
-  // const retrieveAppleToken = () => {};
-  // const signInByApple = () => {};
+  const onGoogleLinkButtonPress = async () => {
+    await InAppBrowser.open(
+      `https://troove-dev-385107.uc.r.appspot.com/api/v1/gmail/connect?doc_id=${
+        auth()!.currentUser!.uid
+      }`,
+      InAppBrowserUtils.configDefault,
+    );
+  };
 
-  // const signInByCredential = () => {};
-
+  const signOut = async () => {
+    await GoogleSignin.revokeAccess();
+    await GoogleSignin.signOut();
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+  };
   return {
     signInByGoogle,
+    onGoogleLinkButtonPress,
+    signOut,
   };
 };
 

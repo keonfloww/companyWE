@@ -19,27 +19,12 @@ export enum EnumAuthProviderButton {
   MICROSOFT = IMAGES.icMicrosoftSrc,
   GOOGLE = IMAGES.icGoogleSrc,
 }
-const EnumAuthProviderButtonTranslation: {
-  [key in EnumAuthProviderButton]: string;
-} = {
-  [EnumAuthProviderButton.APPLE]: t('Apple'),
-  [EnumAuthProviderButton.YAHOO]: t('Yahoo'),
-  [EnumAuthProviderButton.MICROSOFT]: t('Microsoft'),
-  [EnumAuthProviderButton.GOOGLE]: t('Google'),
-};
 
 export enum EnumAuthProviderButtonType {
   SIGN_IN = 'signIn',
   SIGN_UP = 'signUp',
   CONNECT = 'connect',
 }
-const EnumAuthProviderButtonTypeTranslation: {
-  [key in EnumAuthProviderButtonType]: string;
-} = {
-  [EnumAuthProviderButtonType.SIGN_IN]: t('Sign in with'),
-  [EnumAuthProviderButtonType.SIGN_UP]: t('Sign up by'),
-  [EnumAuthProviderButtonType.CONNECT]: t('Connect an account'),
-};
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -60,6 +45,22 @@ const ServiceButton: React.FC<Props> = ({
 
   authProvider,
 }) => {
+  const EnumAuthProviderButtonTranslation: {
+    [key in EnumAuthProviderButton]: string;
+  } = {
+    [EnumAuthProviderButton.APPLE]: t('Apple'),
+    [EnumAuthProviderButton.YAHOO]: t('Yahoo'),
+    [EnumAuthProviderButton.MICROSOFT]: t('Microsoft'),
+    [EnumAuthProviderButton.GOOGLE]: t('Google'),
+  };
+
+  const EnumAuthProviderButtonTypeTranslation: {
+    [key in EnumAuthProviderButtonType]: string;
+  } = {
+    [EnumAuthProviderButtonType.SIGN_IN]: t('Sign in with'),
+    [EnumAuthProviderButtonType.SIGN_UP]: t('Sign up by'),
+    [EnumAuthProviderButtonType.CONNECT]: t('Connect new account with'),
+  };
   const computedText = useMemo(
     () =>
       `${EnumAuthProviderButtonTypeTranslation?.[type]} ${EnumAuthProviderButtonTranslation?.[authProvider]}`,

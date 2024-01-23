@@ -14,27 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "527645071665-2nrr6kah6pdqr1l4n77s3dgjlfl35q5i.apps.googleusercontent.com",
+          "client_id": "527645071665-0hemvtk53oe6f79btkfh1vma78087e05.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.troove.troove_app",
-            "certificate_hash": "9f4bb5e5b2d2a8c5f8891e30c0058bd27160c2cd"
-          }
-        },
-        {
-          "client_id": "527645071665-3mabkg79pefo1kk1bvi16cut0a2ma8or.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.troove.troove_app",
-            "certificate_hash": "cb8daa4c69a22d460c190011a766bc0d34c09ee4"
-          }
-        },
-        {
-          "client_id": "527645071665-5qtj3csc4cvcvcpoqe6kkkll84ob9ds2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.troove.troove_app",
-            "certificate_hash": "b60cb960c737c9dfe841a5424e40d5daf577c471"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
@@ -43,62 +27,6 @@
           "android_info": {
             "package_name": "com.troove.troove_app",
             "certificate_hash": "1b53a9107978701c620ae7783c16f7c47a96ca82"
-          }
-        },
-        {
-          "client_id": "527645071665-cppg5pccbp5355rvjpec4o3snurtd4f7.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.troove.troove_app",
-            "certificate_hash": "026503dfa1441a3c986c01dd30b16cbfb79526c2"
-          }
-        },
-        {
-          "client_id": "527645071665-e0ac806j1hpap4qjtg2cbtoldii9vvtk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.troove.troove_app",
-            "certificate_hash": "7e107635e35ffffd4894e5c60d4b9acd6c22fb7b"
-          }
-        },
-        {
-          "client_id": "527645071665-iv1v1bvkjsqjae377ssu4kjl37ri10u6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.troove.troove_app",
-            "certificate_hash": "1dff2712df80f645f2b0aa9d2597334948e236a4"
-          }
-        },
-        {
-          "client_id": "527645071665-m7c127004sivsl5b8fv2u6lqh7aasags.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.troove.troove_app",
-            "certificate_hash": "020782c95a50af8991ee5ae42e1ea9ac3ed568dc"
-          }
-        },
-        {
-          "client_id": "527645071665-nc20d5jtobeuo2vjnaovhch98jetf97i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.troove.troove_app",
-            "certificate_hash": "803c9d3b3b3e901973b57493b0c2d1a17c175118"
-          }
-        },
-        {
-          "client_id": "527645071665-toh7lc6riqh7v5o1boiut2jl6lkcis7p.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.troove.troove_app",
-            "certificate_hash": "88a056b11cf4fbd1902ade38daab18ca25a613d7"
-          }
-        },
-        {
-          "client_id": "527645071665-uorph0akhemntfif83nhhojpkmon1rrp.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.troove.troove_app",
-            "certificate_hash": "1c505a0b9359b3c04af20af9bf0c6bc795296353"
           }
         },
         {

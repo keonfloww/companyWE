@@ -4,16 +4,18 @@ import ServiceButton, {
 } from '@components/atoms/ServiceButton/ServiceButton';
 import {Divider} from '@rneui/base';
 import {CardBase} from '@rneui/base/dist/Card/Card';
+import {Button} from '@rneui/themed';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import {scale} from '@utils/mixins';
 import {FC} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 
 /*
 Show case the common component
 or just for testing purpose */
 const StoryBookScreen: FC = () => {
-  const {signInByGoogle} = useAuthProvider();
+  const {signInByGoogle, onGoogleLinkButtonPress, signOut} = useAuthProvider();
+
   return (
     <ScrollView style={{flex: 1}}>
       <CardBase>
@@ -49,6 +51,7 @@ const StoryBookScreen: FC = () => {
           type={EnumAuthProviderButtonType.CONNECT}
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
+          onPress={onGoogleLinkButtonPress}
         />
 
         <ServiceButton
@@ -84,6 +87,8 @@ const StoryBookScreen: FC = () => {
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.MICROSOFT}
         />
+        <View style={{height: scale(25)}}></View>
+        <Button title={'Sign out'} onPress={signOut} />
       </CardBase>
     </ScrollView>
   );

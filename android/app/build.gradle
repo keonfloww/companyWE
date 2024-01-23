@@ -83,7 +83,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     // Do need to change the namespace of android project
-    namespace "com.awesomeproject"
+    namespace "com.troove.troove_app"
     defaultConfig {
         applicationId "com.troove.troove_app"
         minSdkVersion rootProject.ext.minSdkVersion
