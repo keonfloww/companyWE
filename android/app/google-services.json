@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "527645071665",
+    "project_id": "troove-dev",
+    "storage_bucket": "troove-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527645071665:android:fda65edbcaf1f7a98d3810",
+        "android_client_info": {
+          "package_name": "com.troove.troove_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "527645071665-0hemvtk53oe6f79btkfh1vma78087e05.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.troove.troove_app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "527645071665-9ecb18frk356o9slqu4ku7si1vdt6463.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.troove.troove_app",
+            "certificate_hash": "1b53a9107978701c620ae7783c16f7c47a96ca82"
+          }
+        },
+        {
+          "client_id": "527645071665-2eqr8u8nb3rhjpe55p99kll6j0lk7ab6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnDPFgDWxqTI7M-dA6BWSlSFrFJr_E5Qw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "527645071665-2eqr8u8nb3rhjpe55p99kll6j0lk7ab6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "527645071665-8kag2l8pmv2pm9iirpl5371b80mstd7f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.troove.trooveApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

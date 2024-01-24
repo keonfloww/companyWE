@@ -3,7 +3,7 @@ declare global {
     showLoading: () => void;
     hideLoading: () => void;
 
-    showToast: (message: string) => void;
+    showToast: (message: string, isError: boolean) => void;
   };
 }
 export default global;

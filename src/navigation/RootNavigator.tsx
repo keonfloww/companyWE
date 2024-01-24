@@ -18,6 +18,7 @@ import {scale} from '@utils/mixins';
 import {StatusBar} from 'react-native';
 import SignUpScreen from '@screens/Auth/SignUpScreen';
 import BootSplash from "react-native-bootsplash";
+import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -76,6 +77,7 @@ const RootNavigator: FC = () => {
       }}>
       <Stack.Navigator
         initialRouteName={Screen.IntroScreen}
+        // initialRouteName={Screen.StoryBookScreen}
         screenOptions={{
           fullScreenGestureEnabled: false,
           headerBackVisible: true,
@@ -85,7 +87,13 @@ const RootNavigator: FC = () => {
           },
         }}>
         {/* Global */}
+
         <Stack.Group>
+          <Stack.Screen
+            name={Screen.StoryBookScreen}
+            component={StoryBookScreen}
+            options={{title: t('Project Story Book'), headerShown: true}}
+          />
           <Stack.Screen
             name={Screen.IntroScreen}
             component={IntroScreen}

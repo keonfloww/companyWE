@@ -1,6 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
-
+apply plugin: 'com.google.gms.google-services'
 
 project.ext.envConfigFiles = [
   debug: ".env.development",
@@ -82,14 +82,15 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.awesomeproject"
+    // Do need to change the namespace of android project
+    namespace "com.troove.troove_app"
     defaultConfig {
-        applicationId "com.awesomeproject"
+        applicationId "com.troove.troove_app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        resValue "string", "build_config_package", "com.awesomeproject"
+        resValue "string", "build_config_package", "com.troove.troove_app"
     }
     signingConfigs {
         debug {
@@ -124,12 +125,12 @@ android {
     productFlavors {
         dev {
             dimension "enviroment"
-            resValue 'string', 'app_name',  'Awesome'
-            applicationIdSuffix ".develop"
+            resValue 'string', 'app_name',  '[DEV]Troove'
+            applicationIdSuffix ""
         }
         stg {
             dimension "enviroment"
-            resValue 'string', 'app_name',  'Awesome'
+            resValue 'string', 'app_name',  '[STG]Troove'
             applicationIdSuffix ".staging"
         }
     }
