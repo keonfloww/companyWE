@@ -10,7 +10,6 @@ import {RootSiblingParent} from 'react-native-root-siblings';
 import AppProvider, {AppConsumer} from 'AppContext';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import CommonStyles from '@screens/styles';
-import BootSplash from "react-native-bootsplash";
 
 // WARNING: Be careful when change the value of below code.
 // It will lead us to some dependencies conflict, example webview package
@@ -45,17 +44,6 @@ const theme = createTheme({
 });
 
 const App = () => {
-
-  useEffect(() => {
-    const init = async () => {
-      // …do multiple sync or async tasks
-    };
-  
-    init().finally(async () => {
-      await BootSplash.hide({ fade: true });
-      console.log("BootSplash has been hidden successfully");
-    });
-  }, []);
 
   return (
     <RootSiblingParent>
