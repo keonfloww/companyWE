@@ -36,6 +36,8 @@ import ServiceButton, {
   EnumAuthProviderButtonType,
 } from '@components/atoms/ServiceButton/ServiceButton';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
+import {useDispatch, useSelector} from 'react-redux';
+import { setUser } from '@redux/slices/user.slice';
 
 interface IFormData {
   email: string;
@@ -46,6 +48,7 @@ const SignUpScreen: FC<any> = ({navigation}) => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const {signInByGoogle} = useAuthProvider();
+  const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
   const styless = withTheme(styles);
   const {
@@ -67,6 +70,28 @@ const SignUpScreen: FC<any> = ({navigation}) => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     flex: 1,
   };
+
+  function onAuthStateChanged(user: any) {
+    if (!user) {
+      return;
+    }
+    console.log(user);
+    let createdUser = {
+      id: user?.uid,
+      email: user?.email,
+      emailVerified: user?.emailVerified,
+      userName: user?.displayName,
+      main_profile_image: user?.photoURL,
+      providerId: user?.providerId,
+    }
+    dispatch(setUser(createdUser));
+    navigation.navigate(Screen.StoryBookScreen);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
 
   return (
     <SafeView style={backgroundStyle}>
