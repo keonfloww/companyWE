@@ -12,6 +12,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import CommonStyles from '@screens/styles';
 import BootSplash from 'react-native-bootsplash';
 import useFirebaseService from '@services/firebaseService';
+import auth from '@react-native-firebase/auth';
 
 // WARNING: Be careful when change the value of below code.
 // It will lead us to some dependencies conflict, example webview package
@@ -48,17 +49,28 @@ const theme = createTheme({
 const App = () => {
   const {initFirebaseApp} = useFirebaseService();
 
-  useEffect(() => {
-    const init = async () => {
-      // …do multiple sync or async tasks
-    };
+  function onAuthStateChanged(user: any) {
+    if (user) {
+      
+    }
+    // setUser(user);
+    console.log(user);
+    // if (user) setloggedIn(true);
+  }
 
-    init().finally(async () => {
-      await BootSplash.hide({fade: true});
-      console.log('BootSplash has been hidden successfully');
-    });
+  useEffect(() => {
+    // const init = async () => {
+    //   // …do multiple sync or async tasks
+    // };
+
+    // init().finally(async () => {
+    //   await BootSplash.hide({fade: true});
+    //   console.log('BootSplash has been hidden successfully');
+    // });
 
     initFirebaseApp();
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
   }, []);
 
   return (

@@ -19,6 +19,7 @@ import {StatusBar} from 'react-native';
 import SignUpScreen from '@screens/Auth/SignUpScreen';
 import BootSplash from "react-native-bootsplash";
 import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
+import auth from '@react-native-firebase/auth';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import type {FC} from 'react';
 import {
   Image,
@@ -18,7 +18,7 @@ import {
   useColorScheme,
   Dimensions,
 } from 'react-native';
-
+import auth from '@react-native-firebase/auth';
 import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
 import {scale, scaleFont} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
@@ -31,6 +31,11 @@ import {useSSR} from 'react-i18next';
 import SafeView from '@components/atoms/View/SafeView';
 import FormItemController from '@components/atoms/Form/FormItemController';
 import {useForm} from 'react-hook-form';
+import ServiceButton, {
+  EnumAuthProviderButton,
+  EnumAuthProviderButtonType,
+} from '@components/atoms/ServiceButton/ServiceButton';
+import useAuthProvider from '@utils/hooks/useAuthProvider';
 
 interface IFormData {
   email: string;
@@ -40,6 +45,7 @@ interface IFormData {
 const SignUpScreen: FC<any> = ({navigation}) => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const {signInByGoogle} = useAuthProvider();
   const isDarkMode = useColorScheme() === 'dark';
   const styless = withTheme(styles);
   const {
@@ -55,7 +61,7 @@ const SignUpScreen: FC<any> = ({navigation}) => {
 
   const onSubmit = (data: IFormData) => {
     console.log({data, errors});
-    navigation.navigate(Screen.MainTabBar);
+    navigation.navigate(Screen.StoryBookScreen);
   };
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -136,6 +142,36 @@ const SignUpScreen: FC<any> = ({navigation}) => {
           containerStyle={{}}
         />
       </View>
+      <View
+        style={{
+          height: scale(1),
+          backgroundColor: '#EFEFEF',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginVertical: scale(10),
+          marginHorizontal: scale(20),
+        }}>
+        <Text
+          style={{
+            position: 'absolute',
+            backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+            borderRadius: scale(100),
+          }}>
+          OR
+        </Text>
+      </View>
+      <View style={{marginHorizontal: scale(20), flexDirection: 'row'}}>
+        <ServiceButton
+          type={EnumAuthProviderButtonType.SIGN_UP}
+          containerStyle={styless.baseButton}
+          authProvider={EnumAuthProviderButton.GOOGLE}
+          onPress={signInByGoogle}
+          titleContainerStyles={{display: 'none'}}
+        />
+      </View>
+      <View style={{margin: scale(20),}}>
+        <Text>Have an account? <Text>Sign in</Text></Text>
+      </View>
     </SafeView>
   );
 };
@@ -181,5 +217,15 @@ const styles = ({theme}: any) =>
     },
     labelStyle: {
       color: '#3C3C3C',
+    },
+    baseButton: {
+      backgroundColor: 'white',
+      marginTop: scale(15),
+      borderRadius: 99,
+      borderWidth: 1,
+      flex: 0,
+      borderColor: '#50048A',
+      alignItems: 'center',
+      justifyContent: 'center'
     },
   });
