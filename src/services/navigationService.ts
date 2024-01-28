@@ -66,7 +66,7 @@ function navigate(routeName: string, params = {}, key: any = null) {
  * @param params Route parameters.
  */
 function navigateAndReset(routeName: string, params = {}) {
-  navigationRef.current.dispatch(
+  navigationRef?.current?.dispatch(
     CommonActions.reset({
       index: 0,
       routes: [

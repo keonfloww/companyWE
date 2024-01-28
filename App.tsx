@@ -53,6 +53,7 @@ const App = () => {
   // const user = useSelector((state: RootState) => state.userReducer.user);
   function onAuthStateChanged(user: any) {
     if (user) {
+      console.log("ranann");
       navigationService.navigateAndReset(Screen.MainTabBar)
     }
     // setUser(user);
@@ -71,8 +72,8 @@ const App = () => {
     // });
 
     initFirebaseApp();
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
+    // const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    // return subscriber;
   }, []);
 
   return (
