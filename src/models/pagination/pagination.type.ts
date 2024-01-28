@@ -1,3 +1,7 @@
+export type IUser = {
+  data: any | null;
+}
+
 export type IBasePaginateData<T> = {
   data?: T[];
   meta: Meta;

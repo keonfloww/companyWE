@@ -10,6 +10,11 @@ import _ from 'lodash';
  * @param {AnyAction} action
  * @return {*}
  */
+
+const setUserData = (state: any, action: AnyAction) => {
+  console.log({state});
+}
+
 const setReducerPaginateByKey = (
   key: string,
   state: any,
@@ -102,6 +107,7 @@ const setDataAfterCreate = (key: string, state: any, _action: any) => {
 };
 
 export const SliceUtils = {
+  setUserData,
   setReducerPaginateByKey,
   setDataAfterDelete,
   setDataAfterUpdate,

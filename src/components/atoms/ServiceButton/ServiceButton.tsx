@@ -30,7 +30,7 @@ interface Props {
   containerStyle?: StyleProp<ViewStyle>;
   title?: string;
   titleStyles?: StyleProp<TextStyle>;
-
+  titleContainerStyles?: StyleProp<ViewStyle>;
   onPress?: () => void;
 
   authProvider: EnumAuthProviderButton;
@@ -40,7 +40,7 @@ const ServiceButton: React.FC<Props> = ({
   type,
   containerStyle,
   titleStyles,
-
+  titleContainerStyles,
   onPress,
 
   authProvider,
@@ -75,7 +75,7 @@ const ServiceButton: React.FC<Props> = ({
         resizeMode={'contain'}
         source={authProvider}
       />
-      <View style={styles.titleContainer}>
+      <View style={[styles.titleContainer, titleContainerStyles]}>
         <Text style={[styles.title, titleStyles]}>{computedText}</Text>
       </View>
     </TouchableOpacity>

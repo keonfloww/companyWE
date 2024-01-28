@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import type {FC} from 'react';
 import {
   Image,
@@ -81,7 +81,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
 
   const nextPress = (index: number) => {
     if(index > 2) {
-      navigation.navigate(Screen.MainTabBar);
+      navigation.navigate(Screen.Auth);
       return;
     }
     console.log({index})
@@ -168,7 +168,7 @@ const backPress = (index: number) => {
         )}
         {corouselIndex !== 3 ? (
           <Text
-            onPress={() => navigation.navigate(Screen.MainTabBar)}
+            onPress={() => navigation.navigate(Screen.Auth)}
             style={CommonStyles.font.semiBold14}>
             Skip
           </Text>

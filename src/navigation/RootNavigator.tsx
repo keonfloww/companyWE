@@ -16,7 +16,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {StyleSheet} from 'react-native';
 import {scale} from '@utils/mixins';
 import {StatusBar} from 'react-native';
+import SignUpScreen from '@screens/Auth/SignUpScreen';
+import BootSplash from "react-native-bootsplash";
 import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
+import auth from '@react-native-firebase/auth';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -57,6 +60,9 @@ const RootNavigator: FC = () => {
 
   return (
     <NavigationContainer
+      onReady={() => {
+        BootSplash.hide({fade: true});
+      }}
       ref={navigationRef}
       linking={linking}
       theme={{
@@ -93,6 +99,13 @@ const RootNavigator: FC = () => {
             name={Screen.IntroScreen}
             component={IntroScreen}
             options={{title: t('screen:intro'), headerShown: false}}
+          />
+        </Stack.Group>
+        <Stack.Group>
+          <Stack.Screen
+            name={Screen.Auth}
+            component={SignUpScreen}
+            options={{title: t('screen:auth'), headerShown: false}}
           />
         </Stack.Group>
 

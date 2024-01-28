@@ -10,19 +10,23 @@ const FormItemController = ({
   style = {},
   errors = {},
   rules = {},
+  containerStyle = {},
+  labelStyle = {},
+  textContentType = 'emailAddress'
 }: any) => {
   return (
-    <View style={[styles.container]}>
-      <Text style={styles.label}>{label}</Text>
+    <View style={[styles.container, containerStyle ? containerStyle : {}]}>
+      <Text style={[styles.label, labelStyle ? labelStyle : {}]}>{label}</Text>
       <Controller
         control={control}
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, onBlur, value,}}) => (
           <>
             <TextInput
               style={[styles.input, style, errors?.[name] ? styles.error : {}]}
               onBlur={onBlur}
               onChangeText={value => onChange(value)}
               value={value}
+              textContentType={textContentType}
             />
           </>
         )}
