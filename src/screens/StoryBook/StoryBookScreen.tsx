@@ -2,24 +2,22 @@ import ServiceButton, {
   EnumAuthProviderButton,
   EnumAuthProviderButtonType,
 } from '@components/atoms/ServiceButton/ServiceButton';
-import {Divider} from '@rneui/base';
 import {CardBase} from '@rneui/base/dist/Card/Card';
 import {Button} from '@rneui/themed';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import {scale} from '@utils/mixins';
 import {FC} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import { IUser } from '@models/users/user.type';
-import { RootState } from '@redux/stores';
+import {BaseState} from '@redux/stores';
 
 /*
 Show case the common component
 or just for testing purpose */
 const StoryBookScreen: FC = () => {
   const {signInByGoogle, onGoogleLinkButtonPress, signOut} = useAuthProvider();
-  const user = useSelector((state: RootState) => state.userReducer.user);
-  console.log('--->>>',{user});
+  const user = useSelector((state: BaseState) => state.userReducer.user);
+  console.log('--->>>', {user});
 
   return (
     <ScrollView style={{flex: 1}}>

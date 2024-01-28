@@ -37,6 +37,7 @@ interface Props {
   type: EnumAuthProviderButtonType;
 }
 const ServiceButton: React.FC<Props> = ({
+  title = null,
   type,
   containerStyle,
   titleStyles,
@@ -59,24 +60,28 @@ const ServiceButton: React.FC<Props> = ({
   } = {
     [EnumAuthProviderButtonType.SIGN_IN]: t('Sign in with'),
     [EnumAuthProviderButtonType.SIGN_UP]: t('Sign up by'),
-    [EnumAuthProviderButtonType.CONNECT]: t('Connect new account with'),
+    [EnumAuthProviderButtonType.CONNECT]: t('Connect'),
   };
+
   const computedText = useMemo(
     () =>
       `${EnumAuthProviderButtonTypeTranslation?.[type]} ${EnumAuthProviderButtonTranslation?.[authProvider]}`,
     [authProvider, type],
   );
+
   return (
-    <TouchableOpacity
-      style={[styles.container, containerStyle]}
-      onPress={onPress}>
-      <FastImage
-        style={[styles.icon, styles.icon]}
-        resizeMode={'contain'}
-        source={authProvider}
-      />
-      <View style={[styles.titleContainer, titleContainerStyles]}>
-        <Text style={[styles.title, titleStyles]}>{computedText}</Text>
+    <TouchableOpacity onPress={onPress}>
+      <View style={[styles.container, containerStyle]}>
+        <FastImage
+          style={[styles.icon, styles.icon]}
+          resizeMode={'contain'}
+          source={authProvider}
+        />
+        <View style={[styles.titleContainer, titleContainerStyles]}>
+          <Text style={[styles.title, titleStyles]}>
+            {title ?? computedText}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -88,7 +93,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: scale(38),
-    flex: 1,
     alignItems: 'center',
     borderRadius: scale(5),
     display: 'flex',
