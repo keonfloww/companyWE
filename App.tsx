@@ -11,9 +11,6 @@ import AppProvider, {AppConsumer} from 'AppContext';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import CommonStyles from '@screens/styles';
 import useFirebaseService from '@services/firebaseService';
-import auth from '@react-native-firebase/auth';
-import navigationService from '@services/navigationService';
-import {Screen} from '@navigation/navigation.enums';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 // WARNING: Be careful when change the value of below code.
@@ -50,29 +47,9 @@ const theme = createTheme({
 
 const App = () => {
   const {initFirebaseApp} = useFirebaseService();
-  // const user = useSelector((state: BaseState) => state.userReducer.user)
-  function onAuthStateChanged(user: any) {
-    if (user) {
-      navigationService.navigateAndReset(Screen.MainTabBar);
-    }
-    // setUser(user);
-    console.log('in app.tsx', user);
-    // if (user) setloggedIn(true);
-  }
 
   useEffect(() => {
-    // const init = async () => {
-    //   // …do multiple sync or async tasks
-    // };
-
-    // init().finally(async () => {
-    //   await BootSplash.hide({fade: true});
-    //   console.log('BootSplash has been hidden successfully');
-    // });
-
     initFirebaseApp();
-    // const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    // return subscriber;
   }, []);
 
   return (

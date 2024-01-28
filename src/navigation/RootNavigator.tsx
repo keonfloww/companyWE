@@ -1,9 +1,9 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useTheme} from '@rneui/themed';
+import {Button, useTheme} from '@rneui/themed';
 import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
-import React, {FC, useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Screen} from './navigation.enums';
 // import HeaderBackgroundDefault from '@layouts/default/HeaderBackgroundDefault';
 import navigationService, {navigationRef} from '@services/navigationService';
@@ -23,6 +23,12 @@ import InboxScreen from '@screens/Inbox/InboxScreen';
 import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookmarkSearchActions';
 import ConnectMailScreen from '@screens/ConnectMail/ConnectMailScreen';
 import useUserViewModel from '@redux/hooks/useUserViewModel';
+import auth from '@react-native-firebase/auth';
+import {BaseState} from '@redux/stores';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUser} from '@redux/slices/user.slice';
+import useAuthProvider from '@utils/hooks/useAuthProvider';
+import LoginScreen from '@screens/Auth/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,9 +36,8 @@ const CONFIG = {};
 
 const RootNavigator: FC = () => {
   const {theme} = useTheme();
-
+  const [initialScreen, setInitialScreen] = useState(Screen.IntroScreen);
   const {isEmptyConnectedMails} = useUserViewModel();
-
   // TODO: Need to use insets to handle status bar
   // const insets = useSafeAreaInsets();
 
@@ -42,14 +47,22 @@ const RootNavigator: FC = () => {
   };
 
   useEffect(() => {
-    if (isEmptyConnectedMails) {
-      global?.props?.showLoading();
-      setTimeout(() => {
-        navigationService.navigateAndReset(Screen.ConnectMailScreen);
-        global?.props?.hideLoading();
-      }, 1000);
-    }
+    // if (isEmptyConnectedMails) {
+    //   global?.props?.showLoading();
+    //   setTimeout(() => {
+    //     navigationService.navigateAndReset(Screen.ConnectMailScreen);
+    //     global?.props?.hideLoading();
+    //   }, 1000);
+    // }
   }, [isEmptyConnectedMails]);
+
+  useEffect(() => {
+    const firebaseAuth = auth()!.currentUser;
+    if (firebaseAuth?.uid) {
+      setInitialScreen(Screen.ConnectMailScreen);
+    }
+    console.log(firebaseAuth?.uid);
+  }, []);
 
   return (
     <NavigationContainer
@@ -70,7 +83,7 @@ const RootNavigator: FC = () => {
         dark: theme.mode === 'dark',
       }}>
       <Stack.Navigator
-        initialRouteName={Screen.IntroScreen}
+        initialRouteName={initialScreen}
         // initialRouteName={Screen.StoryBookScreen}
         screenOptions={{
           fullScreenGestureEnabled: false,
@@ -82,43 +95,44 @@ const RootNavigator: FC = () => {
         }}>
         {/* Global */}
 
-        <Stack.Group>
-          <Stack.Screen
-            name={Screen.StoryBookScreen}
-            component={StoryBookScreen}
-            options={{title: t('Project Story Book'), headerShown: true}}
-          />
-          <Stack.Screen
-            name={Screen.IntroScreen}
-            component={IntroScreen}
-            options={{title: t('screen:intro'), headerShown: false}}
-          />
-          <Stack.Screen
-            name={Screen.ConnectMailScreen}
-            component={ConnectMailScreen}
-            options={{headerShown: false}}
-          />
-        </Stack.Group>
-        <Stack.Group>
-          <Stack.Screen
-            name={Screen.Auth}
-            component={SignUpScreen}
-            options={{title: t('screen:auth'), headerShown: false}}
-          />
-        </Stack.Group>
-
-        {/* Private */}
-        <Stack.Group>
-          <Stack.Screen
-            name={Screen.MainTabBar}
-            component={TabBarNavigator}
-            options={{
-              headerTitle: 'Test',
-              headerShown: false,
-              // gestureEnabled: false,
-            }}
-          />
-        </Stack.Group>
+          <Stack.Group>
+            <Stack.Screen
+              name={Screen.IntroScreen}
+              component={IntroScreen}
+              options={{title: t('screen:intro'), headerShown: false}}
+            />
+            <Stack.Screen
+              name={Screen.Auth}
+              component={SignUpScreen}
+              options={{title: t('screen:auth'), headerShown: false}}
+            />
+            <Stack.Screen
+              name={Screen.Login}
+              component={LoginScreen}
+              options={{title: t('screen:auth'), headerShown: false}}
+            />
+            <Stack.Screen
+              name={Screen.ConnectMailScreen}
+              component={ConnectMailScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={Screen.StoryBookScreen}
+              component={StoryBookScreen}
+              options={{title: t('Project Story Book'), headerShown: true}}
+            />
+          </Stack.Group>
+          <Stack.Group>
+            <Stack.Screen
+              name={Screen.MainTabBar}
+              component={TabBarNavigator}
+              options={{
+                headerTitle: 'Test',
+                headerShown: false,
+                // gestureEnabled: false,
+              }}
+            />
+          </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -216,9 +230,20 @@ const TabBarNavigator: FC = () => {
 };
 
 const FakeScreen = () => {
+  const {signOut} = useAuthProvider();
+  const dispatch = useDispatch();
+
+  const signOutt = () => {
+    signOut().then(()=> {
+      dispatch(setUser(null));
+      navigationService.navigateAndReset(Screen.Login);
+    });
+  } 
+
   return (
     <View>
       <Text>Fake screen</Text>
+      <Button title={'Sign out'} onPress={signOutt} />
     </View>
   );
 };

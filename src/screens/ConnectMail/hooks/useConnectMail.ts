@@ -23,7 +23,7 @@ const useConnectMail = ({
 
   useEffect(() => {
     const firebaseAuth = auth()!.currentUser;
-    if (!firebaseAuth!.uid) {
+    if (!firebaseAuth?.uid) {
       return;
     }
     const unsubcribe = firestore()

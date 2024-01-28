@@ -5,7 +5,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import _ from 'lodash';
 
 const initialState: {
-  user: IUser;
+  user: IUser | null;
   connectedMails: any[];
 
   // Inbox
@@ -29,7 +29,7 @@ export const userSlice = createSlice({
   name: 'userSlice',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<IUser>) => {
+    setUser: (state, action: PayloadAction<IUser | null>) => {
       state.user = action.payload;
     },
     addNewConnectedMail: (
