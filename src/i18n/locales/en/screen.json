@@ -3,5 +3,7 @@
   "contactManagement": "Contact Management",
   "newContacts": "New Contact",
   "contacts": "Contacts",
-  "intro": "Intro"
+  "intro": "Intro",
+  "inboxScreen": "Inbox",
+  "subscriptionScreen": "Subscription"
 }

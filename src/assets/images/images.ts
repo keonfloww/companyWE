@@ -33,6 +33,10 @@ import welcomeBenefit1 from './svg/welcome_benefit1.svg';
 import welcomeBenefit2 from './svg/welcome_benefit2.svg';
 import arrowLeft from './svg/arrow_left.svg';
 
+//
+import icUnBookmark from './svg/ic_unbookmark.svg';
+import icMailOpen from './svg/ic_mail_open.svg';
+
 const IMAGES = {
   icEdit,
   icCircleOk,
@@ -67,6 +71,9 @@ const IMAGES = {
   icMicrosoftSrc,
   icYahooSrc,
   icGoogleSrc,
+
+  icUnBookmark,
+  icMailOpen,
 };
 
 export default IMAGES;

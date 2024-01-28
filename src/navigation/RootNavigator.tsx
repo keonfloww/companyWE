@@ -17,9 +17,11 @@ import {StyleSheet} from 'react-native';
 import {scale} from '@utils/mixins';
 import {StatusBar} from 'react-native';
 import SignUpScreen from '@screens/Auth/SignUpScreen';
-import BootSplash from "react-native-bootsplash";
+import BootSplash from 'react-native-bootsplash';
 import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
 import auth from '@react-native-firebase/auth';
+import InboxScreen from '@screens/Inbox/InboxScreen';
+import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookmarkSearchActions';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -137,6 +139,32 @@ const TabBarNavigator: FC = () => {
     StatusBar.setBarStyle('dark-content');
   }, [theme]);
 
+  const styleHeader = () => {
+    return {
+      headerStyle: {
+        backgroundColor: '#50048A',
+      },
+      headerRight: () => {
+        return (
+          <BaseBookmarkSearchActions
+            color="white"
+            onPressBookMark={() => {
+              console.log('onPressBookMark');
+            }}
+            onPressSearch={() => {
+              console.log('onPressSearch');
+            }}
+          />
+        );
+      },
+      headerRightContainerStyle: {
+        paddingRight: scale(15),
+      },
+      headerTitleStyle: styles.headerScreenTitle,
+      headerTitleAlign: 'left',
+      headerTintColor: '#fff',
+    };
+  };
   return (
     <Tab.Navigator
       screenOptions={{
@@ -159,11 +187,11 @@ const TabBarNavigator: FC = () => {
       />
       <Tab.Screen
         name={Screen.InboxScreen}
-        component={FakeScreen}
+        component={InboxScreen}
         options={{
-          title: t('screen:InboxScreen'),
+          ...styleHeader(),
+          title: t('screen:inboxScreen'),
           tabBarBadge: 3,
-          headerTitleStyle: styles.bottomTabTitle,
           tabBarIcon: ({color}) => <IMAGES.IcInbox color={color} />,
         }}
       />
@@ -171,8 +199,8 @@ const TabBarNavigator: FC = () => {
         name={Screen.SubscriptionScreen}
         component={FakeScreen}
         options={{
-          title: t('screen:SubscriptionScreen'),
-          headerTitleStyle: styles.bottomTabTitle,
+          ...styleHeader(),
+          title: t('screen:subscriptionScreen'),
           tabBarIcon: ({color}) => <IMAGES.IcStar color={color} fill={color} />,
         }}
       />
@@ -204,5 +232,9 @@ const styles = StyleSheet.create({
     fontSize: CommonStyles.fontSize.size12,
     fontFamily: CommonStyles.fontFamily.regular,
     marginBottom: scale(15),
+  },
+  headerScreenTitle: {
+    fontSize: CommonStyles.fontSize.size30,
+    fontFamily: CommonStyles.fontFamily.medium,
   },
 });

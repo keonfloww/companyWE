@@ -1,26 +1,28 @@
 import IMAGES from '@assets/images/images';
 import {scale} from '@utils/mixins';
 import React, {FC} from 'react';
-import {Pressable, View} from 'react-native';
+import {Pressable, TouchableOpacity, View} from 'react-native';
 
 interface Props {
   onPressBookMark: () => void;
   onPressSearch: () => void;
+  color?: string;
 }
 
 const BaseBookmarkSearchActions: FC<Props> = ({
   onPressBookMark,
   onPressSearch,
+  color = null,
 }) => {
   return (
     <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-      <Pressable onPress={onPressBookMark}>
-        <IMAGES.icBookMark />
-      </Pressable>
+      <TouchableOpacity onPress={onPressBookMark} activeOpacity={0.7}>
+        <IMAGES.icBookMark color={color ?? '#3C3C3C'} />
+      </TouchableOpacity>
       <View style={{width: scale(7)}} />
-      <Pressable onPress={onPressSearch}>
-        <IMAGES.icSearch />
-      </Pressable>
+      <TouchableOpacity onPress={onPressSearch} activeOpacity={0.7}>
+        <IMAGES.icSearch color={color ?? '#3C3C3C'} />
+      </TouchableOpacity>
     </View>
   );
 };
