@@ -12,7 +12,7 @@ import useConnectMail from './hooks/useConnectMail';
 
 const ConnectMailScreen = () => {
   const {onGoogleLinkButtonPress} = useAuthProvider();
-  const {} = useConnectMail();
+  const {} = useConnectMail({autoRedirectToHome: true});
 
   return (
     <LayoutBackgroundDefault>

@@ -7,9 +7,18 @@ import {BaseState} from '@redux/stores';
 import auth from '@react-native-firebase/auth';
 import {FireBaseMailCredentials} from '@models/firebaseModel';
 import {userSliceActions} from '@redux/slices/user.slice';
+import navigationService from '@services/navigationService';
+import {Screen} from '@navigation/navigation.enums';
 
-const useConnectMail = () => {
+const useConnectMail = ({
+  autoRedirectToHome = false,
+}: {
+  autoRedirectToHome: boolean;
+}) => {
   const user = useSelector((state: BaseState) => state?.userReducer?.user?.id);
+  const connectedMails = useSelector(
+    (state: BaseState) => state?.userReducer.connectedMails,
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,6 +39,9 @@ const useConnectMail = () => {
         }
 
         dispatch(userSliceActions.addNewConnectedMail(newFirebaseMail));
+        if (autoRedirectToHome) {
+          navigationService.navigate(Screen.MainTabBar);
+        }
         setTimeout(() => {
           InAppBrowser.close();
         }, 1500);
@@ -38,6 +50,6 @@ const useConnectMail = () => {
     return () => unsubcribe();
   }, [user]);
 
-  return {};
+  return {connectedMails};
 };
 export default useConnectMail;

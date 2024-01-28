@@ -6,6 +6,7 @@ const icMicrosoftSrc = require('../images/ic_microsoft.png');
 const icYahooSrc = require('../images/ic_yahoo.png');
 const icGoogleSrc = require('../images/ic_google.png');
 const bgDefaultSrc = require('../images/png/bg_default.png');
+const logoSrc = require('../images/png/logo.png');
 
 // SVG
 import IcHome from './svg/ic_home.svg';
@@ -76,6 +77,7 @@ const IMAGES = {
   icUnBookmark,
   icMailOpen,
   bgDefaultSrc,
+  logoSrc,
 };
 
 export default IMAGES;

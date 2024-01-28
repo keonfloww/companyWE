@@ -1,20 +1,50 @@
 import IMAGES from '@assets/images/images';
+import {Email} from '@models/mail/modelMail';
+import CommonStyles from '@screens/styles';
+import DateUtils from '@utils/dateUtils';
 import {scale} from '@utils/mixins';
-import React, {useState} from 'react';
-import {Pressable} from 'react-native';
+import {safeString} from '@utils/stringUtils';
+import React, {FC, useMemo, useState} from 'react';
+import {Pressable, StyleSheet} from 'react-native';
 import {Avatar, Checkbox, Drawer, Text, View} from 'react-native-ui-lib';
+import useMailItem from '../hooks/useMailItem';
 
-const MailRow = ({isSelectMode = false, onSelectMode = () => {}}) => {
+interface Props {
+  item: Email;
+  isSelectMode?: boolean;
+  onSelect: (_: string) => void;
+  onSelectMode: () => void;
+  onCancelSelectMode: () => void;
+}
+const MailRow: FC<Props> = ({
+  item,
+  isSelectMode = false,
+  onSelect = (_: string) => {},
+  onSelectMode = () => {},
+  onCancelSelectMode = () => {},
+}) => {
+  const {
+    isRead,
+    handleMarkAsRead,
+
+    isBookMark,
+    handleMarkBookMark,
+  } = useMailItem({item});
   const [selected, setSelected] = useState(false);
+
+  const computedDisableStyle = useMemo(() => {
+    return isRead ? styles.textDisable : {};
+  }, [isRead]);
 
   return (
     <Drawer
+      onDragStart={onCancelSelectMode}
       rightItems={[
         {
           width: scale(78),
           customElement: <IMAGES.icUnBookmark />,
           background: '#50048A',
-          onPress: () => console.log('icUnBookmark pressed'),
+          onPress: handleMarkBookMark,
         },
       ]}
       leftItem={{
@@ -24,20 +54,14 @@ const MailRow = ({isSelectMode = false, onSelectMode = () => {}}) => {
         onPress: () => console.log('icMailOpen pressed'),
       }}>
       <Pressable
+        onPress={handleMarkAsRead}
         onLongPress={() => {
           onSelectMode();
           setSelected(true);
+          onSelect(item?.metadata_id);
         }}>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            columnGap: scale(12),
-            paddingHorizontal: scale(20),
-            paddingBottom: scale(10),
-            backgroundColor: 'white',
-          }}>
-          {isSelectMode && (
+        <View style={styles.container}>
+          {isSelectMode ? (
             <View>
               <Checkbox
                 color="#50048A"
@@ -50,39 +74,61 @@ const MailRow = ({isSelectMode = false, onSelectMode = () => {}}) => {
                 }}
                 borderRadius={99}
                 value={selected}
-                onValueChange={() => setSelected(!selected)}
+                onValueChange={() => {
+                  setSelected(!selected);
+                  onSelect(item?.metadata_id);
+                }}
               />
             </View>
-          )}
-          <View>
+          ) : (
             <Avatar
               size={scale(36)}
-              source={{
-                uri: 'https://lh3.googleusercontent.com/-CMM0GmT5tiI/AAAAAAAAAAI/AAAAAAAAAAA/-o9gKbC6FVo/s181-c/111308920004613908895.jpg',
-              }}
+              source={
+                item?.picture
+                  ? {
+                      uri: item?.picture,
+                    }
+                  : IMAGES.logoSrc
+              }
             />
-          </View>
-          <View style={{flex: 1}}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <View style={{flex: 1}}>
-                <Text style={{fontSize: scale(16)}}>Amazon Prime</Text>
+          )}
+          <View style={styles.mailContent}>
+            <View style={styles.mailFirstRowContainer}>
+              <View
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}>
+                {isBookMark && (
+                  <IMAGES.icBookMark
+                    height={18}
+                    color={'#50048A'}
+                    fill={'#50048A'}
+                  />
+                )}
+                <Text
+                  style={[styles.senderName, computedDisableStyle]}
+                  numberOfLines={1}>
+                  {safeString(item?.sender_name)}
+                </Text>
               </View>
-              <Text>3:00 PM 14 Apr 2023</Text>
+              <Text style={[styles.dateTime, computedDisableStyle]}>
+                {DateUtils.unixToFormatDefault(item?.received_on_unix)}
+              </Text>
             </View>
             <View style={{height: scale(5)}} />
             <View style={{flex: 1}}>
-              <Text style={{fontSize: scale(14)}} numberOfLines={1}>
-                Now streaming on Prime Video ,Now streaming on Prime Video
+              <Text
+                style={[styles.subject, computedDisableStyle]}
+                numberOfLines={1}>
+                {safeString(item?.subject)}
               </Text>
               <View style={{height: scale(2)}} />
-              <Text style={{fontSize: scale(12)}} numberOfLines={1}>
-                Lorem ipsum dolor sit amet, consecteturLorem ipsum dolor sit
-                amet, consectetur
+              <Text
+                style={[styles.shortBody, computedDisableStyle]}
+                numberOfLines={1}>
+                {safeString(item?.short_body)}
               </Text>
             </View>
           </View>
@@ -91,5 +137,43 @@ const MailRow = ({isSelectMode = false, onSelectMode = () => {}}) => {
     </Drawer>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: scale(12),
+    paddingHorizontal: scale(20),
+    paddingBottom: scale(10),
+    backgroundColor: 'white',
+  },
+
+  mailContent: {flex: 1},
+  mailFirstRowContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  senderName: {
+    ...CommonStyles.font.semiBold16,
+    color: '#3C3C3C',
+  },
+  subject: {
+    ...CommonStyles.font.semiBold14,
+    color: '#3C3C3C',
+  },
+  dateTime: {
+    ...CommonStyles.font.semiBold12,
+    color: '#3C3C3C',
+  },
+  shortBody: {
+    ...CommonStyles.font.regular14,
+    color: '#3C3C3C',
+  },
+  textDisable: {
+    color: '#757575',
+    fontFamily: CommonStyles.fontFamily.regular,
+  },
+});
 
 export default React.memo(MailRow);
