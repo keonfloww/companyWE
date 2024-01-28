@@ -50,7 +50,7 @@ const theme = createTheme({
 
 const App = () => {
   const {initFirebaseApp} = useFirebaseService();
-  // const user = useSelector((state: RootState) => state.userReducer.user);
+  // const user = useSelector((state: BaseState) => state.userReducer.user)
   function onAuthStateChanged(user: any) {
     if (user) {
       navigationService.navigateAndReset(Screen.MainTabBar);

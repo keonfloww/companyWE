@@ -10,23 +10,23 @@ import {CommonActions, StackActions} from '@react-navigation/native';
 export const navigationRef: RefObject<any> = React.createRef();
 
 function getCurrentRoute() {
-  return navigationRef.current.getCurrentRoute().name;
+  return navigationRef?.current?.getCurrentRoute().name;
 }
 
 function goBack() {
-  navigationRef.current.dispatch(CommonActions.goBack());
+  navigationRef?.current?.dispatch(CommonActions.goBack());
 }
 
 function replace(routeName: string, params = {}) {
-  navigationRef.current.dispatch(StackActions.replace(routeName, params));
+  navigationRef?.current?.dispatch(StackActions.replace(routeName, params));
 }
 
 function pop() {
-  navigationRef.current.dispatch(StackActions.pop());
+  navigationRef?.current?.dispatch(StackActions.pop());
 }
 
 function popWithNStack(n: number) {
-  navigationRef.current.dispatch(StackActions.pop(n));
+  navigationRef?.current?.dispatch(StackActions.pop(n));
 }
 
 /**
@@ -38,7 +38,7 @@ function popWithNStack(n: number) {
 function navigate(routeName: string, params = {}, key: any = null) {
   // This key to handle resursion nagivate in same screen
   if (key) {
-    navigationRef.current.dispatch(
+    navigationRef?.current?.dispatch(
       CommonActions.navigate({
         key: key,
         name: routeName,
@@ -48,7 +48,7 @@ function navigate(routeName: string, params = {}, key: any = null) {
 
     return;
   }
-  navigationRef.current.dispatch(
+  navigationRef?.current?.dispatch(
     CommonActions.navigate({
       name: routeName,
       params,

@@ -1,6 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {HTTP_METHODS} from './api.config';
-import {IBasePaginateParams} from '@models/pagination/paginationRequest.type';
 import Config from 'react-native-config';
 
 export const gmailApi = createApi({
@@ -10,7 +9,7 @@ export const gmailApi = createApi({
   }),
   endpoints: builder => ({
     getMail: builder.mutation({
-      query: (params: IBasePaginateParams) => {
+      query: (params: IGetMailParams) => {
         return {
           url: `/v1/gmail/retrieve_emails`,
           method: HTTP_METHODS.GET,
@@ -19,7 +18,7 @@ export const gmailApi = createApi({
       },
     }),
     getMailV2: builder.mutation({
-      query: (params: IBasePaginateParams) => {
+      query: (params: IGetMailParams) => {
         return {
           url: `/v1/gmail/retrieve_emails_v2`,
           method: HTTP_METHODS.GET,
@@ -30,4 +29,12 @@ export const gmailApi = createApi({
   }),
 });
 
-export const {} = gmailApi;
+export const {useGetMailMutation} = gmailApi;
+
+export interface IGetMailParams {
+  access_token: string;
+  start_date: string;
+  end_date: string;
+  expiry_date: number;
+  refresh_token: string;
+}

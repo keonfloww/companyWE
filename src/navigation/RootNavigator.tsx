@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useTheme} from '@rneui/themed';
 import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
-import React, {FC, PropsWithChildren, useCallback, useEffect} from 'react';
+import React, {FC, useCallback, useEffect} from 'react';
 import {Screen} from './navigation.enums';
 // import HeaderBackgroundDefault from '@layouts/default/HeaderBackgroundDefault';
 import navigationService, {navigationRef} from '@services/navigationService';
@@ -19,9 +19,10 @@ import {StatusBar} from 'react-native';
 import SignUpScreen from '@screens/Auth/SignUpScreen';
 import BootSplash from 'react-native-bootsplash';
 import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
-import auth from '@react-native-firebase/auth';
 import InboxScreen from '@screens/Inbox/InboxScreen';
 import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookmarkSearchActions';
+import ConnectMailScreen from '@screens/ConnectMail/ConnectMailScreen';
+import useUserViewModel from '@redux/hooks/useUserViewModel';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,6 +30,8 @@ const CONFIG = {};
 
 const RootNavigator: FC = () => {
   const {theme} = useTheme();
+
+  const {isEmptyConnectedMails} = useUserViewModel();
 
   // TODO: Need to use insets to handle status bar
   // const insets = useSafeAreaInsets();
@@ -38,27 +41,15 @@ const RootNavigator: FC = () => {
     CONFIG,
   };
 
-  const navigateToCreateContact = useCallback(() => {
-    navigationService.navigate(
-      Screen.ContactDetailScreen,
-      {
-        userId: null,
-        userName: null,
-        isCreate: true,
-      },
-      'ContactCreateScreen',
-    );
-  }, []);
-  const pressContactAction = useCallback(() => {
-    return (
-      <TouchableOpacity onPress={navigateToCreateContact}>
-        <FastImage
-          style={CommonStyles.icon.icon35}
-          source={IMAGES.icAddContact}
-        />
-      </TouchableOpacity>
-    );
-  }, []);
+  useEffect(() => {
+    if (isEmptyConnectedMails) {
+      global?.props?.showLoading();
+      setTimeout(() => {
+        navigationService.navigateAndReset(Screen.ConnectMailScreen);
+        global?.props?.hideLoading();
+      }, 1000);
+    }
+  }, [isEmptyConnectedMails]);
 
   return (
     <NavigationContainer
@@ -101,6 +92,11 @@ const RootNavigator: FC = () => {
             name={Screen.IntroScreen}
             component={IntroScreen}
             options={{title: t('screen:intro'), headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.ConnectMailScreen}
+            component={ConnectMailScreen}
+            options={{headerShown: false}}
           />
         </Stack.Group>
         <Stack.Group>

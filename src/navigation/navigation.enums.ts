@@ -4,6 +4,8 @@ export enum Screen {
   IntroScreen = 'IntroScreen',
   IntroScreenTwo = 'IntroScreenTwo',
   IntroScreenThree = 'IntroScreenThree',
+
+  ConnectMailScreen = 'ConnectMailScreen',
   // Auth
   Auth = 'Auth',
   Login = 'Login',

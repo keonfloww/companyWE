@@ -7,13 +7,7 @@
 
 import React, {useEffect} from 'react';
 import type {FC} from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  useColorScheme,
-} from 'react-native';
+import {Pressable, StyleSheet, Text, View, useColorScheme} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {scale} from '../../utils/mixins';
@@ -32,7 +26,7 @@ import ServiceButton, {
 } from '@components/atoms/ServiceButton/ServiceButton';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import {useDispatch} from 'react-redux';
-import { setUser } from '@redux/slices/user.slice';
+import {setUser} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
 
 interface IFormData {
@@ -67,19 +61,21 @@ const SignUpScreen: FC<any> = () => {
     flex: 1,
   };
 
+  // TODO: Vipin put type for user
   function onAuthStateChanged(user: any) {
     if (!user) {
       return;
     }
     console.log(user);
     let createdUser = {
+      ...user,
       id: user?.uid,
-      email: user?.email,
-      emailVerified: user?.emailVerified,
+      // email: user?.email,
+      // emailVerified: user?.emailVerified,
       userName: user?.displayName,
       main_profile_image: user?.photoURL,
-      providerId: user?.providerId,
-    }
+      // providerId: user?.providerId,
+    };
     dispatch(setUser(createdUser));
     navigationService.navigate(Screen.MainTabBar);
   }
@@ -190,8 +186,10 @@ const SignUpScreen: FC<any> = () => {
           titleContainerStyles={{display: 'none'}}
         />
       </View>
-      <View style={{margin: scale(20),}}>
-        <Text>Have an account? <Text>Sign in</Text></Text>
+      <View style={{margin: scale(20)}}>
+        <Text>
+          Have an account? <Text>Sign in</Text>
+        </Text>
       </View>
     </SafeView>
   );
@@ -247,6 +245,6 @@ const styles = ({theme}: any) =>
       flex: 0,
       borderColor: '#50048A',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
   });

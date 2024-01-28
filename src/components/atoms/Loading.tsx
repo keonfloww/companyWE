@@ -13,7 +13,7 @@ const Loading: React.FC<LoadingProps> = ({show}) => {
   return (
     <View style={[StyleSheet.absoluteFill, styles.container]}>
       <View style={styles.content}>
-        <ActivityIndicator size="large" color={'red'} />
+        <ActivityIndicator size="large" />
       </View>
     </View>
   );
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
-    opacity: 0.1,
+    backgroundColor: 'black',
+    opacity: 0.2,
   },
 });

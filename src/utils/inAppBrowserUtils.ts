@@ -2,7 +2,7 @@ const InAppBrowserUtils = {
   configDefault: {
     // iOS Properties
     dismissButtonStyle: 'cancel',
-    preferredBarTintColor: '#453AA4',
+    preferredBarTintColor: '#50048A',
     preferredControlTintColor: 'white',
     readerMode: false,
     animated: true,
@@ -12,7 +12,7 @@ const InAppBrowserUtils = {
     enableBarCollapsing: false,
     // Android Properties
     showTitle: true,
-    toolbarColor: '#6200EE',
+    toolbarColor: '#50048A',
     secondaryToolbarColor: 'black',
     navigationBarColor: 'black',
     navigationBarDividerColor: 'white',
