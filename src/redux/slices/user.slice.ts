@@ -1,11 +1,28 @@
-import {IBasePaginateData} from '@models/pagination/pagination.type';
+import {FireBaseMailCredentials} from '@models/firebaseModel';
+import {Email} from '@models/mail/modelMail';
 import {IUser} from '@models/users/user.type';
-import {AnyAction, PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {SliceUtils} from '@utils/sliceUtils';
+import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import _ from 'lodash';
 
-// const initialState: {userPaginate: IBasePaginateData<IUser>; UIState: any} = {
-const initialState: {user: IUser;} = {
+const initialState: {
+  user: IUser;
+  connectedMails: any[];
+
+  // Inbox
+  syncedMailAddress: string[];
+  mailbox: {[key in string]: Email[]};
+
+  // mail status
+  mailReadMetadataIds: {[key in string]: boolean};
+  mailBookmarkMetadataIds: {[key in string]: boolean};
+} = {
   user: {},
+  connectedMails: [],
+  syncedMailAddress: [],
+  mailbox: {},
+
+  mailReadMetadataIds: {},
+  mailBookmarkMetadataIds: {},
 };
 
 export const userSlice = createSlice({
@@ -13,30 +30,54 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<IUser>) => {
-      state.user = action.payload
+      state.user = action.payload;
     },
-    // setPaginate: (state, action: AnyAction) =>
-    //   SliceUtils.setReducerPaginateByKey('userPaginate', state, action),
-    // refreshPaginate: (state, _action: AnyAction) => ({
-    //   ...state,
-    //   UIState: {
-    //     addedIds: [],
-    //   },
-    // }),
-    // deleteUser: (state, action: AnyAction) =>
-    //   SliceUtils.setDataAfterDelete(state, action, state.userPaginate?.data),
-    // updateUser: (state, action: {payload: any}) =>
-    //   SliceUtils.setDataAfterUpdate(
-    //     'userPaginate',
-    //     state,
-    //     action,
-    //     state.userPaginate?.data,
-    //   ),
-    // createUser: (state, action: {payload: {newItem: IUser}}) =>
-    //   SliceUtils.setDataAfterCreate('userPaginate', state, action),
+    addNewConnectedMail: (
+      state,
+      action: PayloadAction<FireBaseMailCredentials>,
+    ) => {
+      return {
+        ...state,
+        connectedMails: state?.connectedMails?.concat(action.payload),
+      };
+    },
+
+    // Middleware triggered
+    appendMailFromResponse: (
+      state,
+      action: PayloadAction<{targetMailAddress: string; emails: Email[]}>,
+    ) => {
+      const data = action.payload;
+
+      const oldEmailFromTargetMailAddress =
+        state?.mailbox?.[data.targetMailAddress] ?? [];
+
+      return {
+        ...state,
+        mailbox: {
+          [data.targetMailAddress]: oldEmailFromTargetMailAddress?.concat(
+            _.orderBy(data?.emails, 'received_on_unix', 'desc'),
+          ),
+        },
+        syncedMailAddress: _.uniq(
+          state?.syncedMailAddress?.concat(data.targetMailAddress),
+        ),
+      };
+    },
+
+    mailMarkAsRead: (state, action: PayloadAction<{metadata_id: string}>) => {
+      return {
+        ...state,
+        mailReadMetadataIds: {
+          ...state?.mailBookmarkMetadataIds,
+          [action.payload.metadata_id]: true,
+        },
+      };
+    },
   },
 });
 
 export const {setUser} = userSlice.actions;
+export const userSliceActions = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

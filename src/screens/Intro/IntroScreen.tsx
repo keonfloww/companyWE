@@ -5,12 +5,10 @@
  * @format
  */
 
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useRef, useState} from 'react';
 import type {FC} from 'react';
 import {
-  Image,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   FlatList,
@@ -19,15 +17,14 @@ import {
   Dimensions,
 } from 'react-native';
 
-import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
-import {scale, scaleFont} from '../../utils/mixins';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
 import CommonStyles from '@screens/styles';
 import {t} from 'i18next';
 import IMAGES from '@assets/images/images';
 import {withTheme} from '@utils/mixinsComponents';
-import {useSSR} from 'react-i18next';
 import SafeView from '@components/atoms/View/SafeView';
 
 interface IcarouselItems {
@@ -40,7 +37,7 @@ interface IcarouselItems {
 const IntroScreen: FC<any> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const styless = withTheme(styles);
-  const flatListRef = useRef();
+  const flatListRef = useRef<FlatList>();
   const [corouselIndex, setCorouselIndex] = useState(1);
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -102,7 +99,7 @@ const backPress = (index: number) => {
   }
 };
 
-  const _renderItem = ({item}) => (
+  const _renderItem = ({item}: any) => (
     <View style={[styless.view, { width: Dimensions.get('screen').width, marginVertical: scale (20), flex: 1,}]}>
       <View style={{paddingHorizontal: scale(20), flex: 1, justifyContent: 'space-between',}}>
       <View style={{alignItems: 'center', justifyContent: 'flex-start', flex: 1,}}>{item.image}</View>

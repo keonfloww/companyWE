@@ -5,29 +5,18 @@
  * @format
  */
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect} from 'react';
 import type {FC} from 'react';
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  FlatList,
-  View,
-  useColorScheme,
-  Dimensions,
-} from 'react-native';
+import {Pressable, StyleSheet, Text, View, useColorScheme} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
-import {scale, scaleFont} from '../../utils/mixins';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
 import CommonStyles from '@screens/styles';
 import {t} from 'i18next';
 import IMAGES from '@assets/images/images';
 import {withTheme} from '@utils/mixinsComponents';
-import {useSSR} from 'react-i18next';
 import SafeView from '@components/atoms/View/SafeView';
 import FormItemController from '@components/atoms/Form/FormItemController';
 import {useForm} from 'react-hook-form';
@@ -36,15 +25,16 @@ import ServiceButton, {
   EnumAuthProviderButtonType,
 } from '@components/atoms/ServiceButton/ServiceButton';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
-import {useDispatch, useSelector} from 'react-redux';
-import { setUser } from '@redux/slices/user.slice';
+import {useDispatch} from 'react-redux';
+import {setUser} from '@redux/slices/user.slice';
+import navigationService from '@services/navigationService';
 
 interface IFormData {
   email: string;
   password: string;
 }
 
-const SignUpScreen: FC<any> = ({navigation}) => {
+const SignUpScreen: FC<any> = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const {signInByGoogle} = useAuthProvider();
@@ -64,28 +54,30 @@ const SignUpScreen: FC<any> = ({navigation}) => {
 
   const onSubmit = (data: IFormData) => {
     console.log({data, errors});
-    navigation.navigate(Screen.StoryBookScreen);
+    navigationService.navigate(Screen.MainTabBar);
   };
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     flex: 1,
   };
 
+  // TODO: Vipin put type for user
   function onAuthStateChanged(user: any) {
     if (!user) {
       return;
     }
     console.log(user);
     let createdUser = {
+      ...user,
       id: user?.uid,
-      email: user?.email,
-      emailVerified: user?.emailVerified,
+      // email: user?.email,
+      // emailVerified: user?.emailVerified,
       userName: user?.displayName,
       main_profile_image: user?.photoURL,
-      providerId: user?.providerId,
-    }
+      // providerId: user?.providerId,
+    };
     dispatch(setUser(createdUser));
-    navigation.navigate(Screen.StoryBookScreen);
+    navigationService.navigate(Screen.MainTabBar);
   }
 
   useEffect(() => {
@@ -106,7 +98,7 @@ const SignUpScreen: FC<any> = ({navigation}) => {
           paddingHorizontal: scale(30),
         }}>
         <Pressable
-          onPress={() => navigation.goBack()}
+          onPress={navigationService.goBack}
           style={{height: scale(25), width: scale(25)}}>
           <IMAGES.arrowLeft />
         </Pressable>
@@ -194,8 +186,10 @@ const SignUpScreen: FC<any> = ({navigation}) => {
           titleContainerStyles={{display: 'none'}}
         />
       </View>
-      <View style={{margin: scale(20),}}>
-        <Text>Have an account? <Text>Sign in</Text></Text>
+      <View style={{margin: scale(20)}}>
+        <Text>
+          Have an account? <Text>Sign in</Text>
+        </Text>
       </View>
     </SafeView>
   );
@@ -251,6 +245,6 @@ const styles = ({theme}: any) =>
       flex: 0,
       borderColor: '#50048A',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
   });
