@@ -26,7 +26,7 @@ import ServiceButton, {
 } from '@components/atoms/ServiceButton/ServiceButton';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import {useDispatch, useSelector} from 'react-redux';
-import {userSliceActions} from '@redux/slices/user.slice';
+import {setUser} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BaseState } from '@redux/stores';
@@ -36,7 +36,7 @@ interface IFormData {
   password: string;
 }
 
-const SignUpScreen: FC<any> = () => {
+const LoginScreen: FC<any> = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const connectedMails = useSelector(
@@ -58,8 +58,8 @@ const SignUpScreen: FC<any> = () => {
   });
 
   const onSubmit = (data: IFormData) => {
-    // console.log({data, errors});
-    // navigationService.navigateAndReset(Screen.ConnectMailScreen);
+    console.log({data, errors});
+    navigationService.navigateAndReset(Screen.ConnectMailScreen);
   };
 
   const signInWithGoogle = async () => {
@@ -102,14 +102,14 @@ const SignUpScreen: FC<any> = () => {
       </View>
       <View style={styless.view}>
         <Text style={[CommonStyles.font.bold30, {color: '#3c3c3c'}]}>
-          Sign Up
+          Welcome back!
         </Text>
         <Text
           style={[
             CommonStyles.font.regular14,
             {color: '#3c3c3c', marginTop: scale(10)},
           ]}>
-          Enter your email and set a password
+          Please sign in to continue.
         </Text>
         <View style={{marginTop: scale(20), marginBottom: scale(10)}}>
           <FormItemController
@@ -146,7 +146,7 @@ const SignUpScreen: FC<any> = () => {
           />
         </View>
         <BaseButton
-          title={t('Register')}
+          title={t('Login')}
           titleStyle={CommonStyles.font.regular14}
           onPress={handleSubmit(onSubmit)}
           size="lg"
@@ -171,29 +171,29 @@ const SignUpScreen: FC<any> = () => {
           OR
         </Text>
       </View>
-      <View style={{marginHorizontal: scale(20), flexDirection: 'row'}}>
+      <View style={{marginHorizontal: scale(20),}}>
         <ServiceButton
-          type={EnumAuthProviderButtonType.SIGN_UP}
+          type={EnumAuthProviderButtonType.SIGN_IN}
           containerStyle={styless.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
           onPress={signInWithGoogle}
-          titleContainerStyles={{display: 'none'}}
+        //   titleContainerStyles={{display: 'none'}}
         />
       </View>
       <View style={{margin: scale(20)}}>
         <Text>
-          Have an account?{' '}
+          Don't have an account?{' '}
           <Text
             style={[CommonStyles.font.semiBold14, {color: '#50048A'}]}
-            onPress={() => navigationService.navigateAndReset(Screen.Login)}>
-            Sign in
+            onPress={() => navigationService.navigateAndReset(Screen.Auth)}>
+            Sign up
           </Text>
         </Text>
       </View>
     </SafeView>
   );
 };
-export default SignUpScreen;
+export default LoginScreen;
 
 const styles = ({theme}: any) =>
   StyleSheet.create({
@@ -241,7 +241,7 @@ const styles = ({theme}: any) =>
       marginTop: scale(15),
       borderRadius: 99,
       borderWidth: 1,
-      flex: 0,
+    //   flex: 0,
       borderColor: '#50048A',
       alignItems: 'center',
       justifyContent: 'center',

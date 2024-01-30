@@ -1,77 +1,53 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {HTTP_METHODS} from './api.config';
-import {IBasePaginateParams} from '@models/pagination/paginationRequest.type';
-import {IUpdateUserParams} from '@models/users/request/userRequests.type';
 import Config from 'react-native-config';
 
 export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: Config.API_URL ?? 'https://jointly-full-ghoul.ngrok-free.app/api',
-    headers: new Headers({
-      'ngrok-skip-browser-warning': '69420',
-    }),
+    baseUrl: Config.API_URL,
   }),
   endpoints: builder => ({
-    userPaginate: builder.mutation({
-      query: (params: IBasePaginateParams) => {
+    userRegister: builder.mutation({
+      query: (params: IUserRegisterParams) => {
         return {
-          url: `/users`,
-          method: HTTP_METHODS.GET,
+          url: `/users/register`,
+          method: HTTP_METHODS.POST,
           params,
         };
       },
     }),
-    userDetail: builder.mutation({
-      query: ({userId}: {userId: number}) => {
+    userVerify: builder.mutation({
+      query: (params: IUserVerifyParams) => {
         return {
-          url: `/users/${userId}`,
-          method: HTTP_METHODS.GET,
+          url: `/users/verify`,
+          method: HTTP_METHODS.POST,
+          params,
         };
       },
       transformResponse: (res: any) => res.data,
     }),
-    userUpdate: builder.mutation({
-      query: ({
-        params,
-        userId,
-      }: {
-        params: IUpdateUserParams;
-        userId: number;
-      }) => {
-        return {
-          url: `/users/${userId}`,
-          method: HTTP_METHODS.PUT,
-          params: params,
-        };
-      },
-    }),
-    userDelete: builder.mutation({
-      query: ({userId}: {userId: number}) => {
-        return {
-          url: `/users/${userId}`,
-          method: HTTP_METHODS.DELETE,
-        };
-      },
-    }),
-    userCreate: builder.mutation({
-      query: ({params}: {params: IUpdateUserParams}) => {
-        return {
-          url: `/users`,
-          method: HTTP_METHODS.POST,
-          params: params,
-        };
-      },
-      transformResponse: (res: any) => res?.data,
-    }),
   }),
 });
 
-export const {
-  useUserPaginateMutation,
+export interface IUserRegisterParams {
+  id: string;
+  user_name: string;
+  email_address: string;
+  is_email_address_verified: boolean;
+  sign_up_provider_id: string;
+}
+export interface IUserVerifyParams {
+  id: string;
+  is_email_address_verified: boolean;
+}
 
-  useUserDetailMutation,
-  useUserUpdateMutation,
-  useUserDeleteMutation,
-  useUserCreateMutation,
+
+
+export const {
+  useUserRegisterMutation,
+  useUserVerifyMutation,
+  // useUserUpdateMutation,
+  // useUserDeleteMutation,
+  // useUserCreateMutation,
 } = userApi;
