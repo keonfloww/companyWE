@@ -16,7 +16,6 @@ import BaseButton from '@components/atoms/Button/BaseButton';
 import CommonStyles from '@screens/styles';
 import {t} from 'i18next';
 import IMAGES from '@assets/images/images';
-import {withTheme} from '@utils/mixinsComponents';
 import SafeView from '@components/atoms/View/SafeView';
 import FormItemController from '@components/atoms/Form/FormItemController';
 import {useForm} from 'react-hook-form';
@@ -29,7 +28,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setUser} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BaseState } from '@redux/stores';
+import {BaseState} from '@redux/stores';
 
 interface IFormData {
   email: string;
@@ -39,13 +38,13 @@ interface IFormData {
 const LoginScreen: FC<any> = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const connectedMails = useSelector(
-      (state: BaseState) => state?.userReducer.connectedMails,
-    );
+  const connectedMails = useSelector(
+    (state: BaseState) => state?.userReducer.connectedMails,
+  );
   const {signInByGoogle} = useAuthProvider();
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
-  const styless = withTheme(styles);
+  console.log('connectedMails', connectedMails);
   const {
     control,
     handleSubmit,
@@ -64,7 +63,6 @@ const LoginScreen: FC<any> = () => {
 
   const signInWithGoogle = async () => {
     const data = await signInByGoogle();
-    console.log({useresr:data.user})
     AsyncStorage.setItem('user', JSON.stringify(data.user));
     // dispatch(userSliceActions.setUser(createdUser));
     if (!connectedMails.length) {
@@ -72,7 +70,7 @@ const LoginScreen: FC<any> = () => {
       return;
     }
     navigationService.navigateAndReset(Screen.MainTabBar);
-  }
+  };
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -100,7 +98,7 @@ const LoginScreen: FC<any> = () => {
       <View>
         <IMAGES.welcomeCircle />
       </View>
-      <View style={styless.view}>
+      <View style={styles.view}>
         <Text style={[CommonStyles.font.bold30, {color: '#3c3c3c'}]}>
           Welcome back!
         </Text>
@@ -124,9 +122,9 @@ const LoginScreen: FC<any> = () => {
                 message: 'Please enter a valid email address',
               },
             }}
-            style={styless.inputStyle}
-            containerStyle={styless.inputContainerStyle}
-            labelStyle={[CommonStyles.font.semiBold14, styless.labelStyle]}
+            style={styles.inputStyle}
+            containerStyle={styles.inputContainerStyle}
+            labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
           />
           <FormItemController
             control={control}
@@ -140,9 +138,9 @@ const LoginScreen: FC<any> = () => {
                 message: 'Password should be at least 8 characters long',
               },
             }}
-            style={styless.inputStyle}
-            containerStyle={styless.inputContainerStyle}
-            labelStyle={[CommonStyles.font.semiBold14, styless.labelStyle]}
+            style={styles.inputStyle}
+            containerStyle={styles.inputContainerStyle}
+            labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
           />
         </View>
         <BaseButton
@@ -171,13 +169,13 @@ const LoginScreen: FC<any> = () => {
           OR
         </Text>
       </View>
-      <View style={{marginHorizontal: scale(20),}}>
+      <View style={{marginHorizontal: scale(20)}}>
         <ServiceButton
           type={EnumAuthProviderButtonType.SIGN_IN}
-          containerStyle={styless.baseButton}
+          containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
           onPress={signInWithGoogle}
-        //   titleContainerStyles={{display: 'none'}}
+          //   titleContainerStyles={{display: 'none'}}
         />
       </View>
       <View style={{margin: scale(20)}}>
@@ -195,55 +193,54 @@ const LoginScreen: FC<any> = () => {
 };
 export default LoginScreen;
 
-const styles = ({theme}: any) =>
-  StyleSheet.create({
-    text: {
-      color: '#3C3C3C',
-      marginBottom: scale(10),
-    },
-    view: {
-      marginHorizontal: scale(25),
-      marginVertical: scale(20),
-    },
-    paginationDot: {
-      borderRadius: scale(6),
-      width: scale(6),
-      height: scale(6),
-      margin: scale(5),
-      backgroundColor: 'lightgray',
-    },
-    pagination: {
-      // width: Dimensions.get('screen').width,
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
-      marginTop: scale(10),
-      marginBottom: scale(40),
-      marginHorizontal: scale(20),
-      //  backgroundColor: 'red'
-    },
-    inputStyle: {
-      borderWidth: 1,
-      borderRadius: scale(100),
-      paddingHorizontal: scale(20),
-      paddingVertical: scale(10),
-      // marginBottom: scale(12),
-      height: scale(40),
-    },
-    inputContainerStyle: {
-      marginBottom: scale(14),
-    },
-    labelStyle: {
-      color: '#3C3C3C',
-    },
-    baseButton: {
-      backgroundColor: 'white',
-      marginTop: scale(15),
-      borderRadius: 99,
-      borderWidth: 1,
+const styles = StyleSheet.create({
+  text: {
+    color: '#3C3C3C',
+    marginBottom: scale(10),
+  },
+  view: {
+    marginHorizontal: scale(25),
+    marginVertical: scale(20),
+  },
+  paginationDot: {
+    borderRadius: scale(6),
+    width: scale(6),
+    height: scale(6),
+    margin: scale(5),
+    backgroundColor: 'lightgray',
+  },
+  pagination: {
+    // width: Dimensions.get('screen').width,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginTop: scale(10),
+    marginBottom: scale(40),
+    marginHorizontal: scale(20),
+    //  backgroundColor: 'red'
+  },
+  inputStyle: {
+    borderWidth: 1,
+    borderRadius: scale(100),
+    paddingHorizontal: scale(20),
+    paddingVertical: scale(10),
+    // marginBottom: scale(12),
+    height: scale(40),
+  },
+  inputContainerStyle: {
+    marginBottom: scale(14),
+  },
+  labelStyle: {
+    color: '#3C3C3C',
+  },
+  baseButton: {
+    backgroundColor: 'white',
+    marginTop: scale(15),
+    borderRadius: 99,
+    borderWidth: 1,
     //   flex: 0,
-      borderColor: '#50048A',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
+    borderColor: '#50048A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

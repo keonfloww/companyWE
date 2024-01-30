@@ -25,12 +25,14 @@ import useUserViewModel from '@redux/hooks/useUserViewModel';
 import auth from '@react-native-firebase/auth';
 import {BaseState} from '@redux/stores';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUser} from '@redux/slices/user.slice';
+import {setUser, userSliceActions} from '@redux/slices/user.slice';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import LoginScreen from '@screens/Auth/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
-import {Colors} from 'react-native-ui-lib';
+import {Button, Colors} from 'react-native-ui-lib';
+import firestore from '@react-native-firebase/firestore';
+import {FireStoreCollection} from '@services/firestoreService';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -50,22 +52,27 @@ const RootNavigator: FC = () => {
     CONFIG,
   };
 
-  useEffect(() => {
-    if (isEmptyConnectedMails) {
-      global?.props?.showLoading();
-      setTimeout(() => {
+  const checkAuth = async () => {
+    const user = await AsyncStorage.getItem('user');
+    const firebaseAuth = auth()!.currentUser;
+
+    if (firebaseAuth?.uid && user) {
+      if (!connectedMails.length || isEmptyConnectedMails) {
         navigationService.navigateAndReset(Screen.ConnectMailScreen);
-        global?.props?.hideLoading();
-      }, 1000);
+      } else {
+        navigationService.navigateAndReset(Screen.MainTabBar);
+      }
     }
-  }, [isEmptyConnectedMails]);
+    setTimeout(() => {
+      BootSplash.hide({fade: true});
+    }, 500);
+  };
 
   return (
     <NavigationContainer
-  onReady={checkAuth}
+      onReady={checkAuth}
       ref={navigationRef}
-      linking={linking}
->
+      linking={linking}>
       <Stack.Navigator
         initialRouteName={initialScreen}
         // initialRouteName={Screen.StoryBookScreen}
@@ -79,44 +86,44 @@ const RootNavigator: FC = () => {
         }}>
         {/* Global */}
 
-          <Stack.Group>
-            <Stack.Screen
-              name={Screen.IntroScreen}
-              component={IntroScreen}
-              options={{title: t('screen:intro'), headerShown: false}}
-            />
-            <Stack.Screen
-              name={Screen.Auth}
-              component={SignUpScreen}
-              options={{title: t('screen:auth'), headerShown: false}}
-            />
-            <Stack.Screen
-              name={Screen.Login}
-              component={LoginScreen}
-              options={{title: t('screen:auth'), headerShown: false}}
-            />
-            <Stack.Screen
-              name={Screen.ConnectMailScreen}
-              component={ConnectMailScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name={Screen.StoryBookScreen}
-              component={StoryBookScreen}
-              options={{title: t('Project Story Book'), headerShown: true}}
-            />
-          </Stack.Group>
-          <Stack.Group>
-            <Stack.Screen
-              name={Screen.MainTabBar}
-              component={TabBarNavigator}
-              options={{
-                headerTitle: 'Test',
-                headerShown: false,
-                // gestureEnabled: false,
-              }}
-            />
-          </Stack.Group>
+        <Stack.Group>
+          <Stack.Screen
+            name={Screen.IntroScreen}
+            component={IntroScreen}
+            options={{title: t('screen:intro'), headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.Auth}
+            component={SignUpScreen}
+            options={{title: t('screen:auth'), headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.Login}
+            component={LoginScreen}
+            options={{title: t('screen:auth'), headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.ConnectMailScreen}
+            component={ConnectMailScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.StoryBookScreen}
+            component={StoryBookScreen}
+            options={{title: t('Project Story Book'), headerShown: true}}
+          />
+        </Stack.Group>
+        <Stack.Group>
+          <Stack.Screen
+            name={Screen.MainTabBar}
+            component={TabBarNavigator}
+            options={{
+              headerTitle: 'Test',
+              headerShown: false,
+              // gestureEnabled: false,
+            }}
+          />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -125,9 +132,10 @@ const RootNavigator: FC = () => {
 export default RootNavigator;
 
 const TabBarNavigator: FC = () => {
-  const {theme} = useTheme();
-
-  const {mailCountUnread} = useInboxScreen();
+  const {mailCountUnread, handleGetAllMailInConnectedMails} = useInboxScreen();
+  useEffect(() => {
+    handleGetAllMailInConnectedMails();
+  }, []);
 
   // TODO: create hook for status bar on each screen style
   useEffect(() => {
@@ -169,8 +177,6 @@ const TabBarNavigator: FC = () => {
         headerShown: true,
         tabBarActiveTintColor: Colors.primary,
         tabBarAllowFontScaling: true,
-        // tabBarStyle: {minHeight: scale(59)},
-        // tabBarLabelStyle: {marginVertical: scale(10)},
       }}>
       <Tab.Screen
         name={Screen.HomeScreen}
@@ -235,18 +241,26 @@ const FakeScreen = () => {
   const {signOut} = useAuthProvider();
   const dispatch = useDispatch();
 
-  const signOutt = () => {
-    signOut().then(()=> {
-      dispatch(setUser(null));
+  const handleSignOut = async () => {
+    try {
+      const firebaseAuth = auth()!.currentUser;
+      await firestore()
+        .collection(FireStoreCollection.MAIL)
+        .doc(firebaseAuth!.uid)
+        .delete();
+      await signOut();
+      dispatch(userSliceActions.signOut());
       AsyncStorage.removeItem('user');
       navigationService.navigateAndReset(Screen.Login);
-    });
-  }
+    } catch (error) {
+      console.log('error handleSignOut');
+    }
+  };
 
   return (
     <View>
       <Text>Fake screen</Text>
-      <Button title={'Sign out'} onPress={signOutt} />
+      <Button label={'Sign out'} onPress={handleSignOut} />
     </View>
   );
 };

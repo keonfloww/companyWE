@@ -7,7 +7,7 @@ const useUserViewModel = () => {
   const connectedMails = useSelector(
     (state: BaseState) => state?.userReducer.connectedMails,
   );
-
+  console.log('connectedMails?.length', connectedMails?.length);
   const isEmptyConnectedMails = useMemo(() => {
     return !connectedMails?.length;
   }, [connectedMails]);

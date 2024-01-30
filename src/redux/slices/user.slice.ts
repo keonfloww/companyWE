@@ -38,6 +38,10 @@ export const userSlice = createSlice({
     setUser: (state, action: PayloadAction<IUser | null>) => {
       state.user = action.payload;
     },
+
+    signOut: () => {
+      return initialState;
+    },
     addNewConnectedMail: (
       state,
       action: PayloadAction<FireBaseMailCredentials>,
