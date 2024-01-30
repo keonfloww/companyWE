@@ -1,15 +1,25 @@
 import {FireBaseMailCredentials} from '@models/firebaseModel';
-import {useGetMailMutation} from '@redux/slices/api/mailApi.slice';
+import {Email} from '@models/mail/modelMail';
+import {
+  useGetMailMutation,
+  useMoveToTrashMutation,
+} from '@redux/slices/api/mailApi.slice';
+import {userSliceActions} from '@redux/slices/user.slice';
 import {BaseState} from '@redux/stores';
 import DateUtils from '@utils/dateUtils';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
+import {useMemo} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
 const useInboxScreen = () => {
-  const [getMail] = useGetMailMutation();
+  const dispatch = useDispatch();
 
+  const [getMail] = useGetMailMutation();
+  const [moveMailToTrash] = useMoveToTrashMutation();
+
+  const userState = useSelector((state: BaseState) => state.userReducer);
+  const mailState = useSelector((state: BaseState) => state.mailReducer);
   const connectedMailsUnsynced = useSelector((state: BaseState) => {
-    console.log(state.userReducer?.syncedMailAddress);
     return state.userReducer?.connectedMails?.filter(
       (i: FireBaseMailCredentials) =>
         !state.userReducer?.syncedMailAddress?.includes(i?.email),
@@ -19,26 +29,36 @@ const useInboxScreen = () => {
     Object.values(state.userReducer.mailbox).flat(),
   );
 
-  // TEST log mail
-  // console.log(
-  //   'mailBox',
-  //   mailBoxFlatten?.map((mail: Mail) => {
-  //     return {...mail, body: {}};
-  //   }),
-  // );
+  // MEMO ---------------------
+  const mailCountUnread = useMemo(() => {
+    return (
+      mailBoxFlatten?.length -
+        Object.values(mailState?.mailReadMetadataIds)?.length ?? 0
+    );
+  }, [mailState?.mailReadMetadataIds, mailBoxFlatten?.length]);
 
+  const computedIsShowDeleteAfterSyncedMail = useMemo(
+    () =>
+      userState?.isAskedForDeleteMail
+        ? false
+        : connectedMailsUnsynced?.length == 0,
+    [connectedMailsUnsynced?.length, userState?.isAskedForDeleteMail],
+  );
+
+  // FUNCTIONS ---------------------
   const handleGetAllMailInConnectedMails = async () => {
     try {
       connectedMailsUnsynced?.forEach((mail: FireBaseMailCredentials) => {
         getMail({
-          email_address: mail.email,
           access_token: mail?.access_token,
+          expiry_date: mail.expiry_date,
+          refresh_token: mail.refresh_token,
+
+          email_address: mail.email,
           start_date: moment()
             .subtract(2, 'week')
             .format(DateUtils.BACKEND_FORMAT),
           end_date: moment().format(DateUtils.BACKEND_FORMAT),
-          expiry_date: mail.expiry_date,
-          refresh_token: mail.refresh_token,
         }).unwrap();
       });
     } catch (error) {
@@ -46,9 +66,38 @@ const useInboxScreen = () => {
     }
   };
 
+  const handleMoveMailToTrash = () => {
+    try {
+      userState.connectedMails?.forEach((mail: FireBaseMailCredentials) => {
+        moveMailToTrash({
+          access_token: mail?.access_token,
+          expiry_date: mail.expiry_date,
+          refresh_token: mail.refresh_token,
+          message_ids: userState.mailbox[mail.email]?.map(
+            (mail: Email) => mail.metadata_id,
+          ),
+        }).unwrap();
+      });
+      dispatch(userSliceActions.markAsAskedDelete());
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  // EFFECT ---------------------
+
+  // TEST log mail
+  // console.log(
+  //   'mailBox',
+  //   mailBoxFlatten?.map((mail: Mail) => {
+  //     return {...mail, body: {}};
+  //   }),
+  // );
   return {
     mailBoxFlatten,
-
+    mailCountUnread,
+    computedIsShowDeleteAfterSyncedMail,
+    handleMoveMailToTrash,
     handleGetAllMailInConnectedMails,
   };
 };
