@@ -28,7 +28,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {userSliceActions} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BaseState } from '@redux/stores';
+import {BaseState} from '@redux/stores';
+import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 
 interface IFormData {
   email: string;
@@ -38,9 +39,9 @@ interface IFormData {
 const SignUpScreen: FC<any> = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const connectedMails = useSelector(
-      (state: BaseState) => state?.userReducer.connectedMails,
-    );
+  const connectedMails = useSelector(
+    (state: BaseState) => state?.userReducer.connectedMails,
+  );
   const {signInByGoogle} = useAuthProvider();
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
@@ -63,7 +64,7 @@ const SignUpScreen: FC<any> = () => {
 
   const signInWithGoogle = async () => {
     const data = await signInByGoogle();
-    console.log({useresr:data.user})
+    console.log({useresr: data.user});
     AsyncStorage.setItem('user', JSON.stringify(data.user));
     // dispatch(userSliceActions.setUser(createdUser));
     if (!connectedMails.length) {
@@ -71,7 +72,7 @@ const SignUpScreen: FC<any> = () => {
       return;
     }
     navigationService.navigateAndReset(Screen.MainTabBar);
-  }
+  };
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -79,11 +80,11 @@ const SignUpScreen: FC<any> = () => {
   };
 
   return (
-    <SafeView style={backgroundStyle}>
+    <LayoutBackgroundDefault>
       <View
         style={{
           position: 'absolute',
-          top: 50,
+          top: scale(15),
           justifyContent: 'space-between',
           flexDirection: 'row',
           width: '100%',
@@ -96,9 +97,7 @@ const SignUpScreen: FC<any> = () => {
           <IMAGES.arrowLeft />
         </Pressable>
       </View>
-      <View>
-        <IMAGES.welcomeCircle />
-      </View>
+      <View style={{height: scale(163)}}></View>
       <View style={styles.view}>
         <Text style={[CommonStyles.font.bold30, {color: Colors.text}]}>
           Sign Up
@@ -184,12 +183,12 @@ const SignUpScreen: FC<any> = () => {
           Have an account?{' '}
           <Text
             style={[CommonStyles.font.semiBold14, {color: '#50048A'}]}
-            onPress={() => navigationService.navigateAndReset(Screen.Login)}>
+            onPress={() => navigationService.navigate(Screen.Login)}>
             Sign in
           </Text>
         </Text>
       </View>
-    </SafeView>
+    </LayoutBackgroundDefault>
   );
 };
 export default SignUpScreen;

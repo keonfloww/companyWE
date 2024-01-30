@@ -30,6 +30,7 @@ import IMAGES from '@assets/images/images';
 import SafeView from '@components/atoms/View/SafeView';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import navigationService from '@services/navigationService';
 
 interface IcarouselItems {
   id: number;
@@ -201,7 +202,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
         )}
         {corouselIndex !== 3 ? (
           <Text
-            onPress={() => navigation.navigate(Screen.Auth)}
+            onPress={() => navigationService.navigate(Screen.Login)}
             style={CommonStyles.font.semiBold14}>
             Skip
           </Text>

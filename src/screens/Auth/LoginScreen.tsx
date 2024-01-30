@@ -29,6 +29,7 @@ import {setUser} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BaseState} from '@redux/stores';
+import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 
 interface IFormData {
   email: string;
@@ -72,17 +73,12 @@ const LoginScreen: FC<any> = () => {
     navigationService.navigateAndReset(Screen.MainTabBar);
   };
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    flex: 1,
-  };
-
   return (
-    <SafeView style={backgroundStyle}>
+    <LayoutBackgroundDefault>
       <View
         style={{
           position: 'absolute',
-          top: 50,
+          top: scale(15),
           justifyContent: 'space-between',
           flexDirection: 'row',
           width: '100%',
@@ -95,9 +91,7 @@ const LoginScreen: FC<any> = () => {
           <IMAGES.arrowLeft />
         </Pressable>
       </View>
-      <View>
-        <IMAGES.welcomeCircle />
-      </View>
+      <View style={{height: scale(163)}}></View>
       <View style={styles.view}>
         <Text style={[CommonStyles.font.bold30, {color: '#3c3c3c'}]}>
           Welcome back!
@@ -183,12 +177,12 @@ const LoginScreen: FC<any> = () => {
           Don't have an account?{' '}
           <Text
             style={[CommonStyles.font.semiBold14, {color: '#50048A'}]}
-            onPress={() => navigationService.navigateAndReset(Screen.Auth)}>
+            onPress={() => navigationService.navigate(Screen.Auth)}>
             Sign up
           </Text>
         </Text>
       </View>
-    </SafeView>
+    </LayoutBackgroundDefault>
   );
 };
 export default LoginScreen;

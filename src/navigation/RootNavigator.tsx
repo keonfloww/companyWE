@@ -33,13 +33,13 @@ import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 import {Button, Colors} from 'react-native-ui-lib';
 import firestore from '@react-native-firebase/firestore';
 import {FireStoreCollection} from '@services/firestoreService';
+import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
 
 const RootNavigator: FC = () => {
-  let initialScreen = Screen.IntroScreen;
   const {isEmptyConnectedMails} = useUserViewModel();
   const connectedMails = useSelector(
     (state: BaseState) => state?.userReducer.connectedMails,
@@ -74,7 +74,7 @@ const RootNavigator: FC = () => {
       ref={navigationRef}
       linking={linking}>
       <Stack.Navigator
-        initialRouteName={initialScreen}
+        initialRouteName={Screen.SplashScreen}
         // initialRouteName={Screen.StoryBookScreen}
         screenOptions={{
           fullScreenGestureEnabled: false,
@@ -87,6 +87,11 @@ const RootNavigator: FC = () => {
         {/* Global */}
 
         <Stack.Group>
+          <Stack.Screen
+            name={Screen.SplashScreen}
+            component={() => <LayoutBackgroundDefault />}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name={Screen.IntroScreen}
             component={IntroScreen}

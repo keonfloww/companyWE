@@ -69,6 +69,9 @@ const useInboxScreen = () => {
     }
   };
 
+  const handleMarkAsAskedDelete = () =>
+    dispatch(userSliceActions.markAsAskedDelete());
+
   const handleMoveMailToTrash = () => {
     try {
       userState.connectedMails?.forEach((mail: FireBaseMailCredentials) => {
@@ -81,7 +84,7 @@ const useInboxScreen = () => {
           ),
         }).unwrap();
       });
-      dispatch(userSliceActions.markAsAskedDelete());
+      handleMarkAsAskedDelete();
     } catch (error) {
       console.log('error', error);
     }
@@ -102,6 +105,7 @@ const useInboxScreen = () => {
     computedIsShowDeleteAfterSyncedMail,
     handleMoveMailToTrash,
     handleGetAllMailInConnectedMails,
+    handleMarkAsAskedDelete,
   };
 };
 

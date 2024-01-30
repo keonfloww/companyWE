@@ -22,6 +22,7 @@ const InboxScreen = () => {
 
     handleMoveMailToTrash,
     handleGetAllMailInConnectedMails,
+    handleMarkAsAskedDelete,
   } = useInboxScreen();
   const {data, nextPage, setPage} = usePagination<Email>(mailBoxFlatten);
   const [selectMode, setSelectMode] = useState<boolean>(false);
@@ -61,7 +62,7 @@ const InboxScreen = () => {
           </Text>
         )}
       </View>
-      <View style={{height: scale(10)}}></View>
+      <View style={{height: scale(10)}} />
       <FlatList
         onEndReached={nextPage}
         refreshing={false}
@@ -100,6 +101,7 @@ const InboxScreen = () => {
         confirmTitle={t('Yes, I am sure')}
         cancelTitle={t('No')}
         onClose={() => {
+          handleMarkAsAskedDelete();
           setIsShowDeleteAfterSyncedMail(false);
         }}
         onConfirm={() => {
