@@ -26,18 +26,33 @@ export const mailApi = createApi({
         };
       },
     }),
+    moveToTrash: builder.mutation({
+      query: (params: IMoveMailToTrash) => {
+        return {
+          url: `/gmail/trash_emails`,
+          method: HTTP_METHODS.POST,
+          body: params,
+        };
+      },
+    }),
   }),
 });
 
-export const {useGetMailMutation} = mailApi;
+export const {useGetMailMutation, useMoveToTrashMutation} = mailApi;
 
-export interface IGetMailParams {
+interface MailAuth2Data {
   access_token: string;
-  start_date: string;
-  end_date: string;
   expiry_date: number;
   refresh_token: string;
+}
+export interface IGetMailParams extends MailAuth2Data {
+  start_date: string;
+  end_date: string;
 
   // UI FIRST
   email_address: string;
+}
+
+export interface IMoveMailToTrash extends MailAuth2Data {
+  message_ids: string[];
 }

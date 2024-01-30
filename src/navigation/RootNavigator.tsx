@@ -3,13 +3,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Button, useTheme} from '@rneui/themed';
 import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {Screen} from './navigation.enums';
 // import HeaderBackgroundDefault from '@layouts/default/HeaderBackgroundDefault';
 import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
-import {Text, TouchableOpacity, View} from 'react-native';
-import FastImage from 'react-native-fast-image';
+import {Text, View} from 'react-native';
 import IMAGES from '@assets/images/images';
 import CommonStyles from '@screens/styles';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -30,6 +29,7 @@ import {setUser} from '@redux/slices/user.slice';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import LoginScreen from '@screens/Auth/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -154,6 +154,8 @@ export default RootNavigator;
 const TabBarNavigator: FC = () => {
   const {theme} = useTheme();
 
+  const {mailCountUnread} = useInboxScreen();
+
   // TODO: create hook for status bar on each screen style
   useEffect(() => {
     StatusBar.setBackgroundColor('white');
@@ -212,7 +214,7 @@ const TabBarNavigator: FC = () => {
         options={{
           ...styleHeader(),
           title: t('screen:inboxScreen'),
-          tabBarBadge: 3,
+          tabBarBadge: mailCountUnread,
           tabBarIcon: ({color}) => <IMAGES.IcInbox color={color} />,
         }}
       />

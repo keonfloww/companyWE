@@ -3,6 +3,7 @@ import {Email} from '@models/mail/modelMail';
 import {IUser} from '@models/users/user.type';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import _ from 'lodash';
+import moment from 'moment';
 
 const initialState: {
   user: IUser | null;
@@ -15,6 +16,9 @@ const initialState: {
   // mail status
   mailReadMetadataIds: {[key in string]: boolean};
   mailBookmarkMetadataIds: {[key in string]: boolean};
+
+  // Action marker
+  isAskedForDeleteMail?: boolean;
 } = {
   user: {},
   connectedMails: [],
@@ -23,6 +27,8 @@ const initialState: {
 
   mailReadMetadataIds: {},
   mailBookmarkMetadataIds: {},
+
+  isAskedForDeleteMail: false,
 };
 
 export const userSlice = createSlice({
@@ -49,9 +55,12 @@ export const userSlice = createSlice({
     ) => {
       const data = action.payload;
 
-      const oldEmailFromTargetMailAddress =
+      let oldEmailFromTargetMailAddress =
         state?.mailbox?.[data.targetMailAddress] ?? [];
 
+      oldEmailFromTargetMailAddress?.filter((mail: Email) => {
+        return mail.received_on_unix >= moment().subtract(2, 'week').unix();
+      });
       return {
         ...state,
         mailbox: {
@@ -72,6 +81,13 @@ export const userSlice = createSlice({
           ...state?.mailBookmarkMetadataIds,
           [action.payload.metadata_id]: true,
         },
+      };
+    },
+
+    markAsAskedDelete: state => {
+      return {
+        ...state,
+        isAskedForDeleteMail: true,
       };
     },
   },
