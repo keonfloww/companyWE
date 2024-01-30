@@ -3,7 +3,7 @@ import firebase from '@react-native-firebase/app';
 
 const useFirebaseService = () => {
   const initFirebaseApp = async () => {
-    console.log('initFirebaseApp', initFirebaseApp);
+    console.log('------- initFirebaseApp -------');
 
     // TODO: toannt update into env
     const firebaseConfig = {

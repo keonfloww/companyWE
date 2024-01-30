@@ -1,5 +1,6 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
+import {Colors} from 'react-native-ui-lib';
 
 const SafeView = (props: any) => {
   return (
@@ -18,5 +19,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
 });

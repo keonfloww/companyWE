@@ -1,14 +1,14 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Button, useTheme} from '@rneui/themed';
+import {useTheme} from '@rneui/themed';
 import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
-import React, {FC, useEffect} from 'react';
+import React, {FC, PropsWithChildren, useEffect} from 'react';
 import {Screen} from './navigation.enums';
 // import HeaderBackgroundDefault from '@layouts/default/HeaderBackgroundDefault';
 import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
-import {Text, View} from 'react-native';
+import {Platform, Text, View} from 'react-native';
 import IMAGES from '@assets/images/images';
 import CommonStyles from '@screens/styles';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -25,18 +25,20 @@ import useUserViewModel from '@redux/hooks/useUserViewModel';
 import auth from '@react-native-firebase/auth';
 import {BaseState} from '@redux/stores';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUser} from '@redux/slices/user.slice';
+import {setUser, userSliceActions} from '@redux/slices/user.slice';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import LoginScreen from '@screens/Auth/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
+import {Button, Colors} from 'react-native-ui-lib';
+import firestore from '@react-native-firebase/firestore';
+import {FireStoreCollection} from '@services/firestoreService';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
 
 const RootNavigator: FC = () => {
-  const {theme} = useTheme();
   let initialScreen = Screen.IntroScreen;
   const {isEmptyConnectedMails} = useUserViewModel();
   const connectedMails = useSelector(
@@ -50,49 +52,27 @@ const RootNavigator: FC = () => {
     CONFIG,
   };
 
-  useEffect(() => {
-    // if (isEmptyConnectedMails) {
-    //   global?.props?.showLoading();
-    //   setTimeout(() => {
-    //     navigationService.navigateAndReset(Screen.ConnectMailScreen);
-    //     global?.props?.hideLoading();
-    //   }, 1000);
-    // }
-  }, [isEmptyConnectedMails]);
-
   const checkAuth = async () => {
     const user = await AsyncStorage.getItem('user');
     const firebaseAuth = auth()!.currentUser;
-    console.log(firebaseAuth?.uid);
+
     if (firebaseAuth?.uid && user) {
-      if(!connectedMails.length) {
-          navigationService.navigateAndReset(Screen.ConnectMailScreen);
-      } else { 
+      if (!connectedMails.length || isEmptyConnectedMails) {
+        navigationService.navigateAndReset(Screen.ConnectMailScreen);
+      } else {
         navigationService.navigateAndReset(Screen.MainTabBar);
       }
-    } 
-    console.log('this runn')
-    setTimeout(()=> {
+    }
+    setTimeout(() => {
       BootSplash.hide({fade: true});
-    },500);
-  }
+    }, 500);
+  };
 
   return (
     <NavigationContainer
       onReady={checkAuth}
       ref={navigationRef}
-      linking={linking}
-      theme={{
-        colors: {
-          primary: theme.colors.primary,
-          background: theme.colors.background,
-          card: theme.colors.white,
-          text: theme.colors.black,
-          border: theme.colors.black,
-          notification: theme.colors.black,
-        },
-        dark: theme.mode === 'dark',
-      }}>
+      linking={linking}>
       <Stack.Navigator
         initialRouteName={initialScreen}
         // initialRouteName={Screen.StoryBookScreen}
@@ -101,49 +81,49 @@ const RootNavigator: FC = () => {
           headerBackVisible: true,
           // headerBackground: HeaderBackgroundDefault,
           headerStyle: {
-            backgroundColor: theme.colors.primary,
+            backgroundColor: Colors.primary,
           },
         }}>
         {/* Global */}
 
-          <Stack.Group>
-            <Stack.Screen
-              name={Screen.IntroScreen}
-              component={IntroScreen}
-              options={{title: t('screen:intro'), headerShown: false}}
-            />
-            <Stack.Screen
-              name={Screen.Auth}
-              component={SignUpScreen}
-              options={{title: t('screen:auth'), headerShown: false}}
-            />
-            <Stack.Screen
-              name={Screen.Login}
-              component={LoginScreen}
-              options={{title: t('screen:auth'), headerShown: false}}
-            />
-            <Stack.Screen
-              name={Screen.ConnectMailScreen}
-              component={ConnectMailScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name={Screen.StoryBookScreen}
-              component={StoryBookScreen}
-              options={{title: t('Project Story Book'), headerShown: true}}
-            />
-          </Stack.Group>
-          <Stack.Group>
-            <Stack.Screen
-              name={Screen.MainTabBar}
-              component={TabBarNavigator}
-              options={{
-                headerTitle: 'Test',
-                headerShown: false,
-                // gestureEnabled: false,
-              }}
-            />
-          </Stack.Group>
+        <Stack.Group>
+          <Stack.Screen
+            name={Screen.IntroScreen}
+            component={IntroScreen}
+            options={{title: t('screen:intro'), headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.Auth}
+            component={SignUpScreen}
+            options={{title: t('screen:auth'), headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.Login}
+            component={LoginScreen}
+            options={{title: t('screen:auth'), headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.ConnectMailScreen}
+            component={ConnectMailScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.StoryBookScreen}
+            component={StoryBookScreen}
+            options={{title: t('Project Story Book'), headerShown: true}}
+          />
+        </Stack.Group>
+        <Stack.Group>
+          <Stack.Screen
+            name={Screen.MainTabBar}
+            component={TabBarNavigator}
+            options={{
+              headerTitle: 'Test',
+              headerShown: false,
+              // gestureEnabled: false,
+            }}
+          />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -152,20 +132,23 @@ const RootNavigator: FC = () => {
 export default RootNavigator;
 
 const TabBarNavigator: FC = () => {
-  const {theme} = useTheme();
-
-  const {mailCountUnread} = useInboxScreen();
+  const {mailCountUnread, handleGetAllMailInConnectedMails} = useInboxScreen();
+  useEffect(() => {
+    handleGetAllMailInConnectedMails();
+  }, []);
 
   // TODO: create hook for status bar on each screen style
   useEffect(() => {
-    StatusBar.setBackgroundColor('white');
+    if (Platform.OS == 'android') {
+      StatusBar.setBackgroundColor('white');
+    }
     StatusBar.setBarStyle('dark-content');
-  }, [theme]);
+  }, []);
 
   const styleHeader = () => {
     return {
       headerStyle: {
-        backgroundColor: '#50048A',
+        backgroundColor: Colors.primary,
       },
       headerRight: () => {
         return (
@@ -192,10 +175,8 @@ const TabBarNavigator: FC = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: true,
-        tabBarActiveTintColor: theme.colors.primary,
+        tabBarActiveTintColor: Colors.primary,
         tabBarAllowFontScaling: true,
-        tabBarStyle: {height: scale(59)},
-        tabBarLabelStyle: {marginBottom: scale(10)},
       }}>
       <Tab.Screen
         name={Screen.HomeScreen}
@@ -204,7 +185,11 @@ const TabBarNavigator: FC = () => {
           title: t('screen:Home'),
           headerShown: false,
           tabBarIcon: ({color}) => {
-            return <IMAGES.IcHome color={color} fill={color} />;
+            return (
+              <View style={{paddingTop: 10}}>
+                <IMAGES.IcHome color={color} fill={color} />
+              </View>
+            );
           },
         }}
       />
@@ -215,7 +200,11 @@ const TabBarNavigator: FC = () => {
           ...styleHeader(),
           title: t('screen:inboxScreen'),
           tabBarBadge: mailCountUnread,
-          tabBarIcon: ({color}) => <IMAGES.IcInbox color={color} />,
+          tabBarIcon: ({color}) => (
+            <TabBarIconWrapper>
+              <IMAGES.IcInbox color={color} />
+            </TabBarIconWrapper>
+          ),
         }}
       />
       <Tab.Screen
@@ -224,7 +213,11 @@ const TabBarNavigator: FC = () => {
         options={{
           ...styleHeader(),
           title: t('screen:subscriptionScreen'),
-          tabBarIcon: ({color}) => <IMAGES.IcStar color={color} fill={color} />,
+          tabBarIcon: ({color}) => (
+            <TabBarIconWrapper>
+              <IMAGES.IcStar color={color} fill={color} />
+            </TabBarIconWrapper>
+          ),
         }}
       />
       <Tab.Screen
@@ -234,7 +227,9 @@ const TabBarNavigator: FC = () => {
           title: t('screen:ProfileScreen'),
           headerTitleStyle: styles.bottomTabTitle,
           tabBarIcon: ({color}) => (
-            <IMAGES.IcProfile color={color} fill={color} />
+            <TabBarIconWrapper>
+              <IMAGES.IcProfile color={color} fill={color} />
+            </TabBarIconWrapper>
           ),
         }}
       />
@@ -246,20 +241,32 @@ const FakeScreen = () => {
   const {signOut} = useAuthProvider();
   const dispatch = useDispatch();
 
-  const signOutt = () => {
-    signOut().then(()=> {
-      dispatch(setUser(null));
+  const handleSignOut = async () => {
+    try {
+      const firebaseAuth = auth()!.currentUser;
+      await firestore()
+        .collection(FireStoreCollection.MAIL)
+        .doc(firebaseAuth!.uid)
+        .delete();
+      await signOut();
+      dispatch(userSliceActions.signOut());
       AsyncStorage.removeItem('user');
       navigationService.navigateAndReset(Screen.Login);
-    });
-  } 
+    } catch (error) {
+      console.log('error handleSignOut');
+    }
+  };
 
   return (
     <View>
       <Text>Fake screen</Text>
-      <Button title={'Sign out'} onPress={signOutt} />
+      <Button label={'Sign out'} onPress={handleSignOut} />
     </View>
   );
+};
+
+const TabBarIconWrapper: FC<PropsWithChildren> = ({children}) => {
+  return <View style={{}}>{children}</View>;
 };
 
 const styles = StyleSheet.create({

@@ -36,7 +36,6 @@ const Avatar: React.FC<AvatarProps> = ({
 const styles = (size: number) =>
   StyleSheet.create({
     container: {
-      // TODO: handle colors by useStyles
       // backgroundColor: colors.white,
       backgroundColor: 'gray',
       justifyContent: 'center',

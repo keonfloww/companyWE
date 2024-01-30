@@ -6,7 +6,14 @@ import {scale} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
 import React, {FC, useMemo, useState} from 'react';
 import {Pressable, StyleSheet} from 'react-native';
-import {Avatar, Checkbox, Drawer, Text, View} from 'react-native-ui-lib';
+import {
+  Avatar,
+  Checkbox,
+  Colors,
+  Drawer,
+  Text,
+  View,
+} from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
 
 interface Props {
@@ -156,22 +163,22 @@ const styles = StyleSheet.create({
   },
   senderName: {
     ...CommonStyles.font.semiBold16,
-    color: '#3C3C3C',
+    color: Colors.text,
   },
   subject: {
     ...CommonStyles.font.semiBold14,
-    color: '#3C3C3C',
+    color: Colors.text,
   },
   dateTime: {
     ...CommonStyles.font.semiBold12,
-    color: '#3C3C3C',
+    color: Colors.text,
   },
   shortBody: {
     ...CommonStyles.font.regular14,
-    color: '#3C3C3C',
+    color: Colors.text,
   },
   textDisable: {
-    color: '#757575',
+    color: Colors.textDisable,
     fontFamily: CommonStyles.fontFamily.regular,
   },
 });
