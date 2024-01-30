@@ -19,14 +19,17 @@ const useInboxScreen = () => {
 
   const userState = useSelector((state: BaseState) => state.userReducer);
   const mailState = useSelector((state: BaseState) => state.mailReducer);
-  const connectedMailsUnsynced = useSelector((state: BaseState) => {
-    return state.userReducer?.connectedMails?.filter(
+
+  const connectedMailsUnsynced = useMemo(() => {
+    return userState?.connectedMails?.filter(
       (i: FireBaseMailCredentials) =>
-        !state.userReducer?.syncedMailAddress?.includes(i?.email),
+        !userState?.syncedMailAddress?.includes(i?.email),
     );
-  });
-  const mailBoxFlatten = useSelector((state: BaseState) =>
-    Object.values(state.userReducer.mailbox).flat(),
+  }, [userState?.connectedMails, userState?.syncedMailAddress]);
+
+  const mailBoxFlatten = useMemo(
+    () => Object.values(userState?.mailbox).flat(),
+    [userState?.mailbox],
   );
 
   // MEMO ---------------------

@@ -4,7 +4,6 @@ import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import useHome from '../hooks/useHome';
 import FastImage from 'react-native-fast-image';
 import CommonStyles from '@screens/styles';
-import {Text as RText} from '@rneui/themed';
 import {useTranslation} from 'react-i18next';
 
 interface Props {
@@ -17,13 +16,11 @@ const HomeSection: FC<Props> = ({title}) => {
   return (
     <View style={style.container}>
       <View style={style.containerHeader}>
-        <RText numberOfLines={1} h4>
-          {title}
-        </RText>
+        <Text numberOfLines={1}>{title}</Text>
         <Pressable onPress={() => {}}>
-          <RText style={CommonStyles.font.regular12} numberOfLines={1}>
+          <Text style={CommonStyles.font.regular12} numberOfLines={1}>
             {t('See all')}
-          </RText>
+          </Text>
         </Pressable>
       </View>
       <View style={{height: scale(12)}} />
@@ -52,15 +49,15 @@ const HomeSection: FC<Props> = ({title}) => {
                 resizeMode={FastImage.resizeMode.contain}
               />
               <View style={{height: scale(8)}} />
-              <RText numberOfLines={1} style={CommonStyles.font.semiBold14}>
+              <Text numberOfLines={1} style={CommonStyles.font.semiBold14}>
                 {item?.title}
-              </RText>
-              <RText numberOfLines={1} style={CommonStyles.font.regular10}>
+              </Text>
+              <Text numberOfLines={1} style={CommonStyles.font.regular10}>
                 {item?.date}
-              </RText>
-              <RText numberOfLines={3} style={CommonStyles.font.regular12}>
+              </Text>
+              <Text numberOfLines={3} style={CommonStyles.font.regular12}>
                 {item?.description}
-              </RText>
+              </Text>
             </View>
           );
         }}

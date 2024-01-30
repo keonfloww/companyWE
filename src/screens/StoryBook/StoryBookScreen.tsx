@@ -3,13 +3,13 @@ import ServiceButton, {
   EnumAuthProviderButtonType,
 } from '@components/atoms/ServiceButton/ServiceButton';
 import {CardBase} from '@rneui/base/dist/Card/Card';
-import {Button} from '@rneui/themed';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import {scale} from '@utils/mixins';
 import {FC} from 'react';
 import {useSelector} from 'react-redux';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {BaseState} from '@redux/stores';
+import {Button} from 'react-native-ui-lib';
 
 /*
 Show case the common component
@@ -91,7 +91,7 @@ const StoryBookScreen: FC = () => {
           authProvider={EnumAuthProviderButton.MICROSOFT}
         />
         <View style={{height: scale(25)}}></View>
-        <Button title={'Sign out'} onPress={signOut} />
+        <Button label={'Sign out'} onPress={signOut} />
       </CardBase>
     </ScrollView>
   );

@@ -16,7 +16,6 @@ import BaseButton from '@components/atoms/Button/BaseButton';
 import CommonStyles from '@screens/styles';
 import {t} from 'i18next';
 import IMAGES from '@assets/images/images';
-import {withTheme} from '@utils/mixinsComponents';
 import SafeView from '@components/atoms/View/SafeView';
 import FormItemController from '@components/atoms/Form/FormItemController';
 import {useForm} from 'react-hook-form';
@@ -45,7 +44,7 @@ const SignUpScreen: FC<any> = () => {
   const {signInByGoogle} = useAuthProvider();
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
-  const styless = withTheme(styles);
+
   const {
     control,
     handleSubmit,
@@ -100,14 +99,14 @@ const SignUpScreen: FC<any> = () => {
       <View>
         <IMAGES.welcomeCircle />
       </View>
-      <View style={styless.view}>
-        <Text style={[CommonStyles.font.bold30, {color: '#3c3c3c'}]}>
+      <View style={styles.view}>
+        <Text style={[CommonStyles.font.bold30, {color: Colors.text}]}>
           Sign Up
         </Text>
         <Text
           style={[
             CommonStyles.font.regular14,
-            {color: '#3c3c3c', marginTop: scale(10)},
+            {color: Colors.text, marginTop: scale(10)},
           ]}>
           Enter your email and set a password
         </Text>
@@ -124,9 +123,9 @@ const SignUpScreen: FC<any> = () => {
                 message: 'Please enter a valid email address',
               },
             }}
-            style={styless.inputStyle}
-            containerStyle={styless.inputContainerStyle}
-            labelStyle={[CommonStyles.font.semiBold14, styless.labelStyle]}
+            style={styles.inputStyle}
+            containerStyle={styles.inputContainerStyle}
+            labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
           />
           <FormItemController
             control={control}
@@ -140,9 +139,9 @@ const SignUpScreen: FC<any> = () => {
                 message: 'Password should be at least 8 characters long',
               },
             }}
-            style={styless.inputStyle}
-            containerStyle={styless.inputContainerStyle}
-            labelStyle={[CommonStyles.font.semiBold14, styless.labelStyle]}
+            style={styles.inputStyle}
+            containerStyle={styles.inputContainerStyle}
+            labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
           />
         </View>
         <BaseButton
@@ -174,7 +173,7 @@ const SignUpScreen: FC<any> = () => {
       <View style={{marginHorizontal: scale(20), flexDirection: 'row'}}>
         <ServiceButton
           type={EnumAuthProviderButtonType.SIGN_UP}
-          containerStyle={styless.baseButton}
+          containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
           onPress={signInWithGoogle}
           titleContainerStyles={{display: 'none'}}
@@ -195,55 +194,54 @@ const SignUpScreen: FC<any> = () => {
 };
 export default SignUpScreen;
 
-const styles = ({theme}: any) =>
-  StyleSheet.create({
-    text: {
-      color: '#3C3C3C',
-      marginBottom: scale(10),
-    },
-    view: {
-      marginHorizontal: scale(25),
-      marginVertical: scale(20),
-    },
-    paginationDot: {
-      borderRadius: scale(6),
-      width: scale(6),
-      height: scale(6),
-      margin: scale(5),
-      backgroundColor: 'lightgray',
-    },
-    pagination: {
-      // width: Dimensions.get('screen').width,
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
-      marginTop: scale(10),
-      marginBottom: scale(40),
-      marginHorizontal: scale(20),
-      //  backgroundColor: 'red'
-    },
-    inputStyle: {
-      borderWidth: 1,
-      borderRadius: scale(100),
-      paddingHorizontal: scale(20),
-      paddingVertical: scale(10),
-      // marginBottom: scale(12),
-      height: scale(40),
-    },
-    inputContainerStyle: {
-      marginBottom: scale(14),
-    },
-    labelStyle: {
-      color: '#3C3C3C',
-    },
-    baseButton: {
-      backgroundColor: 'white',
-      marginTop: scale(15),
-      borderRadius: 99,
-      borderWidth: 1,
-      flex: 0,
-      borderColor: '#50048A',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
+const styles = StyleSheet.create({
+  text: {
+    color: Colors.text,
+    marginBottom: scale(10),
+  },
+  view: {
+    marginHorizontal: scale(25),
+    marginVertical: scale(20),
+  },
+  paginationDot: {
+    borderRadius: scale(6),
+    width: scale(6),
+    height: scale(6),
+    margin: scale(5),
+    backgroundColor: 'lightgray',
+  },
+  pagination: {
+    // width: Dimensions.get('screen').width,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginTop: scale(10),
+    marginBottom: scale(40),
+    marginHorizontal: scale(20),
+    //  backgroundColor: 'red'
+  },
+  inputStyle: {
+    borderWidth: 1,
+    borderRadius: scale(100),
+    paddingHorizontal: scale(20),
+    paddingVertical: scale(10),
+    // marginBottom: scale(12),
+    height: scale(40),
+  },
+  inputContainerStyle: {
+    marginBottom: scale(14),
+  },
+  labelStyle: {
+    color: Colors.text,
+  },
+  baseButton: {
+    backgroundColor: 'white',
+    marginTop: scale(15),
+    borderRadius: 99,
+    borderWidth: 1,
+    flex: 0,
+    borderColor: Colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

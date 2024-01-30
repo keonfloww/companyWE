@@ -1,7 +1,6 @@
 import SafeView from '@components/atoms/View/SafeView';
 import {Divider} from '@rneui/base';
 import {scale} from '@utils/mixins';
-import {withTheme} from '@utils/mixinsComponents';
 import {FC, Fragment, useState} from 'react';
 import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native';
 import HomeHeader from './components/HomeHeader';
@@ -10,7 +9,6 @@ import HomeDontMissOut from './components/HomeDontMissOut';
 import HomeSection from './components/HomeSection';
 
 const HomeScreen: FC<any> = () => {
-  const styless = withTheme(styles);
   const [refreshing, setRefreshing] = useState(false);
   return (
     <SafeView>
@@ -45,7 +43,7 @@ const HomeScreen: FC<any> = () => {
         {/* Body */}
         <View style={{flex: 1}}>
           <Divider width={scale(6)} />
-          <View style={styless.container}>
+          <View style={styles.container}>
             <HomeDontMissOut />
           </View>
         </View>
@@ -74,16 +72,14 @@ const HomeScreen: FC<any> = () => {
   );
 };
 
-const styles = ({theme}: any) => {
-  return StyleSheet.create({
-    container: {
-      // backgroundColor: theme.colors?.custom?.backgroundColor,
+const styles = StyleSheet.create({
+  container: {
+    // backgroundColor: theme.colors?.custom?.backgroundColor,
 
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  });
-};
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default HomeScreen;
