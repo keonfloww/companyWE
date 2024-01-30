@@ -16,6 +16,8 @@ import {
   useColorScheme,
   Dimensions,
   StatusBar,
+  useWindowDimensions,
+  Platform,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -26,6 +28,8 @@ import CommonStyles from '@screens/styles';
 import {t} from 'i18next';
 import IMAGES from '@assets/images/images';
 import SafeView from '@components/atoms/View/SafeView';
+import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface IcarouselItems {
   id: number;
@@ -42,30 +46,38 @@ const IntroScreen: FC<any> = ({navigation}) => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     flex: 1,
   };
+  const {width, height} = useWindowDimensions();
+  const insets = useSafeAreaInsets();
 
   const carouselItems: IcarouselItems[] = [
     {
       id: 1,
-      image: <IMAGES.welcomeTroove />,
+      image: (
+        <IMAGES.welcomeTroove style={{position: 'absolute', bottom: '25%'}} />
+      ),
       title: 'Welcome to Troove!',
       buttonText: 'Next',
     },
     {
       id: 2,
-      image: <IMAGES.welcomeBenefit1 />,
+      image: (
+        <IMAGES.welcomeBenefit1 style={{position: 'absolute', bottom: '25%'}} />
+      ),
       title: 'Benefit 1',
       buttonText: 'Next',
     },
     {
       id: 3,
-      image: <IMAGES.welcomeBenefit2 />,
+      image: (
+        <IMAGES.welcomeBenefit2 style={{position: 'absolute', bottom: '25%'}} />
+      ),
       title: 'Benefit 2',
       buttonText: 'Get Started',
     },
   ];
 
   const pagination = (
-    <View style={[styles.pagination, {}]}>
+    <View style={[styles.pagination, {bottom: insets.bottom + scale(72)}]}>
       {carouselItems.map((_, index) => (
         <View
           key={index}
@@ -105,44 +117,38 @@ const IntroScreen: FC<any> = ({navigation}) => {
 
   const _renderItem = ({item}: any) => (
     <View
-      style={[
-        styles.view,
-        {
-          width: Dimensions.get('screen').width,
-          marginVertical: scale(20),
-          flex: 1,
-        },
-      ]}>
-      <View
-        style={{
-          paddingHorizontal: scale(20),
-          flex: 1,
-          justifyContent: 'space-between',
-        }}>
-        <View
-          style={{alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-          {item.image}
-        </View>
-        <View>
-          <Text style={[CommonStyles.font.bold30, styles.text]}>
-            {item.title}
-          </Text>
-          <Text style={[CommonStyles.font.regular14, styles.text]}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-            libero leo, tincidunt eu ullamcorper euismod, blandit a ipsum.
-          </Text>
-          <BaseButton
-            title={t(item.buttonText)}
-            titleStyle={CommonStyles.font.regular14}
-            onPress={() => nextPress(item.id)}
-            size="md"
-            containerStyle={{
-              width: scale(162),
-              marginVertical: scale(20),
-              marginBottom: scale(0),
-            }}
-          />
-        </View>
+      style={{
+        width: Dimensions.get('screen').width,
+        height: height,
+        marginVertical: scale(20),
+        paddingHorizontal: scale(20),
+        flex: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}>
+      {/* Image absolute */}
+      {item.image}
+
+      <View style={{flex: 5}} />
+      <View style={{flex: 4.5}}>
+        <Text style={[CommonStyles.font.bold30, styles.text]}>
+          {item.title}
+        </Text>
+        <Text style={[CommonStyles.font.regular14, styles.text]}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce libero
+          leo, tincidunt eu ullamcorper euismod, blandit a ipsum.
+        </Text>
+        <BaseButton
+          title={t(item.buttonText)}
+          titleStyle={CommonStyles.font.regular14}
+          onPress={() => nextPress(item.id)}
+          size="md"
+          containerStyle={{
+            width: scale(162),
+            marginVertical: scale(20),
+            marginBottom: scale(0),
+          }}
+        />
       </View>
     </View>
   );
@@ -167,7 +173,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
   );
 
   return (
-    <SafeView style={backgroundStyle}>
+    <LayoutBackgroundDefault>
       <StatusBar
         translucent={true}
         backgroundColor={'transparent'}
@@ -176,12 +182,13 @@ const IntroScreen: FC<any> = ({navigation}) => {
       <View
         style={{
           position: 'absolute',
-          top: scale(75),
           justifyContent: 'space-between',
           flexDirection: 'row',
           width: '100%',
-          zIndex: 1111,
+          zIndex: 2,
           paddingHorizontal: scale(30),
+          top: scale(15),
+          alignItems: 'center',
         }}>
         {corouselIndex !== 1 ? (
           <Pressable
@@ -202,12 +209,10 @@ const IntroScreen: FC<any> = ({navigation}) => {
           <Text />
         )}
       </View>
-      <View style={{marginBottom: scale(20)}}>
-        <IMAGES.welcomeCircle />
-      </View>
       {corousel}
       {pagination}
-    </SafeView>
+      <View style={{height: insets.bottom}} />
+    </LayoutBackgroundDefault>
   );
 };
 export default IntroScreen;
@@ -217,9 +222,6 @@ const styles = StyleSheet.create({
     color: Colors.text,
     marginBottom: scale(10),
   },
-  view: {
-    marginVertical: scale(20),
-  },
   paginationDot: {
     borderRadius: scale(6),
     width: scale(6),
@@ -228,13 +230,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray',
   },
   pagination: {
-    // width: Dimensions.get('screen').width,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     marginTop: scale(10),
     marginBottom: scale(40),
     marginHorizontal: scale(20),
-    //  backgroundColor: 'red'
   },
 });
