@@ -67,56 +67,82 @@ const IntroScreen: FC<any> = ({navigation}) => {
   const pagination = (
     <View style={[styles.pagination, {}]}>
       {carouselItems.map((_, index) => (
-        <View key={index} style={[
-          styles.paginationDot,
-          (corouselIndex === index + 1) ? { backgroundColor: '#3C3C3C', width: scale(20)} : {}
-        ]}/>
+        <View
+          key={index}
+          style={[
+            styles.paginationDot,
+            corouselIndex === index + 1
+              ? {backgroundColor: '#3C3C3C', width: scale(20)}
+              : {},
+          ]}
+        />
       ))}
     </View>
-  )
+  );
 
   const nextPress = (index: number) => {
-    if(index > 2) {
+    if (index > 2) {
       navigation.navigate(Screen.Auth);
       return;
     }
-    console.log({index})
+    console.log({index});
     if (index <= 2) {
       flatListRef?.current?.scrollToIndex({
         animated: true,
-        index: index
+        index: index,
       });
     }
-};
+  };
 
-const backPress = (index: number) => {
-  if (index >= 1) {
-    flatListRef?.current?.scrollToIndex({
-      animated: true,
-      index: index - 2
-    });
-  }
-};
+  const backPress = (index: number) => {
+    if (index >= 1) {
+      flatListRef?.current?.scrollToIndex({
+        animated: true,
+        index: index - 2,
+      });
+    }
+  };
 
   const _renderItem = ({item}: any) => (
-    <View style={[styles.view, { width: Dimensions.get('screen').width, marginVertical: scale (20), flex: 1,}]}>
-      <View style={{paddingHorizontal: scale(20), flex: 1, justifyContent: 'space-between',}}>
-      <View style={{alignItems: 'center', justifyContent: 'flex-start', flex: 1,}}>{item.image}</View>
-      <View>
-      <Text style={[CommonStyles.font.bold30, styles.text]}>{item.title}</Text>
-      <Text style={[CommonStyles.font.regular14, styles.text]}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce libero
-        leo, tincidunt eu ullamcorper euismod, blandit a ipsum.
-      </Text>
-      <BaseButton
-          title={t(item.buttonText)}
-          titleStyle={CommonStyles.font.regular14}
-          onPress={() => nextPress(item.id)}
-          size="md"
-          containerStyle={{width: scale(162), marginVertical: scale(20), marginBottom: scale(0)}}
-        />
-
-      </View>
+    <View
+      style={[
+        styles.view,
+        {
+          width: Dimensions.get('screen').width,
+          marginVertical: scale(20),
+          flex: 1,
+        },
+      ]}>
+      <View
+        style={{
+          paddingHorizontal: scale(20),
+          flex: 1,
+          justifyContent: 'space-between',
+        }}>
+        <View
+          style={{alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+          {item.image}
+        </View>
+        <View>
+          <Text style={[CommonStyles.font.bold30, styles.text]}>
+            {item.title}
+          </Text>
+          <Text style={[CommonStyles.font.regular14, styles.text]}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+            libero leo, tincidunt eu ullamcorper euismod, blandit a ipsum.
+          </Text>
+          <BaseButton
+            title={t(item.buttonText)}
+            titleStyle={CommonStyles.font.regular14}
+            onPress={() => nextPress(item.id)}
+            size="md"
+            containerStyle={{
+              width: scale(162),
+              marginVertical: scale(20),
+              marginBottom: scale(0),
+            }}
+          />
+        </View>
       </View>
     </View>
   );

@@ -186,9 +186,9 @@ const TabBarNavigator: FC = () => {
           headerShown: false,
           tabBarIcon: ({color}) => {
             return (
-              <View style={{paddingTop: 10}}>
+              <TabBarIconWrapper>
                 <IMAGES.IcHome color={color} fill={color} />
-              </View>
+              </TabBarIconWrapper>
             );
           },
         }}
