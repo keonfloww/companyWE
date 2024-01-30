@@ -29,6 +29,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setUser} from '@redux/slices/user.slice';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import LoginScreen from '@screens/Auth/LoginScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,8 +37,11 @@ const CONFIG = {};
 
 const RootNavigator: FC = () => {
   const {theme} = useTheme();
-  const [initialScreen, setInitialScreen] = useState(Screen.IntroScreen);
+  let initialScreen = Screen.IntroScreen;
   const {isEmptyConnectedMails} = useUserViewModel();
+  const connectedMails = useSelector(
+    (state: BaseState) => state?.userReducer.connectedMails,
+  );
   // TODO: Need to use insets to handle status bar
   // const insets = useSafeAreaInsets();
 
@@ -56,19 +60,26 @@ const RootNavigator: FC = () => {
     // }
   }, [isEmptyConnectedMails]);
 
-  useEffect(() => {
+  const checkAuth = async () => {
+    const user = await AsyncStorage.getItem('user');
     const firebaseAuth = auth()!.currentUser;
-    if (firebaseAuth?.uid) {
-      setInitialScreen(Screen.ConnectMailScreen);
-    }
     console.log(firebaseAuth?.uid);
-  }, []);
+    if (firebaseAuth?.uid && user) {
+      if(!connectedMails.length) {
+          navigationService.navigateAndReset(Screen.ConnectMailScreen);
+      } else { 
+        navigationService.navigateAndReset(Screen.MainTabBar);
+      }
+    } 
+    console.log('this runn')
+    setTimeout(()=> {
+      BootSplash.hide({fade: true});
+    },500);
+  }
 
   return (
     <NavigationContainer
-      onReady={() => {
-        BootSplash.hide({fade: true});
-      }}
+      onReady={checkAuth}
       ref={navigationRef}
       linking={linking}
       theme={{
@@ -236,6 +247,7 @@ const FakeScreen = () => {
   const signOutt = () => {
     signOut().then(()=> {
       dispatch(setUser(null));
+      AsyncStorage.removeItem('user');
       navigationService.navigateAndReset(Screen.Login);
     });
   } 

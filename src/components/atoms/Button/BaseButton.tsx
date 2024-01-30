@@ -10,6 +10,7 @@ const BaseButton: FC<ButtonProps> = ({
   title = 'Button',
   color = 'primary',
   size = 'lg',
+  titleStyle = {},
   containerStyle = {},
   ...args
 }) => {
@@ -25,7 +26,10 @@ const BaseButton: FC<ButtonProps> = ({
       ViewComponent={LinearGradient} // Don't forget this!
       size={size}
       title={title}
-      titleStyle={sizeSm ? CommonStyles.font.buttonText14 : {}}
+      titleStyle={[
+        sizeSm ? CommonStyles.font.buttonText14 : {},
+        titleStyle ? titleStyle : {},
+      ]}
       color={'#50048A'}
       {...args}
       containerStyle={[styles.container, containerStyle]}

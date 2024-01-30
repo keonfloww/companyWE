@@ -25,9 +25,11 @@ import ServiceButton, {
   EnumAuthProviderButtonType,
 } from '@components/atoms/ServiceButton/ServiceButton';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
-import {useDispatch} from 'react-redux';
-import {setUser} from '@redux/slices/user.slice';
+import {useDispatch, useSelector} from 'react-redux';
+import {userSliceActions} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BaseState } from '@redux/stores';
 
 interface IFormData {
   email: string;
@@ -37,6 +39,9 @@ interface IFormData {
 const SignUpScreen: FC<any> = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const connectedMails = useSelector(
+      (state: BaseState) => state?.userReducer.connectedMails,
+    );
   const {signInByGoogle} = useAuthProvider();
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
@@ -56,34 +61,23 @@ const SignUpScreen: FC<any> = () => {
     // console.log({data, errors});
     // navigationService.navigateAndReset(Screen.ConnectMailScreen);
   };
+
+  const signInWithGoogle = async () => {
+    const data = await signInByGoogle();
+    console.log({useresr:data.user})
+    AsyncStorage.setItem('user', JSON.stringify(data.user));
+    // dispatch(userSliceActions.setUser(createdUser));
+    if (!connectedMails.length) {
+      navigationService.navigateAndReset(Screen.ConnectMailScreen);
+      return;
+    }
+    navigationService.navigateAndReset(Screen.MainTabBar);
+  }
+
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     flex: 1,
   };
-
-  // TODO: Vipin put type for user
-  function onAuthStateChanged(user: any) {
-    if (!user) {
-      return;
-    }
-    console.log('In SignUpScreen', {user});
-    let createdUser = {
-      ...user,
-      id: user?.uid,
-      // email: user?.email,
-      // emailVerified: user?.emailVerified,
-      userName: user?.displayName,
-      main_profile_image: user?.photoURL,
-      // providerId: user?.providerId,
-    };
-    dispatch(setUser(createdUser));
-    navigationService.navigateAndReset(Screen.ConnectMailScreen);
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-  }, []);
 
   return (
     <SafeView style={backgroundStyle}>
@@ -182,7 +176,7 @@ const SignUpScreen: FC<any> = () => {
           type={EnumAuthProviderButtonType.SIGN_UP}
           containerStyle={styless.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
-          onPress={signInByGoogle}
+          onPress={signInWithGoogle}
           titleContainerStyles={{display: 'none'}}
         />
       </View>

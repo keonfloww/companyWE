@@ -15,6 +15,7 @@ import {
   View,
   useColorScheme,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -48,7 +49,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 1,
       image: <IMAGES.welcomeTroove />,
-      title: 'Welcome to Troove',
+      title: 'Welcome to Troove!',
       buttonText: 'Next',
     },
     {
@@ -68,56 +69,83 @@ const IntroScreen: FC<any> = ({navigation}) => {
   const pagination = (
     <View style={[styless.pagination, {}]}>
       {carouselItems.map((_, index) => (
-        <View key={index} style={[
-          styless.paginationDot,
-          (corouselIndex === index + 1) ? { backgroundColor: '#3C3C3C', width: scale(20)} : {}
-        ]}/>
+        <View
+          key={index}
+          style={[
+            styless.paginationDot,
+            corouselIndex === index + 1
+              ? {backgroundColor: '#3C3C3C', width: scale(20)}
+              : {},
+          ]}
+        />
       ))}
     </View>
-  )
+  );
 
   const nextPress = (index: number) => {
-    if(index > 2) {
+    if (index > 2) {
       navigation.navigate(Screen.Auth);
       return;
     }
-    console.log({index})
+    console.log({index});
     if (index <= 2) {
       flatListRef?.current?.scrollToIndex({
         animated: true,
-        index: index
+        index: index,
       });
     }
-};
+  };
 
-const backPress = (index: number) => {
-  if (index >= 1) {
-    flatListRef?.current?.scrollToIndex({
-      animated: true,
-      index: index - 2
-    });
-  }
-};
+  const backPress = (index: number) => {
+    if (index >= 1) {
+      flatListRef?.current?.scrollToIndex({
+        animated: true,
+        index: index - 2,
+      });
+    }
+  };
 
   const _renderItem = ({item}: any) => (
-    <View style={[styless.view, { width: Dimensions.get('screen').width, marginVertical: scale (20), flex: 1,}]}>
-      <View style={{paddingHorizontal: scale(20), flex: 1, justifyContent: 'space-between',}}>
-      <View style={{alignItems: 'center', justifyContent: 'flex-start', flex: 1,}}>{item.image}</View>
-      <View>
-      <Text style={[CommonStyles.font.bold30, styless.text]}>{item.title}</Text>
-      <Text style={[CommonStyles.font.regular14, styless.text]}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce libero
-        leo, tincidunt eu ullamcorper euismod, blandit a ipsum.
-      </Text>
-      <BaseButton
-          title={t(item.buttonText)}
-          titleStyle={CommonStyles.font.regular14}
-          onPress={() => nextPress(item.id)}
-          size="md"
-          containerStyle={{width: scale(162), marginVertical: scale(20), marginBottom: scale(0)}}
-        />
-
-      </View>
+    <View
+      style={[
+        styless.view,
+        {
+          width: Dimensions.get('screen').width,
+          marginVertical: scale(20),
+          flex: 1,
+        },
+      ]}>
+      <View
+        style={{
+          paddingHorizontal: scale(20),
+          flex: 1,
+          justifyContent: 'space-between',
+        }}>
+        <View
+          style={{alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+          {item.image}
+        </View>
+        <View>
+          <Text style={[CommonStyles.font.bold30, styless.text]}>
+            {item.title}
+          </Text>
+          <Text style={[CommonStyles.font.regular14, styless.text]}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+            libero leo, tincidunt eu ullamcorper euismod, blandit a ipsum.
+          </Text>
+          <BaseButton
+            title={t(item.buttonText)}
+            titleStyle={[CommonStyles.font.regular14, {paddingTop: 0, paddingBottom: 0}]}
+            onPress={() => nextPress(item.id)}
+            size="lg"
+            containerStyle={{
+              width: scale(162),
+              marginVertical: scale(20),
+              marginBottom: scale(0),
+              height: scale(40),
+            }}
+          />
+        </View>
       </View>
     </View>
   );
@@ -128,12 +156,12 @@ const backPress = (index: number) => {
       horizontal
       pagingEnabled
       bounces={false}
-      overScrollMode='never'
+      overScrollMode="never"
       keyExtractor={(_, index) => index.toString()}
       renderItem={_renderItem}
       ref={flatListRef}
       showsHorizontalScrollIndicator={false}
-      onScroll={(event) => {
+      onScroll={event => {
         let contentOffset = event.nativeEvent.contentOffset;
         let index = Math.floor(contentOffset.x / 300);
         setCorouselIndex(index + 1);
@@ -141,13 +169,17 @@ const backPress = (index: number) => {
     />
   );
 
-
   return (
     <SafeView style={backgroundStyle}>
+      <StatusBar
+        translucent={true}
+        backgroundColor={'transparent'}
+        barStyle={'dark-content'}
+      />
       <View
         style={{
           position: 'absolute',
-          top: 50,
+          top: scale(75),
           justifyContent: 'space-between',
           flexDirection: 'row',
           width: '100%',
@@ -200,13 +232,13 @@ const styles = ({theme}: any) =>
       backgroundColor: 'lightgray',
     },
     pagination: {
-     // width: Dimensions.get('screen').width,
+      // width: Dimensions.get('screen').width,
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'flex-start',
       marginTop: scale(10),
       marginBottom: scale(40),
-     marginHorizontal: scale(20),
-    //  backgroundColor: 'red'
-    }
+      marginHorizontal: scale(20),
+      //  backgroundColor: 'red'
+    },
   });
