@@ -34,6 +34,8 @@ import {Button, Colors} from 'react-native-ui-lib';
 import firestore from '@react-native-firebase/firestore';
 import {FireStoreCollection} from '@services/firestoreService';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
+import SplashScreen from '@screens/Splash/SplashScreen';
+import {mailSliceActions} from '@redux/slices/mail.slice';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,7 +64,10 @@ const RootNavigator: FC = () => {
       } else {
         navigationService.navigateAndReset(Screen.MainTabBar);
       }
+      return;
     }
+    navigationService.navigateAndReset(Screen.IntroScreen);
+
     setTimeout(() => {
       BootSplash.hide({fade: true});
     }, 500);
@@ -89,7 +94,7 @@ const RootNavigator: FC = () => {
         <Stack.Group>
           <Stack.Screen
             name={Screen.SplashScreen}
-            component={() => <LayoutBackgroundDefault />}
+            component={SplashScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -204,7 +209,9 @@ const TabBarNavigator: FC = () => {
         options={{
           ...styleHeader(),
           title: t('screen:inboxScreen'),
-          tabBarBadge: mailCountUnread,
+          ...(mailCountUnread
+            ? {tabBarBadge: mailCountUnread}
+            : {tabBarBadgeStyle: {display: 'none'}}),
           tabBarIcon: ({color}) => (
             <TabBarIconWrapper>
               <IMAGES.IcInbox color={color} />
@@ -255,6 +262,7 @@ const FakeScreen = () => {
         .delete();
       await signOut();
       dispatch(userSliceActions.signOut());
+      dispatch(mailSliceActions.clear());
       AsyncStorage.removeItem('user');
       navigationService.navigateAndReset(Screen.Login);
     } catch (error) {

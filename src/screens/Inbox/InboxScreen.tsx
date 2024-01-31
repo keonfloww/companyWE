@@ -38,13 +38,16 @@ const InboxScreen = () => {
   }, []);
 
   useEffect(() => {
+    if (mailCountUnread <= 0) {
+      return;
+    }
     navigation.setOptions({
       tabBarBadge: mailCountUnread,
     });
   }, [navigation, mailCountUnread]);
 
   useEffect(() => {
-    if (computedIsShowDeleteAfterSyncedMail) {
+    if (computedIsShowDeleteAfterSyncedMail && mailCountUnread > 0) {
       setIsShowDeleteAfterSyncedMail(true);
     }
   }, [computedIsShowDeleteAfterSyncedMail]);
@@ -64,6 +67,7 @@ const InboxScreen = () => {
       </View>
       <View style={{height: scale(10)}} />
       <FlatList
+        onEndReachedThreshold={0.1}
         onEndReached={nextPage}
         refreshing={false}
         onRefresh={() => {

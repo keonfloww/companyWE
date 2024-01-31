@@ -17,11 +17,9 @@ const BaseModal = ({
 }) => {
   return (
     <Modal
-      deviceHeight={500}
-      deviceWidth={500}
-      visible={isShow}
+      isVisible={isShow}
       style={styles.container}
-      onBackgroundPress={() => console.log('background pressed')}>
+      onBackButtonPress={() => console.log('background pressed')}>
       <View style={styles.content}>
         {/* Header */}
         <View style={styles.header}>
