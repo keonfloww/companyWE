@@ -198,7 +198,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
             <IMAGES.arrowLeft />
           </Pressable>
         ) : (
-          <View />
+          <View style={{height: scale(25), width: scale(25)}} />
         )}
         {corouselIndex !== 3 ? (
           <Text
