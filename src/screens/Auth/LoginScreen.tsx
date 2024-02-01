@@ -173,7 +173,7 @@ const LoginScreen: FC<any> = () => {
         />
       </View>
       <View style={{margin: scale(20)}}>
-        <Text>
+        <Text style={{color: '#3C3C3C'}}>
           Don't have an account?{' '}
           <Text
             style={[CommonStyles.font.semiBold14, {color: '#50048A'}]}

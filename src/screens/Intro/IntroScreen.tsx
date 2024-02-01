@@ -54,7 +54,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 1,
       image: (
-        <IMAGES.welcomeTroove style={{position: 'absolute', bottom: '25%'}} />
+        <IMAGES.welcomeTroove style={{position: 'absolute', bottom: '20%'}} />
       ),
       title: 'Welcome to Troove!',
       buttonText: 'Next',
@@ -62,7 +62,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 2,
       image: (
-        <IMAGES.welcomeBenefit1 style={{position: 'absolute', bottom: '25%'}} />
+        <IMAGES.welcomeBenefit1 style={{position: 'absolute', bottom: '20%'}} />
       ),
       title: 'Benefit 1',
       buttonText: 'Next',
@@ -70,7 +70,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 3,
       image: (
-        <IMAGES.welcomeBenefit2 style={{position: 'absolute', bottom: '25%'}} />
+        <IMAGES.welcomeBenefit2 style={{position: 'absolute', bottom: '20%'}} />
       ),
       title: 'Benefit 2',
       buttonText: 'Get Started',
@@ -129,9 +129,9 @@ const IntroScreen: FC<any> = ({navigation}) => {
       }}>
       {/* Image absolute */}
       {item.image}
-
+      <View style={{justifyContent: 'space-between',}}>
       <View style={{flex: 5}} />
-      <View style={{flex: 4.5}}>
+      <View style={{flex: 4.5, alignSelf: 'flex-end',justifyContent: 'flex-end',bottom: insets.bottom + scale(120)}}>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
           {item.title}
         </Text>
@@ -143,13 +143,14 @@ const IntroScreen: FC<any> = ({navigation}) => {
           title={t(item.buttonText)}
           titleStyle={CommonStyles.font.regular14}
           onPress={() => nextPress(item.id)}
-          size="md"
+          size="lg"
           containerStyle={{
             width: scale(162),
             marginVertical: scale(20),
             marginBottom: scale(0),
           }}
         />
+      </View>
       </View>
     </View>
   );
