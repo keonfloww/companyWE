@@ -123,7 +123,7 @@ const SignUpScreen: FC<any> = () => {
           <IMAGES.arrowLeft />
         </Pressable>
       </View>
-      <View style={{height: scale(163)}}></View>
+      <View style={{height: scale(123)}}></View>
       <View style={styles.view}>
         <Text style={[CommonStyles.font.bold30, {color: Colors.text}]}>
           Sign Up

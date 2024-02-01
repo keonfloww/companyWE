@@ -54,7 +54,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 1,
       image: (
-        <IMAGES.welcomeTroove style={{position: 'absolute', bottom: '20%'}} />
+        <IMAGES.welcomeTroove style={{position: 'absolute', top: Platform.OS === 'ios' ? '10%' : '12%'}} />
       ),
       title: 'Welcome to Troove!',
       buttonText: 'Next',
@@ -62,7 +62,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 2,
       image: (
-        <IMAGES.welcomeBenefit1 style={{position: 'absolute', bottom: '20%'}} />
+        <IMAGES.welcomeBenefit1 style={{position: 'absolute', top: Platform.OS === 'ios' ? '10%' : '12%'}} />
       ),
       title: 'Benefit 1',
       buttonText: 'Next',
@@ -70,7 +70,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 3,
       image: (
-        <IMAGES.welcomeBenefit2 style={{position: 'absolute', bottom: '20%'}} />
+        <IMAGES.welcomeBenefit2 style={{position: 'absolute', top: Platform.OS === 'ios' ? '10%' : '12%'}} />
       ),
       title: 'Benefit 2',
       buttonText: 'Get Started',
@@ -78,7 +78,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
   ];
 
   const pagination = (
-    <View style={[styles.pagination, {bottom: insets.bottom + scale(72)}]}>
+    <View style={[styles.pagination, {bottom: scale(90)}]}>
       {carouselItems.map((_, index) => (
         <View
           key={index}
@@ -129,9 +129,9 @@ const IntroScreen: FC<any> = ({navigation}) => {
       }}>
       {/* Image absolute */}
       {item.image}
-      <View style={{justifyContent: 'space-between',}}>
+      {console.log(insets.bottom)}
       <View style={{flex: 5}} />
-      <View style={{flex: 4.5, alignSelf: 'flex-end',justifyContent: 'flex-end',bottom: insets.bottom + scale(120)}}>
+      <View style={{flex: 4.5,justifyContent: 'center',bottom: scale(height* 0.08 + insets.bottom),}}>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
           {item.title}
         </Text>
@@ -150,7 +150,6 @@ const IntroScreen: FC<any> = ({navigation}) => {
             marginBottom: scale(0),
           }}
         />
-      </View>
       </View>
     </View>
   );
@@ -189,7 +188,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
           width: '100%',
           zIndex: 2,
           paddingHorizontal: scale(30),
-          top: scale(15),
+          top: scale(30),
           alignItems: 'center',
         }}>
         {corouselIndex !== 1 ? (
