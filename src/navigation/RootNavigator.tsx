@@ -31,6 +31,7 @@ import firestore from '@react-native-firebase/firestore';
 import {FireStoreCollection} from '@services/firestoreService';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import {mailSliceActions} from '@redux/slices/mail.slice';
+import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -236,6 +237,7 @@ const FakeScreen = () => {
       dispatch(userSliceActions.signOut());
       dispatch(mailSliceActions.clear());
       AsyncStorage.removeItem('user');
+      AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS);
       navigationService.navigateAndReset(Screen.Login);
     } catch (error) {
       console.log('error handleSignOut');
