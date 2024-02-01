@@ -49,8 +49,19 @@ export interface IGetMailParams extends IMailAuth2Params {
   email_address: string;
 }
 
+/*
+If you want to delete emails from 1 Jan, 2024 to 2 Feb, 2024 
+then
+Pass "start_date": "2022/01/01", "end_date": "2024/02/01", "delete_historical_mails": false 
+
+If you want to delete all existing emails till 2 Feb, 2024  
+then 
+pass "end_date": "2024/02/01", "delete_historical_mails": true
+*/
 export interface IMoveMailToTrashParams extends IMailAuth2Params {
-  message_ids: string[];
+  start_date?: string;
+  end_date: string;
+  delete_historical_mails: boolean;
 }
 
 // Responses

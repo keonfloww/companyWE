@@ -123,9 +123,9 @@ const useInboxScreen = () => {
           access_token: mail?.access_token,
           expiry_date: mail.expiry_date,
           refresh_token: mail.refresh_token,
-          message_ids: userState.mailbox[mail.email]?.map(
-            (mail: Email) => mail.metadata_id,
-          ),
+
+          end_date: moment().format(DateUtils.BACKEND_FORMAT),
+          delete_historical_mails: true,
         }).unwrap();
       });
       handleMarkAsAskedDelete();
