@@ -129,7 +129,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
       }}>
       {/* Image absolute */}
       {item.image}
-      {console.log(insets.bottom)}
+
       <View style={{flex: 5}} />
       <View style={{flex: 4.5,justifyContent: 'center',bottom: scale(height* 0.08 + insets.bottom),}}>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
