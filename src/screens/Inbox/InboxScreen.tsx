@@ -70,8 +70,9 @@ const InboxScreen = () => {
         onEndReached={nextPage}
         refreshing={false}
         onRefresh={() => {
-          setPage(0);
-          handleGetAllMailInConnectedMails();
+          // setPage(0);
+          // WARNING: NOTICE THE DUPLICATE PROCESS
+          // handleGetAllMailInConnectedMails();
         }}
         data={data}
         renderItem={({item}) => {
