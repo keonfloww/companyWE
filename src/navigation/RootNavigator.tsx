@@ -63,7 +63,7 @@ const RootNavigator: FC = () => {
         navigationService.navigateAndReset(Screen.MainTabBar);
       }
     }
-    navigationService.navigateAndReset(Screen.IntroScreen);
+    navigationService.replace(Screen.IntroScreen);
     setTimeout(() => {
       BootSplash.hide({fade: true});
     }, 500);
