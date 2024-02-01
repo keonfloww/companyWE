@@ -33,9 +33,8 @@ const InboxScreen = () => {
   // console.log('mailBoxFlatten?.length', mailBoxFlatten?.length);
   // console.log('data?.length', data?.length);
 
-  useEffect(() => {
-    handleGetAllMailInConnectedMails();
-  }, []);
+  /**WARNING DONT CALL. Navigator has called it */
+  // handleGetAllMailInConnectedMails();
 
   useEffect(() => {
     if (mailCountUnread <= 0) {
