@@ -11,9 +11,9 @@ import {useEffect} from 'react';
 
 const SplashScreen = () => {
   const {isEmptyConnectedMails} = useUserViewModel();
-  const connectedMails = useSelector(
-    (state: BaseState) => state?.userReducer.connectedMails,
-  );
+  // const connectedMails = useSelector(
+  //   (state: BaseState) => state?.userReducer.connectedMails,
+  // );
 
   const checkAuth = async () => {
     const user = await AsyncStorage.getItem('user');
@@ -21,7 +21,7 @@ const SplashScreen = () => {
 
     setTimeout(() => {
       if (firebaseAuth?.uid && user) {
-        if (!connectedMails.length || isEmptyConnectedMails) {
+        if (isEmptyConnectedMails) {
           navigationService.navigateAndReset(Screen.ConnectMailScreen);
         } else {
           navigationService.navigateAndReset(Screen.MainTabBar);
@@ -36,7 +36,7 @@ const SplashScreen = () => {
 
   useEffect(() => {
     checkAuth();
-  }, [auth()!.currentUser]);
+  }, [auth()!.currentUser, isEmptyConnectedMails]);
 
   return <LayoutBackgroundDefault />;
 };
