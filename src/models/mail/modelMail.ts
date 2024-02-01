@@ -1,11 +1,3 @@
-export interface IGetMailResponse {
-  emails: Email[];
-  token_info: TokenInfo;
-  mail_info: MailInfo;
-  totalNumberOfEmails: number;
-  executionTime: ExecutionTime;
-}
-
 export interface Email {
   metadata_id: string;
   metadata_thread_id: string;

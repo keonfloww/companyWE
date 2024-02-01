@@ -67,7 +67,7 @@ const InboxScreen = () => {
       </View>
       <View style={{height: scale(10)}} />
       <FlatList
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.7}
         onEndReached={nextPage}
         refreshing={false}
         onRefresh={() => {
