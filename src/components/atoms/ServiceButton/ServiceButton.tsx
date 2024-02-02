@@ -70,7 +70,7 @@ const ServiceButton: React.FC<Props> = ({
   );
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPressOut={onPress}>
       <View style={[styles.container, containerStyle]}>
         <FastImage
           style={[styles.icon, styles.icon]}
