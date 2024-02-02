@@ -12,11 +12,11 @@ const useAuthProvider = () => {
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
     // Get the users ID token
     const {idToken} = await GoogleSignin.signIn();
-
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
+    const userData = await auth().signInWithCredential(googleCredential)
+    return {userData, accessToken: googleCredential.token};
   };
 
   const onGoogleLinkButtonPress = async () => {

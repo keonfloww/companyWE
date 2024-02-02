@@ -10,10 +10,15 @@ export const userApi = createApi({
   endpoints: builder => ({
     userRegister: builder.mutation({
       query: (params: IUserRegisterParams) => {
+        console.log({params});
         return {
           url: `/users/register`,
           method: HTTP_METHODS.POST,
-          params,
+          body: params,
+          headers: {
+            'Authorization' : params.accessToken,
+            'content-type': 'application/json',
+          }
         };
       },
     }),
@@ -22,7 +27,7 @@ export const userApi = createApi({
         return {
           url: `/users/verify`,
           method: HTTP_METHODS.POST,
-          params,
+          body: params,
         };
       },
       transformResponse: (res: any) => res.data,
@@ -35,11 +40,13 @@ export interface IUserRegisterParams {
   user_name: string;
   email_address: string;
   is_email_address_verified: boolean;
-  sign_up_provider_id: string;
+  sign_up_provider_id: number;
+  accessToken: string,
 }
 export interface IUserVerifyParams {
   id: string;
   is_email_address_verified: boolean;
+  accessToken: string,
 }
 
 

@@ -38,6 +38,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BaseState} from '@redux/stores';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 import BaseModal from '@components/atoms/Modal/BaseModal';
+import { useUserRegisterMutation } from '@redux/slices/api/userApi.slice';
 
 interface IFormData {
   email: string;
@@ -47,6 +48,7 @@ interface IFormData {
 const SignUpScreen: FC<any> = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const [userRegister] = useUserRegisterMutation();
   const connectedMails = useSelector(
     (state: BaseState) => state?.userReducer.connectedMails,
   );
@@ -94,9 +96,17 @@ const SignUpScreen: FC<any> = () => {
 
   const signInWithGoogle = async () => {
     setTermModalShow(false);
-    const data = await signInByGoogle();
-    console.log({useresr: data.user});
-    AsyncStorage.setItem('user', JSON.stringify(data.user));
+    const {userData, accessToken} = await signInByGoogle();
+    console.log({useresr: userData.user});
+    AsyncStorage.setItem('user', JSON.stringify(userData.user));
+    userRegister({
+      id: userData.user.uid.toString(),
+      user_name: userData.user.displayName.toString(),
+      email_address: userData.user.email.toString(),
+      is_email_address_verified: userData.user.emailVerified,
+      sign_up_provider_id: 1,
+      accessToken: accessToken,
+    }).unwrap();
     // dispatch(userSliceActions.setUser(createdUser));
     if (!connectedMails.length) {
       navigationService.navigateAndReset(Screen.ConnectMailScreen);

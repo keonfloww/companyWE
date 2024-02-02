@@ -30,6 +30,7 @@ import navigationService from '@services/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BaseState} from '@redux/stores';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
+import { useUserVerifyMutation } from '@redux/slices/api/userApi.slice';
 
 interface IFormData {
   email: string;
@@ -39,6 +40,7 @@ interface IFormData {
 const LoginScreen: FC<any> = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const [userVerify] = useUserVerifyMutation();
   const connectedMails = useSelector(
     (state: BaseState) => state?.userReducer.connectedMails,
   );
@@ -63,8 +65,13 @@ const LoginScreen: FC<any> = () => {
   };
 
   const signInWithGoogle = async () => {
-    const data = await signInByGoogle();
-    AsyncStorage.setItem('user', JSON.stringify(data.user));
+    const {userData, accessToken} = await signInByGoogle();
+    AsyncStorage.setItem('user', JSON.stringify(userData.user));
+    userVerify({
+      id: userData.user.uid.toString(),
+      is_email_address_verified: Boolean(userData.user.emailVerified),
+      accessToken: accessToken,
+    }).unwrap();
     // dispatch(userSliceActions.setUser(createdUser));
     if (!connectedMails.length) {
       navigationService.navigateAndReset(Screen.ConnectMailScreen);
