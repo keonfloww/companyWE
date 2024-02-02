@@ -210,13 +210,13 @@ const SignUpScreen: FC<any> = () => {
         </Text>
         <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex: 1}}></View>
       </View>
-      <View style={{marginHorizontal: scale(20), flexDirection: 'row'}}>
+      <View style={{marginHorizontal: scale(20)}}>
         <ServiceButton
           type={EnumAuthProviderButtonType.SIGN_UP}
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
           onPress={() => setTermModalShow(true)}
-          titleContainerStyles={{display: 'none'}}
+          titleStyles={[CommonStyles.font.regular14,styles.connectText]}
         />
       </View>
       <View style={{margin: scale(20)}}>
@@ -250,6 +250,10 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.text,
     marginBottom: scale(10),
+  },
+  connectText: {
+    color: '#50048A',
+    fontWeight: '400',
   },
   termText: {
     color: '#50048A',
@@ -295,7 +299,7 @@ const styles = StyleSheet.create({
     marginTop: scale(15),
     borderRadius: 99,
     borderWidth: 1,
-    flex: 0,
+    //   flex: 0,
     borderColor: '#50048A',
     alignItems: 'center',
     justifyContent: 'center',
