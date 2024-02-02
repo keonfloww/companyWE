@@ -95,13 +95,14 @@ const SignUpScreen: FC<any> = () => {
   );
 
   const signInWithGoogle = async () => {
-    try {
-      global?.props?.showLoading();
-      setTermModalShow(false);
-      const {userData, accessToken} = await signInByGoogle();
-      console.log({useresr: userData.user});
-      AsyncStorage.setItem('user', JSON.stringify(userData.user));
-      userRegister({
+    setTermModalShow(false);
+    setTimeout( async () => {
+        try {
+        global?.props?.showLoading();
+        const {userData, accessToken} = await signInByGoogle();
+        console.log({useresr: userData.user});
+        AsyncStorage.setItem('user', JSON.stringify(userData.user));
+        userRegister({
         id: userData.user.uid.toString(),
         user_name: userData.user.displayName.toString(),
         email_address: userData.user.email.toString(),
@@ -120,6 +121,7 @@ const SignUpScreen: FC<any> = () => {
     } catch (error) {
       global?.props?.hideLoading();
     }
+  },500)
   };
 
   return (
