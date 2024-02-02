@@ -21,7 +21,7 @@ import {
   Image,
 } from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native-ui-lib';
 import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
@@ -222,7 +222,7 @@ export default IntroScreen;
 
 const styles = StyleSheet.create({
   text: {
-    color: Colors.text,
+    color: '#3c3c3c',
     marginBottom: scale(10),
   },
   paginationDot: {

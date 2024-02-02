@@ -157,6 +157,7 @@ const LoginScreen: FC<any> = () => {
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
           onPress={() => signInOrSignUpByFirebase({isSignUp: false})}
+          titleStyles={[CommonStyles.font.regular14,styles.connectText]}
         />
       </View>
       <View style={{margin: scale(20)}}>
@@ -178,6 +179,10 @@ const styles = StyleSheet.create({
   text: {
     color: '#3C3C3C',
     marginBottom: scale(10),
+  },
+  connectText: {
+    color: '#50048A',
+    fontWeight: '400',
   },
   view: {
     marginHorizontal: scale(25),
