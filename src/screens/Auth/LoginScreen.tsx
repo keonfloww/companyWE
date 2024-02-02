@@ -65,19 +65,27 @@ const LoginScreen: FC<any> = () => {
   };
 
   const signInWithGoogle = async () => {
-    const {userData, accessToken} = await signInByGoogle();
-    AsyncStorage.setItem('user', JSON.stringify(userData.user));
-    userVerify({
-      id: userData.user.uid.toString(),
-      is_email_address_verified: Boolean(userData.user.emailVerified),
-      accessToken: accessToken,
-    }).unwrap();
-    // dispatch(userSliceActions.setUser(createdUser));
-    if (!connectedMails.length) {
-      navigationService.navigateAndReset(Screen.ConnectMailScreen);
-      return;
+    try {
+      global?.props?.showLoading();
+      const {userData, accessToken} = await signInByGoogle();
+      AsyncStorage.setItem('user', JSON.stringify(userData.user));
+      userVerify({
+        id: userData.user.uid.toString(),
+        is_email_address_verified: Boolean(userData.user.emailVerified),
+        accessToken: accessToken,
+      }).unwrap();
+      // dispatch(userSliceActions.setUser(createdUser));
+      if (!connectedMails.length) {
+        navigationService.navigateAndReset(Screen.ConnectMailScreen);
+        global?.props?.hideLoading();
+        return;
+      }
+      navigationService.navigateAndReset(Screen.MainTabBar);
+      global?.props?.hideLoading();
+    } catch (error) {
+      global?.props?.hideLoading();
     }
-    navigationService.navigateAndReset(Screen.MainTabBar);
+ 
   };
 
   return (

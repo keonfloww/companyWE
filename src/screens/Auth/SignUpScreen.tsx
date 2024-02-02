@@ -95,24 +95,31 @@ const SignUpScreen: FC<any> = () => {
   );
 
   const signInWithGoogle = async () => {
-    setTermModalShow(false);
-    const {userData, accessToken} = await signInByGoogle();
-    console.log({useresr: userData.user});
-    AsyncStorage.setItem('user', JSON.stringify(userData.user));
-    userRegister({
-      id: userData.user.uid.toString(),
-      user_name: userData.user.displayName.toString(),
-      email_address: userData.user.email.toString(),
-      is_email_address_verified: userData.user.emailVerified,
-      sign_up_provider_id: 1,
-      accessToken: accessToken,
-    }).unwrap();
-    // dispatch(userSliceActions.setUser(createdUser));
-    if (!connectedMails.length) {
-      navigationService.navigateAndReset(Screen.ConnectMailScreen);
-      return;
+    try {
+      global?.props?.showLoading();
+      setTermModalShow(false);
+      const {userData, accessToken} = await signInByGoogle();
+      console.log({useresr: userData.user});
+      AsyncStorage.setItem('user', JSON.stringify(userData.user));
+      userRegister({
+        id: userData.user.uid.toString(),
+        user_name: userData.user.displayName.toString(),
+        email_address: userData.user.email.toString(),
+        is_email_address_verified: userData.user.emailVerified,
+        sign_up_provider_id: 1,
+        accessToken: accessToken,
+      }).unwrap();
+      // dispatch(userSliceActions.setUser(createdUser));
+      if (!connectedMails.length) {
+        navigationService.navigateAndReset(Screen.ConnectMailScreen);
+        global?.props?.hideLoading();
+        return;
+      }
+      global?.props?.hideLoading();
+      navigationService.navigateAndReset(Screen.MainTabBar);
+    } catch (error) {
+      global?.props?.hideLoading();
     }
-    navigationService.navigateAndReset(Screen.MainTabBar);
   };
 
   return (
