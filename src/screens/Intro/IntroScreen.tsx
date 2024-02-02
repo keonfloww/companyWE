@@ -54,7 +54,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 1,
       image: (
-        <IMAGES.welcomeTroove style={{position: 'absolute', bottom: '25%'}} />
+        <IMAGES.welcomeTroove style={{position: 'absolute', top: Platform.OS === 'ios' ? '10%' : '12%'}} />
       ),
       title: 'Welcome to Troove!',
       buttonText: 'Next',
@@ -62,7 +62,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 2,
       image: (
-        <IMAGES.welcomeBenefit1 style={{position: 'absolute', bottom: '25%'}} />
+        <IMAGES.welcomeBenefit1 style={{position: 'absolute', top: Platform.OS === 'ios' ? '10%' : '12%'}} />
       ),
       title: 'Benefit 1',
       buttonText: 'Next',
@@ -70,7 +70,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     {
       id: 3,
       image: (
-        <IMAGES.welcomeBenefit2 style={{position: 'absolute', bottom: '25%'}} />
+        <IMAGES.welcomeBenefit2 style={{position: 'absolute', top: Platform.OS === 'ios' ? '10%' : '12%'}} />
       ),
       title: 'Benefit 2',
       buttonText: 'Get Started',
@@ -78,7 +78,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
   ];
 
   const pagination = (
-    <View style={[styles.pagination, {bottom: insets.bottom + scale(72)}]}>
+    <View style={[styles.pagination, {bottom: scale(90)}]}>
       {carouselItems.map((_, index) => (
         <View
           key={index}
@@ -131,7 +131,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
       {item.image}
 
       <View style={{flex: 5}} />
-      <View style={{flex: 4.5}}>
+      <View style={{flex: 4.5,justifyContent: 'center',bottom: scale(height* 0.08 + insets.bottom),}}>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
           {item.title}
         </Text>
@@ -143,7 +143,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
           title={t(item.buttonText)}
           titleStyle={CommonStyles.font.regular14}
           onPress={() => nextPress(item.id)}
-          size="md"
+          size="lg"
           containerStyle={{
             width: scale(162),
             marginVertical: scale(20),
@@ -188,7 +188,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
           width: '100%',
           zIndex: 2,
           paddingHorizontal: scale(30),
-          top: scale(15),
+          top: scale(30),
           alignItems: 'center',
         }}>
         {corouselIndex !== 1 ? (
@@ -198,7 +198,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
             <IMAGES.arrowLeft />
           </Pressable>
         ) : (
-          <View />
+          <View style={{height: scale(25), width: scale(25)}} />
         )}
         {corouselIndex !== 3 ? (
           <Text

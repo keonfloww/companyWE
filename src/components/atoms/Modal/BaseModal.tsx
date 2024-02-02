@@ -10,44 +10,56 @@ const BaseModal = ({
   headerIcon = <></>,
   onClose = () => {},
   onConfirm = () => {},
-
+  actionViewStyle = {},
+  buttonContainerStyle = {},
+  headerShown = true,
   confirmTitle = '',
   cancelTitle = '',
   children,
+  backdropOpacity = 0.5,
+  // animationOut = 'slideOutDown',
+  // animationOutTiming = 500,
 }) => {
   return (
     <Modal
+      // deviceHeight={500}
+      animationOut={'fadeOut'}
+      animationOutTiming={0.1}
+      deviceWidth={500}
       isVisible={isShow}
       style={styles.container}
-      onBackButtonPress={() => console.log('background pressed')}>
+      backdropOpacity={backdropOpacity}
+      onBackgroundPress={() => console.log('background pressed')}>
       <View style={styles.content}>
         {/* Header */}
-        <View style={styles.header}>
-          {headerIcon}
-          <View style={{height: scale(10)}} />
-        </View>
+        {headerShown && (
+          <View style={styles.header}>
+            {headerIcon}
+            <View style={{height: scale(10)}} />
+          </View>
+        )}
 
         {/* Body */}
         <View style={{}}>{children}</View>
         <View style={{height: scale(28)}} />
 
         {/* Actions */}
-        <View style={styles.actionContainer}>
+        <View style={[styles.actionContainer, actionViewStyle? actionViewStyle : {}]}>
           <Button
             label={cancelTitle}
             onPress={onClose}
-            style={{flex: 1}}
-            labelStyle={CommonStyles.font.regular14}
-            backgroundColor={'#50048A'}
-          />
-          <Button
-            label={confirmTitle}
-            onPress={onConfirm}
-            style={{flex: 1}}
+            style={[{flex: 1}, buttonContainerStyle ? buttonContainerStyle : {}]}
             labelStyle={CommonStyles.font.regular14}
             backgroundColor={'white'}
             outlineColor={'#50048A'}
             color={'#50048A'}
+          />
+          <Button
+            label={confirmTitle}
+            onPress={onConfirm}
+            style={[{flex: 1} , buttonContainerStyle ? buttonContainerStyle: {}]}
+            labelStyle={CommonStyles.font.regular14}
+            backgroundColor={'#50048A'}
           />
         </View>
       </View>

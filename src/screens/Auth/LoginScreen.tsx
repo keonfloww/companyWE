@@ -30,6 +30,7 @@ import navigationService from '@services/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BaseState} from '@redux/stores';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
+import { useUserVerifyMutation } from '@redux/slices/api/userApi.slice';
 
 interface IFormData {
   email: string;
@@ -39,6 +40,7 @@ interface IFormData {
 const LoginScreen: FC<any> = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const [userVerify] = useUserVerifyMutation();
   const connectedMails = useSelector(
     (state: BaseState) => state?.userReducer.connectedMails,
   );
@@ -63,8 +65,13 @@ const LoginScreen: FC<any> = () => {
   };
 
   const signInWithGoogle = async () => {
-    const data = await signInByGoogle();
-    AsyncStorage.setItem('user', JSON.stringify(data.user));
+    const {userData, accessToken} = await signInByGoogle();
+    AsyncStorage.setItem('user', JSON.stringify(userData.user));
+    userVerify({
+      id: userData.user.uid.toString(),
+      is_email_address_verified: Boolean(userData.user.emailVerified),
+      accessToken: accessToken,
+    }).unwrap();
     // dispatch(userSliceActions.setUser(createdUser));
     if (!connectedMails.length) {
       navigationService.navigateAndReset(Screen.ConnectMailScreen);
@@ -91,7 +98,7 @@ const LoginScreen: FC<any> = () => {
           <IMAGES.arrowLeft />
         </Pressable>
       </View>
-      <View style={{height: scale(163)}}></View>
+      <View style={{height: scale(123)}}></View>
       <View style={styles.view}>
         <Text style={[CommonStyles.font.bold30, {color: '#3c3c3c'}]}>
           Welcome back!
@@ -173,7 +180,7 @@ const LoginScreen: FC<any> = () => {
         />
       </View>
       <View style={{margin: scale(20)}}>
-        <Text>
+        <Text style={{color: '#3C3C3C'}}>
           Don't have an account?{' '}
           <Text
             style={[CommonStyles.font.semiBold14, {color: '#50048A'}]}

@@ -5,11 +5,18 @@
  * @format
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import type {FC} from 'react';
-import {Pressable, StyleSheet, Text, View, useColorScheme} from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  useColorScheme,
+} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native-ui-lib';
 import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
@@ -30,6 +37,8 @@ import navigationService from '@services/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BaseState} from '@redux/stores';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
+import BaseModal from '@components/atoms/Modal/BaseModal';
+import { useUserRegisterMutation } from '@redux/slices/api/userApi.slice';
 
 interface IFormData {
   email: string;
@@ -39,9 +48,11 @@ interface IFormData {
 const SignUpScreen: FC<any> = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const [userRegister] = useUserRegisterMutation();
   const connectedMails = useSelector(
     (state: BaseState) => state?.userReducer.connectedMails,
   );
+  const [termModalShow, setTermModalShow] = useState(false);
   const {signInByGoogle} = useAuthProvider();
   const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
@@ -62,21 +73,46 @@ const SignUpScreen: FC<any> = () => {
     // navigationService.navigateAndReset(Screen.ConnectMailScreen);
   };
 
+  const modalChildren = (
+    <View>
+      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <Image source={require('../../assets/images/png/terms.png')} />
+      </View>
+      <Text style={[CommonStyles.font.bold24, styles.modalText]}>
+        Please accept Terms and Conditions and Privacy Policy
+      </Text>
+      <Text style={[CommonStyles.font.regular14, styles.modalText]}>
+        By clicking Accept & Join, you agree to Troove’s{' '}
+        <Text style={[CommonStyles.font.semiBold14, styles.termText]}>
+          Terms and Conditions
+        </Text>{' '}
+        and{' '}
+        <Text style={[CommonStyles.font.semiBold14, styles.termText]}>
+          Privacy Policy
+        </Text>
+      </Text>
+    </View>
+  );
+
   const signInWithGoogle = async () => {
-    const data = await signInByGoogle();
-    console.log({useresr: data.user});
-    AsyncStorage.setItem('user', JSON.stringify(data.user));
+    setTermModalShow(false);
+    const {userData, accessToken} = await signInByGoogle();
+    console.log({useresr: userData.user});
+    AsyncStorage.setItem('user', JSON.stringify(userData.user));
+    userRegister({
+      id: userData.user.uid.toString(),
+      user_name: userData.user.displayName.toString(),
+      email_address: userData.user.email.toString(),
+      is_email_address_verified: userData.user.emailVerified,
+      sign_up_provider_id: 1,
+      accessToken: accessToken,
+    }).unwrap();
     // dispatch(userSliceActions.setUser(createdUser));
     if (!connectedMails.length) {
       navigationService.navigateAndReset(Screen.ConnectMailScreen);
       return;
     }
     navigationService.navigateAndReset(Screen.MainTabBar);
-  };
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    flex: 1,
   };
 
   return (
@@ -97,7 +133,7 @@ const SignUpScreen: FC<any> = () => {
           <IMAGES.arrowLeft />
         </Pressable>
       </View>
-      <View style={{height: scale(163)}}></View>
+      <View style={{height: scale(123)}}></View>
       <View style={styles.view}>
         <Text style={[CommonStyles.font.bold30, {color: Colors.text}]}>
           Sign Up
@@ -174,12 +210,12 @@ const SignUpScreen: FC<any> = () => {
           type={EnumAuthProviderButtonType.SIGN_UP}
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
-          onPress={signInWithGoogle}
+          onPress={() => setTermModalShow(true)}
           titleContainerStyles={{display: 'none'}}
         />
       </View>
       <View style={{margin: scale(20)}}>
-        <Text>
+        <Text style={{color: '#3C3C3C'}}>
           Have an account?{' '}
           <Text
             style={[CommonStyles.font.semiBold14, {color: '#50048A'}]}
@@ -188,6 +224,18 @@ const SignUpScreen: FC<any> = () => {
           </Text>
         </Text>
       </View>
+      <BaseModal
+        isShow={termModalShow}
+        headerShown={false}
+        backdropOpacity={0.5}
+        onClose={() => setTermModalShow(false)}
+        onConfirm={signInWithGoogle}
+        actionViewStyle={{height: scale(40)}}
+        buttonContainerStyle={{paddingVertical: scale(0)}}
+        children={modalChildren}
+        cancelTitle="No"
+        confirmTitle="Accept"
+      />
     </LayoutBackgroundDefault>
   );
 };
@@ -198,6 +246,10 @@ const styles = StyleSheet.create({
     color: Colors.text,
     marginBottom: scale(10),
   },
+  termText: {
+    color: '#50048A',
+  },
+  modalText: {textAlign: 'center', padding: scale(5), color: '#3C3C3C'},
   view: {
     marginHorizontal: scale(25),
     marginVertical: scale(20),
@@ -239,7 +291,7 @@ const styles = StyleSheet.create({
     borderRadius: 99,
     borderWidth: 1,
     flex: 0,
-    borderColor: Colors.primary,
+    borderColor: '#50048A',
     alignItems: 'center',
     justifyContent: 'center',
   },
