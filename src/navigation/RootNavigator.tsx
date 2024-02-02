@@ -1,6 +1,5 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useTheme} from '@rneui/themed';
 import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
 import React, {FC, PropsWithChildren, useEffect} from 'react';
@@ -16,16 +15,13 @@ import {StyleSheet} from 'react-native';
 import {scale} from '@utils/mixins';
 import {StatusBar} from 'react-native';
 import SignUpScreen from '@screens/Auth/SignUpScreen';
-import BootSplash from 'react-native-bootsplash';
 import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
 import InboxScreen from '@screens/Inbox/InboxScreen';
 import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookmarkSearchActions';
 import ConnectMailScreen from '@screens/ConnectMail/ConnectMailScreen';
-import useUserViewModel from '@redux/hooks/useUserViewModel';
 import auth from '@react-native-firebase/auth';
-import {BaseState} from '@redux/stores';
-import {useDispatch, useSelector} from 'react-redux';
-import {setUser, userSliceActions} from '@redux/slices/user.slice';
+import {useDispatch} from 'react-redux';
+import {userSliceActions} from '@redux/slices/user.slice';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import LoginScreen from '@screens/Auth/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -33,36 +29,21 @@ import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 import {Button, Colors} from 'react-native-ui-lib';
 import firestore from '@react-native-firebase/firestore';
 import {FireStoreCollection} from '@services/firestoreService';
-import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
+import SplashScreen from '@screens/Splash/SplashScreen';
+import {mailSliceActions} from '@redux/slices/mail.slice';
+import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
 
 const RootNavigator: FC = () => {
-    // TODO: Need to use insets to handle status bar
+  // TODO: Need to use insets to handle status bar
   // const insets = useSafeAreaInsets();
 
   const linking = {
     prefixes: ['reactnative://'],
     CONFIG,
-  };
-
-  const checkAuth = async () => {
-    const user = await AsyncStorage.getItem('user');
-    const firebaseAuth = auth()!.currentUser;
-
-    if (firebaseAuth?.uid && user) {
-      if (!connectedMails.length || isEmptyConnectedMails) {
-        navigationService.navigateAndReset(Screen.ConnectMailScreen);
-      } else {
-        navigationService.navigateAndReset(Screen.MainTabBar);
-      }
-    }
-    navigationService.navigateAndReset(Screen.IntroScreen);
-    setTimeout(() => {
-      BootSplash.hide({fade: true});
-    }, 500);
   };
 
   return (
@@ -86,7 +67,7 @@ const RootNavigator: FC = () => {
         <Stack.Group>
           <Stack.Screen
             name={Screen.SplashScreen}
-            component={() => <LayoutBackgroundDefault />}
+            component={SplashScreen}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -201,7 +182,9 @@ const TabBarNavigator: FC = () => {
         options={{
           ...styleHeader(),
           title: t('screen:inboxScreen'),
-          tabBarBadge: mailCountUnread,
+          ...(mailCountUnread
+            ? {tabBarBadge: mailCountUnread}
+            : {tabBarBadgeStyle: {display: 'none'}}),
           tabBarIcon: ({color}) => (
             <TabBarIconWrapper>
               <IMAGES.IcInbox color={color} />
@@ -252,7 +235,9 @@ const FakeScreen = () => {
         .delete();
       await signOut();
       dispatch(userSliceActions.signOut());
+      dispatch(mailSliceActions.clear());
       AsyncStorage.removeItem('user');
+      AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS);
       navigationService.navigateAndReset(Screen.Login);
     } catch (error) {
       console.log('error handleSignOut');

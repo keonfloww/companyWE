@@ -23,6 +23,7 @@ const SplashScreen = () => {
         } else {
           navigationService.navigateAndReset(Screen.MainTabBar);
         }
+        BootSplash.hide({fade: true});
         return;
       }
       navigationService.navigateAndReset(Screen.IntroScreen);
