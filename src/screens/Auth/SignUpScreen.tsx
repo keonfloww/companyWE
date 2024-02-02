@@ -270,12 +270,11 @@ const styles = StyleSheet.create({
   },
   baseButton: {
     backgroundColor: 'white',
+    height: scale(40),
+    paddingVertical: 0,
     marginTop: scale(15),
     borderRadius: 99,
     borderWidth: 1,
-    //   flex: 0,
     borderColor: '#50048A',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
