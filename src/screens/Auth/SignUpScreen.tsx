@@ -160,21 +160,26 @@ const SignUpScreen: FC<any> = () => {
       </View>
       <View
         style={{
-          height: scale(1),
-          backgroundColor: '#EFEFEF',
+          // height: scale(1),
+          flexDirection: 'row',
+          backgroundColor: 'transparent',
           alignItems: 'center',
           justifyContent: 'center',
-          marginVertical: scale(10),
+          // marginVertical: scale(10),
           marginHorizontal: scale(20),
         }}>
+        <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex:1}}></View>
         <Text
           style={{
-            position: 'absolute',
-            backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+            // position: 'absolute',
+            backgroundColor: 'transparent',
             borderRadius: scale(100),
+            marginHorizontal: scale(10),
+            color: '#3C3C3C'
           }}>
           OR
         </Text>
+        <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex: 1}}></View>
       </View>
       <View style={{marginHorizontal: scale(20), flexDirection: 'row'}}>
         <ServiceButton
