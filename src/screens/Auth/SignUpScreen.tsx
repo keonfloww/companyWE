@@ -119,8 +119,8 @@ const SignUpScreen: FC<any> = () => {
     <LayoutBackgroundDefault>
       <View
         style={{
-          position: 'absolute',
-          top: scale(15),
+          // position: 'absolute',
+          marginTop: scale(30),
           justifyContent: 'space-between',
           flexDirection: 'row',
           width: '100%',
@@ -133,7 +133,7 @@ const SignUpScreen: FC<any> = () => {
           <IMAGES.arrowLeft />
         </Pressable>
       </View>
-      <View style={{height: scale(123)}}></View>
+      <View style={{height: scale(80)}}></View>
       <View style={styles.view}>
         <Text style={[CommonStyles.font.bold30, {color: Colors.text}]}>
           Sign Up

@@ -13,7 +13,7 @@ const LayoutBackgroundDefault: FC<PropsWithChildren> = ({children}) => {
         flex: 1,
       }}>
       {/* TODO: create back icon here */}
-      <View style={{marginTop: insets.top, marginBottom: insets.bottom}}>
+      <View style={{marginTop: insets.top, marginBottom: insets.bottom, height: '100%'}}>
         {children}
       </View>
     </ImageBackground>
