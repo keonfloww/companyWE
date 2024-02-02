@@ -68,16 +68,30 @@ export const userSlice = createSlice({
       return {
         ...state,
         mailbox: {
-          [data.targetMailAddress]: oldEmailFromTargetMailAddress?.concat(
-            _.orderBy(data?.emails, 'received_on_unix', 'desc'),
+          [data.targetMailAddress]: _.orderBy(
+            _.uniq(
+              data?.emails.concat(oldEmailFromTargetMailAddress),
+              'metadata_id',
+            ),
+            'received_on_unix',
+            'desc',
           ),
         },
+      };
+    },
+    connectedMailMarkAsSynced: (
+      state,
+      action: PayloadAction<{mail: string}>,
+    ) => {
+      return {
+        ...state,
         syncedMailAddress: _.uniq(
-          state?.syncedMailAddress?.concat(data.targetMailAddress),
+          state?.syncedMailAddress?.concat(action.payload.mail),
         ),
       };
     },
 
+    // UI State
     mailMarkAsRead: (state, action: PayloadAction<{metadata_id: string}>) => {
       return {
         ...state,

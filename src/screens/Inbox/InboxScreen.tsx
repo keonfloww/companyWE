@@ -33,18 +33,20 @@ const InboxScreen = () => {
   // console.log('mailBoxFlatten?.length', mailBoxFlatten?.length);
   // console.log('data?.length', data?.length);
 
-  useEffect(() => {
-    handleGetAllMailInConnectedMails();
-  }, []);
+  /**WARNING DONT CALL. Navigator has called it */
+  // handleGetAllMailInConnectedMails();
 
   useEffect(() => {
+    if (mailCountUnread <= 0) {
+      return;
+    }
     navigation.setOptions({
       tabBarBadge: mailCountUnread,
     });
   }, [navigation, mailCountUnread]);
 
   useEffect(() => {
-    if (computedIsShowDeleteAfterSyncedMail) {
+    if (computedIsShowDeleteAfterSyncedMail && mailCountUnread > 0) {
       setIsShowDeleteAfterSyncedMail(true);
     }
   }, [computedIsShowDeleteAfterSyncedMail]);
@@ -64,11 +66,13 @@ const InboxScreen = () => {
       </View>
       <View style={{height: scale(10)}} />
       <FlatList
+        onEndReachedThreshold={0.7}
         onEndReached={nextPage}
         refreshing={false}
         onRefresh={() => {
-          setPage(0);
-          handleGetAllMailInConnectedMails();
+          // setPage(0);
+          // WARNING: NOTICE THE DUPLICATE PROCESS
+          // handleGetAllMailInConnectedMails();
         }}
         data={data}
         renderItem={({item}) => {

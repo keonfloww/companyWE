@@ -9,6 +9,8 @@ import {FireBaseMailCredentials} from '@models/firebaseModel';
 import {userSliceActions} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
 import {Screen} from '@navigation/navigation.enums';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 
 const useConnectMail = ({
   autoRedirectToHome = false,
@@ -39,6 +41,7 @@ const useConnectMail = ({
         }
 
         dispatch(userSliceActions.addNewConnectedMail(newFirebaseMail));
+        AsyncStorage.setItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS, 'true');
         if (autoRedirectToHome) {
           navigationService.navigate(Screen.MainTabBar);
         }
