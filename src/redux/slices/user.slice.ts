@@ -39,7 +39,7 @@ export const userSlice = createSlice({
       state.user = action.payload;
     },
 
-    signOut: () => {
+    init: () => {
       return initialState;
     },
     addNewConnectedMail: (
