@@ -234,13 +234,14 @@ const FakeScreen = () => {
         .doc(firebaseAuth!.uid)
         .delete();
       await signOut();
+    } catch (error) {
+      console.log('error handleSignOut', error);
+    } finally {
       dispatch(userSliceActions.signOut());
       dispatch(mailSliceActions.clear());
       AsyncStorage.removeItem('user');
       AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS);
       navigationService.navigateAndReset(Screen.Login);
-    } catch (error) {
-      console.log('error handleSignOut');
     }
   };
 
