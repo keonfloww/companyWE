@@ -4,7 +4,6 @@ import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
 import React, {FC, PropsWithChildren, useEffect} from 'react';
 import {Screen} from './navigation.enums';
-// import HeaderBackgroundDefault from '@layouts/default/HeaderBackgroundDefault';
 import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
 import {Platform, Text, View} from 'react-native';
@@ -19,18 +18,12 @@ import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
 import InboxScreen from '@screens/Inbox/InboxScreen';
 import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookmarkSearchActions';
 import ConnectMailScreen from '@screens/ConnectMail/ConnectMailScreen';
-import auth from '@react-native-firebase/auth';
-import {useDispatch} from 'react-redux';
-import {userSliceActions} from '@redux/slices/user.slice';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import LoginScreen from '@screens/Auth/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 import {Button, Colors} from 'react-native-ui-lib';
-import firestore from '@react-native-firebase/firestore';
-import {FireStoreCollection} from '@services/firestoreService';
 import SplashScreen from '@screens/Splash/SplashScreen';
-import {mailSliceActions} from '@redux/slices/mail.slice';
 import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 
 const Stack = createNativeStackNavigator();
@@ -47,17 +40,13 @@ const RootNavigator: FC = () => {
   };
 
   return (
-    <NavigationContainer
-      // onReady={checkAuth}
-      ref={navigationRef}
-      linking={linking}>
+    <NavigationContainer ref={navigationRef} linking={linking}>
       <Stack.Navigator
         initialRouteName={Screen.SplashScreen}
         // initialRouteName={Screen.StoryBookScreen}
         screenOptions={{
           fullScreenGestureEnabled: false,
           headerBackVisible: true,
-          // headerBackground: HeaderBackgroundDefault,
           headerStyle: {
             backgroundColor: Colors.primary,
           },
@@ -167,7 +156,7 @@ const TabBarNavigator: FC = () => {
         options={{
           title: t('screen:Home'),
           headerShown: false,
-          tabBarIcon: ({color}) => {
+          tabBarIcon: ({color}: any) => {
             return (
               <TabBarIconWrapper>
                 <IMAGES.IcHome color={color} fill={color} />
@@ -185,7 +174,7 @@ const TabBarNavigator: FC = () => {
           ...(mailCountUnread
             ? {tabBarBadge: mailCountUnread}
             : {tabBarBadgeStyle: {display: 'none'}}),
-          tabBarIcon: ({color}) => (
+          tabBarIcon: ({color}: any) => (
             <TabBarIconWrapper>
               <IMAGES.IcInbox color={color} />
             </TabBarIconWrapper>
@@ -198,7 +187,7 @@ const TabBarNavigator: FC = () => {
         options={{
           ...styleHeader(),
           title: t('screen:subscriptionScreen'),
-          tabBarIcon: ({color}) => (
+          tabBarIcon: ({color}: any) => (
             <TabBarIconWrapper>
               <IMAGES.IcStar color={color} fill={color} />
             </TabBarIconWrapper>
@@ -211,7 +200,7 @@ const TabBarNavigator: FC = () => {
         options={{
           title: t('screen:ProfileScreen'),
           headerTitleStyle: styles.bottomTabTitle,
-          tabBarIcon: ({color}) => (
+          tabBarIcon: ({color}: any) => (
             <TabBarIconWrapper>
               <IMAGES.IcProfile color={color} fill={color} />
             </TabBarIconWrapper>
@@ -223,25 +212,21 @@ const TabBarNavigator: FC = () => {
 };
 
 const FakeScreen = () => {
-  const {signOut} = useAuthProvider();
-  const dispatch = useDispatch();
-
+  const {signOutFirebase} = useAuthProvider();
   const handleSignOut = async () => {
     try {
-      const firebaseAuth = auth()!.currentUser;
-      await firestore()
-        .collection(FireStoreCollection.MAIL)
-        .doc(firebaseAuth!.uid)
-        .delete();
-      await signOut();
+      global?.props?.showLoading();
+
+      await signOutFirebase();
     } catch (error) {
       console.log('error handleSignOut', error);
     } finally {
-      dispatch(userSliceActions.signOut());
-      dispatch(mailSliceActions.clear());
-      AsyncStorage.removeItem('user');
-      AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS);
+      // Dont clear mail data on sign out anymore.
+      // Because once user resign in with same credentials => keep data without sync
+      // If the credentials is difference => remove and sync
+      AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.USER);
       navigationService.navigateAndReset(Screen.Login);
+      global?.props?.hideLoading();
     }
   };
 

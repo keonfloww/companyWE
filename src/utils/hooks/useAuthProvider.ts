@@ -15,7 +15,7 @@ const useAuthProvider = () => {
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     // Sign-in the user with the credential
-    const userData = await auth().signInWithCredential(googleCredential)
+    const userData = await auth().signInWithCredential(googleCredential);
     return {userData, accessToken: googleCredential.token};
   };
 
@@ -28,17 +28,17 @@ const useAuthProvider = () => {
     );
   };
 
-  const signOut = async () => {
+  const signOutFirebase = async () => {
     await GoogleSignin.revokeAccess();
     await GoogleSignin.signOut();
     auth()
       .signOut()
-      .then(() => console.log('User signed out!'));
+      .then(() => console.log('User signed out from Firebase!'));
   };
   return {
     signInByGoogle,
     onGoogleLinkButtonPress,
-    signOut,
+    signOutFirebase,
   };
 };
 
