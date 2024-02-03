@@ -16,7 +16,7 @@ export const userApi = createApi({
           method: HTTP_METHODS.POST,
           body: params,
           headers: {
-            'Authorization' : params.accessToken,
+            'authorization' : params.accessToken,
             'content-type': 'application/json',
           }
         };

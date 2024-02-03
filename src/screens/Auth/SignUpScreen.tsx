@@ -90,8 +90,8 @@ const SignUpScreen: FC<any> = () => {
     <LayoutBackgroundDefault>
       <View
         style={{
-          position: 'absolute',
-          top: scale(15),
+          // position: 'absolute',
+          marginTop: scale(30),
           justifyContent: 'space-between',
           flexDirection: 'row',
           width: '100%',
@@ -104,7 +104,7 @@ const SignUpScreen: FC<any> = () => {
           <IMAGES.arrowLeft />
         </Pressable>
       </View>
-      <View style={{height: scale(123)}}></View>
+      <View style={{height: scale(80)}}></View>
       <View style={styles.view}>
         <Text style={[CommonStyles.font.bold30, {color: Colors.text}]}>
           Sign Up
@@ -160,29 +160,34 @@ const SignUpScreen: FC<any> = () => {
       </View>
       <View
         style={{
-          height: scale(1),
-          backgroundColor: '#EFEFEF',
+          // height: scale(1),
+          flexDirection: 'row',
+          backgroundColor: 'transparent',
           alignItems: 'center',
           justifyContent: 'center',
-          marginVertical: scale(10),
+          // marginVertical: scale(10),
           marginHorizontal: scale(20),
         }}>
+        <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex:1}}></View>
         <Text
           style={{
-            position: 'absolute',
-            backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+            // position: 'absolute',
+            backgroundColor: 'transparent',
             borderRadius: scale(100),
+            marginHorizontal: scale(10),
+            color: '#3C3C3C'
           }}>
           OR
         </Text>
+        <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex: 1}}></View>
       </View>
-      <View style={{marginHorizontal: scale(20), flexDirection: 'row'}}>
+      <View style={{marginHorizontal: scale(20)}}>
         <ServiceButton
           type={EnumAuthProviderButtonType.SIGN_UP}
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
           onPress={() => setTermModalShow(true)}
-          titleContainerStyles={{display: 'none'}}
+          titleStyles={[CommonStyles.font.regular14,styles.connectText]}
         />
       </View>
       <View style={{margin: scale(20)}}>
@@ -219,6 +224,10 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.text,
     marginBottom: scale(10),
+  },
+  connectText: {
+    color: '#50048A',
+    fontWeight: '400',
   },
   termText: {
     color: '#50048A',
@@ -261,12 +270,11 @@ const styles = StyleSheet.create({
   },
   baseButton: {
     backgroundColor: 'white',
+    height: scale(40),
+    paddingVertical: 0,
     marginTop: scale(15),
     borderRadius: 99,
     borderWidth: 1,
-    flex: 0,
     borderColor: '#50048A',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

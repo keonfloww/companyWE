@@ -18,9 +18,10 @@ import {
   StatusBar,
   useWindowDimensions,
   Platform,
+  Image,
 } from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native-ui-lib';
 import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
@@ -53,32 +54,26 @@ const IntroScreen: FC<any> = ({navigation}) => {
   const carouselItems: IcarouselItems[] = [
     {
       id: 1,
-      image: (
-        <IMAGES.welcomeTroove style={{position: 'absolute', top: Platform.OS === 'ios' ? '10%' : '12%'}} />
-      ),
+      image: require('../../assets/images/png/Welcome_1.png'),
       title: 'Welcome to Troove!',
       buttonText: 'Next',
     },
     {
       id: 2,
-      image: (
-        <IMAGES.welcomeBenefit1 style={{position: 'absolute', top: Platform.OS === 'ios' ? '10%' : '12%'}} />
-      ),
+      image: require('../../assets/images/png/Welcome_2.png'),
       title: 'Benefit 1',
       buttonText: 'Next',
     },
     {
       id: 3,
-      image: (
-        <IMAGES.welcomeBenefit2 style={{position: 'absolute', top: Platform.OS === 'ios' ? '10%' : '12%'}} />
-      ),
+      image:require('../../assets/images/png/Welcome_3.png'),
       title: 'Benefit 2',
       buttonText: 'Get Started',
     },
   ];
 
   const pagination = (
-    <View style={[styles.pagination, {bottom: scale(90)}]}>
+    <View style={[styles.pagination]}>
       {carouselItems.map((_, index) => (
         <View
           key={index}
@@ -120,18 +115,19 @@ const IntroScreen: FC<any> = ({navigation}) => {
     <View
       style={{
         width: Dimensions.get('screen').width,
-        height: height,
-        marginVertical: scale(20),
+        // height: '90%',
+        paddingVertical: scale(40),
         paddingHorizontal: scale(20),
-        flex: 1,
+        // flex: 1,
         justifyContent: 'space-between',
+        // backgroundColor: 'blue',
         alignItems: 'center',
       }}>
       {/* Image absolute */}
-      {item.image}
-
-      <View style={{flex: 5}} />
-      <View style={{flex: 4.5,justifyContent: 'center',bottom: scale(height* 0.08 + insets.bottom),}}>
+      <View style={{width: '100%', height: '40%', alignItems: 'center', justifyContent: 'center', marginTop: '10%'}}>
+      <Image source={item.image} style={{width: '100%',marginTop: scale(50)}} resizeMode='contain' />
+      </View>
+      <View style={{justifyContent: 'center', alignSelf: ''}}>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
           {item.title}
         </Text>
@@ -182,13 +178,13 @@ const IntroScreen: FC<any> = ({navigation}) => {
       />
       <View
         style={{
-          position: 'absolute',
+          // position: 'absolute',
           justifyContent: 'space-between',
           flexDirection: 'row',
           width: '100%',
           zIndex: 2,
           paddingHorizontal: scale(30),
-          top: scale(30),
+          marginTop: scale(30),
           alignItems: 'center',
         }}>
         {corouselIndex !== 1 ? (
@@ -210,8 +206,14 @@ const IntroScreen: FC<any> = ({navigation}) => {
           <Text />
         )}
       </View>
+      <View style={{flex: 5}}> 
+        
       {corousel}
+      </View >
+      <View style={{flex: 1}}>
+
       {pagination}
+      </View>
       <View style={{height: insets.bottom}} />
     </LayoutBackgroundDefault>
   );
@@ -220,7 +222,7 @@ export default IntroScreen;
 
 const styles = StyleSheet.create({
   text: {
-    color: Colors.text,
+    color: '#3c3c3c',
     marginBottom: scale(10),
   },
   paginationDot: {
