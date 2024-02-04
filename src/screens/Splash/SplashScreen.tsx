@@ -9,26 +9,32 @@ import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 
 const SplashScreen = () => {
   const checkAuth = async () => {
-    const user = await AsyncStorage.getItem('user');
-    const isConnectedMails = await AsyncStorage.getItem(
-      LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS,
-    );
-
     const firebaseAuth = auth()!.currentUser;
 
-    setTimeout(() => {
+    setTimeout(async () => {
+      const user = await AsyncStorage.getItem('user');
+      const isConnectedMails = await AsyncStorage.getItem(
+        LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS,
+      );
+      console.log('isConnectedMails', !!isConnectedMails);
+
       if (firebaseAuth?.uid && user) {
         if (!isConnectedMails) {
+          console.log('Screen.ConnectMailScreen from splash screen');
           navigationService.navigateAndReset(Screen.ConnectMailScreen);
         } else {
-          navigationService.navigateAndReset(Screen.MainTabBar);
+          console.log('Screen.MainTabBar.Screen.HomeScreen from splash screen');
+          navigationService.navigateAndReset(Screen.MainTabBar, {
+            params: Screen.HomeScreen,
+          });
         }
-        BootSplash.hide({fade: true});
+
+        await BootSplash.hide({fade: true});
         return;
       }
       navigationService.navigateAndReset(Screen.IntroScreen);
 
-      BootSplash.hide({fade: true});
+      await BootSplash.hide({fade: true});
     }, 500);
   };
 

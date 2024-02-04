@@ -40,8 +40,8 @@ export interface IMailAuth2Params {
   refresh_token: string;
 }
 export interface IGetMailParams extends IMailAuth2Params {
-  start_date: string;
-  end_date: string;
+  start_date: string; // unix timestamp
+  end_date: string; // unix timestamp
   max_results: number;
   next_page_token: string | null;
 

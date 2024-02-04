@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import type {FC} from 'react';
 import {
   Image,
@@ -15,7 +15,6 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-import auth from '@react-native-firebase/auth';
 import {Colors} from 'react-native-ui-lib';
 import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
@@ -23,22 +22,16 @@ import BaseButton from '@components/atoms/Button/BaseButton';
 import CommonStyles from '@screens/styles';
 import {t} from 'i18next';
 import IMAGES from '@assets/images/images';
-import SafeView from '@components/atoms/View/SafeView';
 import FormItemController from '@components/atoms/Form/FormItemController';
 import {useForm} from 'react-hook-form';
 import ServiceButton, {
   EnumAuthProviderButton,
   EnumAuthProviderButtonType,
 } from '@components/atoms/ServiceButton/ServiceButton';
-import useAuthProvider from '@utils/hooks/useAuthProvider';
-import {useDispatch, useSelector} from 'react-redux';
-import {userSliceActions} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BaseState} from '@redux/stores';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 import BaseModal from '@components/atoms/Modal/BaseModal';
-import { useUserRegisterMutation } from '@redux/slices/api/userApi.slice';
+import useAuth from './hooks/useAuth';
 
 interface IFormData {
   email: string;
@@ -46,15 +39,13 @@ interface IFormData {
 }
 
 const SignUpScreen: FC<any> = () => {
+  // TODO: Vipin move it to /utils/RegexUtils.ts
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  const [userRegister] = useUserRegisterMutation();
-  const connectedMails = useSelector(
-    (state: BaseState) => state?.userReducer.connectedMails,
-  );
+
+  const {signInOrSignUpByFirebase} = useAuth();
+
   const [termModalShow, setTermModalShow] = useState(false);
-  const {signInByGoogle} = useAuthProvider();
-  const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
 
   const {
@@ -68,7 +59,8 @@ const SignUpScreen: FC<any> = () => {
     },
   });
 
-  const onSubmit = (data: IFormData) => {
+  const onSubmit = (_data: IFormData) => {
+    // TODO: Vipin. Why did you not implement it?
     // console.log({data, errors});
     // navigationService.navigateAndReset(Screen.ConnectMailScreen);
   };
@@ -93,36 +85,6 @@ const SignUpScreen: FC<any> = () => {
       </Text>
     </View>
   );
-
-  const signInWithGoogle = async () => {
-    setTermModalShow(false);
-    setTimeout( async () => {
-        try {
-        global?.props?.showLoading();
-        const {userData, accessToken} = await signInByGoogle();
-        console.log({useresr: userData.user});
-        AsyncStorage.setItem('user', JSON.stringify(userData.user));
-        userRegister({
-        id: userData.user.uid.toString(),
-        user_name: userData.user.displayName.toString(),
-        email_address: userData.user.email.toString(),
-        is_email_address_verified: userData.user.emailVerified,
-        sign_up_provider_id: 1,
-        accessToken: accessToken,
-      }).unwrap();
-      // dispatch(userSliceActions.setUser(createdUser));
-      if (!connectedMails.length) {
-        navigationService.navigateAndReset(Screen.ConnectMailScreen);
-        global?.props?.hideLoading();
-        return;
-      }
-      global?.props?.hideLoading();
-      navigationService.navigateAndReset(Screen.MainTabBar);
-    } catch (error) {
-      global?.props?.hideLoading();
-    }
-  },500)
-  };
 
   return (
     <LayoutBackgroundDefault>
@@ -243,7 +205,10 @@ const SignUpScreen: FC<any> = () => {
         headerShown={false}
         backdropOpacity={0.5}
         onClose={() => setTermModalShow(false)}
-        onConfirm={signInWithGoogle}
+        onConfirm={() => {
+          setTermModalShow(false);
+          signInOrSignUpByFirebase({isSignUp: true});
+        }}
         actionViewStyle={{height: scale(40)}}
         buttonContainerStyle={{paddingVertical: scale(0)}}
         children={modalChildren}

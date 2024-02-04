@@ -5,10 +5,9 @@
  * @format
  */
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import type {FC} from 'react';
 import {Pressable, StyleSheet, Text, View, useColorScheme} from 'react-native';
-import auth from '@react-native-firebase/auth';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
@@ -16,21 +15,15 @@ import BaseButton from '@components/atoms/Button/BaseButton';
 import CommonStyles from '@screens/styles';
 import {t} from 'i18next';
 import IMAGES from '@assets/images/images';
-import SafeView from '@components/atoms/View/SafeView';
 import FormItemController from '@components/atoms/Form/FormItemController';
 import {useForm} from 'react-hook-form';
 import ServiceButton, {
   EnumAuthProviderButton,
   EnumAuthProviderButtonType,
 } from '@components/atoms/ServiceButton/ServiceButton';
-import useAuthProvider from '@utils/hooks/useAuthProvider';
-import {useDispatch, useSelector} from 'react-redux';
-import {setUser} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BaseState} from '@redux/stores';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
-import { useUserVerifyMutation } from '@redux/slices/api/userApi.slice';
+import useAuth from './hooks/useAuth';
 
 interface IFormData {
   email: string;
@@ -38,16 +31,15 @@ interface IFormData {
 }
 
 const LoginScreen: FC<any> = () => {
+  // TODO: Vipin move it to /utils/RegexUtils.ts
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const [userVerify] = useUserVerifyMutation();
-  const connectedMails = useSelector(
-    (state: BaseState) => state?.userReducer.connectedMails,
-  );
-  const {signInByGoogle} = useAuthProvider();
-  const dispatch = useDispatch();
+
+  // TODO: Vipin define Enums
   const isDarkMode = useColorScheme() === 'dark';
-  console.log('connectedMails', connectedMails);
+
+  const {signInOrSignUpByFirebase} = useAuth();
+
   const {
     control,
     handleSubmit,
@@ -62,30 +54,6 @@ const LoginScreen: FC<any> = () => {
   const onSubmit = (data: IFormData) => {
     console.log({data, errors});
     navigationService.navigateAndReset(Screen.ConnectMailScreen);
-  };
-
-  const signInWithGoogle = async () => {
-    try {
-      global?.props?.showLoading();
-      const {userData, accessToken} = await signInByGoogle();
-      AsyncStorage.setItem('user', JSON.stringify(userData.user));
-      userVerify({
-        id: userData.user.uid.toString(),
-        is_email_address_verified: Boolean(userData.user.emailVerified),
-        accessToken: accessToken,
-      }).unwrap();
-      // dispatch(userSliceActions.setUser(createdUser));
-      if (!connectedMails.length) {
-        navigationService.navigateAndReset(Screen.ConnectMailScreen);
-        global?.props?.hideLoading();
-        return;
-      }
-      navigationService.navigateAndReset(Screen.MainTabBar);
-      global?.props?.hideLoading();
-    } catch (error) {
-      global?.props?.hideLoading();
-    }
- 
   };
 
   return (
@@ -188,7 +156,7 @@ const LoginScreen: FC<any> = () => {
           type={EnumAuthProviderButtonType.SIGN_IN}
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
-          onPress={signInWithGoogle}
+          onPress={() => signInOrSignUpByFirebase({isSignUp: false})}
           titleStyles={[CommonStyles.font.regular14,styles.connectText]}
         />
       </View>

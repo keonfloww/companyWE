@@ -15,7 +15,8 @@ import {Button} from 'react-native-ui-lib';
 Show case the common component
 or just for testing purpose */
 const StoryBookScreen: FC = () => {
-  const {signInByGoogle, onGoogleLinkButtonPress, signOut} = useAuthProvider();
+  const {signInByGoogle, onGoogleLinkButtonPress, signOutFirebase} =
+    useAuthProvider();
   const user = useSelector((state: BaseState) => state.userReducer.user);
   console.log('--->>>', {user});
 
@@ -91,7 +92,7 @@ const StoryBookScreen: FC = () => {
           authProvider={EnumAuthProviderButton.MICROSOFT}
         />
         <View style={{height: scale(25)}}></View>
-        <Button label={'Sign out'} onPress={signOut} />
+        <Button label={'Sign out'} onPress={signOutFirebase} />
       </CardBase>
     </ScrollView>
   );

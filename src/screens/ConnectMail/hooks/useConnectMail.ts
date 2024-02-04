@@ -25,6 +25,11 @@ const useConnectMail = ({
 
   useEffect(() => {
     const firebaseAuth = auth()!.currentUser;
+    console.log('firebaseAuth', {
+      email: firebaseAuth?.email,
+      udi: firebaseAuth?.uid,
+    });
+
     if (!firebaseAuth?.uid) {
       return;
     }
@@ -37,13 +42,18 @@ const useConnectMail = ({
           QuerySnapshot.data() as FireBaseMailCredentials;
 
         if (!newFirebaseMail) {
+          console.log(
+            'QuerySnapshot triggered with no mail credentials => User just sign in without connecting any mails',
+          );
           return;
         }
-
+        console.log('Connected new mail', newFirebaseMail.email);
         dispatch(userSliceActions.addNewConnectedMail(newFirebaseMail));
         AsyncStorage.setItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS, 'true');
         if (autoRedirectToHome) {
-          navigationService.navigate(Screen.MainTabBar);
+          navigationService.navigateAndReset(Screen.MainTabBar, {
+            params: Screen.HomeScreen,
+          });
         }
         setTimeout(() => {
           InAppBrowser.close();

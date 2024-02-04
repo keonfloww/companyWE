@@ -9,7 +9,7 @@ import {
 import {userSliceActions} from '@redux/slices/user.slice';
 import {BaseState} from '@redux/stores';
 import DateUtils from '@utils/dateUtils';
-import moment from 'moment';
+import moment, {Moment} from 'moment';
 import {useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -67,19 +67,27 @@ const useInboxScreen = () => {
               refresh_token: targetMail.refresh_token,
             };
 
+            const startDate: Moment = moment()
+              .subtract(2, 'week')
+              .set('hour', 0)
+              .set('minute', 0)
+              .set('second', 0);
+
+            const endDate: Moment = moment()
+              .set('hour', 23)
+              .set('minute', 59)
+              .set('second', 59);
+
             const params: IGetMailParams = {
               ...mailAuth,
 
               email_address: targetMail.email,
-              start_date: moment()
-                .subtract(2, 'week')
-                .format(DateUtils.BACKEND_FORMAT),
-              end_date: moment().format(DateUtils.BACKEND_FORMAT),
+              start_date: startDate.unix().toString(),
+              end_date: endDate.unix().toString(),
               max_results: MAIL_PER_PAGE,
               next_page_token,
             };
             const res = await getMail(params).unwrap();
-
             // handle refresh token and retry here
             const isNeedToRefreshToken = res.token_info.is_expired;
             if (isNeedToRefreshToken) {
@@ -102,7 +110,9 @@ const useInboxScreen = () => {
             if (isEnd) {
               console.log(
                 '---- SYNCED',
-                `${targetMail.email}, from ${params.start_date} to ${params.end_date}`,
+                `${targetMail.email}, from ${startDate.format(
+                  DateUtils.FRONTEND_FORMAT_DEFAULT,
+                )} to ${endDate.format(DateUtils.FRONTEND_FORMAT_DEFAULT)}`,
               );
 
               dispatch(
@@ -143,7 +153,7 @@ const useInboxScreen = () => {
       console.log('error', error);
     }
   };
-
+  console.log('mailBoxFlatten?.length', mailBoxFlatten?.length);
   // EFFECT ---------------------
 
   // TEST log mail
