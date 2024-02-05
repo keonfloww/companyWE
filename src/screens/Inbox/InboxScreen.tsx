@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import IMAGES from '@assets/images/images';
 import BaseModal from '@components/atoms/Modal/BaseModal';
 import {t} from 'i18next';
+import { StyleSheet } from 'react-native';
 
 const InboxScreen = () => {
   const navigation = useNavigation();
@@ -59,7 +60,7 @@ const InboxScreen = () => {
           paddingTop: scale(10),
         }}>
         {selectMode && (
-          <Text style={CommonStyles.font.regular14}>
+          <Text style={[CommonStyles.font.regular14, style.text]}>
             {selectedIds?.length} Selected
           </Text>
         )}
@@ -104,6 +105,8 @@ const InboxScreen = () => {
         headerIcon={<IMAGES.icTrash color={'#E74C3C'} />}
         confirmTitle={t('Yes, I am sure')}
         cancelTitle={t('No')}
+        actionViewStyle={{height: scale(40)}}
+        buttonContainerStyle={{paddingVertical: scale(0)}}
         onClose={() => {
           handleMarkAsAskedDelete();
           setIsShowDeleteAfterSyncedMail(false);
@@ -112,11 +115,11 @@ const InboxScreen = () => {
           setIsShowDeleteAfterSyncedMail(false);
           handleMoveMailToTrash();
         }}>
-        <Text style={{...CommonStyles.font.bold26, textAlign: 'center'}}>
+        <Text style={{...CommonStyles.font.bold26, ...style.text, textAlign: 'center',}}>
           {'Are you sure you want to delete?'}
         </Text>
         <View style={{height: scale(16)}} />
-        <Text style={{...CommonStyles.font.regular14, textAlign: 'center'}}>
+        <Text style={{...CommonStyles.font.regular14, ... style.text, textAlign: 'center',}}>
           Deleting will remove the emails from your Inbox. This action cannot be
           undone.
         </Text>
@@ -126,3 +129,9 @@ const InboxScreen = () => {
 };
 
 export default InboxScreen;
+
+const style = StyleSheet.create({
+  text: {
+    color: '#3c3c3c',
+  }
+})

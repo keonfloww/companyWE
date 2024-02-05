@@ -2,19 +2,23 @@ import SafeView from '@components/atoms/View/SafeView';
 import {Divider} from '@rneui/base';
 import {scale} from '@utils/mixins';
 import {FC, Fragment, useState} from 'react';
-import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native';
+import {Platform, RefreshControl, ScrollView, StyleSheet, View} from 'react-native';
 import HomeHeader from './components/HomeHeader';
 import HomeCategoryList from './components/HomeCategoryList';
 import HomeDontMissOut from './components/HomeDontMissOut';
 import HomeSection from './components/HomeSection';
+import { StatusBar } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const HomeScreen: FC<any> = () => {
   const [refreshing, setRefreshing] = useState(false);
+  const insets = useSafeAreaInsets();
   return (
     <SafeView>
       {/* Header */}
       <View
         style={{
+          marginTop: StatusBar.currentHeight,
           paddingHorizontal: scale(25),
           paddingTop: scale(10),
           paddingBottom: scale(12),

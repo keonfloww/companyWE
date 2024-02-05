@@ -232,7 +232,7 @@ const FakeScreen = () => {
 
   return (
     <View>
-      <Text>Fake screen</Text>
+      <Text style={{color: '#3c3c3c'}}>Fake screen</Text>
       <Button label={'Sign out'} onPress={handleSignOut} />
     </View>
   );

@@ -59,7 +59,7 @@ const ServiceButton: React.FC<Props> = ({
     [key in EnumAuthProviderButtonType]: string;
   } = {
     [EnumAuthProviderButtonType.SIGN_IN]: t('Sign in with'),
-    [EnumAuthProviderButtonType.SIGN_UP]: t('Sign up by'),
+    [EnumAuthProviderButtonType.SIGN_UP]: t('Sign up with'),
     [EnumAuthProviderButtonType.CONNECT]: t('Connect'),
   };
 
