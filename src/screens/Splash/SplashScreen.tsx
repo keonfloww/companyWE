@@ -28,13 +28,16 @@ const SplashScreen = () => {
             params: Screen.HomeScreen,
           });
         }
-
-        await BootSplash.hide({fade: true});
+        setTimeout(() => {
+          BootSplash.hide({fade: true});
+        }, 200);
         return;
       }
       navigationService.navigateAndReset(Screen.IntroScreen);
 
-      await BootSplash.hide({fade: true});
+      setTimeout(() => {
+        BootSplash.hide({fade: true});
+      }, 200);
     }, 500);
   };
 
