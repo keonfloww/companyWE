@@ -61,6 +61,7 @@ pass "end_date": "2024/02/01", "delete_historical_mails": true
 export interface IMoveMailToTrashParams extends IMailAuth2Params {
   start_date?: string;
   end_date: string;
+  end_date_unix?: string;
   delete_historical_mails: boolean;
 }
 

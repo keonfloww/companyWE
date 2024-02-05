@@ -138,13 +138,15 @@ const useInboxScreen = () => {
 
   const handleMoveMailToTrash = () => {
     try {
+      const endDate = moment().add(1, 'day');
       userState.connectedMails?.forEach((mail: FireBaseMailCredentials) => {
         moveMailToTrash({
           access_token: mail?.access_token,
           expiry_date: mail.expiry_date,
           refresh_token: mail.refresh_token,
 
-          end_date: moment().format(DateUtils.BACKEND_FORMAT),
+          end_date: endDate.format(DateUtils.BACKEND_FORMAT),
+          end_date_unix: endDate.unix().toString(),
           delete_historical_mails: true,
         }).unwrap();
       });
