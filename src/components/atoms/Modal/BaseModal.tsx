@@ -48,8 +48,8 @@ const BaseModal = ({
           <Button
             label={cancelTitle}
             onPress={onClose}
-            style={[{flex: 1}, buttonContainerStyle ? buttonContainerStyle : {}]}
-            labelStyle={CommonStyles.font.regular14}
+            style={[{flex: 1, width: scale(130),paddingHorizontal: 0}, buttonContainerStyle ? buttonContainerStyle : {}]}
+            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
             backgroundColor={'white'}
             outlineColor={'#50048A'}
             color={'#50048A'}
@@ -57,8 +57,8 @@ const BaseModal = ({
           <Button
             label={confirmTitle}
             onPress={onConfirm}
-            style={[{flex: 1} , buttonContainerStyle ? buttonContainerStyle: {}]}
-            labelStyle={CommonStyles.font.regular14}
+            style={[{flex: 1, paddingHorizontal: 0, width: scale(130)} , buttonContainerStyle ? buttonContainerStyle: {}]}
+            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
             backgroundColor={'#50048A'}
           />
         </View>
@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
   actionContainer: {
     display: 'flex',
     flexDirection: 'row',
-    columnGap: scale(12),
+    columnGap: scale(8),
   },
 });

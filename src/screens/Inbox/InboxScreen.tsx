@@ -104,6 +104,8 @@ const InboxScreen = () => {
         headerIcon={<IMAGES.icTrash color={'#E74C3C'} />}
         confirmTitle={t('Yes, I am sure')}
         cancelTitle={t('No')}
+        actionViewStyle={{height: scale(40)}}
+        buttonContainerStyle={{paddingVertical: scale(0)}}
         onClose={() => {
           handleMarkAsAskedDelete();
           setIsShowDeleteAfterSyncedMail(false);
