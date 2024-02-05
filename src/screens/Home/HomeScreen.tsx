@@ -18,7 +18,7 @@ const HomeScreen: FC<any> = () => {
       {/* Header */}
       <View
         style={{
-          marginTop: Platform.OS === 'ios' ? insets.top : StatusBar.currentHeight,
+          marginTop: StatusBar.currentHeight,
           paddingHorizontal: scale(25),
           paddingTop: scale(10),
           paddingBottom: scale(12),
