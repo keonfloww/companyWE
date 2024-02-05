@@ -16,7 +16,7 @@ const HomeDontMissOut = () => {
   return (
     <View style={styles.container}>
       <View style={styles.containerHeader}>
-        <Text>{t('Don’t Miss Out')}</Text>
+        <Text style={styles.text}>{t('Don’t Miss Out')}</Text>
       </View>
 
       <View style={styles.containerBody}>
@@ -33,12 +33,12 @@ const HomeDontMissOut = () => {
                 <View style={styles.containerBodyListCardContent}>
                   <View style={CommonStyles.flex.col}>
                     <Text
-                      style={CommonStyles.font.semiBold16}
+                      style={[CommonStyles.font.semiBold16, styles.text]}
                       numberOfLines={1}>
                       {item?.title}
                     </Text>
                     <View style={{height: scale(3)}} />
-                    <Text style={CommonStyles.font.regular12} numberOfLines={2}>
+                    <Text style={[CommonStyles.font.regular12, styles.text]} numberOfLines={2}>
                       {item?.description}
                     </Text>
                     <View style={{height: scale(16)}} />
@@ -83,7 +83,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(25),
     marginBottom: scale(8),
   },
-
+  text: {
+    color: '#3c3c3c',
+  },
   containerBody: {
     flex: 1,
   },

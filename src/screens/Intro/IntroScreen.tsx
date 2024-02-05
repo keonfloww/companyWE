@@ -21,7 +21,8 @@ import {
   Image,
 } from 'react-native';
 
-import {Colors} from 'react-native-ui-lib';
+// import {Colors} from 'react-native-ui-lib';
+import { Colors } from '@utils/colorUtils';
 import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
@@ -44,10 +45,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
   const isDarkMode = useColorScheme() === 'dark';
   const flatListRef = useRef<FlatList>();
   const [corouselIndex, setCorouselIndex] = useState(1);
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    flex: 1,
-  };
+
   const {width, height} = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
@@ -199,7 +197,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
         {corouselIndex !== 3 ? (
           <Text
             onPress={() => navigationService.navigate(Screen.Login)}
-            style={CommonStyles.font.semiBold14}>
+            style={[CommonStyles.font.semiBold14, {color: '#3c3c3c'}]}>
             Skip
           </Text>
         ) : (
@@ -222,7 +220,7 @@ export default IntroScreen;
 
 const styles = StyleSheet.create({
   text: {
-    color: '#3c3c3c',
+    color: '#3C3C3C',
     marginBottom: scale(10),
   },
   paginationDot: {

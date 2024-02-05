@@ -16,9 +16,9 @@ const HomeSection: FC<Props> = ({title}) => {
   return (
     <View style={style.container}>
       <View style={style.containerHeader}>
-        <Text numberOfLines={1}>{title}</Text>
+        <Text numberOfLines={1} style={style.text}>{title}</Text>
         <Pressable onPress={() => {}}>
-          <Text style={CommonStyles.font.regular12} numberOfLines={1}>
+          <Text style={[CommonStyles.font.regular12, style.text]} numberOfLines={1}>
             {t('See all')}
           </Text>
         </Pressable>
@@ -49,13 +49,13 @@ const HomeSection: FC<Props> = ({title}) => {
                 resizeMode={FastImage.resizeMode.contain}
               />
               <View style={{height: scale(8)}} />
-              <Text numberOfLines={1} style={CommonStyles.font.semiBold14}>
+              <Text numberOfLines={1} style={[CommonStyles.font.semiBold14, style.text]}>
                 {item?.title}
               </Text>
-              <Text numberOfLines={1} style={CommonStyles.font.regular10}>
+              <Text numberOfLines={1} style={[CommonStyles.font.regular10, style.text]}>
                 {item?.date}
               </Text>
-              <Text numberOfLines={3} style={CommonStyles.font.regular12}>
+              <Text numberOfLines={3} style={[CommonStyles.font.regular12, style.text]}>
                 {item?.description}
               </Text>
             </View>
@@ -81,6 +81,9 @@ const style = StyleSheet.create({
     paddingVertical: scale(1),
     paddingRight: scale(25),
   },
+  text: {
+    color: '#3c3c3c',
+  }
 });
 
 export default React.memo(HomeSection);

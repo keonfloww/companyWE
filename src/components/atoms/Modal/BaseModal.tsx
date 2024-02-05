@@ -44,11 +44,18 @@ const BaseModal = ({
         <View style={{height: scale(28)}} />
 
         {/* Actions */}
-        <View style={[styles.actionContainer, actionViewStyle? actionViewStyle : {}]}>
+        <View
+          style={[
+            styles.actionContainer,
+            actionViewStyle ? actionViewStyle : {},
+          ]}>
           <Button
             label={cancelTitle}
             onPress={onClose}
-            style={[{flex: 1, width: scale(130),paddingHorizontal: 0}, buttonContainerStyle ? buttonContainerStyle : {}]}
+            style={[
+              {flex: 1, paddingHorizontal: 0},
+              buttonContainerStyle ? buttonContainerStyle : {},
+            ]}
             labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
             backgroundColor={'white'}
             outlineColor={'#50048A'}
@@ -57,7 +64,10 @@ const BaseModal = ({
           <Button
             label={confirmTitle}
             onPress={onConfirm}
-            style={[{flex: 1, paddingHorizontal: 0, width: scale(130)} , buttonContainerStyle ? buttonContainerStyle: {}]}
+            style={[
+              {flex: 1, paddingHorizontal: 0},
+              buttonContainerStyle ? buttonContainerStyle : {},
+            ]}
             labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
             backgroundColor={'#50048A'}
           />

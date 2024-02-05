@@ -13,7 +13,7 @@ const CategoryList: FC = () => {
         contentContainerStyle={{
           paddingVertical: scale(1),
           paddingHorizontal: scale(25),
-          maxHeight: scale(74),
+          maxHeight: scale(80),
         }}
         data={categoryList}
         horizontal={true}
@@ -28,7 +28,7 @@ const CategoryList: FC = () => {
               }}>
               {item?.icon()}
               <View style={{height: scale(8)}}></View>
-              <Text style={CommonStyles.font.regular12}>{item?.label}</Text>
+              <Text style={[CommonStyles.font.regular12, {color: '#3c3c3c'}]}>{item?.label}</Text>
             </View>
           );
         }}

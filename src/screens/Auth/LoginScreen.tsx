@@ -8,7 +8,6 @@
 import React from 'react';
 import type {FC} from 'react';
 import {Pressable, StyleSheet, Text, View, useColorScheme} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
@@ -136,7 +135,7 @@ const LoginScreen: FC<any> = () => {
           alignItems: 'center',
           justifyContent: 'center',
           // marginVertical: scale(10),
-          marginHorizontal: scale(20),
+          marginHorizontal: scale(25),
         }}>
         <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex:1}}></View>
         <Text
@@ -151,7 +150,7 @@ const LoginScreen: FC<any> = () => {
         </Text>
         <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex: 1}}></View>
       </View>
-      <View style={{marginHorizontal: scale(20)}}>
+      <View style={{marginHorizontal: scale(25)}}>
         <ServiceButton
           type={EnumAuthProviderButtonType.SIGN_IN}
           containerStyle={styles.baseButton}
@@ -160,8 +159,8 @@ const LoginScreen: FC<any> = () => {
           titleStyles={[CommonStyles.font.regular14,styles.connectText]}
         />
       </View>
-      <View style={{margin: scale(20)}}>
-        <Text style={{color: '#3C3C3C'}}>
+      <View style={{marginHorizontal: scale(25), marginVertical: scale(20)}}>
+        <Text style={{color: '#3C3C3C',}}>
           Don't have an account?{' '}
           <Text
             style={[CommonStyles.font.semiBold14, {color: '#50048A'}]}

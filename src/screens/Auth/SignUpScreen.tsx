@@ -106,13 +106,13 @@ const SignUpScreen: FC<any> = () => {
       </View>
       <View style={{height: scale(80)}}></View>
       <View style={styles.view}>
-        <Text style={[CommonStyles.font.bold30, {color: Colors.text}]}>
+        <Text style={[CommonStyles.font.bold30, {color: '#3C3C3C'}]}>
           Sign Up
         </Text>
         <Text
           style={[
             CommonStyles.font.regular14,
-            {color: Colors.text, marginTop: scale(10)},
+            {color: '#3C3C3C', marginTop: scale(10)},
           ]}>
           Enter your email and set a password
         </Text>
@@ -166,7 +166,7 @@ const SignUpScreen: FC<any> = () => {
           alignItems: 'center',
           justifyContent: 'center',
           // marginVertical: scale(10),
-          marginHorizontal: scale(20),
+          marginHorizontal: scale(25),
         }}>
         <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex:1}}></View>
         <Text
@@ -181,7 +181,7 @@ const SignUpScreen: FC<any> = () => {
         </Text>
         <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex: 1}}></View>
       </View>
-      <View style={{marginHorizontal: scale(20)}}>
+      <View style={{marginHorizontal: scale(25)}}>
         <ServiceButton
           type={EnumAuthProviderButtonType.SIGN_UP}
           containerStyle={styles.baseButton}
@@ -190,7 +190,7 @@ const SignUpScreen: FC<any> = () => {
           titleStyles={[CommonStyles.font.regular14,styles.connectText]}
         />
       </View>
-      <View style={{margin: scale(20)}}>
+      <View style={{marginHorizontal: scale(25), marginVertical: scale(20)}}>
         <Text style={{color: '#3C3C3C'}}>
           Have an account?{' '}
           <Text
@@ -222,7 +222,7 @@ export default SignUpScreen;
 
 const styles = StyleSheet.create({
   text: {
-    color: Colors.text,
+    color: '#3C3C3C',
     marginBottom: scale(10),
   },
   connectText: {
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     marginBottom: scale(14),
   },
   labelStyle: {
-    color: Colors.text,
+    color: '#3C3C3C',
   },
   baseButton: {
     backgroundColor: 'white',

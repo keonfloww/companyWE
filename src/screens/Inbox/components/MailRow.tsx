@@ -163,22 +163,22 @@ const styles = StyleSheet.create({
   },
   senderName: {
     ...CommonStyles.font.semiBold16,
-    color: Colors.text,
+    color: '#3C3C3C',
   },
   subject: {
     ...CommonStyles.font.semiBold14,
-    color: Colors.text,
+    color: '#3C3C3C',
   },
   dateTime: {
     ...CommonStyles.font.semiBold12,
-    color: Colors.text,
+    color: '#3C3C3C',
   },
   shortBody: {
     ...CommonStyles.font.regular14,
-    color: Colors.text,
+    color: '#3C3C3C',
   },
   textDisable: {
-    color: Colors.textDisable,
+    color: '#757575',
     fontFamily: CommonStyles.fontFamily.regular,
   },
 });
