@@ -10,6 +10,7 @@ import FastImage from 'react-native-fast-image';
 import IMAGES from '@assets/images/images';
 import BaseButton from '@components/atoms/Button/BaseButton';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
+import {safeString} from '@utils/stringUtils';
 
 const ProfileConnectedMailScreen = () => {
   const {connectedMails} = useProfileConnectedMail();
@@ -30,21 +31,23 @@ const ProfileConnectedMailScreen = () => {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <BaseRowIconLabel
-                  prefixIcon={
-                    <FastImage
-                      style={{width: 25, height: 25}}
-                      resizeMode={'contain'}
-                      source={IMAGES.icGoogleSrc}
-                    />
-                  }
-                  titleNode={
-                    <View>
-                      <Text>{'Google'}</Text>
-                      <Text>{item?.email}</Text>
-                    </View>
-                  }
-                />
+                <View style={{flex: 1}}>
+                  <BaseRowIconLabel
+                    prefixIcon={
+                      <FastImage
+                        style={{width: 25, height: 25}}
+                        resizeMode={'contain'}
+                        source={IMAGES.icGoogleSrc}
+                      />
+                    }
+                    titleNode={
+                      <View style={{flex: 1}}>
+                        <Text>{'Google'}</Text>
+                        <Text numberOfLines={1}>{safeString(item?.email)}</Text>
+                      </View>
+                    }
+                  />
+                </View>
                 <BaseButton title={'Disconnect'} />
               </View>
             );

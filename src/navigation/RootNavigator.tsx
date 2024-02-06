@@ -106,10 +106,15 @@ const RootNavigator: FC = () => {
 export default RootNavigator;
 
 const TabBarNavigator: FC = () => {
-  const {mailCountUnread, handleGetAllMailInConnectedMails} = useInboxScreen();
+  const {
+    userState,
+    mailCountUnread,
+
+    handleGetAllMailInConnectedMails,
+  } = useInboxScreen();
   useEffect(() => {
     handleGetAllMailInConnectedMails();
-  }, []);
+  }, [userState.user?.user.uid]);
 
   // TODO: create hook for status bar on each screen style
   useEffect(() => {
@@ -145,9 +150,6 @@ const TabBarNavigator: FC = () => {
       headerTintColor: '#fff',
     };
   };
-  {
-    console.log(userState.connectedMails, userState.syncedMailAddress);
-  }
   return (
     <Tab.Navigator
       screenOptions={{
@@ -176,8 +178,7 @@ const TabBarNavigator: FC = () => {
         options={{
           ...styleHeader(),
           title: t('screen:inboxScreen'),
-          ...(mailCountUnread &&
-          userState.connectedMails.length === userState.syncedMailAddress.length
+          ...(mailCountUnread
             ? {tabBarBadge: mailCountUnread}
             : {tabBarBadgeStyle: {display: 'none'}}),
           tabBarIcon: ({color}: any) =>
@@ -188,8 +189,8 @@ const TabBarNavigator: FC = () => {
               </TabBarIconWrapper>
             ) : (
               <Progress.Circle
-                style={{borderRadius: 50}}
-                size={scale(30)}
+                style={{borderRadius: 99}}
+                size={scale(25)}
                 strokeCap="round"
                 endAngle={0.8}
                 indeterminate={true}
@@ -249,12 +250,7 @@ const FakeScreen = () => {
     }
   };
 
-  return (
-    <View>
-      <Text style={{color: '#3c3c3c'}}>Fake screen</Text>
-      <Button label={'Sign out'} onPress={handleSignOut} />
-    </View>
-  );
+  return <View></View>;
 };
 
 const TabBarIconWrapper: FC<PropsWithChildren> = ({children}) => {

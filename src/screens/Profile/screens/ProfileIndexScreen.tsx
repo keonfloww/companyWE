@@ -82,7 +82,9 @@ const ProfileIndexScreen = () => {
           {groupItems.map(item => {
             return (
               <FlatList
+                key={item?.label}
                 ListHeaderComponentStyle={{marginBottom: scale(10)}}
+                keyExtractor={item => item?.title}
                 ListHeaderComponent={
                   <View>
                     <Text style={CommonStyles.font.bold16}>{item.label}</Text>

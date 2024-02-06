@@ -166,6 +166,7 @@ const useInboxScreen = () => {
   //   }),
   // );
   return {
+    userState,
     mailBoxFlatten,
     mailCountUnread,
     computedIsShowDeleteAfterSyncedMail,
