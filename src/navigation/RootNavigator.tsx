@@ -6,7 +6,7 @@ import React, {FC, PropsWithChildren, useEffect} from 'react';
 import {Screen} from './navigation.enums';
 import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
-import {Platform, Text, View} from 'react-native';
+import {Platform, Text, View, ActivityIndicator} from 'react-native';
 import IMAGES from '@assets/images/images';
 import CommonStyles from '@screens/styles';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -26,6 +26,7 @@ import {Button, Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 import ProfileScreen from '@screens/Profile/ProfileScreen';
+import * as Progress from 'react-native-progress';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -144,6 +145,9 @@ const TabBarNavigator: FC = () => {
       headerTintColor: '#fff',
     };
   };
+  {
+    console.log(userState.connectedMails, userState.syncedMailAddress);
+  }
   return (
     <Tab.Navigator
       screenOptions={{
@@ -172,14 +176,27 @@ const TabBarNavigator: FC = () => {
         options={{
           ...styleHeader(),
           title: t('screen:inboxScreen'),
-          ...(mailCountUnread
+          ...(mailCountUnread &&
+          userState.connectedMails.length === userState.syncedMailAddress.length
             ? {tabBarBadge: mailCountUnread}
             : {tabBarBadgeStyle: {display: 'none'}}),
-          tabBarIcon: ({color}: any) => (
-            <TabBarIconWrapper>
-              <IMAGES.IcInbox color={color} />
-            </TabBarIconWrapper>
-          ),
+          tabBarIcon: ({color}: any) =>
+            userState.connectedMails.length ===
+            userState.syncedMailAddress.length ? (
+              <TabBarIconWrapper>
+                <IMAGES.IcInbox color={color} />
+              </TabBarIconWrapper>
+            ) : (
+              <Progress.Circle
+                style={{borderRadius: 50}}
+                size={scale(30)}
+                strokeCap="round"
+                endAngle={0.8}
+                indeterminate={true}
+                borderColor="#50048A"
+                borderWidth={scale(5)}
+              />
+            ),
         }}
       />
       <Tab.Screen
