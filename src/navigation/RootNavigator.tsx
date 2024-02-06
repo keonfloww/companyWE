@@ -177,12 +177,7 @@ const TabBarNavigator: FC = () => {
         component={InboxScreen}
         options={{
           ...styleHeader(),
-          title:
-            userState.connectedMails.length ===
-            userState.syncedMailAddress.length
-              ? t('screen:inboxScreen')
-              : '',
-          tabBarLabelStyle: {display: userState.connectedMails.length === userState.syncedMailAddress.length? 'flex' : 'none'},
+          title: t('screen:inboxScreen'),
           ...(mailCountUnread &&
           userState.connectedMails.length === userState.syncedMailAddress.length
             ? {tabBarBadge: mailCountUnread}
@@ -195,9 +190,8 @@ const TabBarNavigator: FC = () => {
               </TabBarIconWrapper>
             ) : (
               <Progress.Circle
-                style={{padding: 2,height: scale(45), width: scale(45),}}
-                size={scale(40)}
-                thickness={10}
+                style={{borderRadius: 50}}
+                size={scale(30)}
                 strokeCap='round'
                 endAngle={0.8}
                 indeterminate={true}
