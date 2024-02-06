@@ -9,6 +9,7 @@ import React, {useState} from 'react';
 import type {FC} from 'react';
 import {
   Image,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -203,11 +204,11 @@ const SignUpScreen: FC<any> = () => {
       <BaseModal
         isShow={termModalShow}
         headerShown={false}
-        backdropOpacity={0.5}
+        backdropOpacity={0.7}
         onClose={() => setTermModalShow(false)}
         onConfirm={() => {
           setTermModalShow(false);
-          signInOrSignUpByFirebase({isSignUp: true});
+          setTimeout(() => signInOrSignUpByFirebase({isSignUp: true}), Platform.OS === 'ios' ? 100 : 400);
         }}
         actionViewStyle={{height: scale(40)}}
         buttonContainerStyle={{paddingVertical: scale(0)}}
