@@ -11,7 +11,12 @@ interface Props {
 const LogOutButton: FC<Props> = ({onPress = () => {}}) => {
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-      <View style={{display: 'flex', flexDirection: 'row'}}>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
         <IMAGES.icLogout color={Colors.error} />
         <View style={{width: scale(10)}} />
         <Text style={[{color: Colors.error}, CommonStyles.font.regular14]}>
