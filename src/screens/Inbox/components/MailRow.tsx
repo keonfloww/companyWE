@@ -45,6 +45,7 @@ const MailRow: FC<Props> = ({
 
   return (
     <Drawer
+      useNativeAnimations={true}
       onDragStart={onCancelSelectMode}
       rightItems={[
         {
