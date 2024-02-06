@@ -195,12 +195,14 @@ const TabBarNavigator: FC = () => {
               </TabBarIconWrapper>
             ) : (
               <Progress.Circle
-                style={{padding: 2}}
-                size={scale(35)}
+                style={{padding: 2,height: scale(45), width: scale(45),}}
+                size={scale(40)}
+                thickness={10}
+                strokeCap='round'
                 endAngle={0.8}
                 indeterminate={true}
                 borderColor="#50048A"
-                borderWidth={scale(6)}
+                borderWidth={scale(5)}
               />
             ),
         }}
