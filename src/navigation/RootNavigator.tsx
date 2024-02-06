@@ -26,8 +26,6 @@ import {Button, Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 import ProfileScreen from '@screens/Profile/ProfileScreen';
-import {useSelector} from 'react-redux';
-import {BaseState} from '@redux/stores';
 import * as Progress from 'react-native-progress';
 
 const Stack = createNativeStackNavigator();
@@ -192,7 +190,7 @@ const TabBarNavigator: FC = () => {
               <Progress.Circle
                 style={{borderRadius: 50}}
                 size={scale(30)}
-                strokeCap='round'
+                strokeCap="round"
                 endAngle={0.8}
                 indeterminate={true}
                 borderColor="#50048A"
