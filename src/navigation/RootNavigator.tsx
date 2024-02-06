@@ -6,7 +6,7 @@ import React, {FC, PropsWithChildren, useEffect} from 'react';
 import {Screen} from './navigation.enums';
 import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
-import {Platform, Text, View} from 'react-native';
+import {Platform, Text, View, ActivityIndicator} from 'react-native';
 import IMAGES from '@assets/images/images';
 import CommonStyles from '@screens/styles';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -25,6 +25,8 @@ import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 import {Button, Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
+import {useSelector} from 'react-redux';
+import {BaseState} from '@redux/stores';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -105,6 +107,7 @@ export default RootNavigator;
 
 const TabBarNavigator: FC = () => {
   const {mailCountUnread, handleGetAllMailInConnectedMails} = useInboxScreen();
+  const userState = useSelector((state: BaseState) => state.userReducer);
   useEffect(() => {
     handleGetAllMailInConnectedMails();
   }, []);
@@ -174,11 +177,14 @@ const TabBarNavigator: FC = () => {
           ...(mailCountUnread
             ? {tabBarBadge: mailCountUnread}
             : {tabBarBadgeStyle: {display: 'none'}}),
-          tabBarIcon: ({color}: any) => (
-            <TabBarIconWrapper>
-              <IMAGES.IcInbox color={color} />
-            </TabBarIconWrapper>
-          ),
+          tabBarIcon: ({color}: any) =>
+            userState.connectedMails === userState.syncedMailAddress ? (
+              <TabBarIconWrapper>
+                <IMAGES.IcInbox color={color} />
+              </TabBarIconWrapper>
+            ) : (
+              <ActivityIndicator size="large" color="#50048A" />
+            ),
         }}
       />
       <Tab.Screen
