@@ -27,6 +27,7 @@ import SplashScreen from '@screens/Splash/SplashScreen';
 import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 import {useSelector} from 'react-redux';
 import {BaseState} from '@redux/stores';
+import * as Progress from 'react-native-progress';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -146,7 +147,9 @@ const TabBarNavigator: FC = () => {
       headerTintColor: '#fff',
     };
   };
-  {console.log(userState.connectedMails, userState.syncedMailAddress)}
+  {
+    console.log(userState.connectedMails, userState.syncedMailAddress);
+  }
   return (
     <Tab.Navigator
       screenOptions={{
@@ -174,17 +177,31 @@ const TabBarNavigator: FC = () => {
         component={InboxScreen}
         options={{
           ...styleHeader(),
-          title: userState.connectedMails.length === userState.syncedMailAddress.length ?  t('screen:inboxScreen') : '',
-          ...(mailCountUnread
+          title:
+            userState.connectedMails.length ===
+            userState.syncedMailAddress.length
+              ? t('screen:inboxScreen')
+              : '',
+          tabBarLabelStyle: {display: userState.connectedMails.length === userState.syncedMailAddress.length? 'flex' : 'none'},
+          ...(mailCountUnread &&
+          userState.connectedMails.length === userState.syncedMailAddress.length
             ? {tabBarBadge: mailCountUnread}
             : {tabBarBadgeStyle: {display: 'none'}}),
           tabBarIcon: ({color}: any) =>
-            userState.connectedMails.length === userState.syncedMailAddress.length ? (
+            userState.connectedMails.length ===
+            userState.syncedMailAddress.length ? (
               <TabBarIconWrapper>
                 <IMAGES.IcInbox color={color} />
               </TabBarIconWrapper>
             ) : (
-              <ActivityIndicator size="large" color="#50048A" />
+              <Progress.Circle
+                style={{padding: 2}}
+                size={scale(35)}
+                endAngle={0.8}
+                indeterminate={true}
+                borderColor="#50048A"
+                borderWidth={scale(6)}
+              />
             ),
         }}
       />
