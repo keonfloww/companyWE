@@ -1,14 +1,20 @@
 import SafeView from '@components/atoms/View/SafeView';
 import {Divider} from '@rneui/base';
 import {scale} from '@utils/mixins';
-import {FC, Fragment, useState} from 'react';
-import {Platform, RefreshControl, ScrollView, StyleSheet, View} from 'react-native';
+import React, {FC, Fragment, useState} from 'react';
+import {
+  Platform,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import HomeHeader from './components/HomeHeader';
 import HomeCategoryList from './components/HomeCategoryList';
 import HomeDontMissOut from './components/HomeDontMissOut';
 import HomeSection from './components/HomeSection';
-import { StatusBar } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {StatusBar} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const HomeScreen: FC<any> = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -86,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default React.memo(HomeScreen);

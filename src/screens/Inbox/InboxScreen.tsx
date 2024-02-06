@@ -2,7 +2,7 @@ import SafeView from '@components/atoms/View/SafeView';
 import {FlatList, Text, View} from 'react-native';
 import MailRow from './components/MailRow';
 import {scale} from '@utils/mixins';
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import useInboxScreen from './hooks/useInboxScreen';
 import usePagination from '@utils/hooks/usePagination';
 import {Email} from '@models/mail/modelMail';
@@ -87,7 +87,7 @@ const InboxScreen = () => {
   );
 };
 
-export default InboxScreen;
+export default React.memo(InboxScreen);
 
 const style = StyleSheet.create({
   text: {

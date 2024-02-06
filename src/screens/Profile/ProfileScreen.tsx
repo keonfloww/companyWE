@@ -1,6 +1,6 @@
 import {Screen} from '@navigation/navigation.enums';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {FC} from 'react';
+import React, {FC} from 'react';
 import ProfileIndexScreen from './screens/ProfileIndexScreen';
 import ProfileConnectedMailScreen from './screens/ProfileConnectedMailScreen';
 import {t} from 'i18next';
@@ -30,4 +30,4 @@ const ProfileScreen: FC = () => {
   );
 };
 
-export default ProfileScreen;
+export default React.memo(ProfileScreen);

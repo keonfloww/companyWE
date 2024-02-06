@@ -2,7 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
-import React, {FC, PropsWithChildren, useEffect} from 'react';
+import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {Screen} from './navigation.enums';
 import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
@@ -124,7 +124,7 @@ const TabBarNavigator: FC = () => {
     StatusBar.setBarStyle('dark-content');
   }, []);
 
-  const styleHeader = () => {
+  const styleHeader = useMemo(() => {
     return {
       headerStyle: {
         backgroundColor: Colors.primary,
@@ -149,7 +149,42 @@ const TabBarNavigator: FC = () => {
       headerTitleAlign: 'left',
       headerTintColor: '#fff',
     };
-  };
+  }, []);
+
+  console.log('123', 123);
+
+  const inBoxTabBarOptions = useMemo(() => {
+    return {
+      ...styleHeader,
+      title: t('screen:inboxScreen'),
+      ...(mailCountUnread
+        ? {tabBarBadge: mailCountUnread}
+        : {tabBarBadgeStyle: {display: 'none'}}),
+      tabBarIcon: ({color}: any) =>
+        userState.connectedMails.length ===
+        userState.syncedMailAddress.length ? (
+          <TabBarIconWrapper>
+            <IMAGES.IcInbox color={color} />
+          </TabBarIconWrapper>
+        ) : (
+          <Progress.Circle
+            style={{borderRadius: 99}}
+            size={scale(25)}
+            strokeCap="round"
+            endAngle={0.8}
+            indeterminate={true}
+            borderColor="#50048A"
+            borderWidth={scale(5)}
+          />
+        ),
+    };
+  }, [
+    styleHeader,
+    mailCountUnread,
+    userState.connectedMails,
+    userState.syncedMailAddress,
+  ]);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -175,36 +210,13 @@ const TabBarNavigator: FC = () => {
       <Tab.Screen
         name={Screen.InboxScreen}
         component={InboxScreen}
-        options={{
-          ...styleHeader(),
-          title: t('screen:inboxScreen'),
-          ...(mailCountUnread
-            ? {tabBarBadge: mailCountUnread}
-            : {tabBarBadgeStyle: {display: 'none'}}),
-          tabBarIcon: ({color}: any) =>
-            userState.connectedMails.length ===
-            userState.syncedMailAddress.length ? (
-              <TabBarIconWrapper>
-                <IMAGES.IcInbox color={color} />
-              </TabBarIconWrapper>
-            ) : (
-              <Progress.Circle
-                style={{borderRadius: 99}}
-                size={scale(25)}
-                strokeCap="round"
-                endAngle={0.8}
-                indeterminate={true}
-                borderColor="#50048A"
-                borderWidth={scale(5)}
-              />
-            ),
-        }}
+        options={inBoxTabBarOptions}
       />
       <Tab.Screen
         name={Screen.SubscriptionScreen}
         component={FakeScreen}
         options={{
-          ...styleHeader(),
+          ...styleHeader,
           title: t('screen:subscriptionScreen'),
           tabBarIcon: ({color}: any) => (
             <TabBarIconWrapper>
