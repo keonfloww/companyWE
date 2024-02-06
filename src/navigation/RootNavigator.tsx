@@ -174,7 +174,7 @@ const TabBarNavigator: FC = () => {
         component={InboxScreen}
         options={{
           ...styleHeader(),
-          title: t('screen:inboxScreen'),
+          title: userState.connectedMails.length === userState.syncedMailAddress.length ?  t('screen:inboxScreen') : '',
           ...(mailCountUnread
             ? {tabBarBadge: mailCountUnread}
             : {tabBarBadgeStyle: {display: 'none'}}),
