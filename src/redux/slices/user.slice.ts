@@ -66,7 +66,7 @@ export const userSlice = createSlice({
         state?.mailbox?.[data.targetMailAddress] ?? [];
 
       oldEmailFromTargetMailAddress?.filter((mail: Email) => {
-        return mail.received_on_unix >= moment().subtract(2, 'week').unix();
+        return mail?.received_on_unix >= moment().subtract(2, 'week').unix();
       });
       return {
         ...state,
