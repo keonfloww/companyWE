@@ -39,6 +39,7 @@ import arrowLeft from './svg/arrow_left.svg';
 import icUnBookmark from './svg/ic_unbookmark.svg';
 import icMailOpen from './svg/ic_mail_open.svg';
 import icTrash from './svg/ic_trash.svg';
+import icLogout from './svg/ic_logout.svg';
 
 const IMAGES = {
   icEdit,
@@ -80,6 +81,7 @@ const IMAGES = {
   bgDefaultSrc,
   logoSrc,
   icTrash,
+  icLogout,
 };
 
 export default IMAGES;

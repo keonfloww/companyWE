@@ -17,11 +17,11 @@ import {FireStoreCollection} from '@services/firestoreService';
 const useAuth = () => {
   const dispatch = useDispatch();
 
-  const {signInByGoogle} = useAuthProvider();
+  const authUser = useSelector((state: BaseState) => state.userReducer.user);
+
+  const {signInByGoogle, signOutFirebase} = useAuthProvider();
   const [userRegister] = useUserRegisterMutation();
   const [userVerify] = useUserVerifyMutation();
-
-  const user = useSelector((state: BaseState) => state?.userReducer?.user?.id);
 
   const signInOrSignUpByFirebase = async ({isSignUp = false}) => {
     try {
@@ -76,6 +76,7 @@ const useAuth = () => {
           accessToken: accessToken,
         });
       }
+      dispatch(userSliceActions.setUser(userData));
 
       const isConnectedMails = await AsyncStorage.getItem(
         LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS,
@@ -96,6 +97,36 @@ const useAuth = () => {
       global?.props?.hideLoading();
     }
   };
-  return {user, signInOrSignUpByFirebase};
+
+  const handleSignOut = async () => {
+    try {
+      global?.props?.showLoading();
+
+      // const firebaseAuth = auth()!.currentUser;
+      // await firestore()
+      //   .collection(FireStoreCollection.MAIL)
+      //   .doc(firebaseAuth!.uid)
+      //   .delete();
+      await signOutFirebase();
+    } catch (error) {
+      console.log('error handleSignOut', error);
+    } finally {
+      // Dont clear on sign out anymore.
+      // Because once user resign in with same credentials => keep data without sync
+      // If the credentials is difference => remove and sync
+
+      AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.USER);
+      // AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS);
+      navigationService.navigateAndReset(Screen.Login);
+      global?.props?.hideLoading();
+    }
+  };
+
+  return {
+    authUser,
+
+    signInOrSignUpByFirebase,
+    handleSignOut,
+  };
 };
 export default useAuth;

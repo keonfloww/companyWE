@@ -5,5 +5,6 @@
   "contacts": "Contacts",
   "intro": "Intro",
   "inboxScreen": "Inbox",
-  "subscriptionScreen": "Subscription"
+  "subscriptionScreen": "Subscription",
+  "profileConnectedMail": "Email Accounts"
 }

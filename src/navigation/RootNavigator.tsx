@@ -25,6 +25,7 @@ import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 import {Button, Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
+import ProfileScreen from '@screens/Profile/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -196,8 +197,9 @@ const TabBarNavigator: FC = () => {
       />
       <Tab.Screen
         name={Screen.ProfileScreen}
-        component={FakeScreen}
+        component={ProfileScreen}
         options={{
+          headerShown: false,
           title: t('screen:ProfileScreen'),
           headerTitleStyle: styles.bottomTabTitle,
           tabBarIcon: ({color}: any) => (

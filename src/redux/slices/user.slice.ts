@@ -1,13 +1,14 @@
 import {FireBaseMailCredentials} from '@models/firebaseModel';
 import {Email} from '@models/mail/modelMail';
 import {IUser} from '@models/users/user.type';
+import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import _ from 'lodash';
 import moment from 'moment';
 
 const initialState: {
-  user: IUser | null;
-  connectedMails: any[];
+  user: FirebaseAuthTypes.UserCredential | null;
+  connectedMails: FirebaseAuthTypes.UserCredential[];
 
   // Inbox
   syncedMailAddress: string[];
@@ -20,7 +21,7 @@ const initialState: {
   // Action marker
   isAskedForDeleteMail?: boolean;
 } = {
-  user: {},
+  user: null,
   connectedMails: [],
   syncedMailAddress: [],
   mailbox: {},
@@ -35,7 +36,10 @@ export const userSlice = createSlice({
   name: 'userSlice',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<IUser | null>) => {
+    setUser: (
+      state,
+      action: PayloadAction<FirebaseAuthTypes.UserCredential | null>,
+    ) => {
       state.user = action.payload;
     },
 

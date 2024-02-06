@@ -4,7 +4,7 @@ import {StyleSheet} from 'react-native';
 const ViewStyles = StyleSheet.create({
   viewLayout: {
     marginVertical: scale(10),
-    marginHorizontal: scale(10),
+    marginHorizontal: scale(25),
   },
 });
 const SpaceStyles = StyleSheet.create({
