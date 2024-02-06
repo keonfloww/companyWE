@@ -146,6 +146,7 @@ const TabBarNavigator: FC = () => {
       headerTintColor: '#fff',
     };
   };
+  {console.log(userState.connectedMails, userState.syncedMailAddress)}
   return (
     <Tab.Navigator
       screenOptions={{
@@ -178,7 +179,7 @@ const TabBarNavigator: FC = () => {
             ? {tabBarBadge: mailCountUnread}
             : {tabBarBadgeStyle: {display: 'none'}}),
           tabBarIcon: ({color}: any) =>
-            userState.connectedMails === userState.syncedMailAddress ? (
+            userState.connectedMails.length === userState.syncedMailAddress.length ? (
               <TabBarIconWrapper>
                 <IMAGES.IcInbox color={color} />
               </TabBarIconWrapper>
