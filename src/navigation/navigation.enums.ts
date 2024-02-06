@@ -18,6 +18,10 @@ export enum Screen {
   SubscriptionScreen = 'SubscriptionScreen',
   ProfileScreen = 'ProfileScreen',
 
+  //Profile
+  ProfileIndexScreen = 'ProfileIndexScreen',
+  ProfileConnectedMailScreen = 'ProfileConnectedMailScreen',
+
   //
   ContactListScreen = 'HOME_ContactListScreen',
   ContactDetailScreen = 'HOME_ContactDetailScreen',
