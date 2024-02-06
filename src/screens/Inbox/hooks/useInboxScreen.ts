@@ -1,5 +1,4 @@
 import {FireBaseMailCredentials} from '@models/firebaseModel';
-import {Email} from '@models/mail/modelMail';
 import {
   IGetMailParams,
   IMailAuth2Params,

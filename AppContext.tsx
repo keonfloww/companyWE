@@ -2,12 +2,20 @@ import React, {
   PropsWithChildren,
   createContext,
   useCallback,
+  useEffect,
   useState,
 } from 'react';
 import {RootSiblingPortal} from 'react-native-root-siblings';
 import Loading from '@components/atoms/Loading';
 import DebugView from '@components/molecules/DebugView';
 import Toast from 'react-native-easy-toast';
+import BaseModal from '@components/atoms/Modal/BaseModal';
+import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
+import IMAGES from '@assets/images/images';
+import CommonStyles from '@screens/styles';
+import {scale} from '@utils/mixins';
+import {t} from 'i18next';
+import {StyleSheet, Text, View} from 'react-native';
 
 const Context = createContext({});
 
@@ -17,6 +25,23 @@ const Context = createContext({});
  * @return {*}
  */
 const AppProvider = ({children}: PropsWithChildren) => {
+  const {
+    mailCountUnread,
+    computedIsShowDeleteAfterSyncedMail,
+
+    handleMoveMailToTrash,
+    handleMarkAsAskedDelete,
+  } = useInboxScreen();
+
+  const [isShowDeleteAfterSyncedMail, setIsShowDeleteAfterSyncedMail] =
+    useState(false);
+
+  useEffect(() => {
+    if (computedIsShowDeleteAfterSyncedMail && mailCountUnread > 0) {
+      setIsShowDeleteAfterSyncedMail(true);
+    }
+  }, [computedIsShowDeleteAfterSyncedMail]);
+
   const [showNetwork, setShowNetwork] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   let toasts: any;
@@ -66,6 +91,42 @@ const AppProvider = ({children}: PropsWithChildren) => {
       <RootSiblingPortal>
         <Loading show={loading} />
       </RootSiblingPortal>
+      <RootSiblingPortal>
+        <BaseModal
+          isShow={isShowDeleteAfterSyncedMail}
+          headerIcon={<IMAGES.icTrash color={'#E74C3C'} />}
+          confirmTitle={t('Yes, I am sure')}
+          cancelTitle={t('No')}
+          actionViewStyle={{height: scale(40)}}
+          buttonContainerStyle={{paddingVertical: scale(0)}}
+          onClose={() => {
+            handleMarkAsAskedDelete();
+            setIsShowDeleteAfterSyncedMail(false);
+          }}
+          onConfirm={() => {
+            setIsShowDeleteAfterSyncedMail(false);
+            handleMoveMailToTrash();
+          }}>
+          <Text
+            style={{
+              ...CommonStyles.font.bold24,
+              ...style.text,
+              textAlign: 'center',
+            }}>
+            {`Want to delete promotional emails from your mail inbox?`}
+          </Text>
+          <View style={{height: scale(16)}} />
+          <Text
+            style={{
+              ...CommonStyles.font.regular14,
+              ...style.text,
+              textAlign: 'center',
+            }}>
+            It will move all the promotional emails to the trash folder. You can
+            restore them later.
+          </Text>
+        </BaseModal>
+      </RootSiblingPortal>
 
       {/* TODO: implement show debug button on dev env only */}
       {/* <DebugView
@@ -78,3 +139,9 @@ const AppProvider = ({children}: PropsWithChildren) => {
 
 export const AppConsumer = Context.Consumer;
 export default AppProvider;
+
+const style = StyleSheet.create({
+  text: {
+    color: '#3c3c3c',
+  },
+});
