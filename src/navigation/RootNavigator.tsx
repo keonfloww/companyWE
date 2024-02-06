@@ -151,8 +151,6 @@ const TabBarNavigator: FC = () => {
     };
   }, []);
 
-  console.log('123', 123);
-
   const inBoxTabBarOptions = useMemo(() => {
     return {
       ...styleHeader,
