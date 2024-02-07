@@ -1,5 +1,4 @@
 import {FireBaseMailCredentials} from '@models/firebaseModel';
-import {Email} from '@models/mail/modelMail';
 import {
   IGetMailParams,
   IMailAuth2Params,
@@ -14,7 +13,7 @@ import {useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 // Future this will be set by user setting
-const MAIL_PER_PAGE = 5;
+const MAIL_PER_PAGE = 25;
 
 const useInboxScreen = () => {
   const dispatch = useDispatch();
@@ -166,6 +165,7 @@ const useInboxScreen = () => {
   //   }),
   // );
   return {
+    userState,
     mailBoxFlatten,
     mailCountUnread,
     computedIsShowDeleteAfterSyncedMail,

@@ -17,19 +17,16 @@ import {
   Dimensions,
   StatusBar,
   useWindowDimensions,
-  Platform,
   Image,
 } from 'react-native';
 
 // import {Colors} from 'react-native-ui-lib';
-import { Colors } from '@utils/colorUtils';
 import {scale} from '../../utils/mixins';
 import {Screen} from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
 import CommonStyles from '@screens/styles';
 import {t} from 'i18next';
 import IMAGES from '@assets/images/images';
-import SafeView from '@components/atoms/View/SafeView';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import navigationService from '@services/navigationService';
@@ -64,7 +61,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     },
     {
       id: 3,
-      image:require('../../assets/images/png/Welcome_3.png'),
+      image: require('../../assets/images/png/Welcome_3.png'),
       title: 'Benefit 2',
       buttonText: 'Get Started',
     },
@@ -122,8 +119,19 @@ const IntroScreen: FC<any> = ({navigation}) => {
         alignItems: 'center',
       }}>
       {/* Image absolute */}
-      <View style={{width: '100%', height: '40%', alignItems: 'center', justifyContent: 'center', marginTop: '10%'}}>
-      <Image source={item.image} style={{width: '100%',marginTop: scale(50)}} resizeMode='contain' />
+      <View
+        style={{
+          width: '100%',
+          height: '40%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginTop: '10%',
+        }}>
+        <Image
+          source={item.image}
+          style={{width: '100%', marginTop: scale(50)}}
+          resizeMode="contain"
+        />
       </View>
       <View style={{justifyContent: 'center', alignSelf: ''}}>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
@@ -169,11 +177,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
 
   return (
     <LayoutBackgroundDefault>
-      <StatusBar
-        translucent={true}
-        backgroundColor={'transparent'}
-        barStyle={'dark-content'}
-      />
+      <StatusBar translucent backgroundColor="transparent" />
       <View
         style={{
           // position: 'absolute',
@@ -204,14 +208,8 @@ const IntroScreen: FC<any> = ({navigation}) => {
           <Text />
         )}
       </View>
-      <View style={{flex: 5}}> 
-        
-      {corousel}
-      </View >
-      <View style={{flex: 1}}>
-
-      {pagination}
-      </View>
+      <View style={{flex: 5}}>{corousel}</View>
+      <View style={{flex: 1}}>{pagination}</View>
       <View style={{height: insets.bottom}} />
     </LayoutBackgroundDefault>
   );

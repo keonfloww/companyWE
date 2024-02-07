@@ -2,11 +2,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
-import React, {FC, PropsWithChildren, useEffect} from 'react';
+import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {Screen} from './navigation.enums';
 import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
-import {Platform, Text, View, ActivityIndicator} from 'react-native';
+import {Platform, View} from 'react-native';
 import IMAGES from '@assets/images/images';
 import CommonStyles from '@screens/styles';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -22,11 +22,10 @@ import useAuthProvider from '@utils/hooks/useAuthProvider';
 import LoginScreen from '@screens/Auth/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
-import {Button, Colors} from 'react-native-ui-lib';
+import {Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
-import {useSelector} from 'react-redux';
-import {BaseState} from '@redux/stores';
+import ProfileScreen from '@screens/Profile/ProfileScreen';
 import * as Progress from 'react-native-progress';
 
 const Stack = createNativeStackNavigator();
@@ -107,11 +106,15 @@ const RootNavigator: FC = () => {
 export default RootNavigator;
 
 const TabBarNavigator: FC = () => {
-  const {mailCountUnread, handleGetAllMailInConnectedMails} = useInboxScreen();
-  const userState = useSelector((state: BaseState) => state.userReducer);
+  const {
+    userState,
+    mailCountUnread,
+
+    handleGetAllMailInConnectedMails,
+  } = useInboxScreen();
   useEffect(() => {
     handleGetAllMailInConnectedMails();
-  }, []);
+  }, [userState.user?.user.uid]);
 
   // TODO: create hook for status bar on each screen style
   useEffect(() => {
@@ -121,7 +124,7 @@ const TabBarNavigator: FC = () => {
     StatusBar.setBarStyle('dark-content');
   }, []);
 
-  const styleHeader = () => {
+  const styleHeader = useMemo(() => {
     return {
       headerStyle: {
         backgroundColor: Colors.primary,
@@ -146,10 +149,40 @@ const TabBarNavigator: FC = () => {
       headerTitleAlign: 'left',
       headerTintColor: '#fff',
     };
-  };
-  {
-    console.log(userState.connectedMails, userState.syncedMailAddress);
-  }
+  }, []);
+
+  const inBoxTabBarOptions = useMemo(() => {
+    return {
+      ...styleHeader,
+      title: t('screen:inboxScreen'),
+      ...(mailCountUnread
+        ? {tabBarBadge: mailCountUnread}
+        : {tabBarBadgeStyle: {display: 'none'}}),
+      tabBarIcon: ({color}: any) =>
+        userState.connectedMails.length ===
+        userState.syncedMailAddress.length ? (
+          <TabBarIconWrapper>
+            <IMAGES.IcInbox color={color} />
+          </TabBarIconWrapper>
+        ) : (
+          <Progress.Circle
+            style={{borderRadius: 99}}
+            size={scale(25)}
+            strokeCap="round"
+            endAngle={0.8}
+            indeterminate={true}
+            borderColor="#50048A"
+            borderWidth={scale(5)}
+          />
+        ),
+    };
+  }, [
+    styleHeader,
+    mailCountUnread,
+    userState.connectedMails,
+    userState.syncedMailAddress,
+  ]);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -175,37 +208,13 @@ const TabBarNavigator: FC = () => {
       <Tab.Screen
         name={Screen.InboxScreen}
         component={InboxScreen}
-        options={{
-          ...styleHeader(),
-          title: t('screen:inboxScreen'),
-          ...(mailCountUnread &&
-          userState.connectedMails.length === userState.syncedMailAddress.length
-            ? {tabBarBadge: mailCountUnread}
-            : {tabBarBadgeStyle: {display: 'none'}}),
-          tabBarIcon: ({color}: any) =>
-            userState.connectedMails.length ===
-            userState.syncedMailAddress.length ? (
-              <TabBarIconWrapper>
-                <IMAGES.IcInbox color={color} />
-              </TabBarIconWrapper>
-            ) : (
-              <Progress.Circle
-                style={{borderRadius: 50}}
-                size={scale(30)}
-                strokeCap='round'
-                endAngle={0.8}
-                indeterminate={true}
-                borderColor="#50048A"
-                borderWidth={scale(5)}
-              />
-            ),
-        }}
+        options={inBoxTabBarOptions}
       />
       <Tab.Screen
         name={Screen.SubscriptionScreen}
         component={FakeScreen}
         options={{
-          ...styleHeader(),
+          ...styleHeader,
           title: t('screen:subscriptionScreen'),
           tabBarIcon: ({color}: any) => (
             <TabBarIconWrapper>
@@ -216,8 +225,9 @@ const TabBarNavigator: FC = () => {
       />
       <Tab.Screen
         name={Screen.ProfileScreen}
-        component={FakeScreen}
+        component={ProfileScreen}
         options={{
+          headerShown: false,
           title: t('screen:ProfileScreen'),
           headerTitleStyle: styles.bottomTabTitle,
           tabBarIcon: ({color}: any) => (
@@ -250,12 +260,7 @@ const FakeScreen = () => {
     }
   };
 
-  return (
-    <View>
-      <Text style={{color: '#3c3c3c'}}>Fake screen</Text>
-      <Button label={'Sign out'} onPress={handleSignOut} />
-    </View>
-  );
+  return <View></View>;
 };
 
 const TabBarIconWrapper: FC<PropsWithChildren> = ({children}) => {

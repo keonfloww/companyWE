@@ -57,7 +57,7 @@ const useConnectMail = ({
         }
         setTimeout(() => {
           InAppBrowser.close();
-        }, 1500);
+        }, 2000);
       });
 
     return () => unsubcribe();
