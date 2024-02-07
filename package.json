@@ -59,7 +59,8 @@
     "react-native-version-number": "^0.3.6",
     "react-native-webview": "^13.6.4",
     "react-redux": "^8.1.2",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "string-to-color": "^2.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

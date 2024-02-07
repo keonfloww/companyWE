@@ -15,6 +15,8 @@ import {
   View,
 } from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
+import stc from 'string-to-color';
+// import { LightenDarkenColor } from '@utils/colorUtils';
 
 interface Props {
   item: Email;
@@ -42,6 +44,25 @@ const MailRow: FC<Props> = ({
   const computedDisableStyle = useMemo(() => {
     return isRead ? styles.textDisable : {};
   }, [isRead]);
+
+    const lightenHexColor = (hexColor, magnitude) => {
+      hexColor = hexColor.replace(`#`, ``);
+      if (hexColor.length === 6) {
+          const decimalColor = parseInt(hexColor, 16);
+          let r = (decimalColor >> 16) + magnitude;
+          r > 255 && (r = 255);
+          r < 0 && (r = 0);
+          let g = (decimalColor & 0x0000ff) + magnitude;
+          g > 255 && (g = 255);
+          g < 0 && (g = 0);
+          let b = ((decimalColor >> 8) & 0x00ff) + magnitude;
+          b > 255 && (b = 255);
+          b < 0 && (b = 0);
+          return `#${(g | (b << 8) | (r << 16)).toString(16)}`;
+      } else {
+          return hexColor;
+      }
+  };
 
   return (
     <Drawer
@@ -89,16 +110,30 @@ const MailRow: FC<Props> = ({
               />
             </View>
           ) : (
-            <Avatar
-              size={scale(36)}
-              source={
-                item?.picture
-                  ? {
-                      uri: item?.picture,
-                    }
-                  : IMAGES.logoSrc
-              }
-            />
+            <View style={[styles.logo, {backgroundColor: lightenHexColor(stc(item?.sender_name),110),}]}>
+              <Text
+                style={[
+                  {
+                    textAlign: 'center',
+                    textAlignVertical: 'center',
+                    color: stc(item?.sender_name),
+                  },
+                  CommonStyles.font.semiBold16,
+                ]}>
+                {safeString(item?.sender_name)[0]}
+              </Text>
+            </View>
+            // <Avatar
+            //   size={scale(36)}
+            //   imageProps={{resizeMode: 'contain',}}
+            //   source={
+            //     item?.images.length
+            //       ? {
+            //           uri: item?.images[0].src,
+            //         }
+            //       : IMAGES.logoSrc
+            //   }
+            // />
           )}
           <View style={styles.mailContent}>
             <View style={styles.mailFirstRowContainer}>
@@ -155,7 +190,15 @@ const styles = StyleSheet.create({
     paddingBottom: scale(10),
     backgroundColor: 'white',
   },
-
+  logo: {
+    borderRadius: scale(36),
+    borderColor: '#DADADA',
+    borderWidth: scale(1),
+    width: scale(36),
+    height: scale(36),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   mailContent: {flex: 1},
   mailFirstRowContainer: {
     display: 'flex',
