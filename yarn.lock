@@ -6900,6 +6900,13 @@ react-native-network-logger@^1.15.0:
   resolved "https://registry.yarnpkg.com/react-native-network-logger/-/react-native-network-logger-1.15.0.tgz#e333ac57f19875a5d4d797498b144a42b37e8a1e"
   integrity sha512-/nxAC6iCWf7dwD4LB6hTV64P/wnMj75oSDxgKKSJXDO1m0yGiZwMQzC9fcAydMM9lqKWRS5T4jPUPinZNu7VOQ==
 
+react-native-progress@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-5.0.1.tgz#4e15258b5661c49bad74554352326ca540bb7c58"
+  integrity sha512-TYfJ4auAe5vubDma2yfFvt7ktSI+UCfysqJnkdHEcLXqAitRFOozgF/cLgN5VNi/iLdaf3ga1ETi2RF4jVZ/+g==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-ratings@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-8.1.0.tgz#3fa9ad29128dc3a88e59518ba151e61c59dd0647"
