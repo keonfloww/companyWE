@@ -2,12 +2,15 @@ import {Image} from './../image/image.type';
 
 export interface IUser {
   id?: number;
-  email?: string;
-  emailVerified?: boolean;
-  userName?: string;
+  email_address?: string;
+  is_email_address_verified?: boolean;
+  user_name?: string;
   phone_number?: string;
+  gender?: string;
   images?: Image[];
-  main_profile_image?: Image;
+  user_profile_picture?: Image;
+  date_of_birth?: string;
+  user_address?: string;
   description?: string;
   providerId?: string;
 }

@@ -62,10 +62,10 @@ const useAuth = () => {
 
         return;
       }
-
+        let userData;
       if (isSignUp) {
         // API register
-        userRegister({
+        const data = await userRegister({
           id: userData.user.uid.toString(),
           user_name: userData?.user?.displayName?.toString() ?? '',
           email_address: userData?.user?.email?.toString() ?? '',
@@ -73,14 +73,17 @@ const useAuth = () => {
           sign_up_provider_id: 1,
           accessToken: accessToken,
         });
+        userData = data?.data?.data
       } else {
         // sign in
         // API register login
-        userVerify({
+       const data = await userVerify({
           id: userData.user.uid.toString(),
           is_email_address_verified: Boolean(userData.user.emailVerified),
           accessToken: accessToken,
         });
+        console.log("datatatatin",data);
+        userData = data?.data
       }
       dispatch(userSliceActions.setUser(userData));
       if (userData.user.email && persistReducerState?.[userData.user.email]) {

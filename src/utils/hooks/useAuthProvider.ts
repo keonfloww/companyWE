@@ -16,7 +16,8 @@ const useAuthProvider = () => {
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     // Sign-in the user with the credential
     const userData = await auth().signInWithCredential(googleCredential);
-    return {userData, accessToken: googleCredential.token};
+    const token = await userData.user.getIdToken();
+    return {userData, accessToken: token};
   };
 
   const onGoogleLinkButtonPress = async () => {

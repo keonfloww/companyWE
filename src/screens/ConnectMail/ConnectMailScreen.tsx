@@ -12,13 +12,17 @@ import LayoutBackgroundDefaultV1 from '@layouts/default/LayoutBackgroundDefaultV
 import LogoutButton from '@components/atoms/LogoutButton';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Colors} from 'react-native-ui-lib';
+import {useSelector} from 'react-redux';
+import {BaseState} from '@redux/stores';
 
 const ConnectMailScreen = () => {
   const insets = useSafeAreaInsets();
-
+  const authUser = useSelector((state: BaseState) => state.userReducer.user);
   const {onGoogleLinkButtonPress} = useAuthProvider();
   const {handleSignOut} = useAuth();
   const {} = useConnectMail({autoRedirectToHome: true});
+  console.log('sdfsdfsf',authUser);
 
   return (
     <LayoutBackgroundDefaultV1
@@ -27,8 +31,31 @@ const ConnectMailScreen = () => {
         flex: 1,
       }}>
       <View style={{paddingTop: scale(100), flex: 1}}>
-        <View style={{position: 'absolute', right: 0, top: insets.top}}>
-          <LogoutButton onPress={handleSignOut} />
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: insets.top,
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            flexDirection: 'row',
+          }}>
+          <View>
+            <Text style={CommonStyles.font.semiBold14}>
+              Welcome back, {authUser?.user_name?.split(' ')[0]}. Not you?
+            </Text>
+          </View>
+            <View
+              style={{
+                borderBottomWidth: scale(1),
+                borderBottomColor: Colors.primary,
+              }}>
+              <Text onPress={handleSignOut} style={[CommonStyles.font.bold14, {color: Colors.primary}]}>
+                {' '}
+                Log Out.
+              </Text>
+            </View>
+          {/* <LogoutButton onPress={handleSignOut} /> */}
         </View>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
           {t('Connect your\nemail accounts')}
@@ -42,7 +69,7 @@ const ConnectMailScreen = () => {
         <View style={{height: scale(15)}} />
         <View style={{flex: 1}}>
           <ServiceButton
-            title={t('Connect a Google Account')}
+            title={t('Connect your Google Account')}
             type={EnumAuthProviderButtonType.CONNECT}
             containerStyle={styles.baseButton}
             authProvider={EnumAuthProviderButton.GOOGLE}

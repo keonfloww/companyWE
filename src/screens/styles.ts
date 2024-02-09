@@ -64,6 +64,10 @@ const FontStyles = StyleSheet.create({
     fontSize: FontSizeStyles.size16,
     fontFamily: FontFamilyStyles.semiBold,
   },
+  bold14: {
+    fontSize: FontSizeStyles.size14,
+    fontFamily: FontFamilyStyles.bold,
+  },
   bold16: {
     fontSize: FontSizeStyles.size16,
     fontFamily: FontFamilyStyles.bold,
