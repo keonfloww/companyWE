@@ -17,10 +17,10 @@ const getValueForPersistMail = (
     | null,
 ) => {
   if (DEBUG) {
-    console.warn('KEY FOR PERSIST DATA IS EMAIL');
+    console.info('KEY FOR PERSIST DATA IS EMAIL');
     return fireBaseCredential?.user?.email ?? fireBaseCredential?.email ?? '';
   }
-  console.warn('KEY FOR PERSIST DATA IS UID');
+  console.info('KEY FOR PERSIST DATA IS UID');
   return fireBaseCredential?.user?.uid ?? fireBaseCredential?.uid ?? '';
 };
 const BaseMailUtils = {getValueForPersistMail};

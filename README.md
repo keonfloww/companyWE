@@ -87,3 +87,8 @@ yarn && yarn pod && yarn ios
 │   ├── index.js
 └── ...
 ```
+
+TODO:
+
+1. after connected new mail => Call sync mail
+2. clear the process sync mail if user signed out. (auto sync again?)

@@ -55,11 +55,15 @@ const useInboxScreen = () => {
 
   // FUNCTIONS ---------------------
   const handleGetAllMailInConnectedMails = async () => {
+    console.log('connectedMailsUnsynced', connectedMailsUnsynced);
     try {
       connectedMailsUnsynced?.forEach(
         async (targetMail: FireBaseMailCredentials) => {
           let next_page_token = null;
-
+          console.log(
+            'handleGetAllMailInConnectedMails targetMail.email',
+            targetMail.email,
+          );
           while (true) {
             let mailAuth: IMailAuth2Params = {
               access_token: targetMail?.access_token,
