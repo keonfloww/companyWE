@@ -9,47 +9,62 @@ import {FireBaseMailCredentials} from '@models/firebaseModel';
 import {userSliceActions} from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
 import {Screen} from '@navigation/navigation.enums';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
+import {LocalUtils} from '@utils/localStorageUtils';
+import BaseMailUtils from '@utils/baseMailUtils';
 
 const useConnectMail = ({
   autoRedirectToHome = false,
 }: {
   autoRedirectToHome: boolean;
 }) => {
-  const user = useSelector((state: BaseState) => state?.userReducer?.user?.id);
+  const user = useSelector((state: BaseState) => state?.userReducer?.user);
   const connectedMails = useSelector(
     (state: BaseState) => state?.userReducer.connectedMails,
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const firebaseAuth = auth()!.currentUser;
-    console.log('firebaseAuth', {
-      email: firebaseAuth?.email,
-      udi: firebaseAuth?.uid,
-    });
+    const firebaseAuth = auth();
+    const currentUser = firebaseAuth.currentUser;
+    console.log('firebaseAuth', currentUser);
 
-    if (!firebaseAuth?.uid) {
+    if (!currentUser?.uid) {
       return;
     }
     const unsubcribe = firestore()
       .collection(FireStoreCollection.MAIL)
-      .doc(firebaseAuth!.uid)
-      .onSnapshot(QuerySnapshot => {
-        console.log('QuerySnapshot');
-        const newFirebaseMail: FireBaseMailCredentials =
-          QuerySnapshot.data() as FireBaseMailCredentials;
-
-        if (!newFirebaseMail) {
-          console.log(
-            'QuerySnapshot triggered with no mail credentials => User just sign in without connecting any mails',
-          );
+      .doc(currentUser.uid)
+      .onSnapshot(async QuerySnapshot => {
+        if (
+          await LocalUtils.isConnectedMail(
+            BaseMailUtils.getValueForPersistMail(currentUser),
+          )
+        ) {
+          console.info('useConnectMail RESTORE FROM PERSIST DATA');
+          if (autoRedirectToHome) {
+            navigationService.navigateAndReset(Screen.MainTabBar, {
+              params: Screen.HomeScreen,
+            });
+          }
           return;
         }
-        console.log('Connected new mail', newFirebaseMail.email);
+
+        const newFirebaseMail: FireBaseMailCredentials =
+          QuerySnapshot.data() as FireBaseMailCredentials;
+        if (!newFirebaseMail) {
+          console.info(
+            'QuerySnapshot triggered with no mail credentials => User just sign in without connecting any mails',
+          );
+
+          return;
+        }
+        console.info('Connected new mail', newFirebaseMail.email);
+
         dispatch(userSliceActions.addNewConnectedMail(newFirebaseMail));
-        AsyncStorage.setItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS, 'true');
+        LocalUtils.appendNewConnectedMailCrendentials(
+          BaseMailUtils.getValueForPersistMail(currentUser),
+        );
+
         if (autoRedirectToHome) {
           navigationService.navigateAndReset(Screen.MainTabBar, {
             params: Screen.HomeScreen,
@@ -57,6 +72,9 @@ const useConnectMail = ({
         }
         setTimeout(() => {
           InAppBrowser.close();
+
+          // DELETE IT AFTER GOT TO PREVENT AUTO CONNECT ON OTHER SESSION
+          QuerySnapshot.ref.delete();
         }, 2000);
       });
 

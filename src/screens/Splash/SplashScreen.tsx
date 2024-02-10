@@ -5,7 +5,8 @@ import navigationService from '@services/navigationService';
 import {Screen} from '@navigation/navigation.enums';
 import BootSplash from 'react-native-bootsplash';
 import {useEffect} from 'react';
-import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
+import {LocalUtils} from '@utils/localStorageUtils';
+import BaseMailUtils from '@utils/baseMailUtils';
 
 const SplashScreen = () => {
   const checkAuth = async () => {
@@ -13,11 +14,9 @@ const SplashScreen = () => {
 
     setTimeout(async () => {
       const user = await AsyncStorage.getItem('user');
-      const isConnectedMails = await AsyncStorage.getItem(
-        LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS,
+      const isConnectedMails = await LocalUtils.isConnectedMail(
+        BaseMailUtils.getValueForPersistMail(user ? JSON.parse(user) : ''),
       );
-      console.log('isConnectedMails', !!isConnectedMails);
-
       if (firebaseAuth?.uid && user) {
         if (!isConnectedMails) {
           console.log('Screen.ConnectMailScreen from splash screen');
