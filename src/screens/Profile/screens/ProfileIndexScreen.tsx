@@ -7,7 +7,7 @@ import {Screen} from '@navigation/navigation.enums';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
-import {ProfileColors} from '@utils/colorUtils';
+import {EnumProfileColors, ProfileColors} from '@utils/colorUtils';
 import {scale} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
 import {t} from 'i18next';
@@ -61,6 +61,7 @@ const ProfileIndexScreen = () => {
     },
   ];
 
+  console.log('authUser', authUser);
   return (
     <LayoutBackgroundDefaultV1
       containerStyle={{
@@ -85,8 +86,10 @@ const ProfileIndexScreen = () => {
                 styles.logo,
                 {
                   backgroundColor:
-                    ProfileColors[safeString(authUser?.user_name)[0]]
-                      .SecondaryColor,
+                    ProfileColors?.[
+                      safeString(authUser?.user_name)?.[0] ||
+                        EnumProfileColors.DEFAULT
+                    ]?.SecondaryColor,
                 },
               ]}>
               <Text
@@ -95,8 +98,10 @@ const ProfileIndexScreen = () => {
                     textAlign: 'center',
                     textAlignVertical: 'center',
                     color:
-                      ProfileColors[safeString(authUser?.user_name)[0]]
-                        .MainColor,
+                      ProfileColors?.[
+                        safeString(authUser?.user_name)?.[0] ||
+                          EnumProfileColors.DEFAULT
+                      ]?.MainColor,
                   },
                   CommonStyles.font.bold30,
                 ]}>
@@ -145,6 +150,8 @@ const ProfileIndexScreen = () => {
           {groupItems.map(item => {
             return (
               <FlatList
+                alwaysBounceVertical={false}
+                overScrollMode="never"
                 key={item?.label}
                 ListHeaderComponentStyle={{marginBottom: scale(10)}}
                 keyExtractor={item => item?.title}
