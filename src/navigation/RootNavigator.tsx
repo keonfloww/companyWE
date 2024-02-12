@@ -4,7 +4,7 @@ import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
 import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {Screen} from './navigation.enums';
-import navigationService, {navigationRef} from '@services/navigationService';
+import {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
 import {Platform, View} from 'react-native';
 import IMAGES from '@assets/images/images';
@@ -18,13 +18,10 @@ import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
 import InboxScreen from '@screens/Inbox/InboxScreen';
 import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookmarkSearchActions';
 import ConnectMailScreen from '@screens/ConnectMail/ConnectMailScreen';
-import useAuthProvider from '@utils/hooks/useAuthProvider';
 import LoginScreen from '@screens/Auth/LoginScreen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 import {Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
-import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 import ProfileScreen from '@screens/Profile/ProfileScreen';
 import * as Progress from 'react-native-progress';
 
@@ -242,24 +239,6 @@ const TabBarNavigator: FC = () => {
 };
 
 const FakeScreen = () => {
-  const {signOutFirebase} = useAuthProvider();
-  const handleSignOut = async () => {
-    try {
-      global?.props?.showLoading();
-
-      await signOutFirebase();
-    } catch (error) {
-      console.log('error handleSignOut', error);
-    } finally {
-      // Dont clear mail data on sign out anymore.
-      // Because once user resign in with same credentials => keep data without sync
-      // If the credentials is difference => remove and sync
-      AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.USER);
-      navigationService.navigateAndReset(Screen.Login);
-      global?.props?.hideLoading();
-    }
-  };
-
   return <View></View>;
 };
 

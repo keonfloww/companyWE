@@ -22,8 +22,9 @@ const useInboxScreen = () => {
   const [moveMailToTrash] = useMoveToTrashMutation();
 
   const userState = useSelector((state: BaseState) => state.userReducer);
-  const mailState = useSelector((state: BaseState) => state.mailReducer);
-
+  const persistData = useSelector((state: BaseState) => state.persistReducer);
+  console.log('persistData', persistData);
+  console.log('userState', {...userState, mailbox: userState?.mailbox?.length});
   const connectedMailsUnsynced = useMemo(() => {
     return userState?.connectedMails?.filter(
       (i: FireBaseMailCredentials) =>
@@ -32,7 +33,7 @@ const useInboxScreen = () => {
   }, [userState?.connectedMails, userState?.syncedMailAddress]);
 
   const mailBoxFlatten = useMemo(
-    () => Object.values(userState?.mailbox).flat(),
+    () => userState?.mailbox,
     [userState?.mailbox],
   );
 
@@ -40,9 +41,9 @@ const useInboxScreen = () => {
   const mailCountUnread = useMemo(() => {
     const res =
       mailBoxFlatten?.length -
-        Object.values(mailState?.mailReadMetadataIds)?.length ?? 0;
+        Object.values(userState?.mailReadMetadataIds)?.length ?? 0;
     return res > 0 ? res : 0;
-  }, [mailState?.mailReadMetadataIds, mailBoxFlatten?.length]);
+  }, [userState?.mailReadMetadataIds, mailBoxFlatten?.length]);
 
   const computedIsShowDeleteAfterSyncedMail = useMemo(
     () =>
@@ -54,11 +55,15 @@ const useInboxScreen = () => {
 
   // FUNCTIONS ---------------------
   const handleGetAllMailInConnectedMails = async () => {
+    console.log('connectedMailsUnsynced', connectedMailsUnsynced);
     try {
       connectedMailsUnsynced?.forEach(
         async (targetMail: FireBaseMailCredentials) => {
           let next_page_token = null;
-
+          console.log(
+            'handleGetAllMailInConnectedMails targetMail.email',
+            targetMail.email,
+          );
           while (true) {
             let mailAuth: IMailAuth2Params = {
               access_token: targetMail?.access_token,
@@ -154,7 +159,6 @@ const useInboxScreen = () => {
       console.log('error', error);
     }
   };
-  console.log('mailBoxFlatten?.length', mailBoxFlatten?.length);
   // EFFECT ---------------------
 
   // TEST log mail

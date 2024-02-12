@@ -11,10 +11,12 @@ import IMAGES from '@assets/images/images';
 import BaseButton from '@components/atoms/Button/BaseButton';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import {safeString} from '@utils/stringUtils';
+import useConnectMail from '@screens/ConnectMail/hooks/useConnectMail';
 
 const ProfileConnectedMailScreen = () => {
   const {connectedMails} = useProfileConnectedMail();
   const {onGoogleLinkButtonPress} = useAuthProvider();
+  const {} = useConnectMail({autoRedirectToHome: false});
 
   return (
     <SafeView>

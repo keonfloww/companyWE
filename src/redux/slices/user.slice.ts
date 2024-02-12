@@ -11,7 +11,7 @@ const initialState: {
 
   // Inbox
   syncedMailAddress: string[];
-  mailbox: {[key in string]: Email[]};
+  mailbox: Email[];
 
   // mail status
   mailReadMetadataIds: {[key in string]: boolean};
@@ -23,7 +23,7 @@ const initialState: {
   user: null,
   connectedMails: [],
   syncedMailAddress: [],
-  mailbox: {},
+  mailbox: [],
 
   mailReadMetadataIds: {},
   mailBookmarkMetadataIds: {},
@@ -40,6 +40,12 @@ export const userSlice = createSlice({
       action: PayloadAction<FirebaseAuthTypes.UserCredential | null>,
     ) => {
       state.user = action.payload;
+    },
+    restoreFromPersistStore: (
+      state,
+      action: PayloadAction<IUserSliceState>,
+    ) => {
+      return {...state, ...action.payload, user: state.user};
     },
 
     init: () => {
@@ -62,24 +68,22 @@ export const userSlice = createSlice({
     ) => {
       const data = action.payload;
 
-      let oldEmailFromTargetMailAddress =
-        state?.mailbox?.[data.targetMailAddress] ?? [];
+      let oldEmailFromTargetMailAddress = state?.mailbox ?? [];
 
       oldEmailFromTargetMailAddress?.filter((mail: Email) => {
         return mail?.received_on_unix >= moment().subtract(2, 'week').unix();
       });
+
       return {
         ...state,
-        mailbox: {
-          [data.targetMailAddress]: _.orderBy(
-            _.uniq(
-              data?.emails.concat(oldEmailFromTargetMailAddress),
-              'metadata_id',
-            ),
-            'received_on_unix',
-            'desc',
+        mailbox: _.orderBy(
+          _.uniq(
+            data?.emails.concat(oldEmailFromTargetMailAddress),
+            'metadata_id',
           ),
-        },
+          'received_on_unix',
+          'desc',
+        ),
       };
     },
     connectedMailMarkAsSynced: (
@@ -99,12 +103,24 @@ export const userSlice = createSlice({
       return {
         ...state,
         mailReadMetadataIds: {
-          ...state?.mailBookmarkMetadataIds,
+          ...state?.mailReadMetadataIds,
           [action.payload.metadata_id]: true,
         },
       };
     },
-
+    mailMarkBookmark: (state, action: PayloadAction<{metadata_id: string}>) => {
+      return {
+        ...state,
+        mailBookmarkMetadataIds: {
+          ...state?.mailBookmarkMetadataIds,
+          [action.payload.metadata_id]: state?.mailBookmarkMetadataIds[
+            action.payload.metadata_id
+          ]
+            ? false
+            : true,
+        },
+      };
+    },
     markAsAskedDelete: state => {
       return {
         ...state,
@@ -116,5 +132,5 @@ export const userSlice = createSlice({
 
 export const {setUser} = userSlice.actions;
 export const userSliceActions = userSlice.actions;
-
+export type IUserSliceState = typeof initialState;
 export const userReducer = userSlice.reducer;

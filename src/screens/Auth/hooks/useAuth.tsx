@@ -6,17 +6,20 @@ import {
 } from '@redux/slices/api/userApi.slice';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
+import {LOCAL_STORAGE_KEYS, LocalUtils} from '@utils/localStorageUtils';
 import {userSliceActions} from '@redux/slices/user.slice';
-import {mailSliceActions} from '@redux/slices/mail.slice';
 import navigationService from '@services/navigationService';
 import {Screen} from '@navigation/navigation.enums';
-import firestore from '@react-native-firebase/firestore';
-import {FireStoreCollection} from '@services/firestoreService';
+import {persistSliceActions} from '@redux/slices/persist.slice';
+import BaseMailUtils from '@utils/baseMailUtils';
 
 const useAuth = () => {
   const dispatch = useDispatch();
 
+  const userReducerState = useSelector((state: BaseState) => state.userReducer);
+  const persistReducerState = useSelector(
+    (state: BaseState) => state.persistReducer,
+  );
   const authUser = useSelector((state: BaseState) => state.userReducer.user);
 
   const {signInByGoogle, signOutFirebase} = useAuthProvider();
@@ -33,29 +36,31 @@ const useAuth = () => {
         JSON.stringify(userData.user),
       );
 
-      const oldUserUid = await AsyncStorage.getItem(
-        LOCAL_STORAGE_KEYS.LATEST_USER_UID_AUTH,
+      const key = BaseMailUtils.getValueForPersistMail(userData);
+      const isUserReSignInWithSameAccount = await LocalUtils.isConnectedMail(
+        key,
       );
-
-      const isUserReSignInWithSameAccount = oldUserUid != userData?.user?.uid;
-
+      console.log(
+        'isUserReSignInWithSameAccount',
+        isUserReSignInWithSameAccount,
+        'key',
+        key,
+      );
       if (isUserReSignInWithSameAccount) {
-        console.log(
-          'user is diff with old once/ first sign in => remove old local storage',
-        );
-        dispatch(userSliceActions.init());
-        dispatch(mailSliceActions.clear());
-        await AsyncStorage.setItem(
-          LOCAL_STORAGE_KEYS.LATEST_USER_UID_AUTH,
-          userData?.user?.uid,
-        );
-        await AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS);
+        console.info('useAuth RESTORE FROM PERSIST DATA');
+        dispatch(userSliceActions.setUser(userData));
+        if (userData.user.email && persistReducerState?.[key]) {
+          dispatch(
+            userSliceActions.restoreFromPersistStore(
+              persistReducerState?.[key],
+            ),
+          );
+        }
+        navigationService.navigateAndReset(Screen.MainTabBar, {
+          params: Screen.HomeScreen,
+        });
 
-        // Delete firestore to prevent auto sync old connected mails
-        firestore()
-          .collection(FireStoreCollection.MAIL)
-          .doc(userData?.user?.uid)
-          .delete();
+        return;
       }
 
       if (isSignUp) {
@@ -69,6 +74,7 @@ const useAuth = () => {
           accessToken: accessToken,
         });
       } else {
+        // sign in
         // API register login
         userVerify({
           id: userData.user.uid.toString(),
@@ -77,11 +83,17 @@ const useAuth = () => {
         });
       }
       dispatch(userSliceActions.setUser(userData));
+      if (userData.user.email && persistReducerState?.[userData.user.email]) {
+        // email for debug and uid for final release
+        const key = BaseMailUtils.getValueForPersistMail(userData);
+        dispatch(
+          userSliceActions.restoreFromPersistStore(persistReducerState?.[key]),
+        );
+      }
 
-      const isConnectedMails = await AsyncStorage.getItem(
-        LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS,
+      const isConnectedMails = await LocalUtils.isConnectedMail(
+        BaseMailUtils.getValueForPersistMail(userData),
       );
-
       console.log('isConnectedMails', isConnectedMails);
       if (!isConnectedMails) {
         navigationService.navigateAndReset(Screen.ConnectMailScreen);
@@ -102,11 +114,15 @@ const useAuth = () => {
     try {
       global?.props?.showLoading();
 
-      // const firebaseAuth = auth()!.currentUser;
-      // await firestore()
-      //   .collection(FireStoreCollection.MAIL)
-      //   .doc(firebaseAuth!.uid)
-      //   .delete();
+      if (authUser?.user?.email) {
+        dispatch(
+          persistSliceActions.setUserPersistData({
+            userCredentialUid: BaseMailUtils.getValueForPersistMail(authUser),
+            data: userReducerState,
+          }),
+        );
+      }
+      dispatch(userSliceActions.init());
       await signOutFirebase();
     } catch (error) {
       console.log('error handleSignOut', error);
@@ -119,6 +135,7 @@ const useAuth = () => {
       // AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS);
       navigationService.navigateAndReset(Screen.Login);
       global?.props?.hideLoading();
+      console.clear();
     }
   };
 

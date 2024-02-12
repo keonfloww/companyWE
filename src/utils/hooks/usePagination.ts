@@ -12,7 +12,7 @@ const usePagination = <T extends any>(data: T[], volume: number = 10) => {
   const [page, setPage] = useState(0);
   /** Data representing one single page. */
   const slicedData = useMemo(
-    () => clonedData.slice(0, page * volume + volume),
+    () => clonedData?.slice(0, page * volume + volume),
     [volume, page, data],
   );
 
