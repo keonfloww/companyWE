@@ -111,7 +111,7 @@ const TabBarNavigator: FC = () => {
   } = useInboxScreen();
   useEffect(() => {
     handleGetAllMailInConnectedMails();
-  }, [userState.user?.user.uid]);
+  }, [userState.user?.id]);
 
   // TODO: create hook for status bar on each screen style
   useEffect(() => {
@@ -155,11 +155,15 @@ const TabBarNavigator: FC = () => {
       ...(mailCountUnread
         ? {tabBarBadge: mailCountUnread}
         : {tabBarBadgeStyle: {display: 'none'}}),
-      tabBarIcon: ({color}: any) =>
+      tabBarIcon: ({color, focused}: any) =>
         userState.connectedMails.length ===
         userState.syncedMailAddress.length ? (
           <TabBarIconWrapper>
-            <IMAGES.IcInbox color={color} />
+            {focused ? (
+              <IMAGES.IcInboxFilled color={color} />
+              ) : (
+              <IMAGES.IcInbox color={color} />
+            )}
           </TabBarIconWrapper>
         ) : (
           <Progress.Circle

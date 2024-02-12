@@ -16,6 +16,7 @@ import {
 } from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
 import stc from 'string-to-color';
+import { ProfileColors } from '@utils/colorUtils';
 // import { LightenDarkenColor } from '@utils/colorUtils';
 
 interface Props {
@@ -110,13 +111,13 @@ const MailRow: FC<Props> = ({
               />
             </View>
           ) : (
-            <View style={[styles.logo, {backgroundColor: lightenHexColor(stc(item?.sender_name),110),}]}>
+            <View style={[styles.logo, {backgroundColor: ProfileColors[safeString(item?.sender_name)[0]].SecondaryColor,}]}>
               <Text
                 style={[
                   {
                     textAlign: 'center',
                     textAlignVertical: 'center',
-                    color: stc(item?.sender_name),
+                    color: ProfileColors[safeString(item?.sender_name)[0]].MainColor,
                   },
                   CommonStyles.font.semiBold16,
                 ]}>

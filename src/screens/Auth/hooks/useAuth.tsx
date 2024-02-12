@@ -56,6 +56,17 @@ const useAuth = () => {
             ),
           );
         }
+        const userVerifyData = await userVerify({
+          id: userData.user.uid.toString(),
+          is_email_address_verified: Boolean(userData.user.emailVerified),
+          accessToken: accessToken,
+        });
+        const userSignIn = {
+          ...userVerifyData?.data,
+          creationTime: userData.user.metadata.creationTime,
+        };
+        dispatch(userSliceActions.setUser(userSignIn));
+
         navigationService.navigateAndReset(Screen.MainTabBar, {
           params: Screen.HomeScreen,
         });
@@ -63,9 +74,10 @@ const useAuth = () => {
         return;
       }
 
+      let userFromApi: any;
       if (isSignUp) {
         // API register
-        userRegister({
+        const data = await userRegister({
           id: userData.user.uid.toString(),
           user_name: userData?.user?.displayName?.toString() ?? '',
           email_address: userData?.user?.email?.toString() ?? '',
@@ -73,16 +85,24 @@ const useAuth = () => {
           sign_up_provider_id: 1,
           accessToken: accessToken,
         });
+        userFromApi = {
+          ...data?.data?.data,
+          creationTime: userData.user.metadata.creationTime,
+        };
       } else {
         // sign in
         // API register login
-        userVerify({
+        const data = await userVerify({
           id: userData.user.uid.toString(),
           is_email_address_verified: Boolean(userData.user.emailVerified),
           accessToken: accessToken,
         });
+        userFromApi = {
+          ...data?.data,
+          creationTime: userData.user.metadata.creationTime,
+        };
       }
-      dispatch(userSliceActions.setUser(userData));
+      dispatch(userSliceActions.setUser(userFromApi));
       if (userData.user.email && persistReducerState?.[userData.user.email]) {
         // email for debug and uid for final release
         const key = BaseMailUtils.getValueForPersistMail(userData);

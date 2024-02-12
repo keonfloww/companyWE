@@ -4,6 +4,7 @@ import React, {FC} from 'react';
 import ProfileIndexScreen from './screens/ProfileIndexScreen';
 import ProfileConnectedMailScreen from './screens/ProfileConnectedMailScreen';
 import {t} from 'i18next';
+import EditProfileScreen from './screens/EditProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,16 @@ const ProfileScreen: FC = () => {
         }}
         name={Screen.ProfileConnectedMailScreen}
         component={ProfileConnectedMailScreen}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          headerBackTitle: '',
+          title: t('Your Profile'),
+          headerBackTitleVisible: false,
+        }}
+        name={Screen.EditProfileScreen}
+        component={EditProfileScreen}
       />
     </Stack.Navigator>
   );

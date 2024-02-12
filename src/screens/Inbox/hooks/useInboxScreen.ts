@@ -23,8 +23,8 @@ const useInboxScreen = () => {
 
   const userState = useSelector((state: BaseState) => state.userReducer);
   const persistData = useSelector((state: BaseState) => state.persistReducer);
-  console.log('persistData', persistData);
-  console.log('userState', {...userState, mailbox: userState?.mailbox?.length});
+  // console.log('persistData', persistData);
+  // console.log('userState', {...userState, mailbox: userState?.mailbox?.length});
   const connectedMailsUnsynced = useMemo(() => {
     return userState?.connectedMails?.filter(
       (i: FireBaseMailCredentials) =>

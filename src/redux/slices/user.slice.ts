@@ -1,12 +1,13 @@
 import {FireBaseMailCredentials} from '@models/firebaseModel';
 import {Email} from '@models/mail/modelMail';
+import { IUser } from '@models/users/user.type';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import _ from 'lodash';
 import moment from 'moment';
 
 const initialState: {
-  user: FirebaseAuthTypes.UserCredential | null;
+  user: IUser | null;
   connectedMails: FireBaseMailCredentials[];
 
   // Inbox
@@ -37,7 +38,7 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (
       state,
-      action: PayloadAction<FirebaseAuthTypes.UserCredential | null>,
+      action: PayloadAction<IUser | null>,
     ) => {
       state.user = action.payload;
     },

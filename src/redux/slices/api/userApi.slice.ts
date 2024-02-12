@@ -28,6 +28,10 @@ export const userApi = createApi({
           url: `/users/verify`,
           method: HTTP_METHODS.POST,
           body: params,
+          headers: {
+            'authorization' : params.accessToken,
+            'content-type': 'application/json',
+          }
         };
       },
       transformResponse: (res: any) => res.data,

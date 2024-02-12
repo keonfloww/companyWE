@@ -7,10 +7,12 @@ import {Screen} from '@navigation/navigation.enums';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
+import {EnumProfileColors, ProfileColors} from '@utils/colorUtils';
 import {scale} from '@utils/mixins';
+import {safeString} from '@utils/stringUtils';
 import {t} from 'i18next';
 import moment from 'moment';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
 
@@ -24,9 +26,12 @@ const ProfileIndexScreen = () => {
         {
           prefixIcon: <IMAGES.IcProfile color={'#3C3C3C'} />,
           title: t('Edit Profile Detail'),
+          onPress: () => {
+            navigationService.navigate(Screen.EditProfileScreen);
+          },
         },
         {
-          prefixIcon: <IMAGES.IcProfile color={'#3C3C3C'} />,
+          prefixIcon: <IMAGES.IcConnected color={'#3C3C3C'} />,
           title: t('Connected Email Accounts'),
           onPress: () => {
             navigationService.navigate(Screen.ProfileConnectedMailScreen);
@@ -38,21 +43,25 @@ const ProfileIndexScreen = () => {
       label: t('Information'),
       items: [
         {
-          prefixIcon: <IMAGES.IcProfile color={'#3C3C3C'} />,
+          prefixIcon: <IMAGES.IcTerms color={'#3C3C3C'} />,
           title: t('Terms and Conditions'),
+          onPress: () => {},
         },
         {
-          prefixIcon: <IMAGES.IcProfile color={'#3C3C3C'} />,
+          prefixIcon: <IMAGES.IcPrivacy color={'#3C3C3C'} />,
           title: t('Privacy Policy'),
+          onPress: () => {},
         },
         {
-          prefixIcon: <IMAGES.IcProfile color={'#3C3C3C'} />,
+          prefixIcon: <IMAGES.IcContact color={'#3C3C3C'} />,
           title: t('Contact Us'),
+          onPress: () => {},
         },
       ],
     },
   ];
 
+  console.log('authUser', authUser);
   return (
     <LayoutBackgroundDefaultV1
       containerStyle={{
@@ -66,22 +75,83 @@ const ProfileIndexScreen = () => {
             alignItems: 'center',
             marginTop: scale(30),
           }}>
-          <Avatar
-            source={{uri: authUser?.user?.photoURL ?? ''}}
-            size={scale(130)}
-          />
+          {authUser?.user_profile_picture ? (
+            <Avatar
+              source={{uri: authUser?.user_profile_picture}}
+              size={scale(130)}
+            />
+          ) : (
+            <View
+              style={[
+                styles.logo,
+                {
+                  backgroundColor:
+                    ProfileColors?.[
+                      safeString(authUser?.user_name)?.[0] ||
+                        EnumProfileColors.DEFAULT
+                    ]?.SecondaryColor,
+                },
+              ]}>
+              <Text
+                style={[
+                  {
+                    textAlign: 'center',
+                    textAlignVertical: 'center',
+                    color:
+                      ProfileColors?.[
+                        safeString(authUser?.user_name)?.[0] ||
+                          EnumProfileColors.DEFAULT
+                      ]?.MainColor,
+                  },
+                  CommonStyles.font.bold30,
+                ]}>
+                {safeString(authUser?.user_name)[0]}
+              </Text>
+            </View>
+          )}
           <View style={{height: scale(20)}} />
-          <Text>{authUser?.user?.displayName}</Text>
-          <Text>
+          <Text style={CommonStyles.font.bold24}>{authUser?.user_name}</Text>
+          <Text style={CommonStyles.font.regular14}>
             Member since {moment(authUser?.user?.metadata?.creationTime).year()}
           </Text>
           <View style={{height: scale(20)}} />
+        </View>
+        <View style={{marginBottom: scale(10)}}>
+          <Text style={[CommonStyles.font.bold16, {marginBottom: scale(10)}]}>
+            Account Information
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: scale(15),
+              alignItems: 'center',
+            }}>
+            <Text style={CommonStyles.font.semiBold14}>Email Address</Text>
+            <Text style={[CommonStyles.font.regular14, {color: '#8f8f8f'}]}>
+              {authUser?.email_address}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: scale(15),
+              alignItems: 'center',
+            }}>
+            <Text style={CommonStyles.font.semiBold14}>Account connected</Text>
+            <Text style={[CommonStyles.font.semiBold14, {color: '#8f8f8f'}]}>
+              Google
+            </Text>
+          </View>
         </View>
 
         <View style={{rowGap: scale(15)}}>
           {groupItems.map(item => {
             return (
               <FlatList
+                alwaysBounceVertical={false}
+                overScrollMode="never"
                 key={item?.label}
                 ListHeaderComponentStyle={{marginBottom: scale(10)}}
                 keyExtractor={item => item?.title}
@@ -104,7 +174,7 @@ const ProfileIndexScreen = () => {
                   );
                 }}
                 ItemSeparatorComponent={() => (
-                  <View style={{height: scale(10)}} />
+                  <View style={{height: scale(15)}} />
                 )}
               />
             );
@@ -122,4 +192,50 @@ const ProfileIndexScreen = () => {
     </LayoutBackgroundDefaultV1>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: scale(12),
+    paddingHorizontal: scale(20),
+    paddingBottom: scale(10),
+    backgroundColor: 'white',
+  },
+  logo: {
+    borderRadius: scale(130),
+    borderColor: '#DADADA',
+    borderWidth: scale(1),
+    width: scale(130),
+    height: scale(130),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mailContent: {flex: 1},
+  mailFirstRowContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  senderName: {
+    ...CommonStyles.font.semiBold16,
+    color: '#3C3C3C',
+  },
+  subject: {
+    ...CommonStyles.font.semiBold14,
+    color: '#3C3C3C',
+  },
+  dateTime: {
+    ...CommonStyles.font.semiBold12,
+    color: '#3C3C3C',
+  },
+  shortBody: {
+    ...CommonStyles.font.regular14,
+    color: '#3C3C3C',
+  },
+  textDisable: {
+    color: '#757575',
+    fontFamily: CommonStyles.fontFamily.regular,
+  },
+});
 export default ProfileIndexScreen;

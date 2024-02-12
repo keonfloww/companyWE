@@ -21,6 +21,7 @@ export enum Screen {
   //Profile
   ProfileIndexScreen = 'ProfileIndexScreen',
   ProfileConnectedMailScreen = 'ProfileConnectedMailScreen',
+  EditProfileScreen = 'EditProfileScreen',
 
   //
   ContactListScreen = 'HOME_ContactListScreen',

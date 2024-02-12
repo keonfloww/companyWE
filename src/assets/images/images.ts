@@ -11,8 +11,13 @@ const logoSrc = require('../images/png/logo.png');
 // SVG
 import IcHome from './svg/ic_home.svg';
 import IcInbox from './svg/ic_inbox.svg';
+import IcInboxFilled from './svg/ic_inbox_filled.svg';
 import IcStar from './svg/ic_star.svg';
 import IcProfile from './svg/ic_profile.svg';
+import IcConnected from './svg/ic_connected.svg';
+import IcContact from './svg/ic_contact.svg';
+import IcPrivacy from './svg/ic_privacy.svg';
+import IcTerms from './svg/ic_terms.svg';
 
 import icAppLogo from './svg/ic_app_logo.svg';
 import icAppLogoText from './svg/ic_app_logo_text.svg';
@@ -40,6 +45,7 @@ import icUnBookmark from './svg/ic_unbookmark.svg';
 import icMailOpen from './svg/ic_mail_open.svg';
 import icTrash from './svg/ic_trash.svg';
 import icLogout from './svg/ic_logout.svg';
+import icCamera from './svg/camera.svg';
 
 const IMAGES = {
   icEdit,
@@ -47,12 +53,18 @@ const IMAGES = {
   icAddContact,
   IcHome,
   IcInbox,
+  IcInboxFilled,
   IcStar,
   IcProfile,
   icAppLogo,
   icAppLogoText,
   icBookMark,
   icSearch,
+  IcConnected,
+  IcContact,
+  IcTerms,
+  IcPrivacy,
+  icCamera,
 
   // MOCK,
   icM1,
