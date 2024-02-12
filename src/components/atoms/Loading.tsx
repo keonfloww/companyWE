@@ -13,7 +13,7 @@ const Loading: React.FC<LoadingProps> = ({show}) => {
   return (
     <View style={[StyleSheet.absoluteFill, styles.container]}>
       <View style={styles.content}>
-        <ActivityIndicator size="large" color="#50048A" />
+        <ActivityIndicator size="large" />
       </View>
     </View>
   );
