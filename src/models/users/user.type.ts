@@ -13,6 +13,7 @@ export interface IUser {
   user_address?: string;
   description?: string;
   providerId?: string;
+  creationTime?: string;
 }
 
 // {"displayName": "Vipin Vishwakarma", "email": "mainvipin@gmail.com", "emailVerified": true,

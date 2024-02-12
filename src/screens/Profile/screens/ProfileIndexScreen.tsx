@@ -7,10 +7,12 @@ import {Screen} from '@navigation/navigation.enums';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
+import {ProfileColors} from '@utils/colorUtils';
 import {scale} from '@utils/mixins';
+import {safeString} from '@utils/stringUtils';
 import {t} from 'i18next';
 import moment from 'moment';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
 
@@ -72,12 +74,38 @@ const ProfileIndexScreen = () => {
             alignItems: 'center',
             marginTop: scale(30),
           }}>
-          <Avatar
-            source={{uri: authUser?.user?.photoURL ?? ''}}
-            size={scale(130)}
-          />
+          {authUser?.user_profile_picture ? (
+            <Avatar
+              source={{uri: authUser?.user_profile_picture}}
+              size={scale(130)}
+            />
+          ) : (
+            <View
+              style={[
+                styles.logo,
+                {
+                  backgroundColor:
+                    ProfileColors[safeString(authUser?.user_name)[0]]
+                      .SecondaryColor,
+                },
+              ]}>
+              <Text
+                style={[
+                  {
+                    textAlign: 'center',
+                    textAlignVertical: 'center',
+                    color:
+                      ProfileColors[safeString(authUser?.user_name)[0]]
+                        .MainColor,
+                  },
+                  CommonStyles.font.bold30,
+                ]}>
+                {safeString(authUser?.user_name)[0]}
+              </Text>
+            </View>
+          )}
           <View style={{height: scale(20)}} />
-          <Text style={CommonStyles.font.bold24}>{authUser?.user?.displayName}</Text>
+          <Text style={CommonStyles.font.bold24}>{authUser?.user_name}</Text>
           <Text style={CommonStyles.font.regular14}>
             Member since {moment(authUser?.user?.metadata?.creationTime).year()}
           </Text>
@@ -96,7 +124,7 @@ const ProfileIndexScreen = () => {
             }}>
             <Text style={CommonStyles.font.semiBold14}>Email Address</Text>
             <Text style={[CommonStyles.font.regular14, {color: '#8f8f8f'}]}>
-              {authUser?.user.email}
+              {authUser?.email_address}
             </Text>
           </View>
           <View
@@ -157,4 +185,50 @@ const ProfileIndexScreen = () => {
     </LayoutBackgroundDefaultV1>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: scale(12),
+    paddingHorizontal: scale(20),
+    paddingBottom: scale(10),
+    backgroundColor: 'white',
+  },
+  logo: {
+    borderRadius: scale(130),
+    borderColor: '#DADADA',
+    borderWidth: scale(1),
+    width: scale(130),
+    height: scale(130),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mailContent: {flex: 1},
+  mailFirstRowContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  senderName: {
+    ...CommonStyles.font.semiBold16,
+    color: '#3C3C3C',
+  },
+  subject: {
+    ...CommonStyles.font.semiBold14,
+    color: '#3C3C3C',
+  },
+  dateTime: {
+    ...CommonStyles.font.semiBold12,
+    color: '#3C3C3C',
+  },
+  shortBody: {
+    ...CommonStyles.font.regular14,
+    color: '#3C3C3C',
+  },
+  textDisable: {
+    color: '#757575',
+    fontFamily: CommonStyles.fontFamily.regular,
+  },
+});
 export default ProfileIndexScreen;

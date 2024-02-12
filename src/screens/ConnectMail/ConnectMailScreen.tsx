@@ -41,7 +41,7 @@ const ConnectMailScreen = () => {
             flexDirection: 'row',
           }}>
           <View>
-            <Text style={CommonStyles.font.semiBold14}>
+            <Text style={[CommonStyles.font.semiBold14, {color: '#3c3c3c'}]}>
               Welcome back, {authUser?.user_name?.split(' ')[0]}. Not you?
             </Text>
           </View>

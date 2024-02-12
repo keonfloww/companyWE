@@ -11,6 +11,7 @@ const logoSrc = require('../images/png/logo.png');
 // SVG
 import IcHome from './svg/ic_home.svg';
 import IcInbox from './svg/ic_inbox.svg';
+import IcInboxFilled from './svg/ic_inbox_filled.svg';
 import IcStar from './svg/ic_star.svg';
 import IcProfile from './svg/ic_profile.svg';
 import IcConnected from './svg/ic_connected.svg';
@@ -52,6 +53,7 @@ const IMAGES = {
   icAddContact,
   IcHome,
   IcInbox,
+  IcInboxFilled,
   IcStar,
   IcProfile,
   icAppLogo,

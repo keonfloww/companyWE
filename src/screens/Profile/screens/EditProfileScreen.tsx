@@ -20,6 +20,12 @@ import SafeView from '@components/atoms/View/SafeView';
 import FormItemController from '@components/atoms/Form/FormItemController';
 import {useForm} from 'react-hook-form';
 import BaseButton from '@components/atoms/Button/BaseButton';
+import {ProfileColors} from '@utils/colorUtils';
+import {safeString} from '@utils/stringUtils';
+import DatePicker from '../components/DatePicker';
+import DropDown from '../components/DropDown';
+import PhoneInput from '../components/PhoneInput';
+import AddressInput from '../components/AddressInput';
 
 interface IFormData {
   email: string;
@@ -58,6 +64,8 @@ const EditProfileScreen = () => {
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   const {authUser} = useAuth();
+  const [datePicker, setDatePicker] = useState(false);
+  const [gender, setGender] = useState('Male');
   const [modal, setModal] = useState(false);
 
   const {
@@ -87,33 +95,82 @@ const EditProfileScreen = () => {
               alignItems: 'center',
               marginTop: scale(30),
             }}>
-            <View>
-              <Avatar
-                source={{uri: authUser?.user?.photoURL ?? ''}}
-                size={scale(130)}
-              />
-              <Pressable
-                onPress={() => setModal(true)}
-                style={{
-                  position: 'absolute',
-                  bottom: 5,
-                  right: 5,
-                  backgroundColor: '#50048A',
-                  zIndex: 9999,
-                  width: scale(30),
-                  height: scale(30),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: scale(30),
-                }}>
-                <IMAGES.icCamera
-                  style={{}}
-                  height={14}
-                  width={16}
-                  color={'blue'}
+            {authUser?.user_profile_picture ? (
+              <View>
+                <Avatar
+                  source={{uri: authUser?.user?.photoURL ?? ''}}
+                  size={scale(130)}
                 />
-              </Pressable>
-            </View>
+                <Pressable
+                  onPress={() => setModal(true)}
+                  style={{
+                    position: 'absolute',
+                    bottom: 5,
+                    right: 5,
+                    backgroundColor: '#50048A',
+                    zIndex: 9999,
+                    width: scale(30),
+                    height: scale(30),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: scale(30),
+                  }}>
+                  <IMAGES.icCamera
+                    style={{}}
+                    height={14}
+                    width={16}
+                    color={'blue'}
+                  />
+                </Pressable>
+              </View>
+            ) : (
+              <View>
+                <View
+                  style={[
+                    styles.logo,
+                    {
+                      backgroundColor:
+                        ProfileColors[safeString(authUser?.user_name)[0]]
+                          .SecondaryColor,
+                    },
+                  ]}>
+                  <Text
+                    style={[
+                      {
+                        textAlign: 'center',
+                        textAlignVertical: 'center',
+                        color:
+                          ProfileColors[safeString(authUser?.user_name)[0]]
+                            .MainColor,
+                      },
+                      CommonStyles.font.bold30,
+                    ]}>
+                    {safeString(authUser?.user_name)[0]}
+                  </Text>
+                </View>
+                <Pressable
+                  onPress={() => setModal(true)}
+                  style={{
+                    position: 'absolute',
+                    bottom: 5,
+                    right: 5,
+                    backgroundColor: '#50048A',
+                    zIndex: 9999,
+                    width: scale(30),
+                    height: scale(30),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: scale(30),
+                  }}>
+                  <IMAGES.icCamera
+                    style={{}}
+                    height={14}
+                    width={16}
+                    color={'blue'}
+                  />
+                </Pressable>
+              </View>
+            )}
             <View style={{height: scale(20)}} />
           </View>
 
@@ -124,70 +181,33 @@ const EditProfileScreen = () => {
                 Personal Information
               </Text>
               <View style={{marginBottom: scale(10)}}>
-                <FormItemController
-                  control={control}
-                  errors={errors}
-                  label={'Gender'}
-                  textContentType="emailAddress"
-                  rules={{
-                    required: 'Please enter a valid email address',
-                    pattern: {
-                      value: EMAIL_REGEX,
-                      message: 'Please enter a valid email address',
-                    },
-                  }}
-                  style={styles.inputStyle}
-                  containerStyle={styles.inputContainerStyle}
-                  labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
-                />
-                <FormItemController
-                  control={control}
-                  errors={errors}
-                  label={'Birthday'}
-                  textContentType="password"
-                  rules={{
-                    required: 'Password is required',
-                    minLength: {
-                      value: 8,
-                      message: 'Password should be at least 8 characters long',
-                    },
-                  }}
-                  style={styles.inputStyle}
-                  containerStyle={styles.inputContainerStyle}
-                  labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
-                />
-                <FormItemController
-                  control={control}
-                  errors={errors}
-                  label={'Phone Number'}
-                  textContentType="password"
-                  rules={{
-                    required: 'Password is required',
-                    minLength: {
-                      value: 8,
-                      message: 'Password should be at least 8 characters long',
-                    },
-                  }}
-                  style={styles.inputStyle}
-                  containerStyle={styles.inputContainerStyle}
-                  labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
-                />
-                <FormItemController
-                  control={control}
-                  errors={errors}
-                  label={'Address'}
-                  textContentType="password"
-                  rules={{
-                    required: 'Password is required',
-                    minLength: {
-                      value: 8,
-                      message: 'Password should be at least 8 characters long',
-                    },
-                  }}
-                  style={styles.inputStyle}
-                  containerStyle={styles.inputContainerStyle}
-                  labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
-                />
+                <DropDown value={gender} onChange={(val: any)=> console.log(val)} />
+                <DatePicker
+                  visible={datePicker}
+                  label="Birthday"
+                  value={new Date()}
+                  setDatePicker={setDatePicker}
+                  mode="date"
+                  onChange={(val)=> setGender(val)}
+                  />
+                  <PhoneInput />
+                  <AddressInput />
+                  {/* <FormItemController
+                    control={control}
+                    errors={errors}
+                    label={'Gender'}
+                    textContentType="emailAddress"
+                    rules={{
+                      required: 'Please enter a valid email address',
+                      pattern: {
+                        value: EMAIL_REGEX,
+                        message: 'Please enter a valid email address',
+                      },
+                    }}
+                    style={styles.inputStyle}
+                    containerStyle={styles.inputContainerStyle}
+                    labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
+                  /> */}
               </View>
             </View>
           </View>
@@ -275,6 +295,15 @@ const styles = StyleSheet.create({
   },
   termText: {
     color: '#50048A',
+  },
+  logo: {
+    borderRadius: scale(130),
+    borderColor: '#DADADA',
+    borderWidth: scale(1),
+    width: scale(130),
+    height: scale(130),
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   modalText: {textAlign: 'center', padding: scale(5), color: '#3C3C3C'},
   view: {
