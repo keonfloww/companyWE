@@ -9,7 +9,6 @@ import {t} from 'i18next';
 import {StyleSheet, Text, View} from 'react-native';
 import useConnectMail from './hooks/useConnectMail';
 import LayoutBackgroundDefaultV1 from '@layouts/default/LayoutBackgroundDefaultV1';
-import LogoutButton from '@components/atoms/LogoutButton';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from 'react-native-ui-lib';
@@ -18,11 +17,12 @@ import {BaseState} from '@redux/stores';
 
 const ConnectMailScreen = () => {
   const insets = useSafeAreaInsets();
-  const userProfile = useSelector((state: BaseState) => state.userReducer.userProfile);
+  const userProfile = useSelector(
+    (state: BaseState) => state.userReducer.userProfile,
+  );
   const {onGoogleLinkButtonPress} = useAuthProvider();
   const {handleSignOut} = useAuth();
   const {} = useConnectMail({autoRedirectToHome: true});
-  console.log('sdfsdfsf',userProfile);
 
   return (
     <LayoutBackgroundDefaultV1
@@ -45,16 +45,18 @@ const ConnectMailScreen = () => {
               Welcome back, {userProfile?.user_name?.split(' ')[0]}. Not you?
             </Text>
           </View>
-            <View
-              style={{
-                borderBottomWidth: scale(1),
-                borderBottomColor: Colors.primary,
-              }}>
-              <Text onPress={handleSignOut} style={[CommonStyles.font.bold14, {color: Colors.primary}]}>
-                {' '}
-                Log Out.
-              </Text>
-            </View>
+          <View
+            style={{
+              borderBottomWidth: scale(1),
+              borderBottomColor: Colors.primary,
+            }}>
+            <Text
+              onPress={handleSignOut}
+              style={[CommonStyles.font.bold14, {color: Colors.primary}]}>
+              {' '}
+              Log Out.
+            </Text>
+          </View>
           {/* <LogoutButton onPress={handleSignOut} /> */}
         </View>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
