@@ -4,7 +4,7 @@ import LogoutButton from '@components/atoms/LogoutButton';
 import BaseRowIconLabel from '@components/atoms/Row/BaseRowIconLabel';
 import LayoutBackgroundDefaultV1 from '@layouts/default/LayoutBackgroundDefaultV1';
 import {Screen} from '@navigation/navigation.enums';
-import { BaseState } from '@redux/stores';
+import {BaseState} from '@redux/stores';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
@@ -16,10 +16,12 @@ import moment from 'moment';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const ProfileIndexScreen = () => {
-  const userProfile = useSelector((state: BaseState) => state.userReducer.userProfile)
+  const userProfile = useSelector(
+    (state: BaseState) => state.userReducer.userProfile,
+  );
   const {handleSignOut} = useAuth();
 
   const groupItems = [
@@ -115,7 +117,8 @@ const ProfileIndexScreen = () => {
           <View style={{height: scale(20)}} />
           <Text style={CommonStyles.font.bold24}>{userProfile?.user_name}</Text>
           <Text style={CommonStyles.font.regular14}>
-            Member since {moment(userProfile?.user?.metadata?.creationTime).year()}
+            Member since{' '}
+            {moment(userProfile?.user?.metadata?.creationTime).year()}
           </Text>
           <View style={{height: scale(20)}} />
         </View>
@@ -129,9 +132,15 @@ const ProfileIndexScreen = () => {
               justifyContent: 'space-between',
               marginBottom: scale(15),
               alignItems: 'center',
+              columnGap: scale(10),
             }}>
             <Text style={CommonStyles.font.semiBold14}>Email Address</Text>
-            <Text style={[CommonStyles.font.regular14, {color: '#8f8f8f'}]}>
+            <Text
+              numberOfLines={1}
+              style={[
+                CommonStyles.font.regular14,
+                {color: '#8f8f8f', flex: 1},
+              ]}>
               {userProfile?.email_address}
             </Text>
           </View>
