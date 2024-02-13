@@ -8,9 +8,7 @@ import {Screen} from '@navigation/navigation.enums';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
-import {
-  useUserUpdateMutation
-} from '@redux/slices/api/userApi.slice';
+import {useUserUpdateMutation} from '@redux/slices/api/userApi.slice';
 import {scale} from '@utils/mixins';
 import {t} from 'i18next';
 import moment from 'moment';
@@ -38,7 +36,7 @@ import PhoneInput from '../components/PhoneInput';
 import AddressInput from '../components/AddressInput';
 import {useDispatch, useSelector} from 'react-redux';
 import {BaseState} from '@redux/stores';
-import { userSliceActions } from '@redux/slices/user.slice';
+import {userSliceActions} from '@redux/slices/user.slice';
 
 interface IFormData {
   email: string;
@@ -78,7 +76,6 @@ const EditProfileScreen = () => {
   const userProfile = useSelector(
     (state: BaseState) => state.userReducer.userProfile,
   );
-  const {authUser} = useAuth();
   const [userUpdate] = useUserUpdateMutation();
   const [datePicker, setDatePicker] = useState(false);
   const [date, setDate] = useState(userProfile.date_of_birth || '');
@@ -89,17 +86,6 @@ const EditProfileScreen = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async () => {
-    // console.log("toktnnnnn", authUser.getIdToken());
-    console.log('consoledata',{
-      id: userProfile.id,
-      user_name: userProfile.user_name,
-      email_address: userProfile.email_address,
-      user_address: address,
-      user_profile_picture: '',
-      date_of_birth: date,
-      phone_number: phone,
-      // accessToken: userProfile.accessToken,
-    });
     const data = await userUpdate({
       id: userProfile.id,
       user_name: userProfile.user_name,
@@ -109,23 +95,28 @@ const EditProfileScreen = () => {
       date_of_birth: date,
       phone_number: phone,
       accessToken: userProfile.accessToken,
-    })
+    });
     console.log(data);
-    if(!data.error) {
+    if (!data.error) {
     } else {
-      console.log(data?.error?.data?.message)
+      console.log(data?.error?.data?.message);
     }
-     dispatch(userSliceActions.setUserProfile({...userProfile,...{
-      id: userProfile.id,
-      user_name: userProfile.user_name,
-      email_address: userProfile.email_address,
-      user_address: address,
-      user_profile_picture: '',
-      date_of_birth: date,
-      phone_number: phone,
-      accessToken: userProfile.accessToken,
-    }}));
-     navigationService.goBack();
+    dispatch(
+      userSliceActions.setUserProfile({
+        ...userProfile,
+        ...{
+          id: userProfile.id,
+          user_name: userProfile.user_name,
+          email_address: userProfile.email_address,
+          user_address: address,
+          user_profile_picture: '',
+          date_of_birth: date,
+          phone_number: phone,
+          accessToken: userProfile.accessToken,
+        },
+      }),
+    );
+    navigationService.goBack();
   };
 
   return (
@@ -133,7 +124,7 @@ const EditProfileScreen = () => {
       <View style={CommonStyles.view.viewLayout}>
         <ScrollView
           automaticallyAdjustKeyboardInsets={true}
-          keyboardDismissMode='interactive'
+          keyboardDismissMode="interactive"
           style={{display: 'flex'}}
           showsVerticalScrollIndicator={false}>
           <View
@@ -241,11 +232,17 @@ const EditProfileScreen = () => {
                   mode="date"
                   // onChange={val => setGender(val)}
                 />
-                <PhoneInput value={phone} onChange={(val: any) => setPhone(val)} />
-                <AddressInput value={address} onChange={(val: any) => setAddress(val)} />
+                <PhoneInput
+                  value={phone}
+                  onChange={(val: any) => setPhone(val)}
+                />
+                <AddressInput
+                  value={address}
+                  onChange={(val: any) => setAddress(val)}
+                />
               </View>
             </View>
-            <View style={{height: scale(60)}}/>
+            <View style={{height: scale(60)}} />
           </View>
         </ScrollView>
         <Modal
@@ -301,45 +298,41 @@ const EditProfileScreen = () => {
           </View>
         </Modal>
       </View>
-          <View
-            style={{
-              height: 'auto',
-              marginTop: 'auto',
-              width: '100%',
-              backgroundColor: '#fff',
-              shadowColor: 'black',
-              shadowOffset: {width: 1, height: .5},
-              shadowRadius: scale(20),
-              shadowOpacity: 0.10,
-              elevation: scale(2),
-              padding: scale(20),
-              flexDirection: 'row',
-              borderTopLeftRadius: scale(20),
-              borderTopRightRadius: scale(20),
-              justifyContent: 'space-between',
-              gap: scale(10),
-            }}>
-          <Button
-            label={"Save Changes"}
-            onPress={onSubmit}
-            style={[
-              {flex: 1, paddingHorizontal: 0},
-            ]}
-            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
-            backgroundColor={'#50048A'}
-          />
-            <Button
-            label={"cancel"}
-            // onPress={onClose}
-            style={[
-              {flex: 1, paddingHorizontal: 0},
-            ]}
-            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
-            backgroundColor={'white'}
-            outlineColor={'#50048A'}
-            color={'#50048A'}
-          />
-          </View>
+      <View
+        style={{
+          height: 'auto',
+          marginTop: 'auto',
+          width: '100%',
+          backgroundColor: '#fff',
+          shadowColor: 'black',
+          shadowOffset: {width: 1, height: 0.5},
+          shadowRadius: scale(20),
+          shadowOpacity: 0.1,
+          elevation: scale(2),
+          padding: scale(20),
+          flexDirection: 'row',
+          borderTopLeftRadius: scale(20),
+          borderTopRightRadius: scale(20),
+          justifyContent: 'space-between',
+          gap: scale(10),
+        }}>
+        <Button
+          label={'Save Changes'}
+          onPress={onSubmit}
+          style={[{flex: 1, paddingHorizontal: 0}]}
+          labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
+          backgroundColor={'#50048A'}
+        />
+        <Button
+          label={'cancel'}
+          // onPress={onClose}
+          style={[{flex: 1, paddingHorizontal: 0}]}
+          labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
+          backgroundColor={'white'}
+          outlineColor={'#50048A'}
+          color={'#50048A'}
+        />
+      </View>
     </SafeView>
   );
 };

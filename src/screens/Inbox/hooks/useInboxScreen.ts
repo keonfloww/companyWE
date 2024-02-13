@@ -54,88 +54,90 @@ const useInboxScreen = () => {
   );
 
   // FUNCTIONS ---------------------
-  const handleGetAllMailInConnectedMails = async () => {
-    console.log('connectedMailsUnsynced', connectedMailsUnsynced);
-    try {
-      connectedMailsUnsynced?.forEach(
-        async (targetMail: FireBaseMailCredentials) => {
-          let next_page_token = null;
-          console.log(
-            'handleGetAllMailInConnectedMails targetMail.email',
-            targetMail.email,
-          );
-          while (true) {
-            let mailAuth: IMailAuth2Params = {
-              access_token: targetMail?.access_token,
-              expiry_date: targetMail.expiry_date,
-              refresh_token: targetMail.refresh_token,
-            };
+  const handleGetByFireBaseMail = async (
+    targetMail: FireBaseMailCredentials,
+  ) => {
+    let next_page_token = null;
+    console.log(
+      'handleGetAllMailInConnectedMails targetMail.email',
+      targetMail.email,
+    );
+    while (true) {
+      let mailAuth: IMailAuth2Params = {
+        access_token: targetMail?.access_token,
+        expiry_date: targetMail.expiry_date,
+        refresh_token: targetMail.refresh_token,
+      };
 
-            const startDate: Moment = moment()
-              .subtract(2, 'week')
-              .set('hour', 0)
-              .set('minute', 0)
-              .set('second', 0);
+      const startDate: Moment = moment()
+        .subtract(2, 'week')
+        .set('hour', 0)
+        .set('minute', 0)
+        .set('second', 0);
 
-            const endDate: Moment = moment()
-              .set('hour', 23)
-              .set('minute', 59)
-              .set('second', 59);
+      const endDate: Moment = moment()
+        .set('hour', 23)
+        .set('minute', 59)
+        .set('second', 59);
 
-            const params: IGetMailParams = {
-              ...mailAuth,
+      const params: IGetMailParams = {
+        ...mailAuth,
 
-              email_address: targetMail.email,
-              start_date: startDate.unix().toString(),
-              end_date: endDate.unix().toString(),
-              max_results: MAIL_PER_PAGE,
-              next_page_token,
-            };
-            const res = await getMail(params).unwrap();
-            // handle refresh token and retry here
-            const isNeedToRefreshToken = res.token_info.is_expired;
-            if (isNeedToRefreshToken) {
-              next_page_token = next_page_token;
-              mailAuth = {
-                ...mailAuth,
-                access_token: res.token_info.access_token,
-                expiry_date: res.token_info.expiry_date,
-              };
-              console.log(
-                `${targetMail.email} trigger retry with refresh token`,
-              );
-              continue;
-            }
+        email_address: targetMail.email,
+        start_date: startDate.unix().toString(),
+        end_date: endDate.unix().toString(),
+        max_results: MAIL_PER_PAGE,
+        next_page_token,
+      };
+      const res = await getMail(params).unwrap();
+      // handle refresh token and retry here
+      const isNeedToRefreshToken = res.token_info.is_expired;
+      if (isNeedToRefreshToken) {
+        next_page_token = next_page_token;
+        mailAuth = {
+          ...mailAuth,
+          access_token: res.token_info.access_token,
+          expiry_date: res.token_info.expiry_date,
+        };
+        console.log(`${targetMail.email} trigger retry with refresh token`);
+        continue;
+      }
 
-            const isEndOfMatchedMail = next_page_token == res.next_page_token;
-            const isOufOfMail = !res.next_page_token;
-            const isEnd = isEndOfMatchedMail || isOufOfMail;
-            // End of sync the current address mail
-            if (isEnd) {
-              console.log(
-                '---- SYNCED',
-                `${targetMail.email}, from ${startDate.format(
-                  DateUtils.FRONTEND_FORMAT_DEFAULT,
-                )} to ${endDate.format(DateUtils.FRONTEND_FORMAT_DEFAULT)}`,
-              );
+      const isEndOfMatchedMail = next_page_token == res.next_page_token;
+      const isOufOfMail = !res.next_page_token;
+      const isEnd = isEndOfMatchedMail || isOufOfMail;
+      // End of sync the current address mail
+      if (isEnd) {
+        console.log(
+          '---- SYNCED',
+          `${targetMail.email}, from ${startDate.format(
+            DateUtils.FRONTEND_FORMAT_DEFAULT,
+          )} to ${endDate.format(DateUtils.FRONTEND_FORMAT_DEFAULT)}`,
+        );
 
-              dispatch(
-                userSliceActions.connectedMailMarkAsSynced({
-                  mail: targetMail.email,
-                }),
-              );
-              break;
-            }
+        dispatch(
+          userSliceActions.connectedMailMarkAsSynced({
+            mail: targetMail.email,
+          }),
+        );
+        break;
+      }
 
-            // update next page to call
-            next_page_token = res.next_page_token;
-          }
-        },
-      );
-    } catch (error) {
-      console.log('error', error);
+      // update next page to call
+      next_page_token = res.next_page_token;
     }
   };
+  // const handleGetAllMailInConnectedMails = async () => {
+  //   console.log('connectedMailsUnsynced', connectedMailsUnsynced);
+  //   try {
+  //     connectedMailsUnsynced?.forEach(
+  //       async (targetMail: FireBaseMailCredentials) =>
+  //         handleGetByFireBaseMail(targetMail),
+  //     );
+  //   } catch (error) {
+  //     console.log('error', error);
+  //   }
+  // };
 
   const handleMarkAsAskedDelete = () =>
     dispatch(userSliceActions.markAsAskedDelete());
@@ -174,8 +176,10 @@ const useInboxScreen = () => {
     mailCountUnread,
     computedIsShowDeleteAfterSyncedMail,
     handleMoveMailToTrash,
-    handleGetAllMailInConnectedMails,
+    // handleGetAllMailInConnectedMails,
     handleMarkAsAskedDelete,
+
+    handleGetByFireBaseMail,
   };
 };
 

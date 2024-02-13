@@ -103,15 +103,7 @@ const RootNavigator: FC = () => {
 export default RootNavigator;
 
 const TabBarNavigator: FC = () => {
-  const {
-    userState,
-    mailCountUnread,
-
-    handleGetAllMailInConnectedMails,
-  } = useInboxScreen();
-  useEffect(() => {
-    handleGetAllMailInConnectedMails();
-  }, [userState.user?.id]);
+  const {userState, mailCountUnread} = useInboxScreen();
 
   // TODO: create hook for status bar on each screen style
   useEffect(() => {
@@ -161,7 +153,7 @@ const TabBarNavigator: FC = () => {
           <TabBarIconWrapper>
             {focused ? (
               <IMAGES.IcInboxFilled color={color} />
-              ) : (
+            ) : (
               <IMAGES.IcInbox color={color} />
             )}
           </TabBarIconWrapper>

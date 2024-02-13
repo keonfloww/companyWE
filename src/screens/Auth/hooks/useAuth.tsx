@@ -46,10 +46,13 @@ const useAuth = () => {
         'key',
         key,
       );
+      // DO TOUCH TO IT, THIS IS THE CORE FLOW
+      dispatch(userSliceActions.setUser(userData));
+
       if (isUserReSignInWithSameAccount) {
         console.info('useAuth RESTORE FROM PERSIST DATA');
-        dispatch(userSliceActions.setUser(userData));
-        if (userData.user.email && persistReducerState?.[key]) {
+
+        if (userData?.user?.email && persistReducerState?.[key]) {
           dispatch(
             userSliceActions.restoreFromPersistStore(
               persistReducerState?.[key],
@@ -65,7 +68,7 @@ const useAuth = () => {
           ...userVerifyData?.data,
           creationTime: userData.user.metadata.creationTime,
         };
-        dispatch(userSliceActions.setUser(userSignIn));
+        dispatch(userSliceActions.setUserProfile(userSignIn));
 
         navigationService.navigateAndReset(Screen.MainTabBar, {
           params: Screen.HomeScreen,
@@ -101,7 +104,7 @@ const useAuth = () => {
         userFromApi = {
           ...data?.data,
           creationTime: userData.user.metadata.creationTime,
-          accessToken
+          accessToken,
         };
       }
       console.log({userFromApi});

@@ -11,7 +11,6 @@ import navigationService from '@services/navigationService';
 import {Screen} from '@navigation/navigation.enums';
 import {LocalUtils} from '@utils/localStorageUtils';
 import BaseMailUtils from '@utils/baseMailUtils';
-import {Email} from '@models/mail/modelMail';
 import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 
 const useConnectMail = ({
@@ -23,6 +22,8 @@ const useConnectMail = ({
   const connectedMails = useSelector(
     (state: BaseState) => state?.userReducer.connectedMails,
   );
+  const {handleGetByFireBaseMail} = useInboxScreen();
+
   const dispatch = useDispatch();
 
   const handleCompleteConnectMailProcess = ({onCloseWebview = () => {}}) => {
@@ -96,8 +97,6 @@ const useConnectMail = ({
           console.info(
             'QuerySnapshot triggered with no mail credentials => User just sign in without connecting any mails',
           );
-
-          markAsDoneProcess();
           return;
         }
 
@@ -116,6 +115,8 @@ const useConnectMail = ({
           });
         }
 
+        // Trigger fetch new mails
+        handleGetByFireBaseMail(newFirebaseMail);
         markAsDoneProcess();
       });
 

@@ -1,16 +1,16 @@
 import {FireBaseMailCredentials} from '@models/firebaseModel';
 import {Email} from '@models/mail/modelMail';
-import { IUser } from '@models/users/user.type';
+import {IUser} from '@models/users/user.type';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import _ from 'lodash';
 import moment from 'moment';
 
 const initialState: {
-  user: FirebaseAuthTypes.User | null;
+  user: FirebaseAuthTypes.UserCredential | null;
   userProfile: IUser | null;
   connectedMails: FireBaseMailCredentials[];
-  
+
   // Inbox
   syncedMailAddress: string[];
   mailbox: Email[];
@@ -40,14 +40,11 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (
       state,
-      action: PayloadAction<FirebaseAuthTypes.User | null>,
+      action: PayloadAction<FirebaseAuthTypes.UserCredential | null>,
     ) => {
       state.user = action.payload;
     },
-    setUserProfile: (
-      state,
-      action: PayloadAction<IUser | null>,
-    ) => {
+    setUserProfile: (state, action: PayloadAction<IUser | null>) => {
       state.userProfile = action.payload;
     },
     restoreFromPersistStore: (
