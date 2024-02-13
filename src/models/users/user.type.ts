@@ -14,6 +14,7 @@ export interface IUser {
   description?: string;
   providerId?: string;
   creationTime?: string;
+  accessToken?: string;
 }
 
 // {"displayName": "Vipin Vishwakarma", "email": "mainvipin@gmail.com", "emailVerified": true,

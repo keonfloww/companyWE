@@ -16,9 +16,10 @@ const DropDown = ({data, value, onChange,}: any) => {
   return (
     <View style={{marginBottom: scale(20)}}>
       <Text style={{marginBottom: scale(10)}}>Gender</Text>
+      {console.log("gender",{value})}
       <Dropdown
         data={['Male', 'Female']}
-        value={value}
+        value={value.toString()}
         renderItem={renderItem}
         onChange={(val) => onChange(val)}
         labelField={0}
@@ -39,6 +40,7 @@ const DropDown = ({data, value, onChange,}: any) => {
         style={{
             borderWidth: scale(1),
             borderColor: '#8f8f8f',
+            height:scale(40),
           borderRadius: scale(100),
           paddingVertical: scale(5),
           paddingHorizontal: scale(20),

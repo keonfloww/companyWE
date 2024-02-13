@@ -7,9 +7,10 @@ import _ from 'lodash';
 import moment from 'moment';
 
 const initialState: {
-  user: IUser | null;
+  user: FirebaseAuthTypes.User | null;
+  userProfile: IUser | null;
   connectedMails: FireBaseMailCredentials[];
-
+  
   // Inbox
   syncedMailAddress: string[];
   mailbox: Email[];
@@ -22,6 +23,7 @@ const initialState: {
   isAskedForDeleteMail?: boolean;
 } = {
   user: null,
+  userProfile: null,
   connectedMails: [],
   syncedMailAddress: [],
   mailbox: [],
@@ -38,9 +40,15 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (
       state,
-      action: PayloadAction<IUser | null>,
+      action: PayloadAction<FirebaseAuthTypes.User | null>,
     ) => {
       state.user = action.payload;
+    },
+    setUserProfile: (
+      state,
+      action: PayloadAction<IUser | null>,
+    ) => {
+      state.userProfile = action.payload;
     },
     restoreFromPersistStore: (
       state,

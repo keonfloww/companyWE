@@ -18,11 +18,11 @@ import {BaseState} from '@redux/stores';
 
 const ConnectMailScreen = () => {
   const insets = useSafeAreaInsets();
-  const authUser = useSelector((state: BaseState) => state.userReducer.user);
+  const userProfile = useSelector((state: BaseState) => state.userReducer.userProfile);
   const {onGoogleLinkButtonPress} = useAuthProvider();
   const {handleSignOut} = useAuth();
   const {} = useConnectMail({autoRedirectToHome: true});
-  console.log('sdfsdfsf',authUser);
+  console.log('sdfsdfsf',userProfile);
 
   return (
     <LayoutBackgroundDefaultV1
@@ -42,7 +42,7 @@ const ConnectMailScreen = () => {
           }}>
           <View>
             <Text style={[CommonStyles.font.semiBold14, {color: '#3c3c3c'}]}>
-              Welcome back, {authUser?.user_name?.split(' ')[0]}. Not you?
+              Welcome back, {userProfile?.user_name?.split(' ')[0]}. Not you?
             </Text>
           </View>
             <View

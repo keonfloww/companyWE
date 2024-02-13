@@ -4,6 +4,7 @@ import LogoutButton from '@components/atoms/LogoutButton';
 import BaseRowIconLabel from '@components/atoms/Row/BaseRowIconLabel';
 import LayoutBackgroundDefaultV1 from '@layouts/default/LayoutBackgroundDefaultV1';
 import {Screen} from '@navigation/navigation.enums';
+import { BaseState } from '@redux/stores';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
@@ -15,9 +16,11 @@ import moment from 'moment';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
+import { useSelector } from 'react-redux';
 
 const ProfileIndexScreen = () => {
-  const {authUser, handleSignOut} = useAuth();
+  const userProfile = useSelector((state: BaseState) => state.userReducer.userProfile)
+  const {handleSignOut} = useAuth();
 
   const groupItems = [
     {
@@ -61,7 +64,7 @@ const ProfileIndexScreen = () => {
     },
   ];
 
-  console.log('authUser', authUser);
+  console.log('userProfile', userProfile);
   return (
     <LayoutBackgroundDefaultV1
       containerStyle={{
@@ -75,9 +78,9 @@ const ProfileIndexScreen = () => {
             alignItems: 'center',
             marginTop: scale(30),
           }}>
-          {authUser?.user_profile_picture ? (
+          {userProfile?.user_profile_picture ? (
             <Avatar
-              source={{uri: authUser?.user_profile_picture}}
+              source={{uri: userProfile?.user_profile_picture}}
               size={scale(130)}
             />
           ) : (
@@ -87,7 +90,7 @@ const ProfileIndexScreen = () => {
                 {
                   backgroundColor:
                     ProfileColors?.[
-                      safeString(authUser?.user_name)?.[0] ||
+                      safeString(userProfile?.user_name)?.[0] ||
                         EnumProfileColors.DEFAULT
                     ]?.SecondaryColor,
                 },
@@ -99,20 +102,20 @@ const ProfileIndexScreen = () => {
                     textAlignVertical: 'center',
                     color:
                       ProfileColors?.[
-                        safeString(authUser?.user_name)?.[0] ||
+                        safeString(userProfile?.user_name)?.[0] ||
                           EnumProfileColors.DEFAULT
                       ]?.MainColor,
                   },
                   CommonStyles.font.bold30,
                 ]}>
-                {safeString(authUser?.user_name)[0]}
+                {safeString(userProfile?.user_name)[0]}
               </Text>
             </View>
           )}
           <View style={{height: scale(20)}} />
-          <Text style={CommonStyles.font.bold24}>{authUser?.user_name}</Text>
+          <Text style={CommonStyles.font.bold24}>{userProfile?.user_name}</Text>
           <Text style={CommonStyles.font.regular14}>
-            Member since {moment(authUser?.user?.metadata?.creationTime).year()}
+            Member since {moment(userProfile?.user?.metadata?.creationTime).year()}
           </Text>
           <View style={{height: scale(20)}} />
         </View>
@@ -129,7 +132,7 @@ const ProfileIndexScreen = () => {
             }}>
             <Text style={CommonStyles.font.semiBold14}>Email Address</Text>
             <Text style={[CommonStyles.font.regular14, {color: '#8f8f8f'}]}>
-              {authUser?.email_address}
+              {userProfile?.email_address}
             </Text>
           </View>
           <View

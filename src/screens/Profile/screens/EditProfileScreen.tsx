@@ -8,10 +8,20 @@ import {Screen} from '@navigation/navigation.enums';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
+import {
+  useUserUpdateMutation
+} from '@redux/slices/api/userApi.slice';
 import {scale} from '@utils/mixins';
 import {t} from 'i18next';
 import moment from 'moment';
-import {FlatList, Pressable, StyleSheet, TouchableOpacity} from 'react-native';
+import {Button} from 'react-native-ui-lib';
+import {
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
 import Modal from 'react-native-modal';
@@ -26,6 +36,9 @@ import DatePicker from '../components/DatePicker';
 import DropDown from '../components/DropDown';
 import PhoneInput from '../components/PhoneInput';
 import AddressInput from '../components/AddressInput';
+import {useDispatch, useSelector} from 'react-redux';
+import {BaseState} from '@redux/stores';
+import { userSliceActions } from '@redux/slices/user.slice';
 
 interface IFormData {
   email: string;
@@ -61,44 +74,78 @@ const EditProfileScreen = () => {
       ],
     },
   ];
-  const EMAIL_REGEX =
-    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+  const userProfile = useSelector(
+    (state: BaseState) => state.userReducer.userProfile,
+  );
   const {authUser} = useAuth();
+  const [userUpdate] = useUserUpdateMutation();
   const [datePicker, setDatePicker] = useState(false);
+  const [date, setDate] = useState(userProfile.date_of_birth || '');
   const [gender, setGender] = useState('Male');
   const [modal, setModal] = useState(false);
+  const [address, setAddress] = useState(userProfile.user_address || '');
+  const [phone, setPhone] = useState(userProfile.phone_number || '');
+  const dispatch = useDispatch();
 
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm<IFormData>({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
-
-  const onSubmit = (_data: IFormData) => {
-    // TODO: Vipin. Why did you not implement it?
-    // console.log({data, errors});
-    // navigationService.navigateAndReset(Screen.ConnectMailScreen);
+  const onSubmit = async () => {
+    // console.log("toktnnnnn", authUser.getIdToken());
+    console.log('consoledata',{
+      id: userProfile.id,
+      user_name: userProfile.user_name,
+      email_address: userProfile.email_address,
+      user_address: address,
+      user_profile_picture: '',
+      date_of_birth: date,
+      phone_number: phone,
+      // accessToken: userProfile.accessToken,
+    });
+    const data = await userUpdate({
+      id: userProfile.id,
+      user_name: userProfile.user_name,
+      email_address: userProfile.email_address,
+      user_address: 'address',
+      user_profile_picture: '',
+      date_of_birth: date,
+      phone_number: phone,
+      accessToken: userProfile.accessToken,
+    })
+    console.log(data);
+    if(!data.error) {
+    } else {
+      console.log(data?.error?.data?.message)
+    }
+     dispatch(userSliceActions.setUserProfile({...userProfile,...{
+      id: userProfile.id,
+      user_name: userProfile.user_name,
+      email_address: userProfile.email_address,
+      user_address: address,
+      user_profile_picture: '',
+      date_of_birth: date,
+      phone_number: phone,
+      accessToken: userProfile.accessToken,
+    }}));
+     navigationService.goBack();
   };
 
   return (
     <SafeView>
       <View style={CommonStyles.view.viewLayout}>
-        <View style={{display: 'flex'}}>
+        <ScrollView
+          automaticallyAdjustKeyboardInsets={true}
+          keyboardDismissMode='interactive'
+          style={{display: 'flex'}}
+          showsVerticalScrollIndicator={false}>
           <View
             style={{
               justifyContent: 'center',
               alignItems: 'center',
               marginTop: scale(30),
             }}>
-            {authUser?.user_profile_picture ? (
+            {userProfile?.user_profile_picture ? (
               <View>
                 <Avatar
-                  source={{uri: authUser?.user?.photoURL ?? ''}}
+                  source={{uri: userProfile?.user?.photoURL ?? ''}}
                   size={scale(130)}
                 />
                 <Pressable
@@ -130,7 +177,7 @@ const EditProfileScreen = () => {
                     styles.logo,
                     {
                       backgroundColor:
-                        ProfileColors[safeString(authUser?.user_name)[0]]
+                        ProfileColors[safeString(userProfile?.user_name)[0]]
                           .SecondaryColor,
                     },
                   ]}>
@@ -140,12 +187,12 @@ const EditProfileScreen = () => {
                         textAlign: 'center',
                         textAlignVertical: 'center',
                         color:
-                          ProfileColors[safeString(authUser?.user_name)[0]]
+                          ProfileColors[safeString(userProfile?.user_name)[0]]
                             .MainColor,
                       },
                       CommonStyles.font.bold30,
                     ]}>
-                    {safeString(authUser?.user_name)[0]}
+                    {safeString(userProfile?.user_name)[0]}
                   </Text>
                 </View>
                 <Pressable
@@ -181,37 +228,26 @@ const EditProfileScreen = () => {
                 Personal Information
               </Text>
               <View style={{marginBottom: scale(10)}}>
-                <DropDown value={gender} onChange={(val: any)=> console.log(val)} />
+                <DropDown
+                  value={gender}
+                  onChange={(val: any) => setGender(val)}
+                />
                 <DatePicker
                   visible={datePicker}
                   label="Birthday"
-                  value={new Date()}
+                  value={date}
                   setDatePicker={setDatePicker}
+                  setDate={setDate}
                   mode="date"
-                  onChange={(val)=> setGender(val)}
-                  />
-                  <PhoneInput />
-                  <AddressInput />
-                  {/* <FormItemController
-                    control={control}
-                    errors={errors}
-                    label={'Gender'}
-                    textContentType="emailAddress"
-                    rules={{
-                      required: 'Please enter a valid email address',
-                      pattern: {
-                        value: EMAIL_REGEX,
-                        message: 'Please enter a valid email address',
-                      },
-                    }}
-                    style={styles.inputStyle}
-                    containerStyle={styles.inputContainerStyle}
-                    labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
-                  /> */}
+                  // onChange={val => setGender(val)}
+                />
+                <PhoneInput value={phone} onChange={(val: any) => setPhone(val)} />
+                <AddressInput value={address} onChange={(val: any) => setAddress(val)} />
               </View>
             </View>
+            <View style={{height: scale(60)}}/>
           </View>
-        </View>
+        </ScrollView>
         <Modal
           isVisible={modal}
           style={{padding: 0, margin: 0, backgroundColor: 'transparent'}}>
@@ -264,22 +300,46 @@ const EditProfileScreen = () => {
             </View>
           </View>
         </Modal>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            gap: scale(10),
-          }}>
-          <BaseButton
-            title={'Save Changes'}
-            titleStyle={CommonStyles.font.regular14}
-            onPress={handleSubmit(onSubmit)}
-            size="lg"
-            containerStyle={{}}
-          />
-          <BaseButton title={'Save Changes'} />
-        </View> */}
       </View>
+          <View
+            style={{
+              height: 'auto',
+              marginTop: 'auto',
+              width: '100%',
+              backgroundColor: '#fff',
+              shadowColor: 'black',
+              shadowOffset: {width: 1, height: .5},
+              shadowRadius: scale(20),
+              shadowOpacity: 0.10,
+              elevation: scale(2),
+              padding: scale(20),
+              flexDirection: 'row',
+              borderTopLeftRadius: scale(20),
+              borderTopRightRadius: scale(20),
+              justifyContent: 'space-between',
+              gap: scale(10),
+            }}>
+          <Button
+            label={"Save Changes"}
+            onPress={onSubmit}
+            style={[
+              {flex: 1, paddingHorizontal: 0},
+            ]}
+            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
+            backgroundColor={'#50048A'}
+          />
+            <Button
+            label={"cancel"}
+            // onPress={onClose}
+            style={[
+              {flex: 1, paddingHorizontal: 0},
+            ]}
+            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
+            backgroundColor={'white'}
+            outlineColor={'#50048A'}
+            color={'#50048A'}
+          />
+          </View>
     </SafeView>
   );
 };

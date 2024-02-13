@@ -88,6 +88,7 @@ const useAuth = () => {
         userFromApi = {
           ...data?.data?.data,
           creationTime: userData.user.metadata.creationTime,
+          accessToken,
         };
       } else {
         // sign in
@@ -100,9 +101,11 @@ const useAuth = () => {
         userFromApi = {
           ...data?.data,
           creationTime: userData.user.metadata.creationTime,
+          accessToken
         };
       }
-      dispatch(userSliceActions.setUser(userFromApi));
+      console.log({userFromApi});
+      dispatch(userSliceActions.setUserProfile(userFromApi));
       if (userData.user.email && persistReducerState?.[userData.user.email]) {
         // email for debug and uid for final release
         const key = BaseMailUtils.getValueForPersistMail(userData);

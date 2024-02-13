@@ -8,6 +8,13 @@ import CommonStyles from '@screens/styles';
 
 const PhoneInput = ({data, value, onChange}: any) => {
   const [countryVisible, setCountryVisible] = useState(false);
+  const [country, setCountry] = useState("IN");
+  const [callingCode, setCallingCode] = useState('+91');
+
+  const onSelect = (val: any) => {
+    setCallingCode(val.callingCode[0]);
+    setCountry(val.cca2);
+  }
 
   return (
     <View style={{marginBottom: scale(20)}}>
@@ -26,26 +33,31 @@ const PhoneInput = ({data, value, onChange}: any) => {
             borderColor: '#8f8f8f',
             borderRadius: scale(100),
             paddingHorizontal: scale(20),
-            paddingVertical: scale(10),
+            paddingVertical: scale(0),
+            alignContent: 'center',
+            justifyContent: 'center',
             marginRight:scale(10),
+            height: scale(40)
           }}
-          countryCode="IN"
+          countryCode={country}
           visible={countryVisible}
           onClose={() => setCountryVisible(false)}
-          onSelect={val => console.log(val)}
+          onSelect={val => onSelect(val) }
         />
-
 
         <TextInput
           style={{
             borderWidth: 1,
             borderColor: '#8f8f8f',
             borderRadius: scale(100),
+            height: scale(40),
             // width: '70%',
             flex: 1,
             paddingHorizontal: scale(20),
             paddingVertical: scale(10),
           }}
+          value={value}
+          onChangeText={onChange}
           placeholder="phone"
         />
       </View>

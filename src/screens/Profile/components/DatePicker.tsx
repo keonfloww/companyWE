@@ -5,6 +5,7 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 import {scale} from '@utils/mixins';
 import CommonStyles from '@screens/styles';
+import moment from 'moment';
 
 const DatePicker = ({
   value,
@@ -14,27 +15,44 @@ const DatePicker = ({
   onChange,
   containerStyle,
   label,
-  labelStyle
+  labelStyle,
+  setDate,
+  date,
 }: any) => {
   return (
     <Pressable
       onPress={() => setDatePicker(true)}
       style={[styles.container, containerStyle ? containerStyle : {}]}>
-      <Text style={[CommonStyles.font.semiBold14,styles.label, labelStyle ? labelStyle : {}]} onPress={() => setDatePicker(true)}>{label}</Text>
-      <View style={styles.input}><Text>{value.toString()}</Text></View>
+      <Text
+        style={[
+          CommonStyles.font.semiBold14,
+          styles.label,
+          labelStyle ? labelStyle : {},
+        ]}
+        onPress={() => setDatePicker(true)}>
+        {label}
+      </Text>
+      <View style={styles.input}>
+        <Text>
+          {moment(value).isValid()
+            ? moment(value).format('DD/MM/YYYY').toString()
+            : 'Select Birthday'}
+        </Text>
+      </View>
       {visible && (
         <DateTimePicker
-          value={value}
+          value={value ? new Date(value) : new Date()}
           mode={mode}
           onChange={(event: DateTimePickerEvent, date: Date) => {
             const {
               type,
               nativeEvent: {timestamp, utcOffset},
             } = event;
-            console.log(type);
-            // if(type === 'dismissed') {
-            setDatePicker(false);
-            // }
+            if (type === 'dismissed') {
+              setDatePicker(false);
+            } else if (type === 'set') {
+              setDate(date.toString());
+            }
           }}
         />
       )}
