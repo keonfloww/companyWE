@@ -1,7 +1,13 @@
 export enum EnumProfileColors {
   DEFAULT,
 }
-export const ProfileColors = {
+export interface ColorFromChar {
+  MainColor: string;
+  SecondaryColor: string;
+}
+export const ProfileColors: {
+  [key in string | EnumProfileColors]: ColorFromChar;
+} = {
   [EnumProfileColors.DEFAULT]: {
     MainColor: '#21bfbf',
     SecondaryColor: '#c5fafa',
@@ -32,4 +38,22 @@ export const ProfileColors = {
   X: {MainColor: 'Xanadu', SecondaryColor: '#B0BEC5'},
   Y: {MainColor: 'Yellow', SecondaryColor: '#FFFF99'},
   Z: {MainColor: '#41d1d1', SecondaryColor: '#E0FFFF'},
+};
+
+const getColorFromChar = (
+  string?: string,
+): {MainColor: string; SecondaryColor: string} => {
+  const char = string?.[0]?.toUpperCase() ?? '';
+
+  const colorDefaullt = ProfileColors[EnumProfileColors.DEFAULT];
+  if (!char) {
+    return colorDefaullt;
+  }
+  if (!ProfileColors?.[char]) {
+    console.warn(`${char} is not found in color config`);
+  }
+  return ProfileColors?.[char] ?? colorDefaullt;
+};
+export const ColorUtils = {
+  getColorFromChar,
 };
