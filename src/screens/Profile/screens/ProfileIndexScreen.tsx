@@ -152,7 +152,11 @@ const ProfileIndexScreen = () => {
               numberOfLines={1}
               style={[
                 CommonStyles.font.regular14,
-                {color: '#8f8f8f', flex: 1},
+                {
+                  color: '#8f8f8f',
+                  flex: 1,
+                  textAlign: 'right',
+                },
               ]}>
               {userProfile?.email_address}
             </Text>
