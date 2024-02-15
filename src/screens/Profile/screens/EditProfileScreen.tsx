@@ -1,17 +1,11 @@
 import IMAGES from '@assets/images/images';
 import Avatar from '@components/atoms/Avatar/Avatar';
-import LogoutButton from '@components/atoms/LogoutButton';
-import BaseModal from '@components/atoms/Modal/BaseModal';
 import BaseRowIconLabel from '@components/atoms/Row/BaseRowIconLabel';
-import LayoutBackgroundDefaultV1 from '@layouts/default/LayoutBackgroundDefaultV1';
-import {Screen} from '@navigation/navigation.enums';
-import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
 import {useUserUpdateMutation} from '@redux/slices/api/userApi.slice';
 import {scale} from '@utils/mixins';
 import {t} from 'i18next';
-import moment from 'moment';
 import {Button} from 'react-native-ui-lib';
 import {
   FlatList,
@@ -25,10 +19,7 @@ import {Text} from 'react-native-ui-lib';
 import Modal from 'react-native-modal';
 import {useState} from 'react';
 import SafeView from '@components/atoms/View/SafeView';
-import FormItemController from '@components/atoms/Form/FormItemController';
-import {useForm} from 'react-hook-form';
-import BaseButton from '@components/atoms/Button/BaseButton';
-import {ProfileColors} from '@utils/colorUtils';
+import {ColorUtils} from '@utils/colorUtils';
 import {safeString} from '@utils/stringUtils';
 import DatePickerModal from '../components/DatePickerModal';
 import PhoneInput from '../components/PhoneInput';
@@ -169,9 +160,9 @@ const EditProfileScreen = () => {
                   style={[
                     styles.logo,
                     {
-                      backgroundColor:
-                        ProfileColors[safeString(userProfile?.user_name)[0].toUpperCase()]
-                          .SecondaryColor,
+                      backgroundColor: ColorUtils.getColorFromChar(
+                        userProfile?.user_name,
+                      )?.SecondaryColor,
                     },
                   ]}>
                   <Text
@@ -179,9 +170,9 @@ const EditProfileScreen = () => {
                       {
                         textAlign: 'center',
                         textAlignVertical: 'center',
-                        color:
-                          ProfileColors[safeString(userProfile?.user_name)[0].toUpperCase()]
-                            .MainColor,
+                        color: ColorUtils.getColorFromChar(
+                          userProfile?.user_name,
+                        )?.MainColor,
                       },
                       CommonStyles.font.bold30,
                     ]}>
