@@ -27,7 +27,7 @@ const isConnectedMail = async (value: string) => {
       ? JSON.parse(oldConnectedMailByCredentialsString)
       : [];
 
-  console.log('oldConnectedMailByCredentials', oldConnectedMailByCredentials);
+  // console.log('oldConnectedMailByCredentials', oldConnectedMailByCredentials);
   return oldConnectedMailByCredentials?.includes(value);
 };
 

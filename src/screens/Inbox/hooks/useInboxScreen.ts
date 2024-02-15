@@ -138,6 +138,7 @@ const useInboxScreen = () => {
           }),
         );
         handleSetFlagAskForDelete({shouldAsk: true});
+        global?.props?.showDeleteMailModal();
         break;
       }
 

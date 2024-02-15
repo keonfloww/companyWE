@@ -37,16 +37,19 @@ const AppProvider = ({children}: PropsWithChildren) => {
   const [isShowDeleteAfterSyncedMail, setIsShowDeleteAfterSyncedMail] =
     useState(false);
 
-  useEffect(() => {
-    console.log(
-      'computedIsShowDeleteAfterSyncedMail',
-      computedIsShowDeleteAfterSyncedMail,
-    );
-    if (computedIsShowDeleteAfterSyncedMail && mailCountUnread > 0) {
-      console.log('sohw');
-      setIsShowDeleteAfterSyncedMail(true);
-    }
-  }, [computedIsShowDeleteAfterSyncedMail]);
+  // useEffect(() => {
+  //   console.log(
+  //     'computedIsShowDeleteAfterSyncedMail',
+  //     computedIsShowDeleteAfterSyncedMail,
+  //   );
+  //   if (isShowDeleteAfterSyncedMail == true) {
+  //     return;
+  //   }
+  //   if (computedIsShowDeleteAfterSyncedMail) {
+  //     console.log('sohw');
+  //     setIsShowDeleteAfterSyncedMail(true);
+  //   }
+  // }, [computedIsShowDeleteAfterSyncedMail]);
 
   const [showNetwork, setShowNetwork] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -72,7 +75,6 @@ const AppProvider = ({children}: PropsWithChildren) => {
           console.log('Message empty to show message');
           return;
         }
-        console.log('isError', isError);
         toasts.show(
           <View
             style={{
@@ -111,6 +113,12 @@ const AppProvider = ({children}: PropsWithChildren) => {
       setLoading(false);
     },
     showToast,
+    showDeleteMailModal: () => {
+      if (isShowDeleteAfterSyncedMail) {
+        return;
+      }
+      setIsShowDeleteAfterSyncedMail(true);
+    },
   };
 
   return (
