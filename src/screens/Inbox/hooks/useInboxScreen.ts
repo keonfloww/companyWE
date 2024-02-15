@@ -1,4 +1,7 @@
-import {FireBaseMailCredentials} from '@models/firebaseModel';
+import {
+  FireBaseMailCredentialUpdated,
+  FireBaseMailCredentials,
+} from '@models/firebaseModel';
 import {
   IGetMailParams,
   IMailAuth2Params,
@@ -54,10 +57,12 @@ const useInboxScreen = () => {
   );
 
   // FUNCTIONS ---------------------
+  // TODO: Handle the process when the sync is not done but app is killed
   const handleGetByFireBaseMail = async (
-    targetMail: FireBaseMailCredentials,
+    targetMail: FireBaseMailCredentials & FireBaseMailCredentialUpdated,
   ) => {
-    let next_page_token = null;
+    let next_page_token = targetMail?.next_page_token || null;
+
     console.log(
       'handleGetAllMailInConnectedMails targetMail.email',
       targetMail.email,
@@ -99,6 +104,18 @@ const useInboxScreen = () => {
           access_token: res.token_info.access_token,
           expiry_date: res.token_info.expiry_date,
         };
+
+        dispatch(
+          userSliceActions.connectedMailUpdateProgress({
+            updatedConnectedMail: {
+              ...targetMail,
+              next_page_token,
+              access_token: res.token_info.access_token,
+              expiry_date: res.token_info.expiry_date,
+            },
+          }),
+        );
+
         console.log(`${targetMail.email} trigger retry with refresh token`);
         continue;
       }
@@ -120,10 +137,19 @@ const useInboxScreen = () => {
             mail: targetMail.email,
           }),
         );
+        handleSetFlagAskForDelete({shouldAsk: true});
         break;
       }
 
       // update next page to call
+      dispatch(
+        userSliceActions.connectedMailUpdateProgress({
+          updatedConnectedMail: {
+            ...targetMail,
+            next_page_token: res.next_page_token,
+          },
+        }),
+      );
       next_page_token = res.next_page_token;
     }
   };
@@ -139,8 +165,11 @@ const useInboxScreen = () => {
   //   }
   // };
 
-  const handleMarkAsAskedDelete = () =>
-    dispatch(userSliceActions.markAsAskedDelete());
+  const handleSetFlagAskForDelete = ({
+    shouldAsk = false,
+  }: {
+    shouldAsk: boolean;
+  }) => dispatch(userSliceActions.setFlagAskForDelete({shouldAsk}));
 
   const handleMoveMailToTrash = () => {
     try {
@@ -156,7 +185,7 @@ const useInboxScreen = () => {
           delete_historical_mails: true,
         }).unwrap();
       });
-      handleMarkAsAskedDelete();
+      handleSetFlagAskForDelete({shouldAsk: false});
     } catch (error) {
       console.log('error', error);
     }
@@ -177,7 +206,7 @@ const useInboxScreen = () => {
     computedIsShowDeleteAfterSyncedMail,
     handleMoveMailToTrash,
     // handleGetAllMailInConnectedMails,
-    handleMarkAsAskedDelete,
+    handleSetFlagAskForDelete,
 
     handleGetByFireBaseMail,
   };

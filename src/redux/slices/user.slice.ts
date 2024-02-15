@@ -1,4 +1,7 @@
-import {FireBaseMailCredentials} from '@models/firebaseModel';
+import {
+  FireBaseMailCredentialUpdated,
+  FireBaseMailCredentials,
+} from '@models/firebaseModel';
 import {Email} from '@models/mail/modelMail';
 import {IUser} from '@models/users/user.type';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
@@ -103,6 +106,25 @@ export const userSlice = createSlice({
         ),
       };
     },
+    connectedMailUpdateProgress: (
+      state,
+      action: PayloadAction<{
+        updatedConnectedMail: FireBaseMailCredentialUpdated;
+      }>,
+    ) => {
+      const updatedMailCredential = action.payload.updatedConnectedMail;
+      return {
+        ...state,
+        connectedMails: state.connectedMails?.map(
+          (mail: FireBaseMailCredentialUpdated) => {
+            if (mail.email == updatedMailCredential?.email) {
+              return updatedMailCredential;
+            }
+            return mail;
+          },
+        ),
+      };
+    },
 
     // UI State
     mailMarkAsRead: (state, action: PayloadAction<{metadata_id: string}>) => {
@@ -127,10 +149,13 @@ export const userSlice = createSlice({
         },
       };
     },
-    markAsAskedDelete: state => {
+    setFlagAskForDelete: (
+      state,
+      action: PayloadAction<{shouldAsk: boolean}>,
+    ) => {
       return {
         ...state,
-        isAskedForDeleteMail: true,
+        isAskedForDeleteMail: action.payload.shouldAsk ?? false,
       };
     },
   },

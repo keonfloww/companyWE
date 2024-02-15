@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, TouchableOpacity, View} from 'react-native';
 import useProfileConnectedMail from '../hooks/useProfileConnectedMail';
 import SafeView from '@components/atoms/View/SafeView';
@@ -14,15 +14,18 @@ import {safeString} from '@utils/stringUtils';
 import useConnectMail from '@screens/ConnectMail/hooks/useConnectMail';
 
 const ProfileConnectedMailScreen = () => {
-  const {connectedMails} = useProfileConnectedMail();
+  const {connectedMails, computeIsAbleToConnect} = useProfileConnectedMail();
   const {onGoogleLinkButtonPress} = useAuthProvider();
   const {} = useConnectMail({autoRedirectToHome: false});
 
   return (
     <SafeView>
       <View style={CommonStyles.view.viewLayout}>
-        <Text>Your connected email accounts</Text>
-        <Text> Lorem ipsum dolor sit amet, consectetur adipiscing .</Text>
+        <Text>
+          {
+            'Your connected email accounts\nLorem ipsum dolor sit amet, consectetur adipiscing.'
+          }
+        </Text>
         <View style={{height: scale(23)}} />
         <FlatList
           data={connectedMails}
@@ -50,24 +53,30 @@ const ProfileConnectedMailScreen = () => {
                     }
                   />
                 </View>
-                <BaseButton title={'Disconnect'} />
+                <BaseButton title={'Disconnect'} disabled={true} />
               </View>
             );
           }}
-          ListFooterComponentStyle={{marginTop: scale(15)}}
+          ListFooterComponentStyle={{
+            marginTop: scale(computeIsAbleToConnect ? 15 : 0),
+          }}
           ListFooterComponent={
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={onGoogleLinkButtonPress}>
-              <BaseRowIconLabel
-                prefixIcon={<IMAGES.IcProfile color={'#3C3C3C'} />}
-                titleNode={
-                  <View>
-                    <Text>{'Connect another account'}</Text>
-                  </View>
-                }
-              />
-            </TouchableOpacity>
+            computeIsAbleToConnect ? (
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={onGoogleLinkButtonPress}>
+                <BaseRowIconLabel
+                  prefixIcon={<IMAGES.IcProfile color={'#3C3C3C'} />}
+                  titleNode={
+                    <View>
+                      <Text>{'Connect another account'}</Text>
+                    </View>
+                  }
+                />
+              </TouchableOpacity>
+            ) : (
+              <></>
+            )
           }
           ItemSeparatorComponent={() => <View style={{height: scale(23)}} />}
         />

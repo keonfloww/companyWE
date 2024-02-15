@@ -24,6 +24,11 @@ import {Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import ProfileScreen from '@screens/Profile/ProfileScreen';
 import * as Progress from 'react-native-progress';
+import {useDispatch} from 'react-redux';
+import {LocalUtils} from '@utils/localStorageUtils';
+import Config from 'react-native-config';
+import {userSliceActions} from '@redux/slices/user.slice';
+import {persistSliceActions} from '@redux/slices/persist.slice';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,6 +37,19 @@ const CONFIG = {};
 const RootNavigator: FC = () => {
   // TODO: Need to use insets to handle status bar
   // const insets = useSafeAreaInsets();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('Config.LOCAL_STORAGE_VERSION', Config.LOCAL_STORAGE_VERSION);
+    LocalUtils.shouldClearLocalStorageOnFirstTime({
+      key: Config.LOCAL_STORAGE_VERSION ?? '1', // update it into env
+      onYes: () => {
+        console.info('RECOGNIZED NEW APP INSTALL');
+        dispatch(userSliceActions.init());
+        dispatch(persistSliceActions.init());
+      },
+    });
+  }, []);
 
   const linking = {
     prefixes: ['reactnative://'],

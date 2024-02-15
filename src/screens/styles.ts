@@ -95,6 +95,10 @@ const IconStyles = StyleSheet.create({
     width: scale(15),
     height: scale(15),
   },
+  icon24: {
+    width: scale(24),
+    height: scale(24),
+  },
   icon35: {
     width: scale(35),
     height: scale(35),

@@ -1,31 +1,32 @@
 import {userSlice} from './slices/user.slice';
 import {userApi} from './slices/api/userApi.slice';
 import {configureStore, createListenerMiddleware} from '@reduxjs/toolkit';
-import {Storage, persistCombineReducers, persistStore} from 'redux-persist';
+import {persistCombineReducers, persistStore} from 'redux-persist';
 import {mailApi} from './slices/api/mailApi.slice';
 import {MailApiMiddleware} from './middleware/mailApiMiddleware';
-import {MMKV} from 'react-native-mmkv';
+// import {MMKV} from 'react-native-mmkv';
 import {persistSlice} from './slices/persist.slice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Create the middleware instance and methods
 const listenerMiddleware = createListenerMiddleware();
 
-const storage = new MMKV();
+// const storage = new MMKV();
 
-export const reduxStorage: Storage = {
-  setItem: (key, value) => {
-    storage.set(key, value);
-    return Promise.resolve(true);
-  },
-  getItem: key => {
-    const value = storage.getString(key);
-    return Promise.resolve(value);
-  },
-  removeItem: key => {
-    storage.delete(key);
-    return Promise.resolve();
-  },
-};
+// export const reduxStorage: Storage = {
+//   setItem: (key, value) => {
+//     storage.set(key, value);
+//     return Promise.resolve(true);
+//   },
+//   getItem: key => {
+//     const value = storage.getString(key);
+//     return Promise.resolve(value);
+//   },
+//   removeItem: key => {
+//     storage.delete(key);
+//     return Promise.resolve();
+//   },
+// };
 
 const reducers = {
   userReducer: userSlice.reducer,
@@ -38,8 +39,8 @@ const reducers = {
 
 const persistConfig = {
   key: 'root',
-  // storage: AsyncStorage,
-  storage: reduxStorage,
+  storage: AsyncStorage,
+  // storage: reduxStorage,
   // There is an issue in the source code of redux-persist (default setTimeout does not cleaning)
   timeout: undefined,
   whitelist: ['userReducer', 'persistReducer'],
