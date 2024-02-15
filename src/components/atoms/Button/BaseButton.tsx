@@ -12,14 +12,18 @@ const BaseButton: FC<ButtonProps> = ({
   size = 'lg',
   titleStyle = {},
   containerStyle = {},
+  disabled,
   ...args
 }) => {
   const sizeSm = size == 'sm';
   return (
     <Button
-      activeOpacity={0.8}
+      activeOpacity={disabled ? 1 : 0.8}
       linearGradientProps={{
-        colors: ['#9A32EB', '#50048A'],
+        colors: [
+          disabled ? '#757575' : '#9A32EB',
+          disabled ? '#757575' : '#50048A',
+        ],
         start: {x: 1, y: sizeSm ? 1 : 1},
         end: {x: 1, y: sizeSm ? 0.45 : 0.3},
       }}

@@ -31,7 +31,24 @@ const isConnectedMail = async (value: string) => {
   return oldConnectedMailByCredentials?.includes(value);
 };
 
+const shouldClearLocalStorageOnFirstTime = async ({
+  key = '',
+  onYes = () => {},
+}) => {
+  const storageKey = await AsyncStorage.getItem(LOCAL_STORAGE_KEYS.STORAGE_KEY);
+  if (storageKey != key) {
+    console.info(
+      '------------CLEAN UP OLD STORAGE ON INSTALL APPLICATION------------',
+    );
+    await AsyncStorage.setItem(LOCAL_STORAGE_KEYS.USER, '');
+    await AsyncStorage.setItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS, '');
+    onYes();
+  }
+  await AsyncStorage.setItem(LOCAL_STORAGE_KEYS.STORAGE_KEY, key);
+};
+
 export enum LOCAL_STORAGE_KEYS {
+  STORAGE_KEY = 'storage_key',
   USER = 'user',
   IS_CONNECTED_MAILS = 'is_connected_mails',
 }
@@ -39,4 +56,5 @@ export enum LOCAL_STORAGE_KEYS {
 export const LocalUtils = {
   appendNewConnectedMailCrendentials,
   isConnectedMail,
+  shouldClearLocalStorageOnFirstTime,
 };

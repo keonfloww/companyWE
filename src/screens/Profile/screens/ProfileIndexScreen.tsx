@@ -29,14 +29,21 @@ const ProfileIndexScreen = () => {
       label: t('Setting'),
       items: [
         {
-          prefixIcon: <IMAGES.IcProfile color={'#3C3C3C'} />,
+          prefixIcon: (
+            <IMAGES.IcProfile color={'#3C3C3C'} {...CommonStyles.icon.icon24} />
+          ),
           title: t('Edit Profile Detail'),
           onPress: () => {
             navigationService.navigate(Screen.EditProfileScreen);
           },
         },
         {
-          prefixIcon: <IMAGES.IcConnected color={'#3C3C3C'} />,
+          prefixIcon: (
+            <IMAGES.IcConnected
+              color={'#3C3C3C'}
+              {...CommonStyles.icon.icon24}
+            />
+          ),
           title: t('Connected Email Accounts'),
           onPress: () => {
             navigationService.navigate(Screen.ProfileConnectedMailScreen);
@@ -48,17 +55,23 @@ const ProfileIndexScreen = () => {
       label: t('Information'),
       items: [
         {
-          prefixIcon: <IMAGES.IcTerms color={'#3C3C3C'} />,
+          prefixIcon: (
+            <IMAGES.IcTerms color={'#3C3C3C'} {...CommonStyles.icon.icon24} />
+          ),
           title: t('Terms and Conditions'),
           onPress: () => {},
         },
         {
-          prefixIcon: <IMAGES.IcPrivacy color={'#3C3C3C'} />,
+          prefixIcon: (
+            <IMAGES.IcPrivacy color={'#3C3C3C'} {...CommonStyles.icon.icon24} />
+          ),
           title: t('Privacy Policy'),
           onPress: () => {},
         },
         {
-          prefixIcon: <IMAGES.IcContact color={'#3C3C3C'} />,
+          prefixIcon: (
+            <IMAGES.IcContact color={'#3C3C3C'} {...CommonStyles.icon.icon24} />
+          ),
           title: t('Contact Us'),
           onPress: () => {},
         },

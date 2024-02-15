@@ -18,13 +18,13 @@ const useConnectMail = ({
 }: {
   autoRedirectToHome: boolean;
 }) => {
+  const dispatch = useDispatch();
+
   const user = useSelector((state: BaseState) => state?.userReducer?.user);
   const connectedMails = useSelector(
     (state: BaseState) => state?.userReducer.connectedMails,
   );
   const {handleGetByFireBaseMail} = useInboxScreen();
-
-  const dispatch = useDispatch();
 
   const handleCompleteConnectMailProcess = ({onCloseWebview = () => {}}) => {
     setTimeout(() => {
@@ -69,6 +69,7 @@ const useConnectMail = ({
               mail.email == newFirebaseMail?.email,
           )
         ) {
+          global?.props?.showToast('You connected this mail already !', true);
           console.log('Connected this mail => do not sync again');
           markAsDoneProcess();
           return;

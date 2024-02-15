@@ -6,6 +6,7 @@ const useProfileConnectedMail = () => {
     (state: BaseState) => state.userReducer.connectedMails,
   );
 
+  const computeIsAbleToConnect = connectedMails?.length < 3;
   // const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -38,7 +39,7 @@ const useProfileConnectedMail = () => {
   //   return () => unsubcribe();
   // }, []);
 
-  return {connectedMails};
+  return {connectedMails, computeIsAbleToConnect};
 };
 
 export default useProfileConnectedMail;

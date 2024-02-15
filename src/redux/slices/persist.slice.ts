@@ -9,6 +9,7 @@ export const persistSlice = createSlice({
   name: 'persistSlice',
   initialState,
   reducers: {
+    init: () => initialState,
     setUserPersistData: (
       state,
       action: PayloadAction<{

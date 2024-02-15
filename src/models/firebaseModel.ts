@@ -7,3 +7,8 @@ export interface FireBaseMailCredentials {
   scope: string;
   token_type: string;
 }
+
+export interface FireBaseMailCredentialUpdated extends FireBaseMailCredentials {
+  // UI state
+  next_page_token?: string | null;
+}

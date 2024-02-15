@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import {RootSiblingPortal} from 'react-native-root-siblings';
 import Loading from '@components/atoms/Loading';
-import DebugView from '@components/molecules/DebugView';
+// import DebugView from '@components/molecules/DebugView';
 import Toast from 'react-native-easy-toast';
 import BaseModal from '@components/atoms/Modal/BaseModal';
 import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
@@ -24,37 +24,79 @@ const Context = createContext({});
  * @param {PropsWithChildren} {children}
  * @return {*}
  */
+let toasts: any;
 const AppProvider = ({children}: PropsWithChildren) => {
   const {
     mailCountUnread,
     computedIsShowDeleteAfterSyncedMail,
 
     handleMoveMailToTrash,
-    handleMarkAsAskedDelete,
+    handleSetFlagAskForDelete,
   } = useInboxScreen();
 
   const [isShowDeleteAfterSyncedMail, setIsShowDeleteAfterSyncedMail] =
     useState(false);
 
   useEffect(() => {
+    console.log(
+      'computedIsShowDeleteAfterSyncedMail',
+      computedIsShowDeleteAfterSyncedMail,
+    );
     if (computedIsShowDeleteAfterSyncedMail && mailCountUnread > 0) {
+      console.log('sohw');
       setIsShowDeleteAfterSyncedMail(true);
     }
   }, [computedIsShowDeleteAfterSyncedMail]);
 
   const [showNetwork, setShowNetwork] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  let toasts: any;
 
   const handleShowNetwork = useCallback(
     () => setShowNetwork(prev => !prev),
     [showNetwork],
   );
 
-  const showToast = useCallback((message: string) => {
+  const showToast = useCallback((message: string | any, isError?: boolean) => {
     if (message) {
       try {
-        toasts.show(message, 3000);
+        if (!toasts) {
+          return;
+        }
+        const computedMessage = message;
+
+        const textStyle = {
+          color: isError ? 'white' : '#1A4656',
+        };
+
+        if (!message && !computedMessage) {
+          console.log('Message empty to show message');
+          return;
+        }
+        console.log('isError', isError);
+        toasts.show(
+          <View
+            style={{
+              display: 'flex',
+              backgroundColor: isError ? 'rgba(255, 35, 64, 1)' : '#E4FFBF',
+              width: '100%',
+              borderRadius: scale(5),
+              padding: scale(15),
+            }}>
+            {/* {isError ? (
+              <IMAGES.icCloseRound
+                {...CommonStyles.icon.icon24}
+                color={'white'}
+              />
+            ) : (
+              <IMAGES.icCheckMessage {...CommonStyles.icon.icon24} />
+            )} */}
+            <View style={{width: scale(15)}}></View>
+            <Text numberOfLines={3} style={textStyle}>
+              {isError ? computedMessage : message}
+            </Text>
+          </View>,
+          7000,
+        );
       } catch (error) {
         console.log('Toast was not exist');
       }
@@ -75,11 +117,11 @@ const AppProvider = ({children}: PropsWithChildren) => {
     <Context.Provider value={globals}>
       {children}
       <Toast
+        position="top"
         style={{
-          backgroundColor: 'black',
+          backgroundColor: 'transparent',
           borderRadius: 5,
-          padding: 10,
-          marginHorizontal: 20,
+          marginHorizontal: scale(25),
         }}
         ref={ref => {
           toasts = ref;
@@ -100,7 +142,7 @@ const AppProvider = ({children}: PropsWithChildren) => {
           actionViewStyle={{height: scale(40)}}
           buttonContainerStyle={{paddingVertical: scale(0)}}
           onClose={() => {
-            handleMarkAsAskedDelete();
+            handleSetFlagAskForDelete({shouldAsk: false});
             setIsShowDeleteAfterSyncedMail(false);
           }}
           onConfirm={() => {
