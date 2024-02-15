@@ -36,6 +36,19 @@ export const userApi = createApi({
       },
       transformResponse: (res: any) => res.data,
     }),
+    userGet: builder.mutation({
+      query: (params: IUserVerifyParams) => {
+        return {
+          url: `/users/${params.id}`,
+          method: HTTP_METHODS.GET,
+          headers: {
+            authorization: params.accessToken,
+            'content-type': 'application/json',
+          },
+        };
+      },
+      transformResponse: (res: any) => res.data,
+    }),
     userUpdate: builder.mutation({
       query: (params: IUserUpdateParams) => {
         return {
@@ -81,6 +94,7 @@ export interface IUserUpdateParams {
 export const {
   useUserRegisterMutation,
   useUserVerifyMutation,
+  useUserGetMutation,
   useUserUpdateMutation,
   // useUserUpdateMutation,
   // useUserDeleteMutation,

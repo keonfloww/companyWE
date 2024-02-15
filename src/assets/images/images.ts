@@ -23,6 +23,7 @@ import icAppLogo from './svg/ic_app_logo.svg';
 import icAppLogoText from './svg/ic_app_logo_text.svg';
 import icBookMark from './svg/ic_bookmark.svg';
 import icSearch from './svg/ic_search.svg';
+import dateIcon from './svg/date_profile.svg';
 
 // MOCK
 import icM1 from './svg/ic_cat_fashion.svg';
@@ -91,6 +92,7 @@ const IMAGES = {
   icUnBookmark,
   icMailOpen,
   bgDefaultSrc,
+  dateIcon,
   logoSrc,
   icTrash,
   icLogout,

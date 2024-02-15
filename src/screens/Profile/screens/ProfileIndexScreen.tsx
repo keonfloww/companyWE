@@ -90,11 +90,11 @@ const ProfileIndexScreen = () => {
               style={[
                 styles.logo,
                 {
-                  backgroundColor:
+                  backgroundColor: safeString(userProfile?.user_name)?.[0] ?
                     ProfileColors?.[
-                      safeString(userProfile?.user_name)?.[0] ||
+                      safeString(userProfile?.user_name)?.[0].toUpperCase() ||
                         EnumProfileColors.DEFAULT
-                    ]?.SecondaryColor,
+                    ]?.SecondaryColor : ProfileColors?.[EnumProfileColors.DEFAULT]?.SecondaryColor,
                 },
               ]}>
               <Text
@@ -102,11 +102,11 @@ const ProfileIndexScreen = () => {
                   {
                     textAlign: 'center',
                     textAlignVertical: 'center',
-                    color:
+                    color: safeString(userProfile?.user_name)?.[0] ?
                       ProfileColors?.[
-                        safeString(userProfile?.user_name)?.[0] ||
+                        safeString(userProfile?.user_name)?.[0].toUpperCase() ||
                           EnumProfileColors.DEFAULT
-                      ]?.MainColor,
+                      ]?.MainColor : ProfileColors?.[EnumProfileColors.DEFAULT]?.MainColor,
                   },
                   CommonStyles.font.bold30,
                 ]}>
@@ -134,7 +134,7 @@ const ProfileIndexScreen = () => {
               alignItems: 'center',
               columnGap: scale(10),
             }}>
-            <Text style={CommonStyles.font.semiBold14}>Email Address</Text>
+            <Text style={[CommonStyles.font.semiBold14, {marginRight: scale(10)}]}>Email Address</Text>
             <Text
               numberOfLines={1}
               style={[

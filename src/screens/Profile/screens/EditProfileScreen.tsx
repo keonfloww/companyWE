@@ -30,13 +30,13 @@ import {useForm} from 'react-hook-form';
 import BaseButton from '@components/atoms/Button/BaseButton';
 import {ProfileColors} from '@utils/colorUtils';
 import {safeString} from '@utils/stringUtils';
-import DatePicker from '../components/DatePicker';
-import DropDown from '../components/DropDown';
+import DatePickerModal from '../components/DatePickerModal';
 import PhoneInput from '../components/PhoneInput';
 import AddressInput from '../components/AddressInput';
 import {useDispatch, useSelector} from 'react-redux';
 import {BaseState} from '@redux/stores';
 import {userSliceActions} from '@redux/slices/user.slice';
+import DropDown from '../components/DropDown';
 
 interface IFormData {
   email: string;
@@ -78,23 +78,24 @@ const EditProfileScreen = () => {
   );
   const [userUpdate] = useUserUpdateMutation();
   const [datePicker, setDatePicker] = useState(false);
-  const [date, setDate] = useState(userProfile.date_of_birth || '');
-  const [gender, setGender] = useState('Male');
+  const [date, setDate] = useState(userProfile?.date_of_birth || '');
+  const [gender, setGender] = useState(userProfile?.gender || '');
   const [modal, setModal] = useState(false);
-  const [address, setAddress] = useState(userProfile.user_address || '');
-  const [phone, setPhone] = useState(userProfile.phone_number || '');
+  const [address, setAddress] = useState(userProfile?.user_address || '');
+  const [phone, setPhone] = useState(userProfile?.phone_number || '');
   const dispatch = useDispatch();
 
   const onSubmit = async () => {
     const data = await userUpdate({
-      id: userProfile.id,
-      user_name: userProfile.user_name,
-      email_address: userProfile.email_address,
-      user_address: 'address',
+      id: userProfile?.id,
+      user_name: userProfile?.user_name,
+      email_address: userProfile?.email_address,
+      user_address: address,
       user_profile_picture: '',
       date_of_birth: date,
       phone_number: phone,
-      accessToken: userProfile.accessToken,
+      gender: gender,
+      accessToken: userProfile?.accessToken,
     });
     console.log(data);
     if (!data.error) {
@@ -105,14 +106,15 @@ const EditProfileScreen = () => {
       userSliceActions.setUserProfile({
         ...userProfile,
         ...{
-          id: userProfile.id,
-          user_name: userProfile.user_name,
-          email_address: userProfile.email_address,
+          id: userProfile?.id,
+          user_name: userProfile?.user_name,
+          email_address: userProfile?.email_address,
           user_address: address,
           user_profile_picture: '',
           date_of_birth: date,
           phone_number: phone,
-          accessToken: userProfile.accessToken,
+          gender: gender,
+          accessToken: userProfile?.accessToken,
         },
       }),
     );
@@ -168,7 +170,7 @@ const EditProfileScreen = () => {
                     styles.logo,
                     {
                       backgroundColor:
-                        ProfileColors[safeString(userProfile?.user_name)[0]]
+                        ProfileColors[safeString(userProfile?.user_name)[0].toUpperCase()]
                           .SecondaryColor,
                     },
                   ]}>
@@ -178,7 +180,7 @@ const EditProfileScreen = () => {
                         textAlign: 'center',
                         textAlignVertical: 'center',
                         color:
-                          ProfileColors[safeString(userProfile?.user_name)[0]]
+                          ProfileColors[safeString(userProfile?.user_name)[0].toUpperCase()]
                             .MainColor,
                       },
                       CommonStyles.font.bold30,
@@ -210,6 +212,10 @@ const EditProfileScreen = () => {
               </View>
             )}
             <View style={{height: scale(20)}} />
+            <Text style={CommonStyles.font.bold24}>
+              {userProfile?.user_name}
+            </Text>
+            <View style={{height: scale(20)}} />
           </View>
 
           <View style={{rowGap: scale(15)}}>
@@ -223,14 +229,13 @@ const EditProfileScreen = () => {
                   value={gender}
                   onChange={(val: any) => setGender(val)}
                 />
-                <DatePicker
+                <DatePickerModal
+                  label={'Birthday'}
                   visible={datePicker}
-                  label="Birthday"
-                  value={date}
                   setDatePicker={setDatePicker}
                   setDate={setDate}
-                  mode="date"
-                  // onChange={val => setGender(val)}
+                  value={date}
+                  onChange={(val: any) => setDate(val)}
                 />
                 <PhoneInput
                   value={phone}
@@ -308,7 +313,7 @@ const EditProfileScreen = () => {
           shadowOffset: {width: 1, height: 0.5},
           shadowRadius: scale(20),
           shadowOpacity: 0.1,
-          elevation: scale(2),
+          elevation: scale(5),
           padding: scale(20),
           flexDirection: 'row',
           borderTopLeftRadius: scale(20),
@@ -325,7 +330,7 @@ const EditProfileScreen = () => {
         />
         <Button
           label={'cancel'}
-          // onPress={onClose}
+          onPress={() => navigationService.goBack()}
           style={[{flex: 1, paddingHorizontal: 0}]}
           labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
           backgroundColor={'white'}

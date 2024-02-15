@@ -5,10 +5,19 @@ import ProfileIndexScreen from './screens/ProfileIndexScreen';
 import ProfileConnectedMailScreen from './screens/ProfileConnectedMailScreen';
 import {t} from 'i18next';
 import EditProfileScreen from './screens/EditProfileScreen';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
-const ProfileScreen: FC = () => {
+const ProfileScreen: FC = ({navigation, route}) => {
+  React.useLayoutEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+    if (routeName === Screen.EditProfileScreen){
+        navigation.setOptions({tabBarStyle: {display: 'none'}});
+    }else {
+        navigation.setOptions({tabBarStyle: {display: 'flex'}});
+    }
+}, [navigation, route]);
   return (
     <Stack.Navigator
       initialRouteName={Screen.ProfileIndexScreen}

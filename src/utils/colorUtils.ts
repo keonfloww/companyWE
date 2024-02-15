@@ -18,7 +18,7 @@ export const ProfileColors: {
   D: {MainColor: 'Deep Purple', SecondaryColor: '#D8BFD8'},
   E: {MainColor: 'Emerald Green', SecondaryColor: '#80FFA0'},
   F: {MainColor: 'Fuchsia', SecondaryColor: '#FFD9EC'},
-  G: {MainColor: 'Gold', SecondaryColor: '#FFFFCC'},
+  G: {MainColor: '#d1d15c', SecondaryColor: '#f0f0bd'},
   H: {MainColor: 'Honey', SecondaryColor: '#FFFFCC'},
   I: {MainColor: 'Indigo', SecondaryColor: '#8A2BE2'},
   J: {MainColor: 'Jade', SecondaryColor: '#66FFC2'},

@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {BaseState} from '@redux/stores';
 import {
   useUserRegisterMutation,
-  useUserVerifyMutation,
+  useUserGetMutation,
 } from '@redux/slices/api/userApi.slice';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,6 +12,8 @@ import navigationService from '@services/navigationService';
 import {Screen} from '@navigation/navigation.enums';
 import {persistSliceActions} from '@redux/slices/persist.slice';
 import BaseMailUtils from '@utils/baseMailUtils';
+import moment from 'moment';
+import DateUtils from '@utils/dateUtils';
 
 const useAuth = () => {
   const dispatch = useDispatch();
@@ -24,7 +26,7 @@ const useAuth = () => {
 
   const {signInByGoogle, signOutFirebase} = useAuthProvider();
   const [userRegister] = useUserRegisterMutation();
-  const [userVerify] = useUserVerifyMutation();
+  const [userGet] = useUserGetMutation();
 
   const signInOrSignUpByFirebase = async ({isSignUp = false}) => {
     try {
@@ -35,7 +37,6 @@ const useAuth = () => {
         LOCAL_STORAGE_KEYS.USER,
         JSON.stringify(userData.user),
       );
-
       const key = BaseMailUtils.getValueForPersistMail(userData);
       const isUserReSignInWithSameAccount = await LocalUtils.isConnectedMail(
         key,
@@ -59,14 +60,16 @@ const useAuth = () => {
             ),
           );
         }
-        const userVerifyData = await userVerify({
+        const userVerifyData = await userGet({
           id: userData.user.uid.toString(),
           is_email_address_verified: Boolean(userData.user.emailVerified),
           accessToken: accessToken,
         });
+        console.log({userVerifyData}, '----');
         const userSignIn = {
           ...userVerifyData?.data,
           creationTime: userData.user.metadata.creationTime,
+          accessToken: accessToken,
         };
         dispatch(userSliceActions.setUserProfile(userSignIn));
 
@@ -78,8 +81,16 @@ const useAuth = () => {
       }
 
       let userFromApi: any;
-      if (isSignUp) {
+      const signedInBefore =
+        moment(userData.user.metadata.creationTime) <
+        moment(userData.user.metadata.lastSignInTime);
+      const oldUser =
+        moment(userData.user.metadata.creationTime).format(
+          DateUtils.BACKEND_FORMAT,
+        ) < moment().format(DateUtils.BACKEND_FORMAT);
+      if (isSignUp && !oldUser && !signedInBefore) {
         // API register
+        console.log('register run');
         const data = await userRegister({
           id: userData.user.uid.toString(),
           user_name: userData?.user?.displayName?.toString() ?? '',
@@ -96,7 +107,8 @@ const useAuth = () => {
       } else {
         // sign in
         // API register login
-        const data = await userVerify({
+        console.log('***-----login run------------**');
+        const data = await userGet({
           id: userData.user.uid.toString(),
           is_email_address_verified: Boolean(userData.user.emailVerified),
           accessToken: accessToken,

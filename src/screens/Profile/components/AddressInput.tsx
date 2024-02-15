@@ -1,6 +1,8 @@
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import React from 'react';
 import {scale} from '@utils/mixins';
+import CommonStyles from '@screens/styles';
+import {Colors} from 'react-native-ui-lib';
 
 const AddressInput = ({
   containerStyle,
@@ -10,11 +12,20 @@ const AddressInput = ({
   onChange,
   value,
 }: any) => {
+  console.log('address', {value});
   return (
     <View style={[styles.container, containerStyle ? containerStyle : {}]}>
-      <Text style={[styles.label, labelStyle ? labelStyle : {}]}>{label}</Text>
+      <Text
+        style={[
+          CommonStyles.font.semiBold14,
+          {color: Colors.text},
+          styles.label,
+          labelStyle ? labelStyle : {},
+        ]}>
+        {label}
+      </Text>
       <TextInput
-        style={[styles.input, style]}
+        style={[CommonStyles.font.regular14,styles.input, style]}
         value={value}
         onChangeText={onChange}
         placeholder="Enter Address"
@@ -34,11 +45,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#8f8f8f',
     borderRadius: scale(100),
+    color: Colors.border,
     // width: '70%',
     // flex: 1,
-    height: scale(40),
+    height: scale(45),
     paddingHorizontal: scale(20),
-    paddingVertical: scale(10),
+    // paddingVertical: scale(10),
   },
   error: {
     borderColor: 'red',

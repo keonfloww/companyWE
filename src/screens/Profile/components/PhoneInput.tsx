@@ -1,30 +1,41 @@
 import {StyleSheet, View, TextInput} from 'react-native';
-import React, {useState} from 'react';
-import {Text} from 'react-native-ui-lib';
-import {Dropdown} from 'react-native-element-dropdown';
+import React, {useEffect, useState} from 'react';
+import {Colors, Text} from 'react-native-ui-lib';
 import {scale} from '@utils/mixins';
 import CountryPicker from 'react-native-country-picker-modal';
 import CommonStyles from '@screens/styles';
 
-const PhoneInput = ({data, value, onChange}: any) => {
+const PhoneInput = ({value, onChange}: any) => {
   const [countryVisible, setCountryVisible] = useState(false);
-  const [country, setCountry] = useState("IN");
-  const [callingCode, setCallingCode] = useState('+91');
-
-  const onSelect = (val: any) => {
-    setCallingCode(val.callingCode[0]);
-    setCountry(val.cca2);
-  }
+  const regex = /^\d+$/;
+  {console.log('isko dekh rha hi ',value, value.toString().split('-')[0])}
+  const onCountryChange = (val: any) => {
+    onChange(`${val.cca2}-${value.split('-')[1]}`);
+  };
+  useEffect(() => {
+    const va =
+      value === '' || value === null ? 'IN' : value.toString().split('-')[0];
+    console.log(value === '' || value === null, {va});
+  });
+  const onPhoneChange = (val: any) => {
+    onChange(`${value.split('-')[0] || 'IN'}-${val}`);
+  };
 
   return (
     <View style={{marginBottom: scale(20)}}>
-      <Text style={{marginBottom: scale(10)}}>Phone</Text>
+      <Text
+        style={[
+          CommonStyles.font.semiBold14,
+          {marginBottom: scale(10), color: Colors.text},
+        ]}>
+        Phone Number
+      </Text>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-        //   rowGap: scale(10),
+          //   rowGap: scale(10),
         }}>
         <CountryPicker
           containerButtonStyle={{
@@ -33,31 +44,43 @@ const PhoneInput = ({data, value, onChange}: any) => {
             borderColor: '#8f8f8f',
             borderRadius: scale(100),
             paddingHorizontal: scale(20),
-            paddingVertical: scale(0),
+            // paddingVertical: scale(0),
             alignContent: 'center',
             justifyContent: 'center',
-            marginRight:scale(10),
-            height: scale(40)
+            marginRight: scale(10),
+            height: scale(45),
           }}
-          countryCode={country}
+          countryCode={
+            value === '' || value === null
+              ? 'IN'
+              : value.toString().split('-')[0]
+          }
           visible={countryVisible}
           onClose={() => setCountryVisible(false)}
-          onSelect={val => onSelect(val) }
+          onSelect={val => onCountryChange(val)}
         />
 
         <TextInput
-          style={{
+          style={[CommonStyles.font.regular14,{
             borderWidth: 1,
             borderColor: '#8f8f8f',
             borderRadius: scale(100),
-            height: scale(40),
+            height: scale(45),
+            color: Colors.border,
             // width: '70%',
             flex: 1,
             paddingHorizontal: scale(20),
             paddingVertical: scale(10),
+          }]}
+          keyboardType="number-pad"
+          value={
+            value === '' || value === null ? '' : value.toString().split('-')[1]
+          }
+          onChangeText={(val: any) => {
+            if(regex.test(val) || val===''){
+              onPhoneChange(val)
+            }
           }}
-          value={value}
-          onChangeText={onChange}
           placeholder="phone"
         />
       </View>

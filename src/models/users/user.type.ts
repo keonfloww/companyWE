@@ -8,7 +8,7 @@ export interface IUser {
   phone_number?: string;
   gender?: string;
   images?: Image[];
-  user_profile_picture?: Image;
+  user_profile_picture?: string;
   date_of_birth?: string;
   user_address?: string;
   description?: string;
