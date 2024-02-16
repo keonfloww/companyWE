@@ -163,6 +163,23 @@ export const userSlice = createSlice({
         },
       };
     },
+    mailMarkDeletedMany: (
+      state,
+      action: PayloadAction<{metadata_ids: string[]}>,
+    ) => {
+      const itemUids = action.payload.metadata_ids;
+
+      const newMailDeletedMetadataIds = {...state?.mailDeletedMetadataIds};
+
+      itemUids?.forEach((id: string) => {
+        Object.assign(newMailDeletedMetadataIds, {[id]: true});
+      });
+
+      return {
+        ...state,
+        mailDeletedMetadataIds: newMailDeletedMetadataIds,
+      };
+    },
 
     // Sync status
     setFlagAskForDelete: (

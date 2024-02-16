@@ -2,7 +2,7 @@ import SafeView from '@components/atoms/View/SafeView';
 import {Text, View} from 'react-native';
 import MailRow from './components/MailRow';
 import {scale} from '@utils/mixins';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import useInboxScreen from './hooks/useInboxScreen';
 import usePagination from '@utils/hooks/usePagination';
 import {Email} from '@models/mail/modelMail';
@@ -10,6 +10,8 @@ import CommonStyles from '@screens/styles';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet} from 'react-native';
 import Animated, {LinearTransition} from 'react-native-reanimated';
+import DeleteMailFloatingButton from './components/DeleteMailFloatingButton';
+import useInboxScreenAction from './hooks/useInboxScreenAction';
 
 const InboxScreen = () => {
   const navigation = useNavigation();
@@ -19,6 +21,8 @@ const InboxScreen = () => {
     mailCountUnread,
     handleInboxTriggerSyncNewItem,
   } = useInboxScreen();
+  const {handleMarkDeletedMany} = useInboxScreenAction();
+
   const {data, nextPage} = usePagination<Email>(mailBoxFlatten);
   const [selectMode, setSelectMode] = useState<boolean>(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -30,6 +34,10 @@ const InboxScreen = () => {
   /**WARNING DONT CALL. Navigator has called it */
   // handleGetAllMailInConnectedMails();
 
+  const resetSelectionMode = useCallback(() => {
+    setSelectMode(false);
+    setSelectedIds([]);
+  }, []);
   useEffect(() => {
     if (mailCountUnread <= 0) {
       return;
@@ -74,10 +82,7 @@ const InboxScreen = () => {
               item={item}
               isSelectMode={selectMode}
               onSelectMode={() => setSelectMode(true)}
-              onCancelSelectMode={() => {
-                setSelectMode(false);
-                setSelectedIds([]);
-              }}
+              onCancelSelectMode={resetSelectionMode}
               onSelect={(id: string) => {
                 if (selectedIds?.includes(id)) {
                   setSelectedIds(selectedIds?.filter(i => i != id));
@@ -90,6 +95,17 @@ const InboxScreen = () => {
         }}
         ItemSeparatorComponent={() => <View style={{height: scale(12)}} />}
         showsVerticalScrollIndicator={false}
+      />
+      <DeleteMailFloatingButton
+        visible={selectMode}
+        onDelete={() => {
+          handleMarkDeletedMany(selectedIds);
+          resetSelectionMode();
+        }}
+        onCancel={() => {
+          setSelectMode(false);
+          resetSelectionMode();
+        }}
       />
     </SafeView>
   );

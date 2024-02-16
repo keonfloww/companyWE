@@ -7,6 +7,8 @@ const icYahooSrc = require('../images/ic_yahoo.png');
 const icGoogleSrc = require('../images/ic_google.png');
 const bgDefaultSrc = require('../images/png/bg_default.png');
 const logoSrc = require('../images/png/logo.png');
+const icTrashSrc = require('../images/png/ic_trash.png');
+const icCloseSrc = require('../images/png/ic_close.png');
 
 // SVG
 import IcHome from './svg/ic_home.svg';
@@ -109,6 +111,8 @@ const IMAGES = {
   logoSrc,
   icTrash,
   icLogout,
+  icTrashSrc,
+  icCloseSrc,
 };
 
 export default IMAGES;

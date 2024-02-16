@@ -4,13 +4,12 @@ import CommonStyles from '@screens/styles';
 import DateUtils from '@utils/dateUtils';
 import {scale} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
-import React, {FC, useCallback, useMemo, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
 import {Pressable, StyleSheet, TextStyle} from 'react-native';
-import {Checkbox, Colors, Drawer, Image, Text, View} from 'react-native-ui-lib';
+import {Checkbox, Colors, Drawer, Text, View} from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
 import {ColorUtils} from '@utils/colorUtils';
 import useColors from '@utils/hooks/useColors';
-// import { LightenDarkenColor } from '@utils/colorUtils';
 
 interface Props {
   item: Email;
@@ -94,6 +93,16 @@ const MailRow: FC<Props> = ({
     setSelected(true);
     onSelect(item?.metadata_id);
   }, [item?.metadata_id, onSelectMode, setSelected, onSelect]);
+
+  /**
+   * Whenever outside trigger cancel selection mode
+   * => Clear selected
+   */
+  useEffect(() => {
+    if (isSelectMode == false) {
+      setSelected(false);
+    }
+  }, [isSelectMode]);
 
   return (
     <Drawer
