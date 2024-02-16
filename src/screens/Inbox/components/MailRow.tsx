@@ -9,6 +9,7 @@ import {Pressable, StyleSheet, TextStyle} from 'react-native';
 import {Checkbox, Colors, Drawer, Text, View} from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
 import {ColorUtils} from '@utils/colorUtils';
+import useColors from '@utils/hooks/useColors';
 // import { LightenDarkenColor } from '@utils/colorUtils';
 
 interface Props {
@@ -25,6 +26,8 @@ const MailRow: FC<Props> = ({
   onSelectMode = () => {},
   onCancelSelectMode = () => {},
 }) => {
+  const _styles = useColors(styles);
+
   const {
     isRead,
     handleMarkAsRead,
@@ -73,7 +76,7 @@ const MailRow: FC<Props> = ({
           setSelected(true);
           onSelect(item?.metadata_id);
         }}>
-        <View style={styles.container}>
+        <View style={_styles.container}>
           {isSelectMode ? (
             <View>
               <Checkbox
@@ -96,7 +99,7 @@ const MailRow: FC<Props> = ({
           ) : (
             <View
               style={[
-                styles.logoContainer,
+                _styles.logoContainer,
                 {
                   backgroundColor: ColorUtils.getColorFromChar(
                     item?.sender_name,
@@ -105,7 +108,7 @@ const MailRow: FC<Props> = ({
               ]}>
               <Text
                 style={[
-                  styles.logoText,
+                  _styles.logoText,
                   {
                     color: ColorUtils.getColorFromChar(item?.sender_name)
                       .MainColor,
@@ -114,23 +117,12 @@ const MailRow: FC<Props> = ({
                 {safeString(item?.sender_name)?.[0]}
               </Text>
             </View>
-            // <Avatar
-            //   size={scale(36)}
-            //   imageProps={{resizeMode: 'contain',}}
-            //   source={
-            //     item?.images.length
-            //       ? {
-            //           uri: item?.images[0].src,
-            //         }
-            //       : IMAGES.logoSrc
-            //   }
-            // />
           )}
-          <View style={styles.mailContent}>
-            <View style={styles.mailFirstRowContainer}>
+          <View style={_styles.mailContent}>
+            <View style={_styles.mailFirstRowContainer}>
               <View
                 style={{
-                  flex: 1,
+                  flex: 3,
                   display: 'flex',
                   flexDirection: 'row',
                 }}>
@@ -143,7 +135,7 @@ const MailRow: FC<Props> = ({
                 )}
                 <Text
                   style={[
-                    styles.senderName,
+                    _styles.senderName,
                     computedDisableStyle,
                     computedBookmarkTextStyle,
                   ]}
@@ -151,20 +143,20 @@ const MailRow: FC<Props> = ({
                   {safeString(item?.sender_name)}
                 </Text>
               </View>
-              <Text style={[styles.dateTime, computedDisableStyle]}>
+              <Text style={[_styles.dateTime, computedDisableStyle]}>
                 {DateUtils.unixToFormatDefault(item?.received_on_unix)}
               </Text>
             </View>
             <View style={CommonStyles.space.s5} />
             <View style={{flex: 1}}>
               <Text
-                style={[styles.subject, computedDisableStyle]}
+                style={[_styles.subject, computedDisableStyle]}
                 numberOfLines={1}>
                 {safeString(item?.subject)}
               </Text>
               <View style={CommonStyles.space.s2} />
               <Text
-                style={[styles.shortBody, computedDisableStyle]}
+                style={[_styles.shortBody, computedDisableStyle]}
                 numberOfLines={1}>
                 {safeString(item?.short_body)}
               </Text>
@@ -206,10 +198,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   senderName: {
     ...CommonStyles.font.semiBold16,
     color: Colors.textSecondary,
+    flex: 1,
   },
   subject: {
     ...CommonStyles.font.semiBold14,
