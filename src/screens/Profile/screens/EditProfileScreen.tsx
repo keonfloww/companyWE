@@ -19,8 +19,7 @@ import {
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
 import Modal from 'react-native-modal';
-import {useState} from 'react';
-import SafeView from '@components/atoms/View/SafeView';
+import {FC, useState} from 'react';
 import {ColorUtils, EnumProfileColors, ProfileColors} from '@utils/colorUtils';
 import {safeString} from '@utils/stringUtils';
 import DatePickerModal from '../components/DatePickerModal';
@@ -35,13 +34,15 @@ import {Alert} from 'react-native';
 import {Image} from 'react-native-image-crop-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
+import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 enum EnumGender {
   MALE = 'Male',
   FEMALE = 'Female',
 }
 
-const EditProfileScreen = () => {
+const EditProfileScreen: FC = () => {
   const groupItems = [
     {
       label: t('Setting'),
@@ -210,7 +211,7 @@ const EditProfileScreen = () => {
   };
 
   return (
-    <SafeView>
+    <SafeViewForceInsets isHasHeaderTabBar={true} isSafeBottom={false}>
       <View style={[CommonStyles.view.viewLayout, {marginTop: 0}]}>
         <KeyboardAwareScrollView
           automaticallyAdjustKeyboardInsets={true}
@@ -404,6 +405,7 @@ const EditProfileScreen = () => {
           shadowOpacity: 0.1,
           elevation: scale(5),
           padding: scale(20),
+          paddingBottom: scale(50),
           flexDirection: 'row',
           borderTopLeftRadius: scale(20),
           borderTopRightRadius: scale(20),
@@ -427,7 +429,7 @@ const EditProfileScreen = () => {
           color={'#50048A'}
         />
       </View>
-    </SafeView>
+    </SafeViewForceInsets>
   );
 };
 
@@ -451,6 +453,8 @@ const styles = StyleSheet.create({
     height: scale(130),
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: scale(2),
+    paddingLeft: scale(0.5),
   },
   modalText: {textAlign: 'center', padding: scale(5), color: '#3C3C3C'},
   view: {
