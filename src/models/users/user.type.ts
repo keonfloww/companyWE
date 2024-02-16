@@ -6,7 +6,7 @@ export interface IUser {
   is_email_address_verified?: boolean;
   user_name?: string;
   phone_number?: string;
-  gender?: string;
+  gender_id?: number | null;
   images?: Image[];
   user_profile_picture?: string;
   date_of_birth?: string;

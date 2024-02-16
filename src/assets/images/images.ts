@@ -18,6 +18,10 @@ import IcConnected from './svg/ic_connected.svg';
 import IcContact from './svg/ic_contact.svg';
 import IcPrivacy from './svg/ic_privacy.svg';
 import IcTerms from './svg/ic_terms.svg';
+import ArrowDown from './svg/arrow_down.svg';
+import Photo from './svg/photo.svg';
+import Upload from './svg/upload.svg';
+import Delete from './svg/delete.svg';
 
 import icAppLogo from './svg/ic_app_logo.svg';
 import icAppLogoText from './svg/ic_app_logo_text.svg';
@@ -66,6 +70,10 @@ const IMAGES = {
   IcTerms,
   IcPrivacy,
   icCamera,
+  ArrowDown,
+  Photo,
+  Upload,
+  Delete,
 
   // MOCK,
   icM1,

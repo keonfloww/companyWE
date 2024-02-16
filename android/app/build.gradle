@@ -91,6 +91,7 @@ android {
         versionCode 1
         versionName "1.0"
         resValue "string", "build_config_package", "com.troove.troove_app"
+        vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
         debug {

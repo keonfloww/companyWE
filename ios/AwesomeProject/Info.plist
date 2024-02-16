@@ -48,6 +48,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+    <key>NSCameraUsageDescription</key>
+    <string>Troove requires camera permission for Image upload</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+  	<string>Troove requires Photo permission for Image upload</string>
+  	<key>NSPhotoLibraryAddUsageDescription</key>
+  	<string>Troove requires Photo Add permission for Image add</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Gilroy-Bold.ttf</string>

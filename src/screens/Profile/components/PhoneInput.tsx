@@ -1,21 +1,20 @@
-import {StyleSheet, View, TextInput} from 'react-native';
+import {StyleSheet, View, TextInput, Pressable} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Colors, Text} from 'react-native-ui-lib';
 import {scale} from '@utils/mixins';
 import CountryPicker from 'react-native-country-picker-modal';
 import CommonStyles from '@screens/styles';
+import IMAGES from '@assets/images/images';
 
 const PhoneInput = ({value, onChange}: any) => {
   const [countryVisible, setCountryVisible] = useState(false);
   const regex = /^\d+$/;
-  {console.log('isko dekh rha hi ',value, value.toString().split('-')[0])}
   const onCountryChange = (val: any) => {
     onChange(`${val.cca2}-${value.split('-')[1]}`);
   };
   useEffect(() => {
     const va =
       value === '' || value === null ? 'IN' : value.toString().split('-')[0];
-    console.log(value === '' || value === null, {va});
   });
   const onPhoneChange = (val: any) => {
     onChange(`${value.split('-')[0] || 'IN'}-${val}`);
@@ -37,6 +36,7 @@ const PhoneInput = ({value, onChange}: any) => {
           alignItems: 'center',
           //   rowGap: scale(10),
         }}>
+         <View style={{flexDirection: 'row', alignItems: 'center'}}> 
         <CountryPicker
           containerButtonStyle={{
             // backgroundColor: 'red',
@@ -59,6 +59,10 @@ const PhoneInput = ({value, onChange}: any) => {
           onClose={() => setCountryVisible(false)}
           onSelect={val => onCountryChange(val)}
         />
+        <Pressable onTouchStart={()=> setCountryVisible(true)} style={{position: 'absolute', right: scale(20)}}>
+          <IMAGES.ArrowDown />
+        </Pressable>
+        </View>
 
         <TextInput
           style={[CommonStyles.font.regular14,{
@@ -72,6 +76,7 @@ const PhoneInput = ({value, onChange}: any) => {
             paddingHorizontal: scale(20),
             paddingVertical: scale(10),
           }]}
+          placeholderTextColor={Colors.border}
           keyboardType="number-pad"
           value={
             value === '' || value === null ? '' : value.toString().split('-')[1]

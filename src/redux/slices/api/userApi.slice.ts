@@ -71,7 +71,12 @@ export interface IUserRegisterParams {
   user_name: string;
   email_address: string;
   is_email_address_verified: boolean;
+  user_profile_picture: string;
   sign_up_provider_id: number;
+  gender_id: number | null;
+  user_address: string;
+  date_of_birth: string;
+  phone_number: string;
   accessToken: string;
 }
 export interface IUserVerifyParams {
@@ -88,6 +93,7 @@ export interface IUserUpdateParams {
   user_profile_picture: string;
   date_of_birth: string;
   phone_number: string;
+  gender_id: number | null;
   accessToken: string;
 }
 

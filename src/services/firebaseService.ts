@@ -10,6 +10,7 @@ const useFirebaseService = () => {
       projectId: 'troove-dev',
       apiKey: 'AIzaSyAnDPFgDWxqTI7M-dA6BWSlSFrFJr_E5Qw',
       appId: '1:527645071665:android:fda65edbcaf1f7a98d3810',
+      storageBucket: 'troove-dev.appspot.com',
       clientId:
         '527645071665-2eqr8u8nb3rhjpe55p99kll6j0lk7ab6.apps.googleusercontent.com',
       androidClientId:

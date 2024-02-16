@@ -88,6 +88,7 @@ const useAuth = () => {
         moment(userData.user.metadata.creationTime).format(
           DateUtils.BACKEND_FORMAT,
         ) < moment().format(DateUtils.BACKEND_FORMAT);
+        
       if (isSignUp && !oldUser && !signedInBefore) {
         // API register
         console.log('register run');
@@ -96,9 +97,15 @@ const useAuth = () => {
           user_name: userData?.user?.displayName?.toString() ?? '',
           email_address: userData?.user?.email?.toString() ?? '',
           is_email_address_verified: userData.user.emailVerified,
+          user_profile_picture: userData?.user?.photoURL || '',
           sign_up_provider_id: 1,
+          gender_id: null,
+          user_address: '',
+          date_of_birth: '',
+          phone_number: '',
           accessToken: accessToken,
         });
+        console.log('after singin',{data})
         userFromApi = {
           ...data?.data?.data,
           creationTime: userData.user.metadata.creationTime,
@@ -113,6 +120,7 @@ const useAuth = () => {
           is_email_address_verified: Boolean(userData.user.emailVerified),
           accessToken: accessToken,
         });
+        console.log('after login',{data})
         userFromApi = {
           ...data?.data,
           creationTime: userData.user.metadata.creationTime,

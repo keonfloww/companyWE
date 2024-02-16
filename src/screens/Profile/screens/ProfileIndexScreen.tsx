@@ -78,8 +78,6 @@ const ProfileIndexScreen = () => {
       ],
     },
   ];
-
-  console.log('userProfile', userProfile);
   return (
     <LayoutBackgroundDefaultV1
       containerStyle={{

@@ -4,11 +4,14 @@ import BaseRowIconLabel from '@components/atoms/Row/BaseRowIconLabel';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
 import {useUserUpdateMutation} from '@redux/slices/api/userApi.slice';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {scale} from '@utils/mixins';
 import {t} from 'i18next';
 import {Button} from 'react-native-ui-lib';
 import {
   FlatList,
+  Linking,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -19,7 +22,7 @@ import {Text} from 'react-native-ui-lib';
 import Modal from 'react-native-modal';
 import {useState} from 'react';
 import SafeView from '@components/atoms/View/SafeView';
-import {ColorUtils} from '@utils/colorUtils';
+import {ColorUtils, EnumProfileColors, ProfileColors} from '@utils/colorUtils';
 import {safeString} from '@utils/stringUtils';
 import DatePickerModal from '../components/DatePickerModal';
 import PhoneInput from '../components/PhoneInput';
@@ -28,10 +31,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {BaseState} from '@redux/stores';
 import {userSliceActions} from '@redux/slices/user.slice';
 import DropDown from '../components/DropDown';
+import ImageUtils from '@utils/imageUtils';
+import {Alert} from 'react-native';
+import {Image} from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
-interface IFormData {
-  email: string;
-  password: string;
+enum EnumGender {
+  MALE = 'Male',
+  FEMALE = 'Female',
 }
 
 const EditProfileScreen = () => {
@@ -40,24 +48,25 @@ const EditProfileScreen = () => {
       label: t('Setting'),
       items: [
         {
-          prefixIcon: <IMAGES.IcProfile color={'#3C3C3C'} />,
+          prefixIcon: <IMAGES.Photo color={'#3C3C3C'} />,
           title: t('Take Photo'),
-          onPress: () => {
-            // navigationService.navigate(Screen.EditProfileScreen);
+          onPress: async () => {
+            uploadFromCamera();
           },
         },
         {
-          prefixIcon: <IMAGES.IcConnected color={'#3C3C3C'} />,
+          prefixIcon: <IMAGES.Upload color={'#3C3C3C'} />,
           title: t('Upload From Gallery'),
           onPress: () => {
-            // navigationService.navigate(Screen.ProfileConnectedMailScreen);
+            uploadFromGallery();
           },
         },
         {
-          prefixIcon: <IMAGES.IcConnected color={'#3C3C3C'} />,
+          prefixIcon: <IMAGES.Delete color={'#3C3C3C'} />,
           title: t('Remove Current Picture'),
           onPress: () => {
-            // navigationService.navigate(Screen.ProfileConnectedMailScreen);
+            setProfileUrl('');
+            setModal(false)
           },
         },
       ],
@@ -70,29 +79,114 @@ const EditProfileScreen = () => {
   const [userUpdate] = useUserUpdateMutation();
   const [datePicker, setDatePicker] = useState(false);
   const [date, setDate] = useState(userProfile?.date_of_birth || '');
-  const [gender, setGender] = useState(userProfile?.gender || '');
+  const [gender, setGender] = useState(userProfile?.gender_id || null);
   const [modal, setModal] = useState(false);
   const [address, setAddress] = useState(userProfile?.user_address || '');
   const [phone, setPhone] = useState(userProfile?.phone_number || '');
+  const [profileUrl, setProfileUrl] = useState(
+    userProfile?.user_profile_picture || '',
+  );
   const dispatch = useDispatch();
 
+  const onGenderChange = (val: any) => {
+    if (val.value === EnumGender.MALE) {
+      setGender(1);
+    } else if (val.value === EnumGender.FEMALE) {
+      setGender(2);
+    } else {
+      setGender(null);
+    }
+  };
+
+  const uploadImage = async (path: any) => {
+    setModal(false);
+    setTimeout(async () => {
+    global?.props?.showLoading();
+    const filename = path.substring(path.lastIndexOf('/') + 1);
+    const uploadpath =
+      Platform.OS === 'ios' ? path.replace('file://', '') : path;
+    const task = storage().ref(`images/${filename}`).putFile(uploadpath);
+    task.on('state_changed', snapshot => {
+      if (snapshot.bytesTransferred === snapshot.totalBytes) {
+        snapshot.ref.getDownloadURL().then(url => {
+          setProfileUrl(url);
+          console.log(url);
+        });
+      }
+    });
+    try {
+      await task;
+    } catch (e) {
+      console.error(e);
+    }
+    global?.props?.hideLoading();
+  }, 10);
+  };
+
+  const uploadFromGallery = async () => {
+    try {
+      await ImageUtils.handleGalleryPermission({
+        onBlocked: () => {
+          Alert.alert(
+            t('permission:requiredTitle', {key: t('Gallery')}),
+            t('permission:requiredMessage', {key: t('Gallery')}),
+            [
+              {
+                text: t('Cancel'),
+                style: 'cancel',
+              },
+              {
+                text: t('Settings'),
+                onPress: Linking.openSettings,
+              },
+            ],
+          );
+        },
+      });
+        const image: Image = await ImageUtils.openGallery();
+        let path = image.path;
+        let uploadpath =
+          Platform.OS === 'ios' ? path.replace('file://', '') : path;
+        const data = await ImageUtils.openCropper({path: uploadpath});
+        console.log({data});
+        path = data.path;
+        await uploadImage(path);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const uploadFromCamera = async () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+    })
+      .then(async image => {
+          let path = image.path;
+          let uploadpath =
+            Platform.OS === 'ios' ? path.replace('file://', '') : path;
+          const data = await ImageUtils.openCropper({path: uploadpath});
+          console.log({data});
+          path = data.path;
+          await uploadImage(path);
+      })
+      .catch(e => console.log(e));
+  };
+
   const onSubmit = async () => {
-    const data = await userUpdate({
-      id: userProfile?.id,
+    try {
+      global?.props?.showLoading();
+      const data = await userUpdate({
+        id: userProfile?.id,
       user_name: userProfile?.user_name,
       email_address: userProfile?.email_address,
       user_address: address,
-      user_profile_picture: '',
+      user_profile_picture: profileUrl,
       date_of_birth: date,
       phone_number: phone,
-      gender: gender,
+      gender_id: gender,
       accessToken: userProfile?.accessToken,
     });
-    console.log(data);
-    if (!data.error) {
-    } else {
-      console.log(data?.error?.data?.message);
-    }
     dispatch(
       userSliceActions.setUserProfile({
         ...userProfile,
@@ -101,21 +195,25 @@ const EditProfileScreen = () => {
           user_name: userProfile?.user_name,
           email_address: userProfile?.email_address,
           user_address: address,
-          user_profile_picture: '',
+          user_profile_picture: profileUrl,
           date_of_birth: date,
           phone_number: phone,
-          gender: gender,
+          gender_id: gender,
           accessToken: userProfile?.accessToken,
         },
       }),
-    );
-    navigationService.goBack();
-  };
-
-  return (
-    <SafeView>
+      );
+      global?.props?.hideLoading();
+      navigationService.goBack();
+    } catch (error) {
+      
+    }
+    };
+    
+    return (
+      <SafeView>
       <View style={CommonStyles.view.viewLayout}>
-        <ScrollView
+        <KeyboardAwareScrollView
           automaticallyAdjustKeyboardInsets={true}
           keyboardDismissMode="interactive"
           style={{display: 'flex'}}
@@ -126,12 +224,9 @@ const EditProfileScreen = () => {
               alignItems: 'center',
               marginTop: scale(30),
             }}>
-            {userProfile?.user_profile_picture ? (
+            {profileUrl ? (
               <View>
-                <Avatar
-                  source={{uri: userProfile?.user?.photoURL ?? ''}}
-                  size={scale(130)}
-                />
+                <Avatar source={{uri: profileUrl}} size={scale(130)} />
                 <Pressable
                   onPress={() => setModal(true)}
                   style={{
@@ -160,9 +255,11 @@ const EditProfileScreen = () => {
                   style={[
                     styles.logo,
                     {
-                      backgroundColor: ColorUtils.getColorFromChar(
-                        userProfile?.user_name,
-                      )?.SecondaryColor,
+                      backgroundColor: safeString(userProfile?.user_name)?.[0]
+                        ? ColorUtils.getColorFromChar(userProfile?.user_name)
+                            ?.SecondaryColor
+                        : ProfileColors?.[EnumProfileColors.DEFAULT]
+                            ?.SecondaryColor,
                     },
                   ]}>
                   <Text
@@ -170,9 +267,11 @@ const EditProfileScreen = () => {
                       {
                         textAlign: 'center',
                         textAlignVertical: 'center',
-                        color: ColorUtils.getColorFromChar(
-                          userProfile?.user_name,
-                        )?.MainColor,
+                        color: safeString(userProfile?.user_name)?.[0]
+                          ? ColorUtils.getColorFromChar(userProfile?.user_name)
+                              ?.MainColor
+                          : ProfileColors?.[EnumProfileColors.DEFAULT]
+                              ?.MainColor,
                       },
                       CommonStyles.font.bold30,
                     ]}>
@@ -217,8 +316,8 @@ const EditProfileScreen = () => {
               </Text>
               <View style={{marginBottom: scale(10)}}>
                 <DropDown
-                  value={gender}
-                  onChange={(val: any) => setGender(val)}
+                  value={!gender ? '' : gender === 1 ? 'Male' : 'Female'}
+                  onChange={(val: any) => onGenderChange(val)}
                 />
                 <DatePickerModal
                   label={'Birthday'}
@@ -240,7 +339,7 @@ const EditProfileScreen = () => {
             </View>
             <View style={{height: scale(60)}} />
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
         <Modal
           isVisible={modal}
           style={{padding: 0, margin: 0, backgroundColor: 'transparent'}}>

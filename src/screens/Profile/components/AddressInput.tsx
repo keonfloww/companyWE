@@ -12,7 +12,6 @@ const AddressInput = ({
   onChange,
   value,
 }: any) => {
-  console.log('address', {value});
   return (
     <View style={[styles.container, containerStyle ? containerStyle : {}]}>
       <Text
@@ -29,6 +28,7 @@ const AddressInput = ({
         value={value}
         onChangeText={onChange}
         placeholder="Enter Address"
+        placeholderTextColor={Colors.border}
       />
     </View>
   );

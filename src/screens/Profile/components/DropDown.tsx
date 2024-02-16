@@ -9,7 +9,7 @@ const DropDown = ({data, value, onChange}: any) => {
   const renderItem = (item: {label: string; value: string}) => {
     return (
       <View style={styles.dd_item_style}>
-        <Text style={styles.dd_item_textstyle}>{item.value}</Text>
+        <Text style={[CommonStyles.font.regular14,styles.dd_item_textstyle]}>{item.value}</Text>
       </View>
     );
   };
@@ -34,7 +34,9 @@ const DropDown = ({data, value, onChange}: any) => {
         ]}
         value={value}
         renderItem={renderItem}
-        onChange={val => onChange(val)}
+        onChange={val =>{
+          onChange(val)
+        }}
         labelField={'label'}
         valueField={'value'}
         selectedTextStyle={[
@@ -69,24 +71,26 @@ const DropDown = ({data, value, onChange}: any) => {
 const styles = StyleSheet.create({
   dd_item_style: {
     flexDirection: 'row',
+    marginTop: scale(15),
     borderBottomWidth: 0,
     borderBottomColor: 'gray',
     alignItems: 'center',
     // backgroundColor: 'red',
-    borderRadius: scale(10)
+    borderRadius: scale(15)
   },
   dd_item_textstyle: {
-    marginVertical: scale(10),
+    marginBottom: scale(15),
     marginHorizontal: scale(20),
     paddingRight: scale(50),
     borderRadius: scale(10),
     paddingLeft: 0,
-
+    color: Colors.border,
     flex: 1,
   },
   selectedTextStyle: {
     // marginLeft: 8,
     color: Colors.border,
+    borderRadius: scale(15)
     // backgroundColor: 'red'
   },
 });
