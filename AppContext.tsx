@@ -2,7 +2,6 @@ import React, {
   PropsWithChildren,
   createContext,
   useCallback,
-  useEffect,
   useState,
 } from 'react';
 import {RootSiblingPortal} from 'react-native-root-siblings';
@@ -16,6 +15,7 @@ import CommonStyles from '@screens/styles';
 import {scale} from '@utils/mixins';
 import {t} from 'i18next';
 import {StyleSheet, Text, View} from 'react-native';
+import DebugView from '@components/molecules/DebugView';
 
 const Context = createContext({});
 
@@ -26,13 +26,7 @@ const Context = createContext({});
  */
 let toasts: any;
 const AppProvider = ({children}: PropsWithChildren) => {
-  const {
-    mailCountUnread,
-    computedIsShowDeleteAfterSyncedMail,
-
-    handleMoveMailToTrash,
-    handleSetFlagAskForDelete,
-  } = useInboxScreen();
+  const {handleMoveMailToTrash, handleSetFlagAskForDelete} = useInboxScreen();
 
   const [isShowDeleteAfterSyncedMail, setIsShowDeleteAfterSyncedMail] =
     useState(false);
