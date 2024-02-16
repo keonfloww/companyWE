@@ -23,7 +23,7 @@ export const ProfileColors: {
   I: {MainColor: '#4b0082', SecondaryColor: '#8A2BE2'},
   J: {MainColor: '#00a86b', SecondaryColor: '#66FFC2'},
   K: {MainColor: '#c3b091', SecondaryColor: '#F5F5DC'},
-  L: {MainColor: '#e6e6fa', SecondaryColor: '#E6E6FA'},
+  L: {MainColor: '#A4A4B4', SecondaryColor: '#E6E6FA'},
   M: {MainColor: '#ba16ba', SecondaryColor: '#fa96fa'},
   N: {MainColor: '#000080', SecondaryColor: '#00008B'},
   O: {MainColor: '#eb872f', SecondaryColor: '#ffd5b0'},
