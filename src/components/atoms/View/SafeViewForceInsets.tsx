@@ -5,11 +5,13 @@ import {Colors} from 'react-native-ui-lib';
 
 interface Props extends PropsWithChildren {
   isSafeBottom?: boolean;
+  isSafeTop?: boolean;
   isHasHeaderTabBar: boolean;
 }
 const SafeViewForceInsets: FC<Props> = ({
   children,
-  isSafeBottom = false,
+  isSafeBottom = true,
+  isSafeTop = true,
   isHasHeaderTabBar,
 }) => {
   const insets = useSafeAreaInsets();
@@ -25,6 +27,11 @@ const SafeViewForceInsets: FC<Props> = ({
             : {
                 marginBottom:
                   -insets.bottom - (isHasHeaderTabBar ? insets.top : 0),
+              },
+          isSafeTop
+            ? {}
+            : {
+                marginTop: -insets.top,
               },
         ]}>
         {children}

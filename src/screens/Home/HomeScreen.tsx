@@ -1,26 +1,21 @@
-import SafeView from '@components/atoms/View/SafeView';
 import {Divider} from '@rneui/base';
 import {scale} from '@utils/mixins';
 import React, {FC, Fragment, useState} from 'react';
-import {
-  Platform,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native';
 import HomeHeader from './components/HomeHeader';
 import HomeCategoryList from './components/HomeCategoryList';
 import HomeDontMissOut from './components/HomeDontMissOut';
 import HomeSection from './components/HomeSection';
 import {StatusBar} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
 
 const HomeScreen: FC<any> = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const insets = useSafeAreaInsets();
   return (
-    <SafeView>
+    <SafeViewForceInsets
+      isHasHeaderTabBar={false}
+      isSafeTop={false}
+      isSafeBottom={true}>
       {/* Header */}
       <View
         style={{
@@ -78,7 +73,7 @@ const HomeScreen: FC<any> = () => {
           </Fragment>
         ))}
       </ScrollView>
-    </SafeView>
+    </SafeViewForceInsets>
   );
 };
 
