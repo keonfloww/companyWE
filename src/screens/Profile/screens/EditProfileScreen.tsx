@@ -128,8 +128,8 @@ const EditProfileScreen = () => {
       await ImageUtils.handleGalleryPermission({
         onBlocked: () => {
           Alert.alert(
-            t('permission:requiredTitle', {key: t('Gallery')}),
-            t('permission:requiredMessage', {key: t('Gallery')}),
+            t('Gallery Permission', {key: t('Gallery')}),
+            t('Gallery Permission is required for image upload', {key: t('Gallery')}),
             [
               {
                 text: t('Cancel'),
