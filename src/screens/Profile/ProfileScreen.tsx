@@ -6,11 +6,8 @@ import ProfileConnectedMailScreen from './screens/ProfileConnectedMailScreen';
 import {t} from 'i18next';
 import EditProfileScreen from './screens/EditProfileScreen';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-import IMAGES from '@assets/images/images';
 import {Colors} from 'react-native-ui-lib';
-import {ImageStore} from 'react-native';
-import CommonStyles from '@screens/styles';
-import {scale} from '@utils/mixins';
+import MixinsTabBar from '@utils/mixinsTabBar';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +36,8 @@ const ProfileScreen: FC = ({navigation, route}) => {
           headerBackTitle: '',
           title: t('screen:profileConnectedMail'),
           headerBackTitleVisible: false,
+          headerTintColor: Colors.text,
+          headerLeft: MixinsTabBar.headerBackDefault,
         }}
         name={Screen.ProfileConnectedMailScreen}
         component={ProfileConnectedMailScreen}
@@ -50,15 +49,7 @@ const ProfileScreen: FC = ({navigation, route}) => {
           title: t('Your Profile'),
           headerBackTitleVisible: false,
           headerTintColor: Colors.text,
-          headerLeft: props => {
-            return (
-              <IMAGES.icBack
-                {...props}
-                {...CommonStyles.icon.icon24}
-                style={{marginLeft: scale(5)}}
-              />
-            );
-          },
+          headerLeft: MixinsTabBar.headerBackDefault,
         }}
         name={Screen.EditProfileScreen}
         component={EditProfileScreen}
