@@ -21,6 +21,7 @@ const initialState: {
   // mail status
   mailReadMetadataIds: {[key in string]: boolean};
   mailBookmarkMetadataIds: {[key in string]: boolean};
+  mailDeletedMetadataIds: {[key in string]: boolean};
 
   // Action marker
   isAskedForDeleteMail?: boolean;
@@ -33,6 +34,7 @@ const initialState: {
 
   mailReadMetadataIds: {},
   mailBookmarkMetadataIds: {},
+  mailDeletedMetadataIds: {},
 
   isAskedForDeleteMail: false,
 };
@@ -142,18 +144,27 @@ export const userSlice = createSlice({
       };
     },
     mailMarkBookmark: (state, action: PayloadAction<{metadata_id: string}>) => {
+      const itemUid = action.payload.metadata_id;
       return {
         ...state,
         mailBookmarkMetadataIds: {
           ...state?.mailBookmarkMetadataIds,
-          [action.payload.metadata_id]: state?.mailBookmarkMetadataIds[
-            action.payload.metadata_id
-          ]
-            ? false
-            : true,
+          [itemUid]: !state?.mailBookmarkMetadataIds[itemUid],
         },
       };
     },
+    mailMarkDeleted: (state, action: PayloadAction<{metadata_id: string}>) => {
+      const itemUid = action.payload.metadata_id;
+      return {
+        ...state,
+        mailDeletedMetadataIds: {
+          ...state?.mailDeletedMetadataIds,
+          [itemUid]: true,
+        },
+      };
+    },
+
+    // Sync status
     setFlagAskForDelete: (
       state,
       action: PayloadAction<{shouldAsk: boolean}>,

@@ -4,7 +4,7 @@ import CommonStyles from '@screens/styles';
 import DateUtils from '@utils/dateUtils';
 import {scale} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
-import React, {FC, useMemo, useState} from 'react';
+import React, {FC, useCallback, useMemo, useState} from 'react';
 import {Pressable, StyleSheet, TextStyle} from 'react-native';
 import {Checkbox, Colors, Drawer, Image, Text, View} from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
@@ -34,6 +34,8 @@ const MailRow: FC<Props> = ({
 
     isBookMark,
     handleMarkBookMark,
+
+    handleMarkDeleted,
   } = useMailItem({item});
   const [selected, setSelected] = useState(false);
 
@@ -51,38 +53,59 @@ const MailRow: FC<Props> = ({
     };
   }, [isBookMark]);
 
+  const leftItem = useMemo(() => {
+    return {
+      width: scale(78),
+      customElement: isRead ? (
+        <IMAGES.icMail color={Colors.white} />
+      ) : (
+        <IMAGES.icMailOpen />
+      ),
+      background: Colors.success,
+      onPress: handleMarkAsRead,
+    };
+  }, [isRead, handleMarkAsRead]);
+
+  const rightItems = useMemo(() => {
+    return [
+      {
+        width: scale(78),
+        customElement: isBookMark ? (
+          <IMAGES.icUnBookmark {...CommonStyles.icon.icon24} />
+        ) : (
+          <IMAGES.icBookMarkAction {...CommonStyles.icon.icon24} />
+        ),
+        background: Colors.primary,
+        onPress: handleMarkBookMark,
+      },
+      {
+        width: scale(78),
+        customElement: (
+          <IMAGES.icTrash {...CommonStyles.icon.icon24} color={Colors.white} />
+        ),
+        background: Colors.error,
+        onPress: handleMarkDeleted,
+      },
+    ];
+  }, [isBookMark, handleMarkBookMark, handleMarkDeleted]);
+
+  const onLongPressItem = useCallback(() => {
+    onSelectMode();
+    setSelected(true);
+    onSelect(item?.metadata_id);
+  }, [item?.metadata_id, onSelectMode, setSelected, onSelect]);
+
   return (
     <Drawer
-      useNativeAnimations={true}
+      bounciness={1}
+      // useNativeAnimations={true}
+      disableHaptic={true}
+      fullSwipeLeft={false}
+      fullSwipeRight={false}
       onDragStart={onCancelSelectMode}
-      rightItems={[
-        {
-          width: scale(78),
-          customElement: isBookMark ? (
-            <IMAGES.icUnBookmark {...CommonStyles.icon.icon24} />
-          ) : (
-            <IMAGES.icBookMarkAction {...CommonStyles.icon.icon24} />
-          ),
-          background: Colors.primary,
-          onPress: handleMarkBookMark,
-        },
-      ]}
-      leftItem={{
-        width: scale(78),
-        customElement: isRead ? (
-          <IMAGES.icMail color={Colors.white} />
-        ) : (
-          <IMAGES.icMailOpen />
-        ),
-        background: Colors.success,
-        onPress: handleMarkAsRead,
-      }}>
-      <Pressable
-        onLongPress={() => {
-          onSelectMode();
-          setSelected(true);
-          onSelect(item?.metadata_id);
-        }}>
+      leftItem={leftItem}
+      rightItems={rightItems}>
+      <Pressable onLongPress={onLongPressItem}>
         <View style={_styles.container}>
           {isSelectMode ? (
             <View>
@@ -91,8 +114,8 @@ const MailRow: FC<Props> = ({
                 iconColor={Colors.white}
                 outline
                 containerStyle={{
-                  width: scale(36),
-                  height: scale(36),
+                  width: scale(34),
+                  height: scale(34),
                   backgroundColor: selected ? Colors.primary : Colors.white,
                 }}
                 borderRadius={99}

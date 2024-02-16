@@ -1,5 +1,5 @@
 import SafeView from '@components/atoms/View/SafeView';
-import {FlatList, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import MailRow from './components/MailRow';
 import {scale} from '@utils/mixins';
 import React, {useEffect, useState} from 'react';
@@ -9,6 +9,7 @@ import {Email} from '@models/mail/modelMail';
 import CommonStyles from '@screens/styles';
 import {useNavigation} from '@react-navigation/native';
 import {StyleSheet} from 'react-native';
+import Animated, {LinearTransition} from 'react-native-reanimated';
 
 const InboxScreen = () => {
   const navigation = useNavigation();
@@ -16,11 +17,13 @@ const InboxScreen = () => {
     mailBoxFlatten,
 
     mailCountUnread,
+    handleInboxTriggerSyncNewItem,
   } = useInboxScreen();
   const {data, nextPage} = usePagination<Email>(mailBoxFlatten);
   const [selectMode, setSelectMode] = useState<boolean>(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
+  const [refreshing, setRefreshing] = useState(false);
   // console.log('mailBoxFlatten?.length', mailBoxFlatten?.length);
   // console.log('data?.length', data?.length);
 
@@ -50,16 +53,21 @@ const InboxScreen = () => {
         )}
       </View>
       <View style={{height: scale(10)}} />
-      <FlatList
+      <Animated.FlatList
+        itemLayoutAnimation={LinearTransition.damping(10)}
         onEndReachedThreshold={0.7}
         onEndReached={nextPage}
-        refreshing={false}
+        refreshing={refreshing}
         onRefresh={() => {
-          // setPage(0);
+          setRefreshing(true);
+          // handleInboxTriggerSyncNewItem();
           // WARNING: NOTICE THE DUPLICATE PROCESS
-          // handleGetAllMailInConnectedMails();
+          setTimeout(() => {
+            setRefreshing(false);
+          }, 1000);
         }}
         data={data}
+        keyExtractor={(item, index) => item?.metadata_id ?? index}
         renderItem={({item}) => {
           return (
             <MailRow

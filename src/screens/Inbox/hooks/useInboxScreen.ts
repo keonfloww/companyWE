@@ -36,8 +36,11 @@ const useInboxScreen = () => {
   }, [userState?.connectedMails, userState?.syncedMailAddress]);
 
   const mailBoxFlatten = useMemo(
-    () => userState?.mailbox,
-    [userState?.mailbox],
+    () =>
+      userState?.mailbox?.filter(
+        mail => !userState.mailDeletedMetadataIds?.[mail?.metadata_id],
+      ),
+    [userState?.mailbox, userState.mailDeletedMetadataIds],
   );
 
   // MEMO ---------------------
@@ -56,17 +59,23 @@ const useInboxScreen = () => {
     [connectedMailsUnsynced?.length, userState?.isAskedForDeleteMail],
   );
 
+  const computedIsSyncing = useMemo(() => {
+    return (
+      userState.syncedMailAddress?.length <= connectedMailsUnsynced?.length
+    );
+  }, [connectedMailsUnsynced?.length, userState.syncedMailAddress?.length]);
+
   // FUNCTIONS ---------------------
   // TODO: Handle the process when the sync is not done but app is killed
   const handleGetByFireBaseMail = async (
     targetMail: FireBaseMailCredentials & FireBaseMailCredentialUpdated,
   ) => {
+    // console.log('handleGetByFireBaseMail', {
+    //   address: targetMail.email,
+    //   next_page_token: targetMail.next_page_token,
+    // });
     let next_page_token = targetMail?.next_page_token || null;
 
-    console.log(
-      'handleGetAllMailInConnectedMails targetMail.email',
-      targetMail.email,
-    );
     try {
       while (true) {
         let mailAuth: IMailAuth2Params = {
@@ -138,6 +147,7 @@ const useInboxScreen = () => {
               mail: targetMail.email,
             }),
           );
+          // TODO: If many mails is syncing. Wait to all syncing process done
           handleSetFlagAskForDelete({shouldAsk: true});
           global?.props?.showDeleteMailModal();
           break;
@@ -175,6 +185,23 @@ const useInboxScreen = () => {
   //     console.log('error', error);
   //   }
   // };
+
+  /**
+   * Description:
+   * Refresh my inbox by pulling down on the screen,
+   * Then sync the latest emails from the original inbox to the troove.
+   */
+  const handleInboxTriggerSyncNewItem = () => {
+    if (computedIsSyncing) {
+      console.info('In syncing process, skip pull to handleRefresh');
+      return;
+    }
+
+    for (let mail of userState.connectedMails) {
+      handleGetByFireBaseMail(mail);
+    }
+    dispatch(userSliceActions.connectedMailResetSync());
+  };
 
   const handleSetFlagAskForDelete = ({
     shouldAsk = false,
@@ -220,6 +247,7 @@ const useInboxScreen = () => {
     handleSetFlagAskForDelete,
 
     handleGetByFireBaseMail,
+    handleInboxTriggerSyncNewItem,
   };
 };
 
