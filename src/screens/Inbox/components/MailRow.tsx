@@ -6,7 +6,7 @@ import {scale} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
 import React, {FC, useMemo, useState} from 'react';
 import {Pressable, StyleSheet, TextStyle} from 'react-native';
-import {Checkbox, Colors, Drawer, Text, View} from 'react-native-ui-lib';
+import {Checkbox, Colors, Drawer, Image, Text, View} from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
 import {ColorUtils} from '@utils/colorUtils';
 import useColors from '@utils/hooks/useColors';
@@ -58,19 +58,26 @@ const MailRow: FC<Props> = ({
       rightItems={[
         {
           width: scale(78),
-          customElement: <IMAGES.icUnBookmark />,
+          customElement: isBookMark ? (
+            <IMAGES.icUnBookmark {...CommonStyles.icon.icon24} />
+          ) : (
+            <IMAGES.icBookMarkAction {...CommonStyles.icon.icon24} />
+          ),
           background: Colors.primary,
           onPress: handleMarkBookMark,
         },
       ]}
       leftItem={{
         width: scale(78),
-        customElement: <IMAGES.icMailOpen />,
+        customElement: isRead ? (
+          <IMAGES.icMail color={Colors.white} />
+        ) : (
+          <IMAGES.icMailOpen />
+        ),
         background: Colors.success,
-        onPress: () => console.log('icMailOpen pressed'),
+        onPress: handleMarkAsRead,
       }}>
       <Pressable
-        onPress={handleMarkAsRead}
         onLongPress={() => {
           onSelectMode();
           setSelected(true);

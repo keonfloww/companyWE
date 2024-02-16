@@ -106,6 +106,9 @@ export const userSlice = createSlice({
         ),
       };
     },
+    connectedMailResetSync: state => {
+      return {...state, syncedMailAddress: []};
+    },
     connectedMailUpdateProgress: (
       state,
       action: PayloadAction<{
@@ -128,11 +131,13 @@ export const userSlice = createSlice({
 
     // UI State
     mailMarkAsRead: (state, action: PayloadAction<{metadata_id: string}>) => {
+      const itemUid = action.payload.metadata_id;
+
       return {
         ...state,
         mailReadMetadataIds: {
           ...state?.mailReadMetadataIds,
-          [action.payload.metadata_id]: true,
+          [itemUid]: !state?.mailReadMetadataIds?.[itemUid],
         },
       };
     },
