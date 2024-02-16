@@ -5,8 +5,8 @@ import DateUtils from '@utils/dateUtils';
 import {scale} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
 import React, {FC, useMemo, useState} from 'react';
-import {Pressable, StyleSheet} from 'react-native';
-import {Checkbox, Drawer, Text, View} from 'react-native-ui-lib';
+import {Pressable, StyleSheet, TextStyle} from 'react-native';
+import {Checkbox, Colors, Drawer, Text, View} from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
 import {ColorUtils} from '@utils/colorUtils';
 // import { LightenDarkenColor } from '@utils/colorUtils';
@@ -38,24 +38,15 @@ const MailRow: FC<Props> = ({
     return isRead ? styles.textDisable : {};
   }, [isRead]);
 
-  const lightenHexColor = (hexColor, magnitude) => {
-    hexColor = hexColor.replace(`#`, ``);
-    if (hexColor.length === 6) {
-      const decimalColor = parseInt(hexColor, 16);
-      let r = (decimalColor >> 16) + magnitude;
-      r > 255 && (r = 255);
-      r < 0 && (r = 0);
-      let g = (decimalColor & 0x0000ff) + magnitude;
-      g > 255 && (g = 255);
-      g < 0 && (g = 0);
-      let b = ((decimalColor >> 8) & 0x00ff) + magnitude;
-      b > 255 && (b = 255);
-      b < 0 && (b = 0);
-      return `#${(g | (b << 8) | (r << 16)).toString(16)}`;
-    } else {
-      return hexColor;
+  const computedBookmarkTextStyle = useMemo((): TextStyle => {
+    if (!isBookMark) {
+      return {};
     }
-  };
+
+    return {
+      color: Colors.primary,
+    };
+  }, [isBookMark]);
 
   return (
     <Drawer
@@ -65,14 +56,14 @@ const MailRow: FC<Props> = ({
         {
           width: scale(78),
           customElement: <IMAGES.icUnBookmark />,
-          background: '#50048A',
+          background: Colors.primary,
           onPress: handleMarkBookMark,
         },
       ]}
       leftItem={{
         width: scale(78),
         customElement: <IMAGES.icMailOpen />,
-        background: '#20C997',
+        background: Colors.success,
         onPress: () => console.log('icMailOpen pressed'),
       }}>
       <Pressable
@@ -86,13 +77,13 @@ const MailRow: FC<Props> = ({
           {isSelectMode ? (
             <View>
               <Checkbox
-                color="#50048A"
-                iconColor="white"
+                color={Colors.primary}
+                iconColor={Colors.white}
                 outline
                 containerStyle={{
                   width: scale(36),
                   height: scale(36),
-                  backgroundColor: selected ? '#50048A' : 'white',
+                  backgroundColor: selected ? Colors.primary : Colors.white,
                 }}
                 borderRadius={99}
                 value={selected}
@@ -105,7 +96,7 @@ const MailRow: FC<Props> = ({
           ) : (
             <View
               style={[
-                styles.logo,
+                styles.logoContainer,
                 {
                   backgroundColor: ColorUtils.getColorFromChar(
                     item?.sender_name,
@@ -114,13 +105,11 @@ const MailRow: FC<Props> = ({
               ]}>
               <Text
                 style={[
+                  styles.logoText,
                   {
-                    textAlign: 'center',
-                    textAlignVertical: 'center',
                     color: ColorUtils.getColorFromChar(item?.sender_name)
                       .MainColor,
                   },
-                  CommonStyles.font.semiBold16,
                 ]}>
                 {safeString(item?.sender_name)?.[0]}
               </Text>
@@ -147,13 +136,17 @@ const MailRow: FC<Props> = ({
                 }}>
                 {isBookMark && (
                   <IMAGES.icBookMark
-                    height={18}
-                    color={'#50048A'}
-                    fill={'#50048A'}
+                    height={scale(18)}
+                    color={Colors.primary}
+                    fill={Colors.primary}
                   />
                 )}
                 <Text
-                  style={[styles.senderName, computedDisableStyle]}
+                  style={[
+                    styles.senderName,
+                    computedDisableStyle,
+                    computedBookmarkTextStyle,
+                  ]}
                   numberOfLines={1}>
                   {safeString(item?.sender_name)}
                 </Text>
@@ -162,14 +155,14 @@ const MailRow: FC<Props> = ({
                 {DateUtils.unixToFormatDefault(item?.received_on_unix)}
               </Text>
             </View>
-            <View style={{height: scale(5)}} />
+            <View style={CommonStyles.space.s5} />
             <View style={{flex: 1}}>
               <Text
                 style={[styles.subject, computedDisableStyle]}
                 numberOfLines={1}>
                 {safeString(item?.subject)}
               </Text>
-              <View style={{height: scale(2)}} />
+              <View style={CommonStyles.space.s2} />
               <Text
                 style={[styles.shortBody, computedDisableStyle]}
                 numberOfLines={1}>
@@ -190,16 +183,23 @@ const styles = StyleSheet.create({
     columnGap: scale(12),
     paddingHorizontal: scale(20),
     paddingBottom: scale(10),
-    backgroundColor: 'white',
+    backgroundColor: Colors.white,
   },
-  logo: {
+  logoContainer: {
     borderRadius: scale(36),
-    borderColor: '#DADADA',
+    borderColor: Colors.borderAvatar,
     borderWidth: scale(1),
     width: scale(36),
     height: scale(36),
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logoText: {
+    ...CommonStyles.font.semiBold16,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    paddingTop: scale(2),
+    paddingLeft: scale(0.5),
   },
   mailContent: {flex: 1},
   mailFirstRowContainer: {
@@ -209,22 +209,22 @@ const styles = StyleSheet.create({
   },
   senderName: {
     ...CommonStyles.font.semiBold16,
-    color: '#3C3C3C',
+    color: Colors.textSecondary,
   },
   subject: {
     ...CommonStyles.font.semiBold14,
-    color: '#3C3C3C',
+    color: Colors.textSecondary,
   },
   dateTime: {
     ...CommonStyles.font.semiBold12,
-    color: '#3C3C3C',
+    color: Colors.textSecondary,
   },
   shortBody: {
     ...CommonStyles.font.regular14,
-    color: '#3C3C3C',
+    color: Colors.textSecondary,
   },
   textDisable: {
-    color: '#757575',
+    color: Colors.textDisable,
     fontFamily: CommonStyles.fontFamily.regular,
   },
 });
