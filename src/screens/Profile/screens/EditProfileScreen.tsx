@@ -13,7 +13,6 @@ import {
   Linking,
   Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
@@ -66,7 +65,7 @@ const EditProfileScreen = () => {
           title: t('Remove Current Picture'),
           onPress: () => {
             setProfileUrl('');
-            setModal(false)
+            setModal(false);
           },
         },
       ],
@@ -101,26 +100,26 @@ const EditProfileScreen = () => {
   const uploadImage = async (path: any) => {
     setModal(false);
     setTimeout(async () => {
-    global?.props?.showLoading();
-    const filename = path.substring(path.lastIndexOf('/') + 1);
-    const uploadpath =
-      Platform.OS === 'ios' ? path.replace('file://', '') : path;
-    const task = storage().ref(`images/${filename}`).putFile(uploadpath);
-    task.on('state_changed', snapshot => {
-      if (snapshot.bytesTransferred === snapshot.totalBytes) {
-        snapshot.ref.getDownloadURL().then(url => {
-          setProfileUrl(url);
-          console.log(url);
-        });
+      global?.props?.showLoading();
+      const filename = path.substring(path.lastIndexOf('/') + 1);
+      const uploadpath =
+        Platform.OS === 'ios' ? path.replace('file://', '') : path;
+      const task = storage().ref(`images/${filename}`).putFile(uploadpath);
+      task.on('state_changed', snapshot => {
+        if (snapshot.bytesTransferred === snapshot.totalBytes) {
+          snapshot.ref.getDownloadURL().then(url => {
+            setProfileUrl(url);
+            console.log(url);
+          });
+        }
+      });
+      try {
+        await task;
+      } catch (e) {
+        console.error(e);
       }
-    });
-    try {
-      await task;
-    } catch (e) {
-      console.error(e);
-    }
-    global?.props?.hideLoading();
-  }, 10);
+      global?.props?.hideLoading();
+    }, 10);
   };
 
   const uploadFromGallery = async () => {
@@ -129,7 +128,9 @@ const EditProfileScreen = () => {
         onBlocked: () => {
           Alert.alert(
             t('Gallery Permission', {key: t('Gallery')}),
-            t('Gallery Permission is required for image upload', {key: t('Gallery')}),
+            t('Gallery Permission is required for image upload', {
+              key: t('Gallery'),
+            }),
             [
               {
                 text: t('Cancel'),
@@ -143,14 +144,14 @@ const EditProfileScreen = () => {
           );
         },
       });
-        const image: Image = await ImageUtils.openGallery();
-        let path = image.path;
-        let uploadpath =
-          Platform.OS === 'ios' ? path.replace('file://', '') : path;
-        const data = await ImageUtils.openCropper({path: uploadpath});
-        console.log({data});
-        path = data.path;
-        await uploadImage(path);
+      const image: Image = await ImageUtils.openGallery();
+      let path = image.path;
+      let uploadpath =
+        Platform.OS === 'ios' ? path.replace('file://', '') : path;
+      const data = await ImageUtils.openCropper({path: uploadpath});
+      console.log({data});
+      path = data.path;
+      await uploadImage(path);
     } catch (e) {
       console.log(e);
     }
@@ -162,13 +163,13 @@ const EditProfileScreen = () => {
       height: 400,
     })
       .then(async image => {
-          let path = image.path;
-          let uploadpath =
-            Platform.OS === 'ios' ? path.replace('file://', '') : path;
-          const data = await ImageUtils.openCropper({path: uploadpath});
-          console.log({data});
-          path = data.path;
-          await uploadImage(path);
+        let path = image.path;
+        let uploadpath =
+          Platform.OS === 'ios' ? path.replace('file://', '') : path;
+        const data = await ImageUtils.openCropper({path: uploadpath});
+        console.log({data});
+        path = data.path;
+        await uploadImage(path);
       })
       .catch(e => console.log(e));
   };
@@ -178,41 +179,39 @@ const EditProfileScreen = () => {
       global?.props?.showLoading();
       const data = await userUpdate({
         id: userProfile?.id,
-      user_name: userProfile?.user_name,
-      email_address: userProfile?.email_address,
-      user_address: address,
-      user_profile_picture: profileUrl,
-      date_of_birth: date,
-      phone_number: phone,
-      gender_id: gender,
-      accessToken: userProfile?.accessToken,
-    });
-    dispatch(
-      userSliceActions.setUserProfile({
-        ...userProfile,
-        ...{
-          id: userProfile?.id,
-          user_name: userProfile?.user_name,
-          email_address: userProfile?.email_address,
-          user_address: address,
-          user_profile_picture: profileUrl,
-          date_of_birth: date,
-          phone_number: phone,
-          gender_id: gender,
-          accessToken: userProfile?.accessToken,
-        },
-      }),
+        user_name: userProfile?.user_name,
+        email_address: userProfile?.email_address,
+        user_address: address,
+        user_profile_picture: profileUrl,
+        date_of_birth: date,
+        phone_number: phone,
+        gender_id: gender,
+        accessToken: userProfile?.accessToken,
+      });
+      dispatch(
+        userSliceActions.setUserProfile({
+          ...userProfile,
+          ...{
+            id: userProfile?.id,
+            user_name: userProfile?.user_name,
+            email_address: userProfile?.email_address,
+            user_address: address,
+            user_profile_picture: profileUrl,
+            date_of_birth: date,
+            phone_number: phone,
+            gender_id: gender,
+            accessToken: userProfile?.accessToken,
+          },
+        }),
       );
       global?.props?.hideLoading();
       navigationService.goBack();
-    } catch (error) {
-      
-    }
-    };
-    
-    return (
-      <SafeView>
-      <View style={CommonStyles.view.viewLayout}>
+    } catch (error) {}
+  };
+
+  return (
+    <SafeView>
+      <View style={[CommonStyles.view.viewLayout, {marginTop: 0}]}>
         <KeyboardAwareScrollView
           automaticallyAdjustKeyboardInsets={true}
           keyboardDismissMode="interactive"
@@ -222,7 +221,7 @@ const EditProfileScreen = () => {
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              marginTop: scale(30),
+              marginTop: scale(21),
             }}>
             {profileUrl ? (
               <View>
@@ -420,7 +419,7 @@ const EditProfileScreen = () => {
         />
         <Button
           label={'cancel'}
-          onPress={() => navigationService.goBack()}
+          onPress={navigationService.goBack}
           style={[{flex: 1, paddingHorizontal: 0}]}
           labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
           backgroundColor={'white'}

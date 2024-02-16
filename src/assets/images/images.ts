@@ -56,6 +56,7 @@ import icMail from './svg/ic_mail.svg';
 import icTrash from './svg/ic_trash.svg';
 import icLogout from './svg/ic_logout.svg';
 import icCamera from './svg/camera.svg';
+import icBack from './svg/ic_back.svg';
 
 const IMAGES = {
   icEdit,
@@ -113,6 +114,7 @@ const IMAGES = {
   icLogout,
   icTrashSrc,
   icCloseSrc,
+  icBack,
 };
 
 export default IMAGES;

@@ -5,23 +5,30 @@ import ProfileIndexScreen from './screens/ProfileIndexScreen';
 import ProfileConnectedMailScreen from './screens/ProfileConnectedMailScreen';
 import {t} from 'i18next';
 import EditProfileScreen from './screens/EditProfileScreen';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import IMAGES from '@assets/images/images';
+import {Colors} from 'react-native-ui-lib';
+import {ImageStore} from 'react-native';
+import CommonStyles from '@screens/styles';
+import {scale} from '@utils/mixins';
 
 const Stack = createNativeStackNavigator();
 
 const ProfileScreen: FC = ({navigation, route}) => {
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === Screen.EditProfileScreen){
-        navigation.setOptions({tabBarStyle: {display: 'none'}});
-    }else {
-        navigation.setOptions({tabBarStyle: {display: 'flex'}});
+    if (routeName === Screen.EditProfileScreen) {
+      navigation.setOptions({tabBarStyle: {display: 'none'}});
+    } else {
+      navigation.setOptions({tabBarStyle: {display: 'flex'}});
     }
-}, [navigation, route]);
+  }, [navigation, route]);
   return (
     <Stack.Navigator
       initialRouteName={Screen.ProfileIndexScreen}
-      screenOptions={{headerShown: false}}>
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Stack.Screen
         name={Screen.ProfileIndexScreen}
         component={ProfileIndexScreen}
@@ -42,6 +49,16 @@ const ProfileScreen: FC = ({navigation, route}) => {
           headerBackTitle: '',
           title: t('Your Profile'),
           headerBackTitleVisible: false,
+          headerTintColor: Colors.text,
+          headerLeft: props => {
+            return (
+              <IMAGES.icBack
+                {...props}
+                {...CommonStyles.icon.icon24}
+                style={{marginLeft: scale(5)}}
+              />
+            );
+          },
         }}
         name={Screen.EditProfileScreen}
         component={EditProfileScreen}
