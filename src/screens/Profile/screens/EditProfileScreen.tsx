@@ -35,8 +35,13 @@ import {Image} from 'react-native-image-crop-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+/**
+ * TODO: Vipin
+ * rename the screen component with prefix is Profile. Not EditProfile
+ * => Increate developer experience. We dont need to find the file.
+ * Just type Profile => then all of the screens of profile here
+ */
 enum EnumGender {
   MALE = 'Male',
   FEMALE = 'Female',
@@ -73,6 +78,11 @@ const EditProfileScreen: FC = () => {
     },
   ];
 
+  /**
+   * TODO: Vipin
+   * Bring the login useSelector, useDispatch, RTK query into new custom hook
+   * => Separate the logic with the UI
+   */
   const userProfile = useSelector(
     (state: BaseState) => state.userReducer.userProfile,
   );
@@ -88,6 +98,20 @@ const EditProfileScreen: FC = () => {
   );
   const dispatch = useDispatch();
 
+  /**
+   * TODO: Vipin
+   * Why you define enum gender as string, then you set value is number
+   * If you have to do that => Create EnumGenderNumber
+   * => Then create the constanst to transfer string gender to number gender
+   *
+   * Or you just use EnumGender as number
+   */
+
+  /**
+   * TODO: Vipin
+   * if(1) { do something; return;} if(2) {do something; return;}
+   * DONT TRY TO IF ELSE
+   */
   const onGenderChange = (val: any) => {
     if (val.value === EnumGender.MALE) {
       setGender(1);
@@ -102,6 +126,11 @@ const EditProfileScreen: FC = () => {
     setModal(false);
     setTimeout(async () => {
       global?.props?.showLoading();
+
+      /**
+       * TODO: Vipin
+       * create the function in imageUtils for reusable
+       */
       const filename = path.substring(path.lastIndexOf('/') + 1);
       const uploadpath =
         Platform.OS === 'ios' ? path.replace('file://', '') : path;
@@ -114,6 +143,11 @@ const EditProfileScreen: FC = () => {
           });
         }
       });
+
+      /**
+       * TODO: Vipin
+       * Why you only try catch below block. How about the above code error, then crash app?
+       */
       try {
         await task;
       } catch (e) {
@@ -146,6 +180,11 @@ const EditProfileScreen: FC = () => {
         },
       });
       const image: Image = await ImageUtils.openGallery();
+
+      /**
+       * TODO: Vipin
+       * ImageUtils
+       */
       let path = image.path;
       let uploadpath =
         Platform.OS === 'ios' ? path.replace('file://', '') : path;
@@ -165,6 +204,10 @@ const EditProfileScreen: FC = () => {
     })
       .then(async image => {
         let path = image.path;
+        /**
+         * TODO: Vipin
+         * ImageUtils
+         */
         let uploadpath =
           Platform.OS === 'ios' ? path.replace('file://', '') : path;
         const data = await ImageUtils.openCropper({path: uploadpath});
@@ -177,6 +220,10 @@ const EditProfileScreen: FC = () => {
 
   const onSubmit = async () => {
     try {
+      /**
+       * TODO: Vipin
+       * Install prettier, then fix error warning
+       */
       global?.props?.showLoading();
       const data = await userUpdate({
         id: userProfile?.id,
@@ -224,6 +271,7 @@ const EditProfileScreen: FC = () => {
               alignItems: 'center',
               marginTop: scale(21),
             }}>
+            {/* TODO: Vipin: separate it into meaningfull naming component */}
             {profileUrl ? (
               <View>
                 <Avatar source={{uri: profileUrl}} size={scale(130)} />
@@ -275,11 +323,13 @@ const EditProfileScreen: FC = () => {
                       },
                       CommonStyles.font.bold30,
                     ]}>
+                    {/* TODO: Vipin: create function get first char of string in StringUtils*/}
                     {safeString(userProfile?.user_name)[0]}
                   </Text>
                 </View>
                 <Pressable
                   onPress={() => setModal(true)}
+                  // TODO: Vipin: Use scale bot bottom and right
                   style={{
                     position: 'absolute',
                     bottom: 5,
@@ -292,6 +342,7 @@ const EditProfileScreen: FC = () => {
                     justifyContent: 'center',
                     borderRadius: scale(30),
                   }}>
+                  {/* TODO: Vipin: Why the style is empty object? */}
                   <IMAGES.icCamera
                     style={{}}
                     height={14}
@@ -433,6 +484,9 @@ const EditProfileScreen: FC = () => {
   );
 };
 
+{
+  /* TODO: Vipin: Using useColors for style */
+}
 const styles = StyleSheet.create({
   text: {
     color: '#3C3C3C',
