@@ -8,9 +8,12 @@ import HomeDontMissOut from './components/HomeDontMissOut';
 import HomeSection from './components/HomeSection';
 import {StatusBar} from 'react-native';
 import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const HomeScreen: FC<any> = () => {
   const [refreshing, setRefreshing] = useState(false);
+  const insets = useSafeAreaInsets();
+
   return (
     <SafeViewForceInsets
       isHasHeaderTabBar={false}
@@ -19,11 +22,12 @@ const HomeScreen: FC<any> = () => {
       {/* Header */}
       <View
         style={{
-          marginTop: StatusBar.currentHeight,
+          marginTop: insets.top + (StatusBar?.currentHeight ?? 0),
           paddingHorizontal: scale(25),
           paddingTop: scale(10),
           paddingBottom: scale(12),
           display: 'flex',
+          justifyContent: 'center',
         }}>
         <HomeHeader />
       </View>

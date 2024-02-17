@@ -245,7 +245,11 @@ const TabBarNavigator: FC = () => {
 };
 
 const FakeScreen = () => {
-  return <View></View>;
+  return (
+    <View>
+      <StatusBar translucent backgroundColor="transparent" />
+    </View>
+  );
 };
 
 const TabBarIconWrapper: FC<PropsWithChildren> = ({children}) => {

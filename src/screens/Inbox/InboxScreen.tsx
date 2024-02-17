@@ -1,5 +1,5 @@
 import SafeView from '@components/atoms/View/SafeView';
-import {Text, View} from 'react-native';
+import {StatusBar, Text, View} from 'react-native';
 import MailRow from './components/MailRow';
 import {scale} from '@utils/mixins';
 import React, {useCallback, useEffect, useState} from 'react';
@@ -49,6 +49,7 @@ const InboxScreen = () => {
 
   return (
     <SafeView>
+      <StatusBar translucent backgroundColor="transparent" />
       <View
         style={{
           marginHorizontal: scale(20),
