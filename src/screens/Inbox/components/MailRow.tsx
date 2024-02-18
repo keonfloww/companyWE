@@ -17,6 +17,8 @@ interface Props {
   onSelect: (_: string) => void;
   onSelectMode: () => void;
   onCancelSelectMode: () => void;
+
+  onDelete: (_: string) => void;
 }
 const MailRow: FC<Props> = ({
   item,
@@ -24,6 +26,8 @@ const MailRow: FC<Props> = ({
   onSelect = (_: string) => {},
   onSelectMode = () => {},
   onCancelSelectMode = () => {},
+
+  onDelete = (_: string) => {},
 }) => {
   const _styles = useColors(styles);
 
@@ -83,7 +87,9 @@ const MailRow: FC<Props> = ({
           <IMAGES.icTrash {...CommonStyles.icon.icon24} color={Colors.white} />
         ),
         background: Colors.error,
-        onPress: handleMarkDeleted,
+        onPress: () => {
+          onDelete(item?.metadata_id);
+        },
       },
     ];
   }, [isBookMark, handleMarkBookMark, handleMarkDeleted]);

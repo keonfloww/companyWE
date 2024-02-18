@@ -12,6 +12,9 @@ import {StyleSheet} from 'react-native';
 import Animated, {LinearTransition} from 'react-native-reanimated';
 import DeleteMailFloatingButton from './components/DeleteMailFloatingButton';
 import useInboxScreenAction from './hooks/useInboxScreenAction';
+import BaseModal from '@components/atoms/Modal/BaseModal';
+import IMAGES from '@assets/images/images';
+import {t} from 'i18next';
 
 const InboxScreen = () => {
   const navigation = useNavigation();
@@ -22,8 +25,13 @@ const InboxScreen = () => {
     handleInboxTriggerSyncNewItem,
   } = useInboxScreen();
   const {handleMarkDeletedMany} = useInboxScreenAction();
+  const [
+    isShowModalConfirmDeleteSelectedMail,
+    setIsShowModalConfirmDeleteSelectedMail,
+  ] = useState<boolean>(false);
 
   const {data, nextPage} = usePagination<Email>(mailBoxFlatten);
+
   const [selectMode, setSelectMode] = useState<boolean>(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -82,6 +90,14 @@ const InboxScreen = () => {
             <MailRow
               item={item}
               isSelectMode={selectMode}
+              onDelete={(id: string) => {
+                if (selectedIds?.includes(id)) {
+                  setSelectedIds(selectedIds?.filter(i => i != id));
+                  return;
+                }
+                setSelectedIds(selectedIds?.concat(id));
+                setIsShowModalConfirmDeleteSelectedMail(true);
+              }}
               onSelectMode={() => setSelectMode(true)}
               onCancelSelectMode={resetSelectionMode}
               onSelect={(id: string) => {
@@ -100,14 +116,48 @@ const InboxScreen = () => {
       <DeleteMailFloatingButton
         visible={selectMode}
         onDelete={() => {
-          handleMarkDeletedMany(selectedIds);
-          resetSelectionMode();
+          setIsShowModalConfirmDeleteSelectedMail(true);
         }}
         onCancel={() => {
           setSelectMode(false);
           resetSelectionMode();
         }}
       />
+      <BaseModal
+        isShow={isShowModalConfirmDeleteSelectedMail}
+        headerIcon={<IMAGES.icTrash color={'#E74C3C'} />}
+        confirmTitle={t('Yes, I am sure')}
+        cancelTitle={t('No')}
+        actionViewStyle={{height: scale(40)}}
+        buttonContainerStyle={{paddingVertical: scale(0)}}
+        onClose={() => {
+          setIsShowModalConfirmDeleteSelectedMail(false);
+        }}
+        onConfirm={() => {
+          setIsShowModalConfirmDeleteSelectedMail(false);
+          console.log('selectedIds', selectedIds);
+          handleMarkDeletedMany(selectedIds);
+          resetSelectionMode();
+        }}>
+        <Text
+          style={{
+            ...CommonStyles.font.bold24,
+            ...style.text,
+            textAlign: 'center',
+          }}>
+          {t(`Are you sure you want to delete?`)}
+        </Text>
+        <View style={{height: scale(16)}} />
+        <Text
+          style={{
+            ...CommonStyles.font.regular14,
+            ...style.text,
+            textAlign: 'center',
+          }}>
+          {t(`Deleting will remove this email from your Inbox. This action cannot be
+          undone.`)}
+        </Text>
+      </BaseModal>
     </SafeView>
   );
 };
