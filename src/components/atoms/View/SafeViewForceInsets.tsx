@@ -1,5 +1,5 @@
 import React, {FC, PropsWithChildren} from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {Platform, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from 'react-native-ui-lib';
 
@@ -31,7 +31,11 @@ const SafeViewForceInsets: FC<Props> = ({
           isSafeTop
             ? {}
             : {
-                marginTop: -insets.top,
+                marginTop:
+                  -insets.top +
+                  (Platform.OS == 'android'
+                    ? (StatusBar.currentHeight ?? 0) * 2 ?? 0
+                    : 0),
               },
         ]}>
         {children}
