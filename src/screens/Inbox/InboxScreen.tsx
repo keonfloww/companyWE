@@ -69,7 +69,7 @@ const InboxScreen = () => {
         refreshing={refreshing}
         onRefresh={() => {
           setRefreshing(true);
-          // handleInboxTriggerSyncNewItem();
+          handleInboxTriggerSyncNewItem();
           // WARNING: NOTICE THE DUPLICATE PROCESS
           setTimeout(() => {
             setRefreshing(false);

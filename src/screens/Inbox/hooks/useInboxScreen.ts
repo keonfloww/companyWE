@@ -103,6 +103,12 @@ const useInboxScreen = () => {
           end_date: endDate.unix().toString(),
           max_results: MAIL_PER_PAGE,
           next_page_token,
+
+          // DEBUG
+          start_date_string: startDate.format(
+            DateUtils.FRONTEND_FORMAT_DEFAULT,
+          ),
+          end_date_string: endDate.format(DateUtils.FRONTEND_FORMAT_DEFAULT),
         };
         const res = await getMail(params).unwrap();
         // handle refresh token and retry here
@@ -150,6 +156,16 @@ const useInboxScreen = () => {
           // TODO: If many mails is syncing. Wait to all syncing process done
           handleSetFlagAskForDelete({shouldAsk: true});
           global?.props?.showDeleteMailModal();
+
+          // save latest token to pull to refresh
+          dispatch(
+            userSliceActions.connectedMailUpdateProgress({
+              updatedConnectedMail: {
+                ...targetMail,
+                next_page_token: next_page_token,
+              },
+            }),
+          );
           break;
         }
 

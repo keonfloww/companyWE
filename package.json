@@ -7,6 +7,7 @@
     "android": "react-native run-android --mode=devDebug --appId 'com.troove.troove_app'",
     "android:stg": "react-native run-android --mode=stgDebug  --appId 'com.troove.troove_app.staging'",
     "ios": "react-native run-ios --scheme 'AwesomeProject'",
+    "ios_si": "react-native run-ios --scheme 'AwesomeProject' --simulator='iPhone 15'",
     "reset": "react-native start --reset-cache",
     "lint": "eslint .",
     "start": "react-native start --reset-cache",

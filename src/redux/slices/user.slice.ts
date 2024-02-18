@@ -88,7 +88,7 @@ export const userSlice = createSlice({
       return {
         ...state,
         mailbox: _.orderBy(
-          _.uniq(
+          _.uniqBy(
             data?.emails.concat(oldEmailFromTargetMailAddress),
             'metadata_id',
           ),
