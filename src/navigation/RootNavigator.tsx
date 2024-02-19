@@ -30,7 +30,6 @@ import {userSliceActions} from '@redux/slices/user.slice';
 import {persistSliceActions} from '@redux/slices/persist.slice';
 import ProgressCircle from './components/ProgressCircle';
 import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
-
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};

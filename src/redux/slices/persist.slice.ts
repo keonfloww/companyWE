@@ -33,4 +33,4 @@ export const persistSlice = createSlice({
 export const {setUserPersistData} = persistSlice.actions;
 export const persistSliceActions = persistSlice.actions;
 
-export const userReducer = persistSlice.reducer;
+export const persistReducer = persistSlice.reducer;
