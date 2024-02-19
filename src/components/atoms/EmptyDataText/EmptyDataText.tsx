@@ -1,25 +1,35 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import i18next from 'i18next';
+import IMAGES from '@assets/images/images';
+import CommonStyles from '@screens/styles';
+import {scale} from '@utils/mixins';
 
-interface EmptyDataTextProps {
+interface Props {
   styleExtend?: any;
+  content?: string;
 }
-const EmptyDataText: React.FC<EmptyDataTextProps> = ({styleExtend}) => {
+const EmptyContent: React.FC<Props> = ({styleExtend, content = null}) => {
   return (
-    <>
+    <View
+      style={{
+        alignItems: 'center',
+        alignContent: 'center',
+      }}>
+      <IMAGES.icEmpty />
       <Text style={[styles.text, styleExtend]}>
-        {i18next.t('common:notAnyData')}
+        {content ?? i18next.t('common:notAnyData')}
       </Text>
-    </>
+    </View>
   );
 };
 
-export default EmptyDataText;
+export default EmptyContent;
 
 const styles = StyleSheet.create({
   text: {
-    flex: 1,
+    marginTop: scale(42),
     textAlign: 'center',
+    ...CommonStyles.font.bold24,
   },
 });

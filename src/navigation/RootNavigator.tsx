@@ -29,6 +29,7 @@ import Config from 'react-native-config';
 import {userSliceActions} from '@redux/slices/user.slice';
 import {persistSliceActions} from '@redux/slices/persist.slice';
 import ProgressCircle from './components/ProgressCircle';
+import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,7 +43,7 @@ const RootNavigator: FC = () => {
   useEffect(() => {
     console.log('Config.LOCAL_STORAGE_VERSION', Config.LOCAL_STORAGE_VERSION);
     LocalUtils.shouldClearLocalStorageOnFirstTime({
-      key: Config.LOCAL_STORAGE_VERSION ?? '1', // update it into env
+      key: '3' ?? Config.LOCAL_STORAGE_VERSION ?? '1', // update it into env
       onYes: () => {
         console.info('RECOGNIZED NEW APP INSTALL');
         dispatch(userSliceActions.init());
@@ -246,8 +247,17 @@ const TabBarNavigator: FC = () => {
 
 const FakeScreen = () => {
   return (
-    <View>
+    <View style={{flex: 1, backgroundColor: 'white'}}>
       <StatusBar translucent backgroundColor="transparent" />
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+          flex: 1,
+        }}>
+        <EmptyContent content="" />
+      </View>
     </View>
   );
 };
