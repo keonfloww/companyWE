@@ -12,6 +12,10 @@ const useMailItem = ({item}: {item: Email}) => {
     dispatch(
       userSliceActions.mailMarkBookmark({metadata_id: item?.metadata_id}),
     );
+  const handleMarkDeleted = () =>
+    dispatch(
+      userSliceActions.mailMarkDeleted({metadata_id: item?.metadata_id}),
+    );
 
   const isRead = useSelector(
     (state: BaseState) =>
@@ -24,10 +28,12 @@ const useMailItem = ({item}: {item: Email}) => {
 
   return {
     isRead,
-    isBookMark,
-
     handleMarkAsRead,
+
+    isBookMark,
     handleMarkBookMark,
+
+    handleMarkDeleted,
   };
 };
 

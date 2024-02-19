@@ -28,6 +28,8 @@ const ProfileConnectedMailScreen = () => {
         </Text>
         <View style={{height: scale(23)}} />
         <FlatList
+          alwaysBounceVertical={false}
+          overScrollMode="never"
           data={connectedMails}
           renderItem={({item}) => {
             return (

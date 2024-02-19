@@ -8,6 +8,7 @@ const ViewStyles = StyleSheet.create({
   },
 });
 const SpaceStyles = StyleSheet.create({
+  s2: {width: scale(2), height: scale(2)},
   s5: {width: scale(5), height: scale(5)},
   s10: {width: scale(10), height: scale(10)},
   s25: {width: scale(25), height: scale(25)},
@@ -94,6 +95,10 @@ const IconStyles = StyleSheet.create({
   icon15: {
     width: scale(15),
     height: scale(15),
+  },
+  icon20: {
+    width: scale(20),
+    height: scale(20),
   },
   icon24: {
     width: scale(24),

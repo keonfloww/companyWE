@@ -101,11 +101,13 @@ const ProfileIndexScreen = () => {
               style={[
                 styles.logo,
                 {
-                  backgroundColor: safeString(userProfile?.user_name)?.[0] ?
-                    ProfileColors?.[
-                      safeString(userProfile?.user_name)?.[0].toUpperCase() ||
-                        EnumProfileColors.DEFAULT
-                    ]?.SecondaryColor : ProfileColors?.[EnumProfileColors.DEFAULT]?.SecondaryColor,
+                  backgroundColor: safeString(userProfile?.user_name)?.[0]
+                    ? ProfileColors?.[
+                        safeString(userProfile?.user_name)?.[0].toUpperCase() ||
+                          EnumProfileColors.DEFAULT
+                      ]?.SecondaryColor
+                    : ProfileColors?.[EnumProfileColors.DEFAULT]
+                        ?.SecondaryColor,
                 },
               ]}>
               <Text
@@ -113,11 +115,13 @@ const ProfileIndexScreen = () => {
                   {
                     textAlign: 'center',
                     textAlignVertical: 'center',
-                    color: safeString(userProfile?.user_name)?.[0] ?
-                      ProfileColors?.[
-                        safeString(userProfile?.user_name)?.[0].toUpperCase() ||
-                          EnumProfileColors.DEFAULT
-                      ]?.MainColor : ProfileColors?.[EnumProfileColors.DEFAULT]?.MainColor,
+                    color: safeString(userProfile?.user_name)?.[0]
+                      ? ProfileColors?.[
+                          safeString(
+                            userProfile?.user_name,
+                          )?.[0].toUpperCase() || EnumProfileColors.DEFAULT
+                        ]?.MainColor
+                      : ProfileColors?.[EnumProfileColors.DEFAULT]?.MainColor,
                   },
                   CommonStyles.font.bold30,
                 ]}>
@@ -127,9 +131,11 @@ const ProfileIndexScreen = () => {
           )}
           <View style={{height: scale(20)}} />
           <Text style={CommonStyles.font.bold24}>{userProfile?.user_name}</Text>
+          <View style={{height: scale(5)}} />
           <Text style={CommonStyles.font.regular14}>
-            Member since{' '}
-            {moment(userProfile?.user?.metadata?.creationTime).year()}
+            {`Member since ${moment(
+              userProfile?.user?.metadata?.creationTime,
+            ).year()}`}
           </Text>
           <View style={{height: scale(20)}} />
         </View>
@@ -145,7 +151,10 @@ const ProfileIndexScreen = () => {
               alignItems: 'center',
               columnGap: scale(10),
             }}>
-            <Text style={[CommonStyles.font.semiBold14, {marginRight: scale(10)}]}>Email Address</Text>
+            <Text
+              style={[CommonStyles.font.semiBold14, {marginRight: scale(10)}]}>
+              Email Address
+            </Text>
             <Text
               numberOfLines={1}
               style={[
