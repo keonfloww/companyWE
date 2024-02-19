@@ -157,8 +157,9 @@ const InboxScreen = () => {
             ...style.text,
             textAlign: 'center',
           }}>
-          {t(`Deleting will remove this email from your Inbox. This action cannot be
-          undone.`)}
+          {t(
+            `Deleting will remove this email from your Inbox. This action cannot be undone.`,
+          )}
         </Text>
       </BaseModal>
     </SafeView>
