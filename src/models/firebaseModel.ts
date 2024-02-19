@@ -11,4 +11,5 @@ export interface FireBaseMailCredentials {
 export interface FireBaseMailCredentialUpdated extends FireBaseMailCredentials {
   // UI state
   next_page_token?: string | null;
+  last_end_date_synced?: string | null;
 }

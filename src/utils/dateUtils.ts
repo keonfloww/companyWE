@@ -4,6 +4,7 @@ const DateUtils = {
   UPDATE_FORMAT: 'MM/DD/YYYY',
   BACKEND_FORMAT: 'YYYY/MM/DD',
   FRONTEND_FORMAT_DEFAULT: 'h:mm A D MMM YYYY',
+  FRONTEND_FORMAT_DEBUG: 'HH:mm:ss A D MMM YYYY',
   formatDefault: (dateString: string) => {
     if (!dateString) {
       return '';
