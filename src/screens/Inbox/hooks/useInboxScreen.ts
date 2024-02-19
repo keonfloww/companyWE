@@ -69,6 +69,7 @@ const useInboxScreen = () => {
   // TODO: Handle the process when the sync is not done but app is killed
   const handleGetByFireBaseMail = async (
     targetMail: FireBaseMailCredentials & FireBaseMailCredentialUpdated,
+    options: {isPullToRefresh: boolean},
   ) => {
     // console.log('handleGetByFireBaseMail', {
     //   address: targetMail.email,
@@ -158,7 +159,10 @@ const useInboxScreen = () => {
             }),
           );
           // TODO: If many mails is syncing. Wait to all syncing process done
-          handleSetFlagAskForDelete({shouldAsk: true});
+          if (!options.isPullToRefresh) {
+            handleSetFlagAskForDelete({shouldAsk: true});
+            return;
+          }
           global?.props?.showDeleteMailModal();
 
           const latestEndDateSynced = endDate
@@ -227,7 +231,7 @@ const useInboxScreen = () => {
     }
 
     for (let mail of userState.connectedMails) {
-      handleGetByFireBaseMail(mail);
+      handleGetByFireBaseMail(mail, {isPullToRefresh: true});
     }
     dispatch(userSliceActions.connectedMailResetSync());
   };
