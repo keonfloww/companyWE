@@ -57,6 +57,7 @@ import icTrash from './svg/ic_trash.svg';
 import icLogout from './svg/ic_logout.svg';
 import icCamera from './svg/camera.svg';
 import icBack from './svg/ic_back.svg';
+import icEmpty from './svg/empty.svg';
 
 const IMAGES = {
   icEdit,
@@ -115,6 +116,7 @@ const IMAGES = {
   icTrashSrc,
   icCloseSrc,
   icBack,
+  icEmpty,
 };
 
 export default IMAGES;

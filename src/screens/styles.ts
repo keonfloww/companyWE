@@ -24,6 +24,7 @@ const FontSizeStyles = {
   size12: scale(12),
   size14: scale(14),
   size16: scale(16),
+  size22: scale(22),
   size24: scale(24),
   size26: scale(26),
   size30: scale(30),
@@ -71,6 +72,10 @@ const FontStyles = StyleSheet.create({
   },
   bold16: {
     fontSize: FontSizeStyles.size16,
+    fontFamily: FontFamilyStyles.bold,
+  },
+  bold22: {
+    fontSize: FontSizeStyles.size22,
     fontFamily: FontFamilyStyles.bold,
   },
   bold24: {
