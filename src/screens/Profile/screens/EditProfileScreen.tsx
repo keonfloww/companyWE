@@ -13,15 +13,13 @@ import {
   Linking,
   Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
 import Modal from 'react-native-modal';
-import {useState} from 'react';
-import SafeView from '@components/atoms/View/SafeView';
+import {FC, useState} from 'react';
 import {ColorUtils, EnumProfileColors, ProfileColors} from '@utils/colorUtils';
 import {safeString} from '@utils/stringUtils';
 import DatePickerModal from '../components/DatePickerModal';
@@ -36,13 +34,20 @@ import {Alert} from 'react-native';
 import {Image} from 'react-native-image-crop-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
+import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
 
+/**
+ * TODO: Vipin
+ * rename the screen component with prefix is Profile. Not EditProfile
+ * => Increate developer experience. We dont need to find the file.
+ * Just type Profile => then all of the screens of profile here
+ */
 enum EnumGender {
   MALE = 'Male',
   FEMALE = 'Female',
 }
 
-const EditProfileScreen = () => {
+const EditProfileScreen: FC = () => {
   const groupItems = [
     {
       label: t('Setting'),
@@ -66,13 +71,18 @@ const EditProfileScreen = () => {
           title: t('Remove Current Picture'),
           onPress: () => {
             setProfileUrl('');
-            setModal(false)
+            setModal(false);
           },
         },
       ],
     },
   ];
 
+  /**
+   * TODO: Vipin
+   * Bring the login useSelector, useDispatch, RTK query into new custom hook
+   * => Separate the logic with the UI
+   */
   const userProfile = useSelector(
     (state: BaseState) => state.userReducer.userProfile,
   );
@@ -88,6 +98,20 @@ const EditProfileScreen = () => {
   );
   const dispatch = useDispatch();
 
+  /**
+   * TODO: Vipin
+   * Why you define enum gender as string, then you set value is number
+   * If you have to do that => Create EnumGenderNumber
+   * => Then create the constanst to transfer string gender to number gender
+   *
+   * Or you just use EnumGender as number
+   */
+
+  /**
+   * TODO: Vipin
+   * if(1) { do something; return;} if(2) {do something; return;}
+   * DONT TRY TO IF ELSE
+   */
   const onGenderChange = (val: any) => {
     if (val.value === EnumGender.MALE) {
       setGender(1);
@@ -101,26 +125,36 @@ const EditProfileScreen = () => {
   const uploadImage = async (path: any) => {
     setModal(false);
     setTimeout(async () => {
-    global?.props?.showLoading();
-    const filename = path.substring(path.lastIndexOf('/') + 1);
-    const uploadpath =
-      Platform.OS === 'ios' ? path.replace('file://', '') : path;
-    const task = storage().ref(`images/${filename}`).putFile(uploadpath);
-    task.on('state_changed', snapshot => {
-      if (snapshot.bytesTransferred === snapshot.totalBytes) {
-        snapshot.ref.getDownloadURL().then(url => {
-          setProfileUrl(url);
-          console.log(url);
-        });
+      global?.props?.showLoading();
+
+      /**
+       * TODO: Vipin
+       * create the function in imageUtils for reusable
+       */
+      const filename = path.substring(path.lastIndexOf('/') + 1);
+      const uploadpath =
+        Platform.OS === 'ios' ? path.replace('file://', '') : path;
+      const task = storage().ref(`images/${filename}`).putFile(uploadpath);
+      task.on('state_changed', snapshot => {
+        if (snapshot.bytesTransferred === snapshot.totalBytes) {
+          snapshot.ref.getDownloadURL().then(url => {
+            setProfileUrl(url);
+            console.log(url);
+          });
+        }
+      });
+
+      /**
+       * TODO: Vipin
+       * Why you only try catch below block. How about the above code error, then crash app?
+       */
+      try {
+        await task;
+      } catch (e) {
+        console.error(e);
       }
-    });
-    try {
-      await task;
-    } catch (e) {
-      console.error(e);
-    }
-    global?.props?.hideLoading();
-  }, 10);
+      global?.props?.hideLoading();
+    }, 10);
   };
 
   const uploadFromGallery = async () => {
@@ -129,7 +163,9 @@ const EditProfileScreen = () => {
         onBlocked: () => {
           Alert.alert(
             t('Gallery Permission', {key: t('Gallery')}),
-            t('Gallery Permission is required for image upload', {key: t('Gallery')}),
+            t('Gallery Permission is required for image upload', {
+              key: t('Gallery'),
+            }),
             [
               {
                 text: t('Cancel'),
@@ -143,14 +179,19 @@ const EditProfileScreen = () => {
           );
         },
       });
-        const image: Image = await ImageUtils.openGallery();
-        let path = image.path;
-        let uploadpath =
-          Platform.OS === 'ios' ? path.replace('file://', '') : path;
-        const data = await ImageUtils.openCropper({path: uploadpath});
-        console.log({data});
-        path = data.path;
-        await uploadImage(path);
+      const image: Image = await ImageUtils.openGallery();
+
+      /**
+       * TODO: Vipin
+       * ImageUtils
+       */
+      let path = image.path;
+      let uploadpath =
+        Platform.OS === 'ios' ? path.replace('file://', '') : path;
+      const data = await ImageUtils.openCropper({path: uploadpath});
+      console.log({data});
+      path = data.path;
+      await uploadImage(path);
     } catch (e) {
       console.log(e);
     }
@@ -162,57 +203,63 @@ const EditProfileScreen = () => {
       height: 400,
     })
       .then(async image => {
-          let path = image.path;
-          let uploadpath =
-            Platform.OS === 'ios' ? path.replace('file://', '') : path;
-          const data = await ImageUtils.openCropper({path: uploadpath});
-          console.log({data});
-          path = data.path;
-          await uploadImage(path);
+        let path = image.path;
+        /**
+         * TODO: Vipin
+         * ImageUtils
+         */
+        let uploadpath =
+          Platform.OS === 'ios' ? path.replace('file://', '') : path;
+        const data = await ImageUtils.openCropper({path: uploadpath});
+        console.log({data});
+        path = data.path;
+        await uploadImage(path);
       })
       .catch(e => console.log(e));
   };
 
   const onSubmit = async () => {
     try {
+      /**
+       * TODO: Vipin
+       * Install prettier, then fix error warning
+       */
       global?.props?.showLoading();
       const data = await userUpdate({
         id: userProfile?.id,
-      user_name: userProfile?.user_name,
-      email_address: userProfile?.email_address,
-      user_address: address,
-      user_profile_picture: profileUrl,
-      date_of_birth: date,
-      phone_number: phone,
-      gender_id: gender,
-      accessToken: userProfile?.accessToken,
-    });
-    dispatch(
-      userSliceActions.setUserProfile({
-        ...userProfile,
-        ...{
-          id: userProfile?.id,
-          user_name: userProfile?.user_name,
-          email_address: userProfile?.email_address,
-          user_address: address,
-          user_profile_picture: profileUrl,
-          date_of_birth: date,
-          phone_number: phone,
-          gender_id: gender,
-          accessToken: userProfile?.accessToken,
-        },
-      }),
+        user_name: userProfile?.user_name,
+        email_address: userProfile?.email_address,
+        user_address: address,
+        user_profile_picture: profileUrl,
+        date_of_birth: date,
+        phone_number: phone,
+        gender_id: gender,
+        accessToken: userProfile?.accessToken,
+      });
+      dispatch(
+        userSliceActions.setUserProfile({
+          ...userProfile,
+          ...{
+            id: userProfile?.id,
+            user_name: userProfile?.user_name,
+            email_address: userProfile?.email_address,
+            user_address: address,
+            user_profile_picture: profileUrl,
+            date_of_birth: date,
+            phone_number: phone,
+            gender_id: gender,
+            accessToken: userProfile?.accessToken,
+          },
+        }),
       );
       global?.props?.hideLoading();
       navigationService.goBack();
-    } catch (error) {
-      
-    }
-    };
-    
-    return (
-      <SafeView>
-      <View style={CommonStyles.view.viewLayout}>
+    } catch (error) {}
+  };
+
+  return (
+    <SafeViewForceInsets isHasHeaderTabBar={true} isSafeBottom={false}>
+      <View style={[CommonStyles.view.viewLayout, {marginTop: 0}]}>
         <KeyboardAwareScrollView
           automaticallyAdjustKeyboardInsets={true}
           keyboardDismissMode="interactive"
@@ -222,8 +269,9 @@ const EditProfileScreen = () => {
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              marginTop: scale(30),
+              marginTop: scale(21),
             }}>
+            {/* TODO: Vipin: separate it into meaningfull naming component */}
             {profileUrl ? (
               <View>
                 <Avatar source={{uri: profileUrl}} size={scale(130)} />
@@ -275,11 +323,13 @@ const EditProfileScreen = () => {
                       },
                       CommonStyles.font.bold30,
                     ]}>
+                    {/* TODO: Vipin: create function get first char of string in StringUtils*/}
                     {safeString(userProfile?.user_name)[0]}
                   </Text>
                 </View>
                 <Pressable
                   onPress={() => setModal(true)}
+                  // TODO: Vipin: Use scale bot bottom and right
                   style={{
                     position: 'absolute',
                     bottom: 5,
@@ -292,6 +342,7 @@ const EditProfileScreen = () => {
                     justifyContent: 'center',
                     borderRadius: scale(30),
                   }}>
+                  {/* TODO: Vipin: Why the style is empty object? */}
                   <IMAGES.icCamera
                     style={{}}
                     height={14}
@@ -405,6 +456,7 @@ const EditProfileScreen = () => {
           shadowOpacity: 0.1,
           elevation: scale(5),
           padding: scale(20),
+          paddingBottom: scale(50),
           flexDirection: 'row',
           borderTopLeftRadius: scale(20),
           borderTopRightRadius: scale(20),
@@ -420,7 +472,7 @@ const EditProfileScreen = () => {
         />
         <Button
           label={'cancel'}
-          onPress={() => navigationService.goBack()}
+          onPress={navigationService.goBack}
           style={[{flex: 1, paddingHorizontal: 0}]}
           labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
           backgroundColor={'white'}
@@ -428,10 +480,13 @@ const EditProfileScreen = () => {
           color={'#50048A'}
         />
       </View>
-    </SafeView>
+    </SafeViewForceInsets>
   );
 };
 
+{
+  /* TODO: Vipin: Using useColors for style */
+}
 const styles = StyleSheet.create({
   text: {
     color: '#3C3C3C',
@@ -452,6 +507,8 @@ const styles = StyleSheet.create({
     height: scale(130),
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: scale(2),
+    paddingLeft: scale(0.5),
   },
   modalText: {textAlign: 'center', padding: scale(5), color: '#3C3C3C'},
   view: {

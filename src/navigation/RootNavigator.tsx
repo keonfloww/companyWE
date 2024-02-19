@@ -23,12 +23,12 @@ import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 import {Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import ProfileScreen from '@screens/Profile/ProfileScreen';
-import * as Progress from 'react-native-progress';
 import {useDispatch} from 'react-redux';
 import {LocalUtils} from '@utils/localStorageUtils';
 import Config from 'react-native-config';
 import {userSliceActions} from '@redux/slices/user.slice';
 import {persistSliceActions} from '@redux/slices/persist.slice';
+import ProgressCircle from './components/ProgressCircle';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -176,15 +176,7 @@ const TabBarNavigator: FC = () => {
             )}
           </TabBarIconWrapper>
         ) : (
-          <Progress.Circle
-            style={{borderRadius: 99}}
-            size={scale(25)}
-            strokeCap="round"
-            endAngle={0.8}
-            indeterminate={true}
-            borderColor="#50048A"
-            borderWidth={scale(5)}
-          />
+          <ProgressCircle />
         ),
     };
   }, [
@@ -253,7 +245,11 @@ const TabBarNavigator: FC = () => {
 };
 
 const FakeScreen = () => {
-  return <View></View>;
+  return (
+    <View>
+      <StatusBar translucent backgroundColor="transparent" />
+    </View>
+  );
 };
 
 const TabBarIconWrapper: FC<PropsWithChildren> = ({children}) => {

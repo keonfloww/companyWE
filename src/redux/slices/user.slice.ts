@@ -21,6 +21,7 @@ const initialState: {
   // mail status
   mailReadMetadataIds: {[key in string]: boolean};
   mailBookmarkMetadataIds: {[key in string]: boolean};
+  mailDeletedMetadataIds: {[key in string]: boolean};
 
   // Action marker
   isAskedForDeleteMail?: boolean;
@@ -33,6 +34,7 @@ const initialState: {
 
   mailReadMetadataIds: {},
   mailBookmarkMetadataIds: {},
+  mailDeletedMetadataIds: {},
 
   isAskedForDeleteMail: false,
 };
@@ -86,7 +88,7 @@ export const userSlice = createSlice({
       return {
         ...state,
         mailbox: _.orderBy(
-          _.uniq(
+          _.uniqBy(
             data?.emails.concat(oldEmailFromTargetMailAddress),
             'metadata_id',
           ),
@@ -105,6 +107,9 @@ export const userSlice = createSlice({
           state?.syncedMailAddress?.concat(action.payload.mail),
         ),
       };
+    },
+    connectedMailResetSync: state => {
+      return {...state, syncedMailAddress: []};
     },
     connectedMailUpdateProgress: (
       state,
@@ -128,27 +133,55 @@ export const userSlice = createSlice({
 
     // UI State
     mailMarkAsRead: (state, action: PayloadAction<{metadata_id: string}>) => {
+      const itemUid = action.payload.metadata_id;
+
       return {
         ...state,
         mailReadMetadataIds: {
           ...state?.mailReadMetadataIds,
-          [action.payload.metadata_id]: true,
+          [itemUid]: !state?.mailReadMetadataIds?.[itemUid],
         },
       };
     },
     mailMarkBookmark: (state, action: PayloadAction<{metadata_id: string}>) => {
+      const itemUid = action.payload.metadata_id;
       return {
         ...state,
         mailBookmarkMetadataIds: {
           ...state?.mailBookmarkMetadataIds,
-          [action.payload.metadata_id]: state?.mailBookmarkMetadataIds[
-            action.payload.metadata_id
-          ]
-            ? false
-            : true,
+          [itemUid]: !state?.mailBookmarkMetadataIds[itemUid],
         },
       };
     },
+    mailMarkDeleted: (state, action: PayloadAction<{metadata_id: string}>) => {
+      const itemUid = action.payload.metadata_id;
+      return {
+        ...state,
+        mailDeletedMetadataIds: {
+          ...state?.mailDeletedMetadataIds,
+          [itemUid]: true,
+        },
+      };
+    },
+    mailMarkDeletedMany: (
+      state,
+      action: PayloadAction<{metadata_ids: string[]}>,
+    ) => {
+      const itemUids = action.payload.metadata_ids;
+
+      const newMailDeletedMetadataIds = {...state?.mailDeletedMetadataIds};
+
+      itemUids?.forEach((id: string) => {
+        Object.assign(newMailDeletedMetadataIds, {[id]: true});
+      });
+
+      return {
+        ...state,
+        mailDeletedMetadataIds: newMailDeletedMetadataIds,
+      };
+    },
+
+    // Sync status
     setFlagAskForDelete: (
       state,
       action: PayloadAction<{shouldAsk: boolean}>,

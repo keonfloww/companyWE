@@ -88,7 +88,7 @@ const useAuth = () => {
         moment(userData.user.metadata.creationTime).format(
           DateUtils.BACKEND_FORMAT,
         ) < moment().format(DateUtils.BACKEND_FORMAT);
-        
+
       if (isSignUp && !oldUser && !signedInBefore) {
         // API register
         console.log('register run');
@@ -105,7 +105,7 @@ const useAuth = () => {
           phone_number: '',
           accessToken: accessToken,
         });
-        console.log('after singin',{data})
+        console.log('after singin', {data});
         userFromApi = {
           ...data?.data?.data,
           creationTime: userData.user.metadata.creationTime,
@@ -120,7 +120,7 @@ const useAuth = () => {
           is_email_address_verified: Boolean(userData.user.emailVerified),
           accessToken: accessToken,
         });
-        console.log('after login',{data})
+        console.log('after login', {data});
         userFromApi = {
           ...data?.data,
           creationTime: userData.user.metadata.creationTime,
@@ -168,7 +168,10 @@ const useAuth = () => {
           }),
         );
       }
-      dispatch(userSliceActions.init());
+      setTimeout(() => {
+        dispatch(userSliceActions.init());
+      }, 1000);
+
       await signOutFirebase();
     } catch (error) {
       console.log('error handleSignOut', error);

@@ -7,6 +7,8 @@ const icYahooSrc = require('../images/ic_yahoo.png');
 const icGoogleSrc = require('../images/ic_google.png');
 const bgDefaultSrc = require('../images/png/bg_default.png');
 const logoSrc = require('../images/png/logo.png');
+const icTrashSrc = require('../images/png/ic_trash.png');
+const icCloseSrc = require('../images/png/ic_close.png');
 
 // SVG
 import IcHome from './svg/ic_home.svg';
@@ -26,6 +28,8 @@ import Delete from './svg/delete.svg';
 import icAppLogo from './svg/ic_app_logo.svg';
 import icAppLogoText from './svg/ic_app_logo_text.svg';
 import icBookMark from './svg/ic_bookmark.svg';
+import icBookMarkAction from './svg/ic_bookmark_action.svg';
+
 import icSearch from './svg/ic_search.svg';
 import dateIcon from './svg/date_profile.svg';
 
@@ -48,9 +52,11 @@ import arrowLeft from './svg/arrow_left.svg';
 //
 import icUnBookmark from './svg/ic_unbookmark.svg';
 import icMailOpen from './svg/ic_mail_open.svg';
+import icMail from './svg/ic_mail.svg';
 import icTrash from './svg/ic_trash.svg';
 import icLogout from './svg/ic_logout.svg';
 import icCamera from './svg/camera.svg';
+import icBack from './svg/ic_back.svg';
 
 const IMAGES = {
   icEdit,
@@ -64,6 +70,7 @@ const IMAGES = {
   icAppLogo,
   icAppLogoText,
   icBookMark,
+  icBookMarkAction,
   icSearch,
   IcConnected,
   IcContact,
@@ -74,6 +81,7 @@ const IMAGES = {
   Photo,
   Upload,
   Delete,
+  icMail,
 
   // MOCK,
   icM1,
@@ -104,6 +112,9 @@ const IMAGES = {
   logoSrc,
   icTrash,
   icLogout,
+  icTrashSrc,
+  icCloseSrc,
+  icBack,
 };
 
 export default IMAGES;

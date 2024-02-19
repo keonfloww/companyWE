@@ -4,12 +4,12 @@ import CommonStyles from '@screens/styles';
 import DateUtils from '@utils/dateUtils';
 import {scale} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
-import React, {FC, useMemo, useState} from 'react';
-import {Pressable, StyleSheet} from 'react-native';
-import {Checkbox, Drawer, Text, View} from 'react-native-ui-lib';
+import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import {Pressable, StyleSheet, TextStyle} from 'react-native';
+import {Checkbox, Colors, Drawer, Text, View} from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
 import {ColorUtils} from '@utils/colorUtils';
-// import { LightenDarkenColor } from '@utils/colorUtils';
+import useColors from '@utils/hooks/useColors';
 
 interface Props {
   item: Email;
@@ -17,6 +17,8 @@ interface Props {
   onSelect: (_: string) => void;
   onSelectMode: () => void;
   onCancelSelectMode: () => void;
+
+  onDelete: (_: string) => void;
 }
 const MailRow: FC<Props> = ({
   item,
@@ -24,13 +26,19 @@ const MailRow: FC<Props> = ({
   onSelect = (_: string) => {},
   onSelectMode = () => {},
   onCancelSelectMode = () => {},
+
+  onDelete = (_: string) => {},
 }) => {
+  const _styles = useColors(styles);
+
   const {
     isRead,
     handleMarkAsRead,
 
     isBookMark,
     handleMarkBookMark,
+
+    handleMarkDeleted,
   } = useMailItem({item});
   const [selected, setSelected] = useState(false);
 
@@ -38,61 +46,92 @@ const MailRow: FC<Props> = ({
     return isRead ? styles.textDisable : {};
   }, [isRead]);
 
-  const lightenHexColor = (hexColor, magnitude) => {
-    hexColor = hexColor.replace(`#`, ``);
-    if (hexColor.length === 6) {
-      const decimalColor = parseInt(hexColor, 16);
-      let r = (decimalColor >> 16) + magnitude;
-      r > 255 && (r = 255);
-      r < 0 && (r = 0);
-      let g = (decimalColor & 0x0000ff) + magnitude;
-      g > 255 && (g = 255);
-      g < 0 && (g = 0);
-      let b = ((decimalColor >> 8) & 0x00ff) + magnitude;
-      b > 255 && (b = 255);
-      b < 0 && (b = 0);
-      return `#${(g | (b << 8) | (r << 16)).toString(16)}`;
-    } else {
-      return hexColor;
+  const computedBookmarkTextStyle = useMemo((): TextStyle => {
+    if (!isBookMark) {
+      return {};
     }
-  };
+
+    return {
+      color: Colors.primary,
+    };
+  }, [isBookMark]);
+
+  const leftItem = useMemo(() => {
+    return {
+      width: scale(78),
+      customElement: isRead ? (
+        <IMAGES.icMail color={Colors.white} />
+      ) : (
+        <IMAGES.icMailOpen />
+      ),
+      background: Colors.success,
+      onPress: handleMarkAsRead,
+    };
+  }, [isRead, handleMarkAsRead]);
+
+  const rightItems = useMemo(() => {
+    return [
+      {
+        width: scale(78),
+        customElement: isBookMark ? (
+          <IMAGES.icUnBookmark {...CommonStyles.icon.icon24} />
+        ) : (
+          <IMAGES.icBookMarkAction {...CommonStyles.icon.icon24} />
+        ),
+        background: Colors.primary,
+        onPress: handleMarkBookMark,
+      },
+      {
+        width: scale(78),
+        customElement: (
+          <IMAGES.icTrash {...CommonStyles.icon.icon24} color={Colors.white} />
+        ),
+        background: Colors.error,
+        onPress: () => {
+          onDelete(item?.metadata_id);
+        },
+      },
+    ];
+  }, [isBookMark, handleMarkBookMark, handleMarkDeleted]);
+
+  const onLongPressItem = useCallback(() => {
+    onSelectMode();
+    setSelected(true);
+    onSelect(item?.metadata_id);
+  }, [item?.metadata_id, onSelectMode, setSelected, onSelect]);
+
+  /**
+   * Whenever outside trigger cancel selection mode
+   * => Clear selected
+   */
+  useEffect(() => {
+    if (isSelectMode == false) {
+      setSelected(false);
+    }
+  }, [isSelectMode]);
 
   return (
     <Drawer
-      useNativeAnimations={true}
+      bounciness={1}
+      // useNativeAnimations={true}
+      disableHaptic={true}
+      fullSwipeLeft={false}
+      fullSwipeRight={false}
       onDragStart={onCancelSelectMode}
-      rightItems={[
-        {
-          width: scale(78),
-          customElement: <IMAGES.icUnBookmark />,
-          background: '#50048A',
-          onPress: handleMarkBookMark,
-        },
-      ]}
-      leftItem={{
-        width: scale(78),
-        customElement: <IMAGES.icMailOpen />,
-        background: '#20C997',
-        onPress: () => console.log('icMailOpen pressed'),
-      }}>
-      <Pressable
-        onPress={handleMarkAsRead}
-        onLongPress={() => {
-          onSelectMode();
-          setSelected(true);
-          onSelect(item?.metadata_id);
-        }}>
-        <View style={styles.container}>
+      leftItem={leftItem}
+      rightItems={rightItems}>
+      <Pressable onLongPress={onLongPressItem}>
+        <View style={_styles.container}>
           {isSelectMode ? (
             <View>
               <Checkbox
-                color="#50048A"
-                iconColor="white"
+                color={Colors.primary}
+                iconColor={Colors.white}
                 outline
                 containerStyle={{
-                  width: scale(36),
-                  height: scale(36),
-                  backgroundColor: selected ? '#50048A' : 'white',
+                  width: scale(34),
+                  height: scale(34),
+                  backgroundColor: selected ? Colors.primary : Colors.white,
                 }}
                 borderRadius={99}
                 value={selected}
@@ -105,7 +144,7 @@ const MailRow: FC<Props> = ({
           ) : (
             <View
               style={[
-                styles.logo,
+                _styles.logoContainer,
                 {
                   backgroundColor: ColorUtils.getColorFromChar(
                     item?.sender_name,
@@ -114,64 +153,55 @@ const MailRow: FC<Props> = ({
               ]}>
               <Text
                 style={[
+                  _styles.logoText,
                   {
-                    textAlign: 'center',
-                    textAlignVertical: 'center',
                     color: ColorUtils.getColorFromChar(item?.sender_name)
                       .MainColor,
                   },
-                  CommonStyles.font.semiBold16,
                 ]}>
                 {safeString(item?.sender_name)?.[0]}
               </Text>
             </View>
-            // <Avatar
-            //   size={scale(36)}
-            //   imageProps={{resizeMode: 'contain',}}
-            //   source={
-            //     item?.images.length
-            //       ? {
-            //           uri: item?.images[0].src,
-            //         }
-            //       : IMAGES.logoSrc
-            //   }
-            // />
           )}
-          <View style={styles.mailContent}>
-            <View style={styles.mailFirstRowContainer}>
+          <View style={_styles.mailContent}>
+            <View style={_styles.mailFirstRowContainer}>
               <View
                 style={{
-                  flex: 1,
+                  flex: 3,
                   display: 'flex',
                   flexDirection: 'row',
                 }}>
                 {isBookMark && (
                   <IMAGES.icBookMark
-                    height={18}
-                    color={'#50048A'}
-                    fill={'#50048A'}
+                    height={scale(18)}
+                    color={Colors.primary}
+                    fill={Colors.primary}
                   />
                 )}
                 <Text
-                  style={[styles.senderName, computedDisableStyle]}
+                  style={[
+                    _styles.senderName,
+                    computedDisableStyle,
+                    computedBookmarkTextStyle,
+                  ]}
                   numberOfLines={1}>
                   {safeString(item?.sender_name)}
                 </Text>
               </View>
-              <Text style={[styles.dateTime, computedDisableStyle]}>
+              <Text style={[_styles.dateTime, computedDisableStyle]}>
                 {DateUtils.unixToFormatDefault(item?.received_on_unix)}
               </Text>
             </View>
-            <View style={{height: scale(5)}} />
+            <View style={CommonStyles.space.s5} />
             <View style={{flex: 1}}>
               <Text
-                style={[styles.subject, computedDisableStyle]}
+                style={[_styles.subject, computedDisableStyle]}
                 numberOfLines={1}>
                 {safeString(item?.subject)}
               </Text>
-              <View style={{height: scale(2)}} />
+              <View style={CommonStyles.space.s2} />
               <Text
-                style={[styles.shortBody, computedDisableStyle]}
+                style={[_styles.shortBody, computedDisableStyle]}
                 numberOfLines={1}>
                 {safeString(item?.short_body)}
               </Text>
@@ -190,41 +220,50 @@ const styles = StyleSheet.create({
     columnGap: scale(12),
     paddingHorizontal: scale(20),
     paddingBottom: scale(10),
-    backgroundColor: 'white',
+    backgroundColor: Colors.white,
   },
-  logo: {
+  logoContainer: {
     borderRadius: scale(36),
-    borderColor: '#DADADA',
+    borderColor: Colors.borderAvatar,
     borderWidth: scale(1),
     width: scale(36),
     height: scale(36),
     alignItems: 'center',
     justifyContent: 'center',
   },
+  logoText: {
+    ...CommonStyles.font.semiBold16,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    paddingTop: scale(2),
+    paddingLeft: scale(0.5),
+  },
   mailContent: {flex: 1},
   mailFirstRowContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   senderName: {
     ...CommonStyles.font.semiBold16,
-    color: '#3C3C3C',
+    color: Colors.textSecondary,
+    flex: 1,
   },
   subject: {
     ...CommonStyles.font.semiBold14,
-    color: '#3C3C3C',
+    color: Colors.textSecondary,
   },
   dateTime: {
     ...CommonStyles.font.semiBold12,
-    color: '#3C3C3C',
+    color: Colors.textSecondary,
   },
   shortBody: {
     ...CommonStyles.font.regular14,
-    color: '#3C3C3C',
+    color: Colors.textSecondary,
   },
   textDisable: {
-    color: '#757575',
+    color: Colors.textDisable,
     fontFamily: CommonStyles.fontFamily.regular,
   },
 });

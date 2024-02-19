@@ -1,0 +1,67 @@
+diff --git a/node_modules/react-native-ui-lib/src/components/floatingButton/index.d.ts b/node_modules/react-native-ui-lib/src/components/floatingButton/index.d.ts
+index 5046806..cc3fbec 100644
+--- a/node_modules/react-native-ui-lib/src/components/floatingButton/index.d.ts
++++ b/node_modules/react-native-ui-lib/src/components/floatingButton/index.d.ts
+@@ -1,5 +1,5 @@
+ import React, { PropsWithChildren, PureComponent } from 'react';
+-import { Animated } from 'react-native';
++import { Animated, ViewStyle } from 'react-native';
+ import { ButtonProps } from '../button';
+ export declare enum FloatingButtonLayouts {
+     VERTICAL = "Vertical",
+@@ -45,6 +45,7 @@ export interface FloatingButtonProps {
+      * Button layout direction: vertical or horizontal
+      */
+     buttonLayout?: FloatingButtonLayouts | `${FloatingButtonLayouts}`;
++    customButtonContainer: ViewStyle; // Tony is here
+ }
+ /**
+  * @description: Hovering button with gradient background
+diff --git a/node_modules/react-native-ui-lib/src/components/floatingButton/index.js b/node_modules/react-native-ui-lib/src/components/floatingButton/index.js
+index 6ae1a4b..778dda5 100644
+--- a/node_modules/react-native-ui-lib/src/components/floatingButton/index.js
++++ b/node_modules/react-native-ui-lib/src/components/floatingButton/index.js
+@@ -29,6 +29,7 @@ class FloatingButton extends PureComponent {
+     super(props);
+     this.initialVisibility = props.visible;
+     this.firstLoad = true;
++    this.customButtonContainer = props.customButtonContainer;
+     this.visibleAnimated = new Animated.Value(Number(!!props.visible));
+   }
+   componentDidUpdate(prevProps) {
+@@ -99,13 +100,15 @@ class FloatingButton extends PureComponent {
+       secondaryButton,
+       bottomMargin,
+       testID,
+-      buttonLayout
++      buttonLayout,
++      button
+     } = this.props;
++
+     const bgColor = secondaryButton?.backgroundColor || Colors.$backgroundDefault;
+     if (buttonLayout === FloatingButtonLayouts.HORIZONTAL) {
+-      return <Button outline flex size={Button.sizes.large} testID={`${testID}.secondaryButton`} {...secondaryButton} style={[styles.shadow, styles.secondaryMargin, {
++      return <Button flex size={Button.sizes.large} testID={`${testID}.secondaryButton`}  style={[styles.shadow, {
+         backgroundColor: bgColor
+-      }]} enableShadow={false} />;
++      }]} {...secondaryButton}  enableShadow={true} />;
+     }
+     return <Button link size={Button.sizes.large} testID={`${testID}.secondaryButton`} {...secondaryButton} style={{
+       marginBottom: bottomMargin || Spacings.s7
+@@ -127,10 +130,14 @@ class FloatingButton extends PureComponent {
+     if (!visible && withoutAnimation) {
+       return false;
+     }
+-    return <View row={!!this.isSecondaryHorizontal} center={!!this.isSecondaryHorizontal} pointerEvents="box-none" animated style={[styles.container, this.getAnimatedStyle()]} testID={testID}>
++    return <View row={!!this.isSecondaryHorizontal} center={!!this.isSecondaryHorizontal} pointerEvents="box-none" animated style={[
++      styles.container,
++      this.getAnimatedStyle(),
++      this.customButtonContainer,
++    ]} testID={testID}>
+         {this.renderOverlay()}
+-        {this.isSecondaryHorizontal && this.renderSecondaryButton()}
+         {this.renderButton()}
++        {this.isSecondaryHorizontal && this.renderSecondaryButton()}
+         {this.isSecondaryVertical && this.renderSecondaryButton()}
+       </View>;
+   }

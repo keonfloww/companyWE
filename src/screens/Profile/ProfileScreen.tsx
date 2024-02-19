@@ -5,23 +5,27 @@ import ProfileIndexScreen from './screens/ProfileIndexScreen';
 import ProfileConnectedMailScreen from './screens/ProfileConnectedMailScreen';
 import {t} from 'i18next';
 import EditProfileScreen from './screens/EditProfileScreen';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {Colors} from 'react-native-ui-lib';
+import MixinsTabBar from '@utils/mixinsTabBar';
 
 const Stack = createNativeStackNavigator();
 
 const ProfileScreen: FC = ({navigation, route}) => {
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === Screen.EditProfileScreen){
-        navigation.setOptions({tabBarStyle: {display: 'none'}});
-    }else {
-        navigation.setOptions({tabBarStyle: {display: 'flex'}});
+    if (routeName === Screen.EditProfileScreen) {
+      navigation.setOptions({tabBarStyle: {display: 'none'}});
+    } else {
+      navigation.setOptions({tabBarStyle: {display: 'flex'}});
     }
-}, [navigation, route]);
+  }, [navigation, route]);
   return (
     <Stack.Navigator
       initialRouteName={Screen.ProfileIndexScreen}
-      screenOptions={{headerShown: false}}>
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Stack.Screen
         name={Screen.ProfileIndexScreen}
         component={ProfileIndexScreen}
@@ -32,6 +36,8 @@ const ProfileScreen: FC = ({navigation, route}) => {
           headerBackTitle: '',
           title: t('screen:profileConnectedMail'),
           headerBackTitleVisible: false,
+          headerTintColor: Colors.text,
+          headerLeft: MixinsTabBar.headerBackDefault,
         }}
         name={Screen.ProfileConnectedMailScreen}
         component={ProfileConnectedMailScreen}
@@ -42,6 +48,8 @@ const ProfileScreen: FC = ({navigation, route}) => {
           headerBackTitle: '',
           title: t('Your Profile'),
           headerBackTitleVisible: false,
+          headerTintColor: Colors.text,
+          headerLeft: MixinsTabBar.headerBackDefault,
         }}
         name={Screen.EditProfileScreen}
         component={EditProfileScreen}
