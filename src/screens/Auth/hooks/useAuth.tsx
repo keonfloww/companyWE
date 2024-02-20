@@ -194,7 +194,7 @@ const useAuth = () => {
         dispatch(userSliceActions.init());
       }, 1000);
 
-      await signOutFirebase();
+      signOutFirebase();
     } catch (error) {
       console.log('error handleSignOut', error);
     } finally {

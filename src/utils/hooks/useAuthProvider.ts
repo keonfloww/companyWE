@@ -30,11 +30,15 @@ const useAuthProvider = () => {
   };
 
   const signOutFirebase = async () => {
-    await GoogleSignin.revokeAccess();
-    await GoogleSignin.signOut();
-    auth()
-      .signOut()
-      .then(() => console.log('User signed out from Firebase!'));
+    try {
+      // await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      auth()
+        .signOut()
+        .then(() => console.log('User signed out from Firebase!'));
+    } catch (error) {
+      console.log('signOutFirebase', error);
+    }
   };
   return {
     signInByGoogle,
