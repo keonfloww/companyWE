@@ -15,6 +15,7 @@ import useInboxScreenAction from './hooks/useInboxScreenAction';
 import BaseModal from '@components/atoms/Modal/BaseModal';
 import IMAGES from '@assets/images/images';
 import {t} from 'i18next';
+import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
 
 const InboxScreen = () => {
   const navigation = useNavigation();
@@ -71,6 +72,7 @@ const InboxScreen = () => {
       </View>
       <View style={{height: scale(10)}} />
       <Animated.FlatList
+        contentContainerStyle={!data?.length ? style.listEmptyStyle : {}}
         itemLayoutAnimation={LinearTransition.damping(10)}
         onEndReachedThreshold={0.7}
         onEndReached={nextPage}
@@ -112,6 +114,7 @@ const InboxScreen = () => {
         }}
         ItemSeparatorComponent={() => <View style={{height: scale(12)}} />}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={<EmptyContent />}
       />
       <DeleteMailFloatingButton
         visible={selectMode}
@@ -154,8 +157,9 @@ const InboxScreen = () => {
             ...style.text,
             textAlign: 'center',
           }}>
-          {t(`Deleting will remove this email from your Inbox. This action cannot be
-          undone.`)}
+          {t(
+            `Deleting will remove this email from your Inbox. This action cannot be undone.`,
+          )}
         </Text>
       </BaseModal>
     </SafeView>
@@ -167,5 +171,10 @@ export default React.memo(InboxScreen);
 const style = StyleSheet.create({
   text: {
     color: '#3c3c3c',
+  },
+  listEmptyStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
   },
 });

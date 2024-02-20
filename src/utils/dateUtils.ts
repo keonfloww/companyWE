@@ -3,6 +3,7 @@ import moment from 'moment';
 const DateUtils = {
   BACKEND_FORMAT: 'YYYY/MM/DD',
   FRONTEND_FORMAT_DEFAULT: 'h:mm A D MMM YYYY',
+  FRONTEND_FORMAT_DEBUG: 'HH:mm:ss A D MMM YYYY',
   formatDefault: (dateString: string) => {
     if (!dateString) {
       return '';

@@ -1,17 +1,14 @@
-import {scale} from '@utils/mixins';
+import IMAGES from '@assets/images/images';
+import LottieView from 'lottie-react-native';
 import React, {FC} from 'react';
-import {Circle} from 'react-native-progress';
 
 const ProgressCircle: FC = () => {
   return (
-    <Circle
-      style={{borderRadius: 99}}
-      size={scale(25)}
-      strokeCap="round"
-      endAngle={0.8}
-      indeterminate={true}
-      borderColor="#50048A"
-      borderWidth={scale(5)}
+    <LottieView
+      source={IMAGES.gifProgressSrc}
+      style={{width: '100%', height: '100%'}}
+      autoPlay
+      loop
     />
   );
 };

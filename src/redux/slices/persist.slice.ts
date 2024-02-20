@@ -17,7 +17,11 @@ export const persistSlice = createSlice({
         data: IUserSliceState;
       }>,
     ) => {
-      const userCredentialUid = action.payload.userCredentialUid;
+      const userCredentialUid = action.payload?.userCredentialUid;
+
+      if (userCredentialUid || !action.payload?.data) {
+        return state;
+      }
       return {
         ...state,
         [userCredentialUid]: action.payload.data,
@@ -29,4 +33,4 @@ export const persistSlice = createSlice({
 export const {setUserPersistData} = persistSlice.actions;
 export const persistSliceActions = persistSlice.actions;
 
-export const userReducer = persistSlice.reducer;
+export const persistReducer = persistSlice.reducer;

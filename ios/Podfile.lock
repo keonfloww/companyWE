@@ -823,6 +823,10 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
+  - lottie-ios (4.4.0)
+  - lottie-react-native (6.6.0):
+    - lottie-ios (~> 4.4.0)
+    - React-Core
   - MMKV (1.3.3):
     - MMKVCore (~> 1.3.3)
   - MMKVCore (1.3.3)
@@ -1309,6 +1313,7 @@ DEPENDENCIES:
   - FirebaseCore
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - GoogleUtilities
+  - lottie-react-native (from `../node_modules/lottie-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -1396,6 +1401,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - libwebp
+    - lottie-ios
     - MMKV
     - MMKVCore
     - nanopb
@@ -1419,6 +1425,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/React/FBReactNativeSpec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  lottie-react-native:
+    :path: "../node_modules/lottie-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -1570,6 +1578,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 8a1b34ad97ebe6f909fb8b9b77fba99943007556
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
+  lottie-ios: ef1be1f90d54255f08e09d767950e43714661178
+  lottie-react-native: 00ac19344296ae018260aabd14d6b36dd816b0e2
   MMKV: f902fb6719da13c2ab0965233d8963a59416f911
   MMKVCore: d26e4d3edd5cb8588c2569222cbd8be4231374e9
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
@@ -1583,7 +1593,7 @@ SPEC CHECKSUMS:
   React-Core: 4572f4cf5f8386b07dfabda5f436ee30dbf66784
   React-CoreModules: 621243df8863055ff30f3bb2ff71573ffa7b16c8
   React-cxxreact: 9f0bd765bbffbd2038936d1f0ba1c80ea7649e28
-  React-debug: acb9a39862e895dd72a45b6fbfbf005e5be658b8
+  React-debug: 6b2758523baa34207c4c7b216e842844178cb39e
   React-jsc: 844ccd35b8dbd105aa0430b658611a43f10ba8a5
   React-jsi: 8c012b3699d7427e96866dd3a539ca9611fa2546
   React-jsiexecutor: bc8a9ad812a2c88b3a41c08b5f4b3ed32d6d4766
@@ -1596,7 +1606,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
   react-native-webview: 4da188d751188601318a31582d4a1dfcb1523158
-  React-NativeModulesApple: 2478782db60918458884e4eb6821e7f5cc6c5bad
+  React-NativeModulesApple: 9d26e6aaa20da1529ab8ca4fb39e89ced8786481
   React-perflogger: 496a1a3dc6737f964107cb3ddae7f9e265ddda58
   React-RCTActionSheet: 02904b932b50e680f4e26e7a686b33ebf7ef3c00
   React-RCTAnimation: e44fe5053708c5be762943087c78dc5a6a3c645c
@@ -1610,9 +1620,9 @@ SPEC CHECKSUMS:
   React-RCTVibration: 35eec7201c8ffdaccdd908a5ec874b7055f975f3
   React-rncore: 46133d523155fc84572338bd6a7c461c1d873efc
   React-runtimeexecutor: d465ba0c47ef3ed8281143f59605cacc2244d5c7
-  React-runtimescheduler: 71a09fee7877709bbe6c0b4b68943e59ddda4d22
-  React-utils: 1b748acf56ce98a7bd2d21969385f5cf47897250
-  ReactCommon: 30e87a9d2946ef96dfd9a5d65b67b03231502492
+  React-runtimescheduler: 1421cc339f1bea9efb93955447b966d42a3719ef
+  React-utils: 116cdc7b7d64617b74ec766cb444fbf28dea365b
+  ReactCommon: 85e0c8c349a3909928d9f7ccf0219119be1ecdfd
   ReactNativeUiLib: dcb4c9faedde24142aad7032ae96469c6a84bd70
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   RNBootSplash: 73c2a97d761db234125638c24ad6da6d781d049d
@@ -1642,4 +1652,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0244213a8a9b7250fec99f533064a860931634c0
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.15.0

@@ -69,6 +69,7 @@ const useInboxScreen = () => {
   // TODO: Handle the process when the sync is not done but app is killed
   const handleGetByFireBaseMail = async (
     targetMail: FireBaseMailCredentials & FireBaseMailCredentialUpdated,
+    options: {isPullToRefresh: boolean},
   ) => {
     // console.log('handleGetByFireBaseMail', {
     //   address: targetMail.email,
@@ -89,6 +90,8 @@ const useInboxScreen = () => {
           .set('hour', 0)
           .set('minute', 0)
           .set('second', 0);
+        const computedStartDateUnix =
+          targetMail?.last_end_date_synced ?? startDate.unix().toString();
 
         const endDate: Moment = moment()
           .set('hour', 23)
@@ -99,16 +102,16 @@ const useInboxScreen = () => {
           ...mailAuth,
 
           email_address: targetMail.email,
-          start_date: startDate.unix().toString(),
+          start_date: computedStartDateUnix, // last_end_date_synced => Pull to refresh
           end_date: endDate.unix().toString(),
           max_results: MAIL_PER_PAGE,
           next_page_token,
 
           // DEBUG
-          start_date_string: startDate.format(
-            DateUtils.FRONTEND_FORMAT_DEFAULT,
-          ),
-          end_date_string: endDate.format(DateUtils.FRONTEND_FORMAT_DEFAULT),
+          start_date_string: moment
+            ?.unix(Number.parseInt(computedStartDateUnix))
+            ?.format(DateUtils.FRONTEND_FORMAT_DEBUG),
+          end_date_string: endDate?.format(DateUtils.FRONTEND_FORMAT_DEBUG),
         };
         const res = await getMail(params).unwrap();
         // handle refresh token and retry here
@@ -143,9 +146,11 @@ const useInboxScreen = () => {
         if (isEnd) {
           console.log(
             '---- SYNCED',
-            `${targetMail.email}, from ${startDate.format(
-              DateUtils.FRONTEND_FORMAT_DEFAULT,
-            )} to ${endDate.format(DateUtils.FRONTEND_FORMAT_DEFAULT)}`,
+            `${targetMail.email}, from ${moment
+              ?.unix(Number.parseInt(computedStartDateUnix))
+              ?.format(DateUtils.FRONTEND_FORMAT_DEBUG)} to ${moment(
+              endDate,
+            )?.format(DateUtils.FRONTEND_FORMAT_DEBUG)}`,
           );
 
           dispatch(
@@ -154,8 +159,16 @@ const useInboxScreen = () => {
             }),
           );
           // TODO: If many mails is syncing. Wait to all syncing process done
-          handleSetFlagAskForDelete({shouldAsk: true});
+          if (!options.isPullToRefresh) {
+            handleSetFlagAskForDelete({shouldAsk: true});
+            return;
+          }
           global?.props?.showDeleteMailModal();
+
+          const latestEndDateSynced = endDate
+            .set('hour', 0)
+            .set('minute', 0)
+            .set('second', 1);
 
           // save latest token to pull to refresh
           dispatch(
@@ -163,6 +176,10 @@ const useInboxScreen = () => {
               updatedConnectedMail: {
                 ...targetMail,
                 next_page_token: next_page_token,
+                last_end_date_synced: latestEndDateSynced?.unix()?.toString(),
+                last_end_date_synced_string: latestEndDateSynced?.format(
+                  DateUtils.FRONTEND_FORMAT_DEBUG,
+                ),
               },
             }),
           );
@@ -214,7 +231,7 @@ const useInboxScreen = () => {
     }
 
     for (let mail of userState.connectedMails) {
-      handleGetByFireBaseMail(mail);
+      handleGetByFireBaseMail(mail, {isPullToRefresh: true});
     }
     dispatch(userSliceActions.connectedMailResetSync());
   };

@@ -9,6 +9,7 @@ const bgDefaultSrc = require('../images/png/bg_default.png');
 const logoSrc = require('../images/png/logo.png');
 const icTrashSrc = require('../images/png/ic_trash.png');
 const icCloseSrc = require('../images/png/ic_close.png');
+const gifProgressSrc = require('../images/gif/loading_progress.json');
 
 // SVG
 import IcHome from './svg/ic_home.svg';
@@ -59,6 +60,7 @@ import icLogout from './svg/ic_logout.svg';
 import icCamera from './svg/camera.svg';
 import icBack from './svg/ic_back.svg';
 import BackButton from './svg/backButton.svg';
+import icEmpty from './svg/empty.svg';
 
 const IMAGES = {
   icEdit,
@@ -119,6 +121,8 @@ const IMAGES = {
   icTrashSrc,
   icCloseSrc,
   icBack,
+  icEmpty,
+  gifProgressSrc,
 };
 
 export default IMAGES;
