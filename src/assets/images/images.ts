@@ -10,6 +10,7 @@ const logoSrc = require('../images/png/logo.png');
 const icTrashSrc = require('../images/png/ic_trash.png');
 const icCloseSrc = require('../images/png/ic_close.png');
 const gifProgressSrc = require('../images/gif/loading_progress.json');
+const icBackSrc = require('../images/png/ic_back.png');
 
 // SVG
 import IcHome from './svg/ic_home.svg';
@@ -123,6 +124,7 @@ const IMAGES = {
   icBack,
   icEmpty,
   gifProgressSrc,
+  icBackSrc,
 };
 
 export default IMAGES;

@@ -7,11 +7,11 @@ import {t} from 'i18next';
 import EditProfileScreen from './screens/EditProfileScreen';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {Colors} from 'react-native-ui-lib';
-import MixinsTabBar from '@utils/mixinsTabBar';
+import IMAGES from '@assets/images/images';
 
 const Stack = createNativeStackNavigator();
 
-const ProfileScreen: FC = ({navigation, route}) => {
+const ProfileScreen: FC<any> = ({navigation, route}) => {
   React.useLayoutEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
     if (routeName === Screen.EditProfileScreen) {
@@ -20,6 +20,7 @@ const ProfileScreen: FC = ({navigation, route}) => {
       navigation.setOptions({tabBarStyle: {display: 'flex'}});
     }
   }, [navigation, route]);
+
   return (
     <Stack.Navigator
       initialRouteName={Screen.ProfileIndexScreen}
@@ -36,10 +37,10 @@ const ProfileScreen: FC = ({navigation, route}) => {
           headerBackTitle: '',
           title: t('screen:profileConnectedMail'),
           headerBackTitleVisible: false,
-          headerTintColor: Colors.text,
           headerBackVisible: true,
-          headerLeft: MixinsTabBar.headerBackDefault,
+          headerTintColor: Colors.text,
           headerTitleAlign: 'center',
+          headerBackImageSource: IMAGES.icBackSrc,
         }}
         name={Screen.ProfileConnectedMailScreen}
         component={ProfileConnectedMailScreen}
@@ -52,10 +53,9 @@ const ProfileScreen: FC = ({navigation, route}) => {
           headerBackTitleVisible: false,
           headerBackVisible: true,
           headerTintColor: Colors.text,
-          headerLeft: MixinsTabBar.headerBackDefault,
           headerTitleAlign: 'center',
+          headerBackImageSource: IMAGES.icBackSrc,
         }}
-
         name={Screen.EditProfileScreen}
         component={EditProfileScreen}
       />

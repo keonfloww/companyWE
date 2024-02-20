@@ -23,8 +23,6 @@ import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
 import {Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import ProfileScreen from '@screens/Profile/ProfileScreen';
-import {useDispatch} from 'react-redux';
-import Config from 'react-native-config';
 import ProgressCircle from './components/ProgressCircle';
 import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
 const Stack = createNativeStackNavigator();
@@ -37,7 +35,7 @@ const RootNavigator: FC = () => {
   // const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('Config.LOCAL_STORAGE_VERSION', Config.LOCAL_STORAGE_VERSION);
+    // console.log('Config.LOCAL_STORAGE_VERSION', Config.LOCAL_STORAGE_VERSION);
     // LocalUtils.shouldClearLocalStorageOnFirstTime({
     //   key: '1' ?? Config.LOCAL_STORAGE_VERSION ?? '1', // update it into env
     //   onYes: () => {
