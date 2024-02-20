@@ -7,8 +7,9 @@ import {useUserUpdateMutation} from '@redux/slices/api/userApi.slice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {scale} from '@utils/mixins';
 import {t} from 'i18next';
-import {Button} from 'react-native-ui-lib';
+import {Button, Colors} from 'react-native-ui-lib';
 import {
+  ActivityIndicator,
   FlatList,
   Linking,
   Platform,
@@ -35,6 +36,7 @@ import {Image} from 'react-native-image-crop-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
+import Loading from '@components/atoms/Loading';
 
 /**
  * TODO: Vipin
@@ -48,35 +50,6 @@ enum EnumGender {
 }
 
 const EditProfileScreen: FC = () => {
-  const groupItems = [
-    {
-      label: t('Setting'),
-      items: [
-        {
-          prefixIcon: <IMAGES.Photo color={'#3C3C3C'} />,
-          title: t('Take Photo'),
-          onPress: async () => {
-            uploadFromCamera();
-          },
-        },
-        {
-          prefixIcon: <IMAGES.Upload color={'#3C3C3C'} />,
-          title: t('Upload From Gallery'),
-          onPress: () => {
-            uploadFromGallery();
-          },
-        },
-        {
-          prefixIcon: <IMAGES.Delete color={'#3C3C3C'} />,
-          title: t('Remove Current Picture'),
-          onPress: () => {
-            setProfileUrl('');
-            setModal(false);
-          },
-        },
-      ],
-    },
-  ];
 
   /**
    * TODO: Vipin
@@ -88,6 +61,7 @@ const EditProfileScreen: FC = () => {
   );
   const [userUpdate] = useUserUpdateMutation();
   const [datePicker, setDatePicker] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [date, setDate] = useState(userProfile?.date_of_birth || '');
   const [gender, setGender] = useState(userProfile?.gender_id || null);
   const [modal, setModal] = useState(false);
@@ -97,6 +71,39 @@ const EditProfileScreen: FC = () => {
     userProfile?.user_profile_picture || '',
   );
   const dispatch = useDispatch();
+
+  const groupItems = [
+    {
+      label: t('Setting'),
+      items: [
+        {
+          prefixIcon: <IMAGES.Photo color={'#3C3C3C'} />,
+          title: t('Take Photo'),
+          onPress: async () => {
+            uploadFromCamera();
+          },
+          disabled: false,
+        },
+        {
+          prefixIcon: <IMAGES.Upload color={'#3C3C3C'} />,
+          title: t('Upload From Gallery'),
+          onPress: () => {
+            uploadFromGallery();
+          },
+          disabled: false,
+        },
+        {
+          prefixIcon: profileUrl === ''? <IMAGES.DeleteDisable color={'#3C3C3C'} /> : <IMAGES.Delete color={'#3C3C3C'} />,
+          title: t('Remove Current Picture'),
+          onPress: () => {
+            setProfileUrl('');
+            setModal(false);
+          },
+          disabled: profileUrl === '',
+        },
+      ],
+    },
+  ];
 
   /**
    * TODO: Vipin
@@ -138,6 +145,7 @@ const EditProfileScreen: FC = () => {
       task.on('state_changed', snapshot => {
         if (snapshot.bytesTransferred === snapshot.totalBytes) {
           snapshot.ref.getDownloadURL().then(url => {
+            setLoading(true);
             setProfileUrl(url);
             console.log(url);
           });
@@ -201,6 +209,7 @@ const EditProfileScreen: FC = () => {
     ImagePicker.openCamera({
       width: 300,
       height: 400,
+      useFrontCamera: true,
     })
       .then(async image => {
         let path = image.path;
@@ -236,6 +245,7 @@ const EditProfileScreen: FC = () => {
         gender_id: gender,
         accessToken: userProfile?.accessToken,
       });
+      console.log(data)
       dispatch(
         userSliceActions.setUserProfile({
           ...userProfile,
@@ -272,9 +282,12 @@ const EditProfileScreen: FC = () => {
               marginTop: scale(21),
             }}>
             {/* TODO: Vipin: separate it into meaningfull naming component */}
-            {profileUrl ? (
-              <View>
-                <Avatar source={{uri: profileUrl}} size={scale(130)} />
+           {profileUrl ? (
+             <View style={{height: scale(130), width: scale(130),alignItems: 'center', justifyContent:'center', backgroundColor:'lightgray', borderRadius: scale(130),}}>
+                <Avatar source={{uri: profileUrl}} size={scale(130)} setLoading={setLoading} />
+                {loading &&
+                <ActivityIndicator color={'#ffffff'} style={{position: 'absolute'}} />
+                }
                 <Pressable
                   onPress={() => setModal(true)}
                   style={{
@@ -290,7 +303,6 @@ const EditProfileScreen: FC = () => {
                     borderRadius: scale(30),
                   }}>
                   <IMAGES.icCamera
-                    style={{}}
                     height={14}
                     width={16}
                     color={'blue'}
@@ -323,13 +335,11 @@ const EditProfileScreen: FC = () => {
                       },
                       CommonStyles.font.bold30,
                     ]}>
-                    {/* TODO: Vipin: create function get first char of string in StringUtils*/}
                     {safeString(userProfile?.user_name)[0]}
                   </Text>
                 </View>
                 <Pressable
                   onPress={() => setModal(true)}
-                  // TODO: Vipin: Use scale bot bottom and right
                   style={{
                     position: 'absolute',
                     bottom: 5,
@@ -342,7 +352,6 @@ const EditProfileScreen: FC = () => {
                     justifyContent: 'center',
                     borderRadius: scale(30),
                   }}>
-                  {/* TODO: Vipin: Why the style is empty object? */}
                   <IMAGES.icCamera
                     style={{}}
                     height={14}
@@ -353,11 +362,53 @@ const EditProfileScreen: FC = () => {
               </View>
             )}
             <View style={{height: scale(20)}} />
-            <Text style={CommonStyles.font.bold24}>
+            <Text style={[CommonStyles.font.bold24, {overflow: 'hidden', flexWrap: 'nowrap'}]}>
               {userProfile?.user_name}
             </Text>
             <View style={{height: scale(20)}} />
           </View>
+            <View style={{marginBottom: scale(10)}}>
+          <Text style={[CommonStyles.font.bold16, {marginBottom: scale(10)}]}>
+            Account Information
+          </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: scale(15),
+              alignItems: 'center',
+              columnGap: scale(10),
+            }}>
+            <Text
+              style={[CommonStyles.font.semiBold14, {marginRight: scale(10)}]}>
+              Email Address
+            </Text>
+            <Text
+              numberOfLines={1}
+              style={[
+                CommonStyles.font.regular14,
+                {
+                  color: '#8f8f8f',
+                  flex: 1,
+                  textAlign: 'right',
+                },
+              ]}>
+              {userProfile?.email_address}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: scale(15),
+              alignItems: 'center',
+            }}>
+            <Text style={CommonStyles.font.semiBold14}>Account connected</Text>
+            <Text style={[CommonStyles.font.semiBold14, {color: '#8f8f8f'}]}>
+              Google
+            </Text>
+          </View>
+        </View>
 
           <View style={{rowGap: scale(15)}}>
             <View style={{marginBottom: scale(10)}}>
@@ -425,9 +476,11 @@ const EditProfileScreen: FC = () => {
                     renderItem={({item}) => {
                       return (
                         <TouchableOpacity
-                          activeOpacity={0.7}
+                        disabled={item.disabled}
+                          activeOpacity={item.disabled ? 1 : 0.7}
                           onPress={item?.onPress}>
                           <BaseRowIconLabel
+                            titleStyle={{color: item.disabled ? '#b0b0ac' : Colors.text}}
                             prefixIcon={item.prefixIcon}
                             title={item.title}
                           />
@@ -471,7 +524,7 @@ const EditProfileScreen: FC = () => {
           backgroundColor={'#50048A'}
         />
         <Button
-          label={'cancel'}
+          label={'Cancel'}
           onPress={navigationService.goBack}
           style={[{flex: 1, paddingHorizontal: 0}]}
           labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}

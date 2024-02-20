@@ -37,7 +37,7 @@ const useAuth = () => {
         LOCAL_STORAGE_KEYS.USER,
         JSON.stringify(userData.user),
       );
-      const key = BaseMailUtils.getValueForPersistMail(userData);
+            const key = BaseMailUtils.getValueForPersistMail(userData);
       const isUserReSignInWithSameAccount = await LocalUtils.isConnectedMail(
         key,
       );
@@ -89,7 +89,7 @@ const useAuth = () => {
           DateUtils.BACKEND_FORMAT,
         ) < moment().format(DateUtils.BACKEND_FORMAT);
 
-      if (isSignUp && !oldUser && !signedInBefore) {
+      if (isSignUp && !oldUser && !signedInBefore ) {
         // API register
         console.log('register run');
         const data = await userRegister({
@@ -105,7 +105,7 @@ const useAuth = () => {
           phone_number: '',
           accessToken: accessToken,
         });
-        console.log('after singin', {data});
+        console.log('after singup', {data});
         userFromApi = {
           ...data?.data?.data,
           creationTime: userData.user.metadata.creationTime,
@@ -126,6 +126,28 @@ const useAuth = () => {
           creationTime: userData.user.metadata.creationTime,
           accessToken,
         };
+        if (!userFromApi?.email_address || !data?.data) {
+          // I have written this coz some of the user data is not registered properly and no fields comes
+          const data = await userRegister({
+            id: userData.user.uid.toString(),
+            user_name: userData?.user?.displayName ?? '',
+            email_address: userData?.user?.email?.toString() ?? '',
+            is_email_address_verified: userData.user.emailVerified,
+            user_profile_picture: userData?.user?.photoURL || '',
+            sign_up_provider_id: 1,
+            gender_id: null,
+            user_address: '',
+            date_of_birth: '',
+            phone_number: '',
+            accessToken: accessToken,
+          });
+          console.log('after singin', {data});
+          userFromApi = {
+            ...data?.data?.data,
+            creationTime: userData.user.metadata.creationTime,
+            accessToken,
+          };
+        }
       }
       console.log({userFromApi});
       dispatch(userSliceActions.setUserProfile(userFromApi));

@@ -24,6 +24,7 @@ import ArrowDown from './svg/arrow_down.svg';
 import Photo from './svg/photo.svg';
 import Upload from './svg/upload.svg';
 import Delete from './svg/delete.svg';
+import DeleteDisable from './svg/delete_disable.svg';
 
 import icAppLogo from './svg/ic_app_logo.svg';
 import icAppLogoText from './svg/ic_app_logo_text.svg';
@@ -57,6 +58,7 @@ import icTrash from './svg/ic_trash.svg';
 import icLogout from './svg/ic_logout.svg';
 import icCamera from './svg/camera.svg';
 import icBack from './svg/ic_back.svg';
+import BackButton from './svg/backButton.svg';
 
 const IMAGES = {
   icEdit,
@@ -81,7 +83,9 @@ const IMAGES = {
   Photo,
   Upload,
   Delete,
+  DeleteDisable,
   icMail,
+  BackButton,
 
   // MOCK,
   icM1,

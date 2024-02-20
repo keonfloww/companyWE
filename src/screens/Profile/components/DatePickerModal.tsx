@@ -35,7 +35,7 @@ const DatePickerModal = ({
         <Text
           style={[CommonStyles.font.regular14, {color: Colors.border}]}
           onPress={() => setDatePicker(true)}>
-          {value ? value.toString() : 'Select Birthday'}
+          {value ? value?.toString() : 'Select Birthday'}
         </Text>
         <IMAGES.dateIcon />
       </View>
@@ -69,10 +69,21 @@ const DatePickerModal = ({
               color: Colors.primary,
             }}
             mode="single"
-            date={value? moment(value, "MM/DD/YYYY").toDate() : new Date()}
+            maxDate={new Date()}
+            date={
+              value &&
+              moment(value.replaceAll('/', '-')).isValid() &&
+              moment(value.replaceAll('/', '-'))
+                ? moment(value.replaceAll('/', '-'))
+                : new Date()
+            }
             onChange={params => {
               setDatePicker(false);
-              setDate(moment(params?.date?.toString()).format(DateUtils.UPDATE_FORMAT));
+              setDate(
+                moment(params?.date?.toString()).format(
+                  DateUtils.BACKEND_FORMAT,
+                ),
+              );
             }}
           />
         </View>

@@ -37,7 +37,9 @@ const ProfileScreen: FC = ({navigation, route}) => {
           title: t('screen:profileConnectedMail'),
           headerBackTitleVisible: false,
           headerTintColor: Colors.text,
+          headerBackVisible: true,
           headerLeft: MixinsTabBar.headerBackDefault,
+          headerTitleAlign: 'center',
         }}
         name={Screen.ProfileConnectedMailScreen}
         component={ProfileConnectedMailScreen}
@@ -48,9 +50,12 @@ const ProfileScreen: FC = ({navigation, route}) => {
           headerBackTitle: '',
           title: t('Your Profile'),
           headerBackTitleVisible: false,
+          headerBackVisible: true,
           headerTintColor: Colors.text,
           headerLeft: MixinsTabBar.headerBackDefault,
+          headerTitleAlign: 'center',
         }}
+
         name={Screen.EditProfileScreen}
         component={EditProfileScreen}
       />

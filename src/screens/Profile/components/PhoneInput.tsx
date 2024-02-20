@@ -5,6 +5,7 @@ import {scale} from '@utils/mixins';
 import CountryPicker from 'react-native-country-picker-modal';
 import CommonStyles from '@screens/styles';
 import IMAGES from '@assets/images/images';
+import countryList from './country.json';
 
 const PhoneInput = ({value, onChange}: any) => {
   const [countryVisible, setCountryVisible] = useState(false);
@@ -36,54 +37,67 @@ const PhoneInput = ({value, onChange}: any) => {
           alignItems: 'center',
           //   rowGap: scale(10),
         }}>
-         <View style={{flexDirection: 'row', alignItems: 'center'}}> 
-        <CountryPicker
-          containerButtonStyle={{
-            // backgroundColor: 'red',
-            borderWidth: 1,
-            borderColor: '#8f8f8f',
-            borderRadius: scale(100),
-            paddingHorizontal: scale(20),
-            // paddingVertical: scale(0),
-            alignContent: 'center',
-            justifyContent: 'center',
-            marginRight: scale(10),
-            height: scale(45),
-          }}
-          countryCode={
-            value === '' || value === null
-              ? 'IN'
-              : value.toString().split('-')[0]
-          }
-          visible={countryVisible}
-          onClose={() => setCountryVisible(false)}
-          onSelect={val => onCountryChange(val)}
-        />
-        <Pressable onTouchStart={()=> setCountryVisible(true)} style={{position: 'absolute', right: scale(20)}}>
-          <IMAGES.ArrowDown />
-        </Pressable>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <CountryPicker
+            containerButtonStyle={{
+              // backgroundColor: 'red',
+              borderWidth: 1,
+              borderColor: '#8f8f8f',
+              borderRadius: scale(100),
+              paddingHorizontal: scale(20),
+              // paddingVertical: scale(0),
+              alignContent: 'center',
+              justifyContent: 'center',
+              marginRight: scale(10),
+              height: scale(45),
+            }}
+            countryCode={
+              value === '' || value === null
+                ? 'IN'
+                : countryList.country.find(
+                    el => el.code === value.toString().split('-')[0],
+                  )
+                ? value.toString().split('-')[0]
+                : 'IN'
+            }
+            visible={countryVisible}
+            onClose={() => setCountryVisible(false)}
+            onSelect={val => onCountryChange(val)}
+          />
+          <Pressable
+            onTouchStart={() => setCountryVisible(true)}
+            style={{position: 'absolute', right: scale(20)}}>
+            <IMAGES.ArrowDown />
+          </Pressable>
         </View>
 
         <TextInput
-          style={[CommonStyles.font.regular14,{
-            borderWidth: 1,
-            borderColor: '#8f8f8f',
-            borderRadius: scale(100),
-            height: scale(45),
-            color: Colors.border,
-            // width: '70%',
-            flex: 1,
-            paddingHorizontal: scale(20),
-            paddingVertical: scale(10),
-          }]}
+          style={[
+            CommonStyles.font.regular14,
+            {
+              borderWidth: 1,
+              borderColor: '#8f8f8f',
+              borderRadius: scale(100),
+              height: scale(45),
+              color: Colors.border,
+              // width: '70%',
+              flex: 1,
+              paddingHorizontal: scale(20),
+              paddingVertical: scale(10),
+            },
+          ]}
           placeholderTextColor={Colors.border}
           keyboardType="number-pad"
           value={
-            value === '' || value === null ? '' : value.toString().split('-')[1]
+            value === '' || value === null
+              ? ''
+              : !!value.toString().split('-')[1]
+              ? value.toString().split('-')[1]
+              : ''
           }
           onChangeText={(val: any) => {
-            if(regex.test(val) || val===''){
-              onPhoneChange(val)
+            if (regex.test(val) || val === '') {
+              onPhoneChange(val);
             }
           }}
           placeholder="phone"
