@@ -36,8 +36,6 @@ const useConnectMail = ({
   useEffect(() => {
     const firebaseAuth = auth();
     const currentUser = firebaseAuth.currentUser;
-    console.log('firebaseAuth', currentUser);
-    console.log('currentUser?.uid', currentUser?.uid);
     if (!currentUser?.uid) {
       return;
     }

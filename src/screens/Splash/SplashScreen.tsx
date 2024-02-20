@@ -19,10 +19,8 @@ const SplashScreen = () => {
       );
       if (firebaseAuth?.uid && user) {
         if (!isConnectedMails) {
-          console.log('Screen.ConnectMailScreen from splash screen');
           navigationService.navigateAndReset(Screen.ConnectMailScreen);
         } else {
-          console.log('Screen.MainTabBar.Screen.HomeScreen from splash screen');
           navigationService.navigateAndReset(Screen.MainTabBar, {
             params: Screen.HomeScreen,
           });
