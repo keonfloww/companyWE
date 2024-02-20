@@ -173,10 +173,10 @@ const AppProvider = ({children}: PropsWithChildren) => {
       </RootSiblingPortal>
 
       {/* TODO: implement show debug button on dev env only */}
-      <DebugView
+      {/* <DebugView
         showNetwork={showNetwork}
         handleShowNetwork={handleShowNetwork}
-      />
+      /> */}
     </Context.Provider>
   );
 };
