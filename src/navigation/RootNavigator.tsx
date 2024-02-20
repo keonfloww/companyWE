@@ -4,7 +4,7 @@ import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
 import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {Screen} from './navigation.enums';
-import navigationService, {navigationRef} from '@services/navigationService';
+import {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
 import {Platform, View} from 'react-native';
 import IMAGES from '@assets/images/images';
@@ -24,13 +24,9 @@ import {Colors} from 'react-native-ui-lib';
 import SplashScreen from '@screens/Splash/SplashScreen';
 import ProfileScreen from '@screens/Profile/ProfileScreen';
 import {useDispatch} from 'react-redux';
-import {LOCAL_STORAGE_KEYS, LocalUtils} from '@utils/localStorageUtils';
 import Config from 'react-native-config';
-import {userSliceActions} from '@redux/slices/user.slice';
-import {persistSliceActions} from '@redux/slices/persist.slice';
 import ProgressCircle from './components/ProgressCircle';
 import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -38,7 +34,7 @@ const CONFIG = {};
 const RootNavigator: FC = () => {
   // TODO: Need to use insets to handle status bar
   // const insets = useSafeAreaInsets();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('Config.LOCAL_STORAGE_VERSION', Config.LOCAL_STORAGE_VERSION);
