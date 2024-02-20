@@ -18,13 +18,7 @@ const LayoutBackgroundDefaultV1: FC<Props> = ({children, containerStyle}) => {
         style={StyleSheet.absoluteFill}>
         {/* TODO: create back icon here */}
       </ImageBackground>
-      <View
-        style={[
-          {marginTop: insets.top, marginBottom: insets.bottom},
-          containerStyle,
-        ]}>
-        {children}
-      </View>
+      <View style={[{marginTop: insets.top}, containerStyle]}>{children}</View>
     </>
   );
 };

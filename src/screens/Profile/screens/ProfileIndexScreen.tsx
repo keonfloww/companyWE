@@ -9,13 +9,13 @@ import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
 import {EnumProfileColors, ProfileColors} from '@utils/colorUtils';
-import {scale} from '@utils/mixins';
+import {scale, scaleHeight} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
 import {t} from 'i18next';
 import moment from 'moment';
 import {useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
-import { ActivityIndicator } from 'react-native';
+import {ActivityIndicator} from 'react-native';
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
 import {useSelector} from 'react-redux';
@@ -108,7 +108,7 @@ const ProfileIndexScreen = () => {
                 source={{uri: userProfile?.user_profile_picture}}
                 size={scale(150)}
                 setLoading={setLoading}
-                onLoadStart={()=> setLoading(true)}
+                onLoadStart={() => setLoading(true)}
               />
               {loading && (
                 <ActivityIndicator
@@ -245,7 +245,7 @@ const ProfileIndexScreen = () => {
         }}>
         <LogoutButton onPress={handleSignOut} />
       </View>
-      <View style={{height: scale(26)}} />
+      <View style={{height: scaleHeight(20)}} />
     </LayoutBackgroundDefaultV1>
   );
 };

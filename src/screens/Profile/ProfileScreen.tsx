@@ -8,6 +8,8 @@ import EditProfileScreen from './screens/EditProfileScreen';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {Colors} from 'react-native-ui-lib';
 import IMAGES from '@assets/images/images';
+import {Platform} from 'react-native';
+import {scale} from '@utils/mixins';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,7 +42,11 @@ const ProfileScreen: FC<any> = ({navigation, route}) => {
           headerBackVisible: true,
           headerTintColor: Colors.text,
           headerTitleAlign: 'center',
-          headerBackImageSource: IMAGES.icBackSrc,
+          // https://github.com/react-navigation/react-navigation/issues/10300
+          headerBackImageSource:
+            Platform.OS === 'android'
+              ? IMAGES.icBackSrc
+              : {uri: 'ic_back', width: scale(24), height: scale(24)},
         }}
         name={Screen.ProfileConnectedMailScreen}
         component={ProfileConnectedMailScreen}
@@ -54,7 +60,11 @@ const ProfileScreen: FC<any> = ({navigation, route}) => {
           headerBackVisible: true,
           headerTintColor: Colors.text,
           headerTitleAlign: 'center',
-          headerBackImageSource: IMAGES.icBackSrc,
+          // https://github.com/react-navigation/react-navigation/issues/10300
+          headerBackImageSource:
+            Platform.OS === 'android'
+              ? IMAGES.icBackSrc
+              : {uri: 'ic_back', width: scale(24), height: scale(24)},
         }}
         name={Screen.EditProfileScreen}
         component={EditProfileScreen}

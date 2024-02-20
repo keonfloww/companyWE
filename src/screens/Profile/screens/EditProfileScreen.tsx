@@ -5,7 +5,7 @@ import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
 import {useUserUpdateMutation} from '@redux/slices/api/userApi.slice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {scale} from '@utils/mixins';
+import {scale, scaleHeight} from '@utils/mixins';
 import {t} from 'i18next';
 import {Button, Colors} from 'react-native-ui-lib';
 import {
@@ -36,7 +36,6 @@ import {Image} from 'react-native-image-crop-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
-import Loading from '@components/atoms/Loading';
 
 /**
  * TODO: Vipin
@@ -50,7 +49,6 @@ enum EnumGender {
 }
 
 const EditProfileScreen: FC = () => {
-
   /**
    * TODO: Vipin
    * Bring the login useSelector, useDispatch, RTK query into new custom hook
@@ -93,7 +91,12 @@ const EditProfileScreen: FC = () => {
           disabled: false,
         },
         {
-          prefixIcon: profileUrl === ''? <IMAGES.DeleteDisable color={'#3C3C3C'} /> : <IMAGES.Delete color={'#3C3C3C'} />,
+          prefixIcon:
+            profileUrl === '' ? (
+              <IMAGES.DeleteDisable color={'#3C3C3C'} />
+            ) : (
+              <IMAGES.Delete color={'#3C3C3C'} />
+            ),
           title: t('Remove Current Picture'),
           onPress: () => {
             setProfileUrl('');
@@ -245,7 +248,7 @@ const EditProfileScreen: FC = () => {
         gender_id: gender,
         accessToken: userProfile?.accessToken,
       });
-      console.log(data)
+      console.log(data);
       dispatch(
         userSliceActions.setUserProfile({
           ...userProfile,
@@ -269,7 +272,11 @@ const EditProfileScreen: FC = () => {
 
   return (
     <SafeViewForceInsets isHasHeaderTabBar={true} isSafeBottom={false}>
-      <View style={[CommonStyles.view.viewLayout, {marginTop: 0}]}>
+      <View
+        style={[
+          CommonStyles.view.viewLayout,
+          {marginTop: 0, marginBottom: scaleHeight(25)},
+        ]}>
         <KeyboardAwareScrollView
           automaticallyAdjustKeyboardInsets={true}
           keyboardDismissMode="interactive"
@@ -282,12 +289,27 @@ const EditProfileScreen: FC = () => {
               marginTop: scale(21),
             }}>
             {/* TODO: Vipin: separate it into meaningfull naming component */}
-           {profileUrl ? (
-             <View style={{height: scale(130), width: scale(130),alignItems: 'center', justifyContent:'center', backgroundColor:'lightgray', borderRadius: scale(130),}}>
-                <Avatar source={{uri: profileUrl}} size={scale(130)} setLoading={setLoading} />
-                {loading &&
-                <ActivityIndicator color={'#ffffff'} style={{position: 'absolute'}} />
-                }
+            {profileUrl ? (
+              <View
+                style={{
+                  height: scale(130),
+                  width: scale(130),
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'lightgray',
+                  borderRadius: scale(130),
+                }}>
+                <Avatar
+                  source={{uri: profileUrl}}
+                  size={scale(130)}
+                  setLoading={setLoading}
+                />
+                {loading && (
+                  <ActivityIndicator
+                    color={'#ffffff'}
+                    style={{position: 'absolute'}}
+                  />
+                )}
                 <Pressable
                   onPress={() => setModal(true)}
                   style={{
@@ -302,11 +324,7 @@ const EditProfileScreen: FC = () => {
                     justifyContent: 'center',
                     borderRadius: scale(30),
                   }}>
-                  <IMAGES.icCamera
-                    height={14}
-                    width={16}
-                    color={'blue'}
-                  />
+                  <IMAGES.icCamera height={14} width={16} color={'blue'} />
                 </Pressable>
               </View>
             ) : (
@@ -362,53 +380,62 @@ const EditProfileScreen: FC = () => {
               </View>
             )}
             <View style={{height: scale(20)}} />
-            <Text style={[CommonStyles.font.bold24, {overflow: 'hidden', flexWrap: 'nowrap'}]}>
+            <Text
+              style={[
+                CommonStyles.font.bold24,
+                {overflow: 'hidden', flexWrap: 'nowrap'},
+              ]}>
               {userProfile?.user_name}
             </Text>
             <View style={{height: scale(20)}} />
           </View>
-            <View style={{marginBottom: scale(10)}}>
-          <Text style={[CommonStyles.font.bold16, {marginBottom: scale(10)}]}>
-            Account Information
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: scale(15),
-              alignItems: 'center',
-              columnGap: scale(10),
-            }}>
-            <Text
-              style={[CommonStyles.font.semiBold14, {marginRight: scale(10)}]}>
-              Email Address
+          <View style={{marginBottom: scale(10)}}>
+            <Text style={[CommonStyles.font.bold16, {marginBottom: scale(10)}]}>
+              Account Information
             </Text>
-            <Text
-              numberOfLines={1}
-              style={[
-                CommonStyles.font.regular14,
-                {
-                  color: '#8f8f8f',
-                  flex: 1,
-                  textAlign: 'right',
-                },
-              ]}>
-              {userProfile?.email_address}
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: scale(15),
+                alignItems: 'center',
+                columnGap: scale(10),
+              }}>
+              <Text
+                style={[
+                  CommonStyles.font.semiBold14,
+                  {marginRight: scale(10)},
+                ]}>
+                Email Address
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={[
+                  CommonStyles.font.regular14,
+                  {
+                    color: '#8f8f8f',
+                    flex: 1,
+                    textAlign: 'right',
+                  },
+                ]}>
+                {userProfile?.email_address}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: scale(15),
+                alignItems: 'center',
+              }}>
+              <Text style={CommonStyles.font.semiBold14}>
+                Account connected
+              </Text>
+              <Text style={[CommonStyles.font.semiBold14, {color: '#8f8f8f'}]}>
+                Google
+              </Text>
+            </View>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: scale(15),
-              alignItems: 'center',
-            }}>
-            <Text style={CommonStyles.font.semiBold14}>Account connected</Text>
-            <Text style={[CommonStyles.font.semiBold14, {color: '#8f8f8f'}]}>
-              Google
-            </Text>
-          </View>
-        </View>
 
           <View style={{rowGap: scale(15)}}>
             <View style={{marginBottom: scale(10)}}>
@@ -476,11 +503,13 @@ const EditProfileScreen: FC = () => {
                     renderItem={({item}) => {
                       return (
                         <TouchableOpacity
-                        disabled={item.disabled}
+                          disabled={item.disabled}
                           activeOpacity={item.disabled ? 1 : 0.7}
                           onPress={item?.onPress}>
                           <BaseRowIconLabel
-                            titleStyle={{color: item.disabled ? '#b0b0ac' : Colors.text}}
+                            titleStyle={{
+                              color: item.disabled ? '#b0b0ac' : Colors.text,
+                            }}
                             prefixIcon={item.prefixIcon}
                             title={item.title}
                           />
@@ -509,7 +538,7 @@ const EditProfileScreen: FC = () => {
           shadowOpacity: 0.1,
           elevation: scale(5),
           padding: scale(20),
-          paddingBottom: scale(50),
+          paddingBottom: scale(60),
           flexDirection: 'row',
           borderTopLeftRadius: scale(20),
           borderTopRightRadius: scale(20),
