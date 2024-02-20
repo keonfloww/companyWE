@@ -161,9 +161,9 @@ const useInboxScreen = () => {
           // TODO: If many mails is syncing. Wait to all syncing process done
           if (!options.isPullToRefresh) {
             handleSetFlagAskForDelete({shouldAsk: true});
+            global?.props?.showDeleteMailModal();
             return;
           }
-          global?.props?.showDeleteMailModal();
 
           const latestEndDateSynced = endDate
             .set('hour', 0)
