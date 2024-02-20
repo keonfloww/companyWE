@@ -19,9 +19,9 @@ export const persistSlice = createSlice({
     ) => {
       const userCredentialUid = action.payload?.userCredentialUid;
 
-      // if (userCredentialUid || !action.payload?.data) {
-      //   return state;
-      // }
+      if (!userCredentialUid || !action.payload?.data) {
+        return state;
+      }
       return {
         ...state,
         [userCredentialUid]: {
