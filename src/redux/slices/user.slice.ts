@@ -111,6 +111,12 @@ export const userSlice = createSlice({
     connectedMailResetSync: state => {
       return {...state, syncedMailAddress: []};
     },
+    connectedMailMarkSyncedAll: state => {
+      return {
+        ...state,
+        syncedMailAddress: state.connectedMails?.map(mail => mail.email) ?? [],
+      };
+    },
     connectedMailUpdateProgress: (
       state,
       action: PayloadAction<{
