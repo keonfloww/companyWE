@@ -81,6 +81,7 @@ export const userSlice = createSlice({
 
       let oldEmailFromTargetMailAddress = state?.mailbox ?? [];
 
+      // TODO: toannt Ignore if syncing in progress, user sign out and sign in with new account
       oldEmailFromTargetMailAddress?.filter((mail: Email) => {
         return mail?.received_on_unix >= moment().subtract(2, 'week').unix();
       });
@@ -112,6 +113,10 @@ export const userSlice = createSlice({
       return {...state, syncedMailAddress: []};
     },
     connectedMailMarkSyncedAll: state => {
+      console.log(
+        'state.connectedMails?.map(mail => mail.email) ?? []',
+        state.connectedMails?.map(mail => mail.email) ?? [],
+      );
       return {
         ...state,
         syncedMailAddress: state.connectedMails?.map(mail => mail.email) ?? [],

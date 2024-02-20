@@ -186,6 +186,8 @@ const useAuth = () => {
         dispatch(
           persistSliceActions.setUserPersistData({
             userCredentialUid: BaseMailUtils.getValueForPersistMail(authUser),
+
+            // Mark as syned all to prevent loader show
             data: userReducerState,
           }),
         );

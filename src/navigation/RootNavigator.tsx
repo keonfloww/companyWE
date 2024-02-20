@@ -25,6 +25,8 @@ import SplashScreen from '@screens/Splash/SplashScreen';
 import ProfileScreen from '@screens/Profile/ProfileScreen';
 import ProgressCircle from './components/ProgressCircle';
 import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
+import {useDispatch} from 'react-redux';
+import {userSliceActions} from '@redux/slices/user.slice';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -32,7 +34,7 @@ const CONFIG = {};
 const RootNavigator: FC = () => {
   // TODO: Need to use insets to handle status bar
   // const insets = useSafeAreaInsets();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // console.log('Config.LOCAL_STORAGE_VERSION', Config.LOCAL_STORAGE_VERSION);
@@ -48,6 +50,7 @@ const RootNavigator: FC = () => {
     //     console.clear();
     //   },
     // });
+    dispatch(userSliceActions.connectedMailMarkSyncedAll());
   }, []);
 
   const linking = {
