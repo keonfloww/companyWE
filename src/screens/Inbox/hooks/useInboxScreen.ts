@@ -77,14 +77,14 @@ const useInboxScreen = () => {
     // });
     let next_page_token = targetMail?.next_page_token || null;
 
+    let mailAuth: IMailAuth2Params = {
+      access_token: targetMail?.access_token,
+      expiry_date: targetMail.expiry_date,
+      refresh_token: targetMail.refresh_token,
+    };
+
     try {
       while (true) {
-        let mailAuth: IMailAuth2Params = {
-          access_token: targetMail?.access_token,
-          expiry_date: targetMail.expiry_date,
-          refresh_token: targetMail.refresh_token,
-        };
-
         const startDate: Moment = moment()
           .subtract(2, 'week')
           .set('hour', 0)
@@ -199,7 +199,7 @@ const useInboxScreen = () => {
       }
     } catch (error) {
       console.log('useinboxscreen error 158', error);
-      global.props.showToast('Error in syncing mail', true);
+      // global.props.showToast('Error in syncing mail', true);
       dispatch(
         userSliceActions.connectedMailMarkAsSynced({
           mail: targetMail.email,
