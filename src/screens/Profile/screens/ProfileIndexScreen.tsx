@@ -13,12 +13,15 @@ import {scale} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
 import {t} from 'i18next';
 import moment from 'moment';
+import {useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
 import {useSelector} from 'react-redux';
 
 const ProfileIndexScreen = () => {
+  const [loading, setLoading] = useState(false);
   const userProfile = useSelector(
     (state: BaseState) => state.userReducer.userProfile,
   );
@@ -92,10 +95,28 @@ const ProfileIndexScreen = () => {
             marginTop: scale(30),
           }}>
           {userProfile?.user_profile_picture ? (
-            <Avatar
-              source={{uri: userProfile?.user_profile_picture}}
-              size={scale(150)}
-            />
+            <View
+              style={{
+                height: scale(130),
+                width: scale(130),
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'lightgray',
+                borderRadius: scale(130),
+              }}>
+              <Avatar
+                source={{uri: userProfile?.user_profile_picture}}
+                size={scale(150)}
+                setLoading={setLoading}
+                onLoadStart={()=> setLoading(true)}
+              />
+              {loading && (
+                <ActivityIndicator
+                  color={'#ffffff'}
+                  style={{position: 'absolute'}}
+                />
+              )}
+            </View>
           ) : (
             <View
               style={[
