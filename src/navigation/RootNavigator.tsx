@@ -43,7 +43,7 @@ const RootNavigator: FC = () => {
   useEffect(() => {
     console.log('Config.LOCAL_STORAGE_VERSION', Config.LOCAL_STORAGE_VERSION);
     LocalUtils.shouldClearLocalStorageOnFirstTime({
-      key: '3' ?? Config.LOCAL_STORAGE_VERSION ?? '1', // update it into env
+      key: '1' ?? Config.LOCAL_STORAGE_VERSION ?? '1', // update it into env
       onYes: () => {
         console.info('RECOGNIZED NEW APP INSTALL');
         dispatch(userSliceActions.init());

@@ -37,7 +37,7 @@ const useAuth = () => {
         LOCAL_STORAGE_KEYS.USER,
         JSON.stringify(userData.user),
       );
-            const key = BaseMailUtils.getValueForPersistMail(userData);
+      const key = BaseMailUtils.getValueForPersistMail(userData);
       const isUserReSignInWithSameAccount = await LocalUtils.isConnectedMail(
         key,
       );
@@ -89,7 +89,7 @@ const useAuth = () => {
           DateUtils.BACKEND_FORMAT,
         ) < moment().format(DateUtils.BACKEND_FORMAT);
 
-      if (isSignUp && !oldUser && !signedInBefore ) {
+      if (isSignUp && !oldUser && !signedInBefore) {
         // API register
         console.log('register run');
         const data = await userRegister({

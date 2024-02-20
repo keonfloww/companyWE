@@ -19,12 +19,17 @@ export const persistSlice = createSlice({
     ) => {
       const userCredentialUid = action.payload?.userCredentialUid;
 
-      if (userCredentialUid || !action.payload?.data) {
+      if (!userCredentialUid || !action.payload?.data) {
         return state;
       }
       return {
         ...state,
-        [userCredentialUid]: action.payload.data,
+        [userCredentialUid]: {
+          ...action.payload.data,
+          syncedMailAddress: (action.payload?.data?.connectedMails ?? [])?.map(
+            m => m?.email,
+          ),
+        },
       };
     },
   },
