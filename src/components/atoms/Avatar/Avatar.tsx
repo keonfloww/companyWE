@@ -14,6 +14,7 @@ interface AvatarProps {
   containerStyle?: StyleProp<ViewStyle>;
   size?: number;
   resizeMode?: ResizeMode;
+  setLoading?: (val: boolean) => void;
 }
 
 const Avatar: React.FC<AvatarProps> = ({
@@ -21,6 +22,7 @@ const Avatar: React.FC<AvatarProps> = ({
   source,
   containerStyle,
   resizeMode,
+  setLoading,
 }) => {
   return (
     <View style={[styles(size).container, containerStyle]}>
@@ -28,6 +30,7 @@ const Avatar: React.FC<AvatarProps> = ({
         source={source}
         style={source ? styles(size).image : styles(size).icon}
         resizeMode={resizeMode ? resizeMode : FastImage.resizeMode.cover}
+        onLoad={(e)=> setLoading ? setLoading(false) : {}}
       />
     </View>
   );
@@ -37,7 +40,7 @@ const styles = (size: number) =>
   StyleSheet.create({
     container: {
       // backgroundColor: colors.white,
-      backgroundColor: 'gray',
+      backgroundColor: 'lightgray',
       justifyContent: 'center',
       alignItems: 'center',
       width: size,

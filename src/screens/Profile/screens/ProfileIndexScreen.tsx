@@ -32,7 +32,7 @@ const ProfileIndexScreen = () => {
           prefixIcon: (
             <IMAGES.IcProfile color={'#3C3C3C'} {...CommonStyles.icon.icon24} />
           ),
-          title: t('Edit Profile Detail'),
+          title: t('Edit Profile Details'),
           onPress: () => {
             navigationService.navigate(Screen.EditProfileScreen);
           },
@@ -94,7 +94,7 @@ const ProfileIndexScreen = () => {
           {userProfile?.user_profile_picture ? (
             <Avatar
               source={{uri: userProfile?.user_profile_picture}}
-              size={scale(130)}
+              size={scale(150)}
             />
           ) : (
             <View

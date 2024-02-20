@@ -60,7 +60,7 @@ const ConnectMailScreen = () => {
           {/* <LogoutButton onPress={handleSignOut} /> */}
         </View>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
-          {t('Connect your\nemail accounts')}
+          {t('Connect your\ngoogle accounts')}
         </Text>
         <View style={{height: scale(10)}} />
         <Text style={[CommonStyles.font.regular14, styles.text]}>
