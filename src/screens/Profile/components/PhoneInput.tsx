@@ -11,14 +11,13 @@ const PhoneInput = ({value, onChange}: any) => {
   const [countryVisible, setCountryVisible] = useState(false);
   const regex = /^\d+$/;
   const onCountryChange = (val: any) => {
-    onChange(`${val.cca2}-${value.split('-')[1]? value.split('-')[1] : ''}`);
+    onChange(`${val.cca2}-${value.split('-')[1] ? value.split('-')[1] : ''}`);
   };
   useEffect(() => {
-    const va =
-      value === '' || value === null ? 'IN' : value;
+    const va = value === '' || value === null ? 'IN' : value;
   });
   const onPhoneChange = (val: any) => {
-    onChange(`${value.split('-')[0] || 'IN'}-${val? val : '' }`);
+    onChange(`${value.split('-')[0] || 'IN'}-${val ? val : ''}`);
   };
 
   return (
@@ -100,7 +99,7 @@ const PhoneInput = ({value, onChange}: any) => {
               onPhoneChange(val);
             }
           }}
-          placeholder="phone"
+          placeholder="Phone"
         />
       </View>
     </View>
