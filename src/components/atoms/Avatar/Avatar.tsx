@@ -15,6 +15,7 @@ interface AvatarProps {
   size?: number;
   resizeMode?: ResizeMode;
   setLoading?: (val: boolean) => void;
+  onLoadStart?: () => void;
 }
 
 const Avatar: React.FC<AvatarProps> = ({
@@ -23,6 +24,7 @@ const Avatar: React.FC<AvatarProps> = ({
   containerStyle,
   resizeMode,
   setLoading,
+  onLoadStart,
 }) => {
   return (
     <View style={[styles(size).container, containerStyle]}>
@@ -31,6 +33,7 @@ const Avatar: React.FC<AvatarProps> = ({
         style={source ? styles(size).image : styles(size).icon}
         resizeMode={resizeMode ? resizeMode : FastImage.resizeMode.cover}
         onLoad={(e)=> setLoading ? setLoading(false) : {}}
+        onLoadStart={()=> onLoadStart ? onLoadStart() : {}}
       />
     </View>
   );
