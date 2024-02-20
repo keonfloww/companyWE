@@ -159,7 +159,7 @@ const useInboxScreen = () => {
             }),
           );
           // TODO: If many mails is syncing. Wait to all syncing process done
-          if (!options.isPullToRefresh) {
+          if (!options?.isPullToRefresh) {
             handleSetFlagAskForDelete({shouldAsk: true});
             global?.props?.showDeleteMailModal();
             return;
