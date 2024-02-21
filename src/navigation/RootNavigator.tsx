@@ -4,7 +4,7 @@ import HomeScreen from '@screens/Home/HomeScreen';
 import IntroScreen from '@screens/Intro/IntroScreen';
 import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {Screen} from './navigation.enums';
-import {navigationRef} from '@services/navigationService';
+import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
 import {Platform, View} from 'react-native';
 import IMAGES from '@assets/images/images';
@@ -27,6 +27,9 @@ import ProgressCircle from './components/ProgressCircle';
 import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
 import {useDispatch} from 'react-redux';
 import {userSliceActions} from '@redux/slices/user.slice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {persistSliceActions} from '@redux/slices/persist.slice';
+import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -41,13 +44,13 @@ const RootNavigator: FC = () => {
     // LocalUtils.shouldClearLocalStorageOnFirstTime({
     //   key: '1' ?? Config.LOCAL_STORAGE_VERSION ?? '1', // update it into env
     //   onYes: () => {
-    //     console.info('RECOGNIZED NEW APP INSTALL');
-    //     dispatch(userSliceActions.init());
-    //     dispatch(persistSliceActions.init());
-    //     AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.USER);
-    //     navigationService.navigateAndReset(Screen.Login);
-    //     global?.props?.hideLoading();
-    //     console.clear();
+    // console.info('RECOGNIZED NEW APP INSTALL');
+    // dispatch(userSliceActions.init());
+    // dispatch(persistSliceActions.init());
+    // AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.USER);
+    // navigationService.navigateAndReset(Screen.Login);
+    // global?.props?.hideLoading();
+    // console.clear();
     //   },
     // });
     dispatch(userSliceActions.connectedMailMarkSyncedAll());
@@ -160,33 +163,25 @@ const TabBarNavigator: FC = () => {
     };
   }, []);
 
-  const inBoxTabBarOptions = useMemo(() => {
-    return {
-      ...styleHeader,
-      title: t('screen:inboxScreen'),
-      ...(mailCountUnread
-        ? {tabBarBadge: mailCountUnread}
-        : {tabBarBadgeStyle: {display: 'none'}}),
-      tabBarIcon: ({color, focused}: any) =>
-        userState.connectedMails.length ===
-        userState.syncedMailAddress.length ? (
-          <TabBarIconWrapper>
-            {focused ? (
-              <IMAGES.IcInboxFilled color={color} />
-            ) : (
-              <IMAGES.IcInbox color={color} />
-            )}
-          </TabBarIconWrapper>
-        ) : (
-          <ProgressCircle />
-        ),
-    };
-  }, [
-    styleHeader,
-    mailCountUnread,
-    userState.connectedMails,
-    userState.syncedMailAddress,
-  ]);
+  const inBoxTabBarOptions = {
+    ...styleHeader,
+    title: t('screen:inboxScreen'),
+    ...(mailCountUnread
+      ? {tabBarBadge: mailCountUnread}
+      : {tabBarBadgeStyle: {display: 'none'}}),
+    tabBarIcon: ({color, focused}: any) =>
+      userState.connectedMails.length === userState.syncedMailAddress.length ? (
+        <TabBarIconWrapper>
+          {focused ? (
+            <IMAGES.IcInboxFilled color={color} />
+          ) : (
+            <IMAGES.IcInbox color={color} />
+          )}
+        </TabBarIconWrapper>
+      ) : (
+        <ProgressCircle />
+      ),
+  };
 
   return (
     <Tab.Navigator
