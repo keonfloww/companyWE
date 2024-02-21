@@ -75,7 +75,9 @@ const useInboxScreen = () => {
     //   address: targetMail.email,
     //   next_page_token: targetMail.next_page_token,
     // });
-    let next_page_token = targetMail?.next_page_token || null;
+    let next_page_token = !options?.isPullToRefresh
+      ? targetMail?.next_page_token || null
+      : null;
 
     let mailAuth: IMailAuth2Params = {
       access_token: targetMail?.access_token,
