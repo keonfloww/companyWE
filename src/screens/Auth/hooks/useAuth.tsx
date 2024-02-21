@@ -208,7 +208,6 @@ const useAuth = () => {
       // AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS);
       navigationService.navigateAndReset(Screen.Login);
       global?.props?.hideLoading();
-      console.clear();
     }
   };
 
