@@ -20,7 +20,7 @@ import {
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
 import Modal from 'react-native-modal';
-import {FC, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {ColorUtils, EnumProfileColors, ProfileColors} from '@utils/colorUtils';
 import {safeString} from '@utils/stringUtils';
 import DatePickerModal from '../components/DatePickerModal';
@@ -65,6 +65,7 @@ const EditProfileScreen: FC = () => {
   const [modal, setModal] = useState(false);
   const [address, setAddress] = useState(userProfile?.user_address || '');
   const [phone, setPhone] = useState(userProfile?.phone_number || '');
+  const [error, setError] = useState(false);
   const [profileUrl, setProfileUrl] = useState(
     userProfile?.user_profile_picture || '',
   );
@@ -108,6 +109,9 @@ const EditProfileScreen: FC = () => {
     },
   ];
 
+  useEffect(()=> {
+    setError(false);
+  },[userProfile?.profileUrl, profileUrl])
   /**
    * TODO: Vipin
    * Why you define enum gender as string, then you set value is number
@@ -150,6 +154,7 @@ const EditProfileScreen: FC = () => {
           snapshot.ref.getDownloadURL().then(url => {
             setLoading(true);
             setProfileUrl(url);
+            setError(false)
             console.log(url);
           });
         }
@@ -289,7 +294,7 @@ const EditProfileScreen: FC = () => {
               marginTop: scale(21),
             }}>
             {/* TODO: Vipin: separate it into meaningfull naming component */}
-            {profileUrl ? (
+            {profileUrl && !error ? (
               <View
                 style={{
                   height: scale(130),
@@ -303,6 +308,7 @@ const EditProfileScreen: FC = () => {
                   source={{uri: profileUrl}}
                   size={scale(130)}
                   setLoading={setLoading}
+                  setError={setError}
                 />
                 {loading && (
                   <ActivityIndicator

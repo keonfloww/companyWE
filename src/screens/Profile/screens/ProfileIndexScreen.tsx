@@ -13,7 +13,7 @@ import {scale, scaleHeight} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
 import {t} from 'i18next';
 import moment from 'moment';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {ActivityIndicator} from 'react-native';
 import {View} from 'react-native';
@@ -22,10 +22,15 @@ import {useSelector} from 'react-redux';
 
 const ProfileIndexScreen = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const userProfile = useSelector(
     (state: BaseState) => state.userReducer.userProfile,
   );
   const {handleSignOut} = useAuth();
+
+  useEffect(()=> {
+    setError(false);
+  },[userProfile?.profileUrl])
 
   const groupItems = [
     {
@@ -94,7 +99,7 @@ const ProfileIndexScreen = () => {
             alignItems: 'center',
             marginTop: scale(30),
           }}>
-          {userProfile?.user_profile_picture ? (
+          {userProfile?.user_profile_picture && !error ? (
             <View
               style={{
                 height: scale(130),
@@ -108,6 +113,7 @@ const ProfileIndexScreen = () => {
                 source={{uri: userProfile?.user_profile_picture}}
                 size={scale(150)}
                 setLoading={setLoading}
+                setError={setError}
                 onLoadStart={() => setLoading(true)}
               />
               {loading && (

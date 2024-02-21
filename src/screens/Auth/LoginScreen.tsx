@@ -52,7 +52,7 @@ const LoginScreen: FC<any> = () => {
 
   const onSubmit = (data: IFormData) => {
     console.log({data, errors});
-    navigationService.navigateAndReset(Screen.ConnectMailScreen);
+    // navigationService.navigateAndReset(Screen.ConnectMailScreen);
   };
 
   return (
