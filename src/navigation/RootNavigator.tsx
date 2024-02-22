@@ -127,7 +127,7 @@ export default RootNavigator;
 
 const TabBarNavigator: FC = () => {
   const {userState, mailCountUnread} = useInboxScreen();
-
+  console.log('mailCountUnread', mailCountUnread);
   // TODO: create hook for status bar on each screen style
   useEffect(() => {
     if (Platform.OS == 'android') {
@@ -166,9 +166,8 @@ const TabBarNavigator: FC = () => {
   const inBoxTabBarOptions = {
     ...styleHeader,
     title: t('screen:inboxScreen'),
-    ...(mailCountUnread
-      ? {tabBarBadge: mailCountUnread}
-      : {tabBarBadgeStyle: {display: 'none'}}),
+    tabBarBadge: mailCountUnread,
+    tabBarBadgeStyle: {display: mailCountUnread == 0 ? 'none' : 'block'},
     tabBarIcon: ({color, focused}: any) =>
       userState.connectedMails.length === userState.syncedMailAddress.length ? (
         <TabBarIconWrapper>

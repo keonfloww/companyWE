@@ -40,7 +40,7 @@ const useInboxScreen = () => {
       userState?.mailbox?.filter(
         mail => !userState.mailDeletedMetadataIds?.[mail?.metadata_id],
       ),
-    [userState?.mailbox, userState.mailDeletedMetadataIds],
+    [userState?.mailbox?.length, userState.mailDeletedMetadataIds],
   );
 
   // MEMO ---------------------
