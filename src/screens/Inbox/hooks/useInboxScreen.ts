@@ -16,7 +16,7 @@ import {useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 // Future this will be set by user setting
-const MAIL_PER_PAGE = 25;
+const MAIL_PER_PAGE = 10;
 
 const useInboxScreen = () => {
   const dispatch = useDispatch();

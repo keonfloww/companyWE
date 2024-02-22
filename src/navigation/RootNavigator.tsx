@@ -167,7 +167,7 @@ const TabBarNavigator: FC = () => {
     ...styleHeader,
     title: t('screen:inboxScreen'),
     tabBarBadge: mailCountUnread,
-    tabBarBadgeStyle: {display: mailCountUnread == 0 ? 'none' : 'block'},
+    tabBarBadgeStyle: {display: mailCountUnread == 0 ? 'none' : 'flex'},
     tabBarIcon: ({color, focused}: any) =>
       userState.connectedMails.length === userState.syncedMailAddress.length ? (
         <TabBarIconWrapper>

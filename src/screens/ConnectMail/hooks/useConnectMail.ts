@@ -112,10 +112,12 @@ const useConnectMail = ({
           navigationService.navigateAndReset(Screen.MainTabBar, {
             params: Screen.HomeScreen,
           });
+        } else {
+          navigationService.navigateAndReset(Screen.InboxScreen);
         }
 
         // Trigger fetch new mails
-        handleGetByFireBaseMail(newFirebaseMail);
+        handleGetByFireBaseMail(newFirebaseMail, {isPullToRefresh: false});
         markAsDoneProcess();
       });
 
