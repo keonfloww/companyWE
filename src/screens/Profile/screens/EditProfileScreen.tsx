@@ -5,17 +5,20 @@ import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
 import {useUserUpdateMutation} from '@redux/slices/api/userApi.slice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {scale, scaleHeight} from '@utils/mixins';
 import {t} from 'i18next';
 import {Button, Colors} from 'react-native-ui-lib';
 import {
   ActivityIndicator,
   FlatList,
+  KeyboardAvoidingView,
   Linking,
   Platform,
   Pressable,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {View} from 'react-native';
 import {Text} from 'react-native-ui-lib';
@@ -66,6 +69,7 @@ const EditProfileScreen: FC = () => {
   const [address, setAddress] = useState(userProfile?.user_address || '');
   const [phone, setPhone] = useState(userProfile?.phone_number || '');
   const [error, setError] = useState(false);
+  const insets = useSafeAreaInsets();
   const [profileUrl, setProfileUrl] = useState(
     userProfile?.user_profile_picture || '',
   );
@@ -277,12 +281,14 @@ const EditProfileScreen: FC = () => {
 
   return (
     <SafeViewForceInsets isHasHeaderTabBar={true} isSafeBottom={false}>
+      <KeyboardAvoidingView {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})} >
       <View
         style={[
           CommonStyles.view.viewLayout,
           {marginTop: 0, marginBottom: scaleHeight(25)},
         ]}>
-        <KeyboardAwareScrollView
+          
+        <ScrollView
           automaticallyAdjustKeyboardInsets={true}
           keyboardDismissMode="interactive"
           style={{display: 'flex'}}
@@ -472,9 +478,10 @@ const EditProfileScreen: FC = () => {
                 />
               </View>
             </View>
-            <View style={{height: scale(60)}} />
+            <View style={{height: scale(90)}} />
           </View>
-        </KeyboardAwareScrollView>
+        </ScrollView>
+
         <Modal
           isVisible={modal}
           style={{padding: 0, margin: 0, backgroundColor: 'transparent'}}>
@@ -544,7 +551,7 @@ const EditProfileScreen: FC = () => {
           shadowOpacity: 0.1,
           elevation: scale(5),
           padding: scale(20),
-          paddingBottom: scale(60),
+          paddingBottom: scale(68)+insets.bottom,
           flexDirection: 'row',
           borderTopLeftRadius: scale(20),
           borderTopRightRadius: scale(20),
@@ -568,6 +575,7 @@ const EditProfileScreen: FC = () => {
           color={'#50048A'}
         />
       </View>
+      </KeyboardAvoidingView>
     </SafeViewForceInsets>
   );
 };

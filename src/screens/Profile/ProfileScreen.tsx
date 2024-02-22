@@ -53,6 +53,7 @@ const ProfileScreen: FC<any> = ({navigation, route}) => {
       />
       <Stack.Screen
         options={{
+          headerShadowVisible: true,
           headerShown: true,
           headerBackTitle: '',
           title: t('Your Profile'),
