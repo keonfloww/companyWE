@@ -30,6 +30,7 @@ const InboxDetailCustomHeader: FC<Props> = ({item}) => {
         style={{
           flexDirection: 'column',
           flex: 1,
+          rowGap: scale(3),
         }}>
         <Text
           numberOfLines={1}
@@ -44,7 +45,7 @@ const InboxDetailCustomHeader: FC<Props> = ({item}) => {
             DateFormatUtils.FRONTEND_FORMAT_DEFAULT_DATE,
           )}
         </Text>
-        <View style={{height: scale(5)}} />
+        <View style={{height: scale(2)}} />
         <Text style={[CommonStyles.font.regular14, {color: '#3C3C3C'}]}>
           {item?.subject}
         </Text>

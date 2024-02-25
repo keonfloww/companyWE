@@ -1,36 +1,21 @@
 import {Divider} from '@rneui/base';
-import {scale} from '@utils/mixins';
+import {CUSTOM_HEADER_HEIGHT, scale} from '@utils/mixins';
 import React, {FC, Fragment, useState} from 'react';
 import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native';
 import HomeHeader from './components/HomeHeader';
 import HomeCategoryList from './components/HomeCategoryList';
 import HomeDontMissOut from './components/HomeDontMissOut';
 import HomeSection from './components/HomeSection';
-import {StatusBar} from 'react-native';
-import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import LayoutCustomHeader from '@layouts/default/LayoutCustomHeader';
 
 const HomeScreen: FC<any> = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const insets = useSafeAreaInsets();
-
   return (
-    <SafeViewForceInsets
-      isHasHeaderTabBar={false}
-      isSafeTop={false}
-      isSafeBottom={true}>
-      {/* Header */}
-      <View
-        style={{
-          paddingHorizontal: scale(25),
-          paddingTop: scale(10),
-          paddingBottom: scale(12),
-          display: 'flex',
-          justifyContent: 'center',
-        }}>
-        <HomeHeader />
-      </View>
-
+    <LayoutCustomHeader
+      isShowBack={false}
+      styleCustomHeader={{height: CUSTOM_HEADER_HEIGHT}}
+      containerStyle={{alignItems: 'center', paddingHorizontal: scale(20)}}
+      customHeader={<HomeHeader />}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -44,6 +29,7 @@ const HomeScreen: FC<any> = () => {
             }}
           />
         }>
+        <View style={{height: scale(12)}} />
         {/* Sub header */}
         <HomeCategoryList />
         <View style={{height: scale(12)}} />
@@ -76,7 +62,7 @@ const HomeScreen: FC<any> = () => {
           </Fragment>
         ))}
       </ScrollView>
-    </SafeViewForceInsets>
+    </LayoutCustomHeader>
   );
 };
 

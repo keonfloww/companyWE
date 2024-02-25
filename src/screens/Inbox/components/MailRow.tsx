@@ -144,7 +144,7 @@ const MailRow: FC<Props> = ({
 
       return <View>{children}</View>;
     },
-    [isReadOnly],
+    [isReadOnly, isBookMark],
   );
 
   return renderByReadOnly(

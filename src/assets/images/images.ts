@@ -63,6 +63,9 @@ import icBack from './svg/ic_back.svg';
 import BackButton from './svg/backButton.svg';
 import icEmpty from './svg/empty.svg';
 import icClose from './svg/ic_close.svg';
+import icShare from './svg/ic_share.svg';
+import icGlobe from './svg/ic_globe.svg';
+import icMeatBall from './svg/ic_meatball.svg';
 
 const IMAGES = {
   icEdit,
@@ -127,6 +130,9 @@ const IMAGES = {
   gifProgressSrc,
   icBackSrc,
   icClose,
+  icShare,
+  icGlobe,
+  icMeatBall,
 };
 
 export default IMAGES;

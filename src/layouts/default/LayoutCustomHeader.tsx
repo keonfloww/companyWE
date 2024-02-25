@@ -9,6 +9,7 @@ interface Props extends PropsWithChildren {
   customHeader: ReactNode;
   styleCustomHeader?: ViewStyle;
   containerStyle?: ViewStyle;
+  isShowBack?: boolean;
 }
 
 const LayoutCustomHeader: FC<Props> = ({
@@ -17,6 +18,7 @@ const LayoutCustomHeader: FC<Props> = ({
   customHeader,
 
   styleCustomHeader = {},
+  isShowBack = true,
 }) => {
   return (
     <SafeView unSafeBackgroundColor={'white'}>
@@ -28,15 +30,17 @@ const LayoutCustomHeader: FC<Props> = ({
             paddingHorizontal: scale(15),
             flexDirection: 'row',
             columnGap: scale(15),
-            borderBottomColor: '#8F8F8F',
+            borderBottomColor: '#DADADA',
             borderBottomWidth: scale(1),
             paddingBottom: scale(10),
           },
           containerStyle,
         ]}>
-        <TouchableOpacity onPress={navigationService.goBack}>
-          <IMAGES.icBack color={'#3C3C3C'} />
-        </TouchableOpacity>
+        {isShowBack && (
+          <TouchableOpacity onPress={navigationService.goBack}>
+            <IMAGES.icBack color={'#3C3C3C'} />
+          </TouchableOpacity>
+        )}
         <View style={[{flex: 1}, styleCustomHeader]}>{customHeader}</View>
       </View>
       {children}
