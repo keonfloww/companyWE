@@ -20,7 +20,7 @@ import ServiceButton, {
   EnumAuthProviderButton,
   EnumAuthProviderButtonType,
 } from '@components/atoms/ServiceButton/ServiceButton';
-import navigationService from '@services/navigationService';
+import navigationService, {navigationRef} from '@services/navigationService';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 import useAuth from './hooks/useAuth';
 
@@ -68,7 +68,15 @@ const LoginScreen: FC<any> = () => {
           paddingHorizontal: scale(30),
         }}>
         <Pressable
-          onPress={navigationService.goBack}
+          onPress={() => {
+            try {
+              if (navigationRef.current.canGoBack()) {
+                navigationService.goBack();
+                return;
+              }
+              navigationService.navigate(Screen.IntroScreen);
+            } catch (error) {}
+          }}
           style={{height: scale(25), width: scale(25)}}>
           <IMAGES.arrowLeft />
         </Pressable>
@@ -137,18 +145,28 @@ const LoginScreen: FC<any> = () => {
           // marginVertical: scale(10),
           marginHorizontal: scale(25),
         }}>
-        <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex:1}}></View>
+        <View
+          style={{
+            height: scale(1),
+            backgroundColor: '#EFEFEF',
+            flex: 1,
+          }}></View>
         <Text
           style={{
             // position: 'absolute',
             backgroundColor: 'transparent',
             borderRadius: scale(100),
             marginHorizontal: scale(10),
-            color: '#3C3C3C'
+            color: '#3C3C3C',
           }}>
           OR
         </Text>
-        <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex: 1}}></View>
+        <View
+          style={{
+            height: scale(1),
+            backgroundColor: '#EFEFEF',
+            flex: 1,
+          }}></View>
       </View>
       <View style={{marginHorizontal: scale(25)}}>
         <ServiceButton
@@ -156,11 +174,11 @@ const LoginScreen: FC<any> = () => {
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
           onPress={() => signInOrSignUpByFirebase({isSignUp: false})}
-          titleStyles={[CommonStyles.font.regular14,styles.connectText]}
+          titleStyles={[CommonStyles.font.regular14, styles.connectText]}
         />
       </View>
       <View style={{marginHorizontal: scale(25), marginVertical: scale(20)}}>
-        <Text style={{color: '#3C3C3C',}}>
+        <Text style={{color: '#3C3C3C'}}>
           Don't have an account?{' '}
           <Text
             style={[CommonStyles.font.semiBold14, {color: '#50048A'}]}
