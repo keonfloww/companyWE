@@ -222,11 +222,13 @@ export const userSlice = createSlice({
       const newKeyword = action.payload.keyword;
       return {
         ...state,
-        searchHistories: [newKeyword].concat(
-          (state?.searchHistories ?? [])?.filter(
-            (s: string) => s != newKeyword && s,
-          ),
-        ),
+        searchHistories: [newKeyword]
+          .concat(
+            (state?.searchHistories ?? [])?.filter(
+              (s: string) => s != newKeyword && s,
+            ),
+          )
+          ?.slice(0, 5),
       };
     },
     searchRemoveHistory: (

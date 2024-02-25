@@ -29,7 +29,7 @@ const HeaderSearchInput: FC<Props> = ({onSubmitSearch = _ => {}}) => {
       <IMAGES.icSearch color={'#8F8F8F'} />
       <TextInput
         returnKeyType={'search'}
-        // autoFocus={true}
+        autoFocus={true}
         // autoCorrect={true}
         // showSoftInputOnFocus={true}
         multiline={false}

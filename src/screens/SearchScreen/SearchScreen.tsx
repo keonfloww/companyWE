@@ -44,10 +44,14 @@ const SearchScreen: FC<any> = () => {
           }}
         />
       }>
-      <KeyboardAwareScrollView scrollEnabled={false} style={{flex: 1}}>
+      <KeyboardAwareScrollView
+        scrollEnabled={false}
+        style={{flex: 1}}
+        showsVerticalScrollIndicator={false}>
         {/* SEARCH HISTORIES */}
         {!isShowSearchResult && (
           <FlatList
+            showsVerticalScrollIndicator={false}
             alwaysBounceVertical={false}
             overScrollMode="never"
             style={[
@@ -82,6 +86,10 @@ const SearchScreen: FC<any> = () => {
         {/* RESULTS */}
         {isShowSearchResult && (
           <FlatList
+<<<<<<< HEAD
+=======
+            showsVerticalScrollIndicator={false}
+>>>>>>> ea265c1 (feat: detail mail and search)
             alwaysBounceVertical={false}
             overScrollMode="never"
             style={[
