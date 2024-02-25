@@ -86,10 +86,7 @@ const SearchScreen: FC<any> = () => {
         {/* RESULTS */}
         {isShowSearchResult && (
           <FlatList
-<<<<<<< HEAD
-=======
             showsVerticalScrollIndicator={false}
->>>>>>> ea265c1 (feat: detail mail and search)
             alwaysBounceVertical={false}
             overScrollMode="never"
             style={[
