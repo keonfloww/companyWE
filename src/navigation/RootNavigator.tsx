@@ -6,13 +6,12 @@ import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {Screen} from './navigation.enums';
 import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
-import {Platform, View, useWindowDimensions} from 'react-native';
+import {Platform, StatusBar, View, useWindowDimensions} from 'react-native';
 import IMAGES from '@assets/images/images';
 import CommonStyles from '@screens/styles';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {StyleSheet} from 'react-native';
 import {scale} from '@utils/mixins';
-import {StatusBar} from 'react-native';
 import SignUpScreen from '@screens/Auth/SignUpScreen';
 import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
 import InboxScreen from '@screens/Inbox/InboxScreen';
@@ -27,16 +26,9 @@ import ProgressCircle from './components/ProgressCircle';
 import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
 import {useDispatch} from 'react-redux';
 import {userSliceActions} from '@redux/slices/user.slice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {persistSliceActions} from '@redux/slices/persist.slice';
-import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
 import InboxDetailScreen from '@screens/Inbox/screens/InboxDetailScreen';
-import {Text} from 'react-native';
-import FastImage from 'react-native-fast-image';
-import {Email} from '@models/mail/modelMail';
-import DateUtils, {DateFormatUtils} from '@utils/dateUtils';
-import AvatarMailSender from '@components/mailComponents/AvatarMailSender';
 import SearchScreen from '@screens/SearchScreen/SearchScreen';
+import FocusAwareStatusBar from '@services/statusBarService';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -118,13 +110,20 @@ const RootNavigator: FC = () => {
           <Stack.Screen
             name={Screen.SearchScreen}
             component={SearchScreen}
-            options={{title: t('SearchScreen'), headerShown: false}}
+            options={{
+              title: t('SearchScreen'),
+              headerShown: false,
+              // ...(Platform.OS == 'android' && {
+              //   statusBarStyle: 'dark',
+              //   statusBarColor: 'white',
+              // }),
+            }}
           />
           <Stack.Screen
             name={Screen.InboxDetailScreen}
             component={InboxDetailScreen}
             options={() => ({
-              ...(Platform.OS == 'android' && {statusBarStyle: 'dark'}),
+              // ...(Platform.OS == 'android' && {statusBarStyle: 'dark'}),
               headerStyle: {
                 backgroundColor: 'white',
               },
@@ -153,12 +152,12 @@ const TabBarNavigator: FC = () => {
   const {userState, mailCountUnread} = useInboxScreen();
   // console.log('mailCountUnread', mailCountUnread);
   // TODO: create hook for status bar on each screen style
-  useEffect(() => {
-    if (Platform.OS == 'android') {
-      StatusBar.setBackgroundColor('white');
-    }
-    StatusBar.setBarStyle('dark-content');
-  }, []);
+  // useEffect(() => {
+  //   if (Platform.OS == 'android') {
+  //     StatusBar.setBackgroundColor('white');
+  //   }
+  //   StatusBar.setBarStyle('dark-content');
+  // }, []);
 
   const styleHeader = useMemo(() => {
     return {
@@ -226,6 +225,10 @@ const TabBarNavigator: FC = () => {
               </TabBarIconWrapper>
             );
           },
+          // ...(Platform.OS == 'android' && {
+          //   statusBarStyle: 'dark',
+          //   statusBarColor: 'white',
+          // }),
         }}
       />
       <Tab.Screen
@@ -253,6 +256,10 @@ const TabBarNavigator: FC = () => {
           headerShown: false,
           title: t('screen:ProfileScreen'),
           headerTitleStyle: styles.bottomTabTitle,
+          // ...(Platform.OS == 'android' && {
+          //   statusBarStyle: 'dark',
+          //   statusBarColor: 'white',
+          // }),
           tabBarIcon: ({color}: any) => (
             <TabBarIconWrapper>
               <IMAGES.IcProfile color={color} fill={color} />
@@ -267,7 +274,10 @@ const TabBarNavigator: FC = () => {
 const FakeScreen = () => {
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <StatusBar translucent backgroundColor="transparent" />
+      <FocusAwareStatusBar
+        backgroundColor={'#50048A'}
+        barStyle={'light-content'}
+      />
       <View
         style={{
           justifyContent: 'center',

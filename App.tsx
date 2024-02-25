@@ -15,8 +15,6 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 // It will lead us to some dependencies conflict, example webview package
 enableFreeze(true);
 
-import {StatusBar} from 'react-native';
-
 const App = () => {
   const {initFirebaseApp} = useFirebaseService();
 
@@ -25,7 +23,6 @@ const App = () => {
   }, []);
   return (
     <RootSiblingParent>
-      <StatusBar translucent backgroundColor="transparent" />
       <SafeAreaProvider>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>

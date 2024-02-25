@@ -11,7 +11,6 @@ const LayoutBackgroundDefaultV1: FC<Props> = ({children, containerStyle}) => {
   const insets = useSafeAreaInsets();
   return (
     <>
-      <StatusBar translucent backgroundColor="transparent" />
       <ImageBackground
         source={IMAGES.bgDefaultSrc}
         resizeMode="cover"

@@ -3,7 +3,8 @@ import SafeView from '@components/atoms/View/SafeView';
 import navigationService from '@services/navigationService';
 import {scale} from '@utils/mixins';
 import React, {FC, PropsWithChildren, ReactNode} from 'react';
-import {TouchableOpacity, View, ViewStyle} from 'react-native';
+import {Platform, TouchableOpacity, View, ViewStyle} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 interface Props extends PropsWithChildren {
   customHeader: ReactNode;
@@ -20,6 +21,8 @@ const LayoutCustomHeader: FC<Props> = ({
   styleCustomHeader = {},
   isShowBack = true,
 }) => {
+  const insets = useSafeAreaInsets();
+
   return (
     <SafeView unSafeBackgroundColor={'white'}>
       <View
@@ -33,6 +36,7 @@ const LayoutCustomHeader: FC<Props> = ({
             borderBottomColor: '#DADADA',
             borderBottomWidth: scale(1),
             paddingBottom: scale(10),
+            ...(Platform.OS == 'android' && {paddingTop: insets.top}),
           },
           containerStyle,
         ]}>

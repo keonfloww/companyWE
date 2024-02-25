@@ -12,6 +12,7 @@ import BaseButton from '@components/atoms/Button/BaseButton';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import {safeString} from '@utils/stringUtils';
 import useConnectMail from '@screens/ConnectMail/hooks/useConnectMail';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 const ProfileConnectedMailScreen = () => {
   const {connectedMails, computeIsAbleToConnect} = useProfileConnectedMail();
@@ -20,6 +21,10 @@ const ProfileConnectedMailScreen = () => {
 
   return (
     <SafeView unSafeBackgroundColor="white">
+      <FocusAwareStatusBar
+        backgroundColor={'white'}
+        barStyle={'dark-content'}
+      />
       <View style={CommonStyles.view.viewLayout}>
         <Text>
           {

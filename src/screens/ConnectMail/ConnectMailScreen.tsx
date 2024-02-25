@@ -14,6 +14,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Colors} from 'react-native-ui-lib';
 import {useSelector} from 'react-redux';
 import {BaseState} from '@redux/stores';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 const ConnectMailScreen = () => {
   const insets = useSafeAreaInsets();
@@ -30,6 +31,11 @@ const ConnectMailScreen = () => {
         marginHorizontal: scale(25),
         flex: 1,
       }}>
+      <FocusAwareStatusBar
+        backgroundColor={'transparent'}
+        barStyle={'dark-content'}
+        translucent
+      />
       <View style={{paddingTop: scale(100), flex: 1}}>
         <View
           style={{

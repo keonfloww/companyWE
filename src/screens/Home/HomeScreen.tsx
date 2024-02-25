@@ -7,6 +7,7 @@ import HomeCategoryList from './components/HomeCategoryList';
 import HomeDontMissOut from './components/HomeDontMissOut';
 import HomeSection from './components/HomeSection';
 import LayoutCustomHeader from '@layouts/default/LayoutCustomHeader';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 const HomeScreen: FC<any> = () => {
   const [refreshing, setRefreshing] = useState(false);
@@ -16,6 +17,10 @@ const HomeScreen: FC<any> = () => {
       styleCustomHeader={{height: CUSTOM_HEADER_HEIGHT}}
       containerStyle={{alignItems: 'center', paddingHorizontal: scale(20)}}
       customHeader={<HomeHeader />}>
+      <FocusAwareStatusBar
+        backgroundColor={'white'}
+        barStyle={'dark-content'}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={

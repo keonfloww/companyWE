@@ -8,6 +8,7 @@ import {BaseState} from '@redux/stores';
 import useAuth from '@screens/Auth/hooks/useAuth';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
+import FocusAwareStatusBar from '@services/statusBarService';
 import {EnumProfileColors, ProfileColors} from '@utils/colorUtils';
 import {scale, scaleHeight} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
@@ -28,9 +29,9 @@ const ProfileIndexScreen = () => {
   );
   const {handleSignOut} = useAuth();
 
-  useEffect(()=> {
+  useEffect(() => {
     setError(false);
-  },[userProfile?.profileUrl])
+  }, [userProfile?.profileUrl]);
 
   const groupItems = [
     {
@@ -92,6 +93,11 @@ const ProfileIndexScreen = () => {
         marginHorizontal: scale(25),
         flex: 1,
       }}>
+      <FocusAwareStatusBar
+        backgroundColor={'transparent'}
+        barStyle={'dark-content'}
+        translucent
+      />
       <View style={{display: 'flex'}}>
         <View
           style={{

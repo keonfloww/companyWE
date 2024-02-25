@@ -30,6 +30,7 @@ import IMAGES from '@assets/images/images';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import navigationService from '@services/navigationService';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 interface IcarouselItems {
   id: number;
@@ -177,7 +178,11 @@ const IntroScreen: FC<any> = ({navigation}) => {
 
   return (
     <LayoutBackgroundDefault>
-      <StatusBar translucent backgroundColor="transparent" />
+      <FocusAwareStatusBar
+        backgroundColor={'transparent'}
+        barStyle={'dark-content'}
+        translucent
+      />
       <View
         style={{
           // position: 'absolute',

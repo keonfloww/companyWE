@@ -23,6 +23,7 @@ import ServiceButton, {
 import navigationService, {navigationRef} from '@services/navigationService';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 import useAuth from './hooks/useAuth';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 interface IFormData {
   email: string;
@@ -57,6 +58,11 @@ const LoginScreen: FC<any> = () => {
 
   return (
     <LayoutBackgroundDefault>
+      <FocusAwareStatusBar
+        backgroundColor={'transparent'}
+        barStyle={'dark-content'}
+        translucent
+      />
       <View
         style={{
           // position: 'absolute',

@@ -39,6 +39,7 @@ import {Image} from 'react-native-image-crop-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 /**
  * TODO: Vipin
@@ -113,9 +114,9 @@ const EditProfileScreen: FC = () => {
     },
   ];
 
-  useEffect(()=> {
+  useEffect(() => {
     setError(false);
-  },[userProfile?.profileUrl, profileUrl])
+  }, [userProfile?.profileUrl, profileUrl]);
   /**
    * TODO: Vipin
    * Why you define enum gender as string, then you set value is number
@@ -158,7 +159,7 @@ const EditProfileScreen: FC = () => {
           snapshot.ref.getDownloadURL().then(url => {
             setLoading(true);
             setProfileUrl(url);
-            setError(false)
+            setError(false);
             console.log(url);
           });
         }
@@ -281,300 +282,307 @@ const EditProfileScreen: FC = () => {
 
   return (
     <SafeViewForceInsets isHasHeaderTabBar={true} isSafeBottom={false}>
-      <KeyboardAvoidingView {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})} >
-      <View
-        style={[
-          CommonStyles.view.viewLayout,
-          {marginTop: 0, marginBottom: scaleHeight(25)},
-        ]}>
-          
-        <ScrollView
-          automaticallyAdjustKeyboardInsets={true}
-          keyboardDismissMode="interactive"
-          style={{display: 'flex'}}
-          showsVerticalScrollIndicator={false}>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: scale(21),
-            }}>
-            {/* TODO: Vipin: separate it into meaningfull naming component */}
-            {profileUrl && !error ? (
-              <View
-                style={{
-                  height: scale(130),
-                  width: scale(130),
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: 'lightgray',
-                  borderRadius: scale(130),
-                }}>
-                <Avatar
-                  source={{uri: profileUrl}}
-                  size={scale(130)}
-                  setLoading={setLoading}
-                  setError={setError}
-                />
-                {loading && (
-                  <ActivityIndicator
-                    color={'#ffffff'}
-                    style={{position: 'absolute'}}
-                  />
-                )}
-                <Pressable
-                  onPress={() => setModal(true)}
-                  style={{
-                    position: 'absolute',
-                    bottom: 5,
-                    right: 5,
-                    backgroundColor: '#50048A',
-                    zIndex: 9999,
-                    width: scale(30),
-                    height: scale(30),
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: scale(30),
-                  }}>
-                  <IMAGES.icCamera height={14} width={16} color={'blue'} />
-                </Pressable>
-              </View>
-            ) : (
-              <View>
+      <FocusAwareStatusBar
+        backgroundColor={'white'}
+        barStyle={'dark-content'}
+      />
+      <KeyboardAvoidingView
+        {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}>
+        <View
+          style={[
+            CommonStyles.view.viewLayout,
+            {marginTop: 0, marginBottom: scaleHeight(25)},
+          ]}>
+          <ScrollView
+            automaticallyAdjustKeyboardInsets={true}
+            keyboardDismissMode="interactive"
+            style={{display: 'flex'}}
+            showsVerticalScrollIndicator={false}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: scale(21),
+              }}>
+              {/* TODO: Vipin: separate it into meaningfull naming component */}
+              {profileUrl && !error ? (
                 <View
-                  style={[
-                    styles.logo,
-                    {
-                      backgroundColor: safeString(userProfile?.user_name)?.[0]
-                        ? ColorUtils.getColorFromChar(userProfile?.user_name)
-                            ?.SecondaryColor
-                        : ProfileColors?.[EnumProfileColors.DEFAULT]
-                            ?.SecondaryColor,
-                    },
-                  ]}>
-                  <Text
-                    style={[
-                      {
-                        textAlign: 'center',
-                        textAlignVertical: 'center',
-                        color: safeString(userProfile?.user_name)?.[0]
-                          ? ColorUtils.getColorFromChar(userProfile?.user_name)
-                              ?.MainColor
-                          : ProfileColors?.[EnumProfileColors.DEFAULT]
-                              ?.MainColor,
-                      },
-                      CommonStyles.font.bold30,
-                    ]}>
-                    {safeString(userProfile?.user_name)[0]}
-                  </Text>
-                </View>
-                <Pressable
-                  onPress={() => setModal(true)}
                   style={{
-                    position: 'absolute',
-                    bottom: 5,
-                    right: 5,
-                    backgroundColor: '#50048A',
-                    zIndex: 9999,
-                    width: scale(30),
-                    height: scale(30),
+                    height: scale(130),
+                    width: scale(130),
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: scale(30),
+                    backgroundColor: 'lightgray',
+                    borderRadius: scale(130),
                   }}>
-                  <IMAGES.icCamera
-                    style={{}}
-                    height={14}
-                    width={16}
-                    color={'blue'}
+                  <Avatar
+                    source={{uri: profileUrl}}
+                    size={scale(130)}
+                    setLoading={setLoading}
+                    setError={setError}
                   />
-                </Pressable>
-              </View>
-            )}
-            <View style={{height: scale(20)}} />
-            <Text
-              style={[
-                CommonStyles.font.bold24,
-                {overflow: 'hidden', flexWrap: 'nowrap'},
-              ]}>
-              {userProfile?.user_name}
-            </Text>
-            <View style={{height: scale(20)}} />
-          </View>
-          <View style={{marginBottom: scale(10)}}>
-            <Text style={[CommonStyles.font.bold16, {marginBottom: scale(10)}]}>
-              Account Information
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginBottom: scale(15),
-                alignItems: 'center',
-                columnGap: scale(10),
-              }}>
+                  {loading && (
+                    <ActivityIndicator
+                      color={'#ffffff'}
+                      style={{position: 'absolute'}}
+                    />
+                  )}
+                  <Pressable
+                    onPress={() => setModal(true)}
+                    style={{
+                      position: 'absolute',
+                      bottom: 5,
+                      right: 5,
+                      backgroundColor: '#50048A',
+                      zIndex: 9999,
+                      width: scale(30),
+                      height: scale(30),
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: scale(30),
+                    }}>
+                    <IMAGES.icCamera height={14} width={16} color={'blue'} />
+                  </Pressable>
+                </View>
+              ) : (
+                <View>
+                  <View
+                    style={[
+                      styles.logo,
+                      {
+                        backgroundColor: safeString(userProfile?.user_name)?.[0]
+                          ? ColorUtils.getColorFromChar(userProfile?.user_name)
+                              ?.SecondaryColor
+                          : ProfileColors?.[EnumProfileColors.DEFAULT]
+                              ?.SecondaryColor,
+                      },
+                    ]}>
+                    <Text
+                      style={[
+                        {
+                          textAlign: 'center',
+                          textAlignVertical: 'center',
+                          color: safeString(userProfile?.user_name)?.[0]
+                            ? ColorUtils.getColorFromChar(
+                                userProfile?.user_name,
+                              )?.MainColor
+                            : ProfileColors?.[EnumProfileColors.DEFAULT]
+                                ?.MainColor,
+                        },
+                        CommonStyles.font.bold30,
+                      ]}>
+                      {safeString(userProfile?.user_name)[0]}
+                    </Text>
+                  </View>
+                  <Pressable
+                    onPress={() => setModal(true)}
+                    style={{
+                      position: 'absolute',
+                      bottom: 5,
+                      right: 5,
+                      backgroundColor: '#50048A',
+                      zIndex: 9999,
+                      width: scale(30),
+                      height: scale(30),
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: scale(30),
+                    }}>
+                    <IMAGES.icCamera
+                      style={{}}
+                      height={14}
+                      width={16}
+                      color={'blue'}
+                    />
+                  </Pressable>
+                </View>
+              )}
+              <View style={{height: scale(20)}} />
               <Text
                 style={[
-                  CommonStyles.font.semiBold14,
-                  {marginRight: scale(10)},
+                  CommonStyles.font.bold24,
+                  {overflow: 'hidden', flexWrap: 'nowrap'},
                 ]}>
-                Email Address
+                {userProfile?.user_name}
               </Text>
-              <Text
-                numberOfLines={1}
-                style={[
-                  CommonStyles.font.regular14,
-                  {
-                    color: '#8f8f8f',
-                    flex: 1,
-                    textAlign: 'right',
-                  },
-                ]}>
-                {userProfile?.email_address}
-              </Text>
+              <View style={{height: scale(20)}} />
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginBottom: scale(15),
-                alignItems: 'center',
-              }}>
-              <Text style={CommonStyles.font.semiBold14}>
-                Account connected
-              </Text>
-              <Text style={[CommonStyles.font.semiBold14, {color: '#8f8f8f'}]}>
-                Google
-              </Text>
-            </View>
-          </View>
-
-          <View style={{rowGap: scale(15)}}>
             <View style={{marginBottom: scale(10)}}>
               <Text
                 style={[CommonStyles.font.bold16, {marginBottom: scale(10)}]}>
-                Personal Information
+                Account Information
               </Text>
-              <View style={{marginBottom: scale(10)}}>
-                <DropDown
-                  value={!gender ? '' : gender === 1 ? 'Male' : 'Female'}
-                  onChange={(val: any) => onGenderChange(val)}
-                />
-                <DatePickerModal
-                  label={'Birthday'}
-                  visible={datePicker}
-                  setDatePicker={setDatePicker}
-                  setDate={setDate}
-                  value={date}
-                  onChange={(val: any) => setDate(val)}
-                />
-                <PhoneInput
-                  value={phone}
-                  onChange={(val: any) => setPhone(val)}
-                />
-                <AddressInput
-                  value={address}
-                  onChange={(val: any) => setAddress(val)}
-                />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginBottom: scale(15),
+                  alignItems: 'center',
+                  columnGap: scale(10),
+                }}>
+                <Text
+                  style={[
+                    CommonStyles.font.semiBold14,
+                    {marginRight: scale(10)},
+                  ]}>
+                  Email Address
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  style={[
+                    CommonStyles.font.regular14,
+                    {
+                      color: '#8f8f8f',
+                      flex: 1,
+                      textAlign: 'right',
+                    },
+                  ]}>
+                  {userProfile?.email_address}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginBottom: scale(15),
+                  alignItems: 'center',
+                }}>
+                <Text style={CommonStyles.font.semiBold14}>
+                  Account connected
+                </Text>
+                <Text
+                  style={[CommonStyles.font.semiBold14, {color: '#8f8f8f'}]}>
+                  Google
+                </Text>
               </View>
             </View>
-            <View style={{height: scale(90)}} />
-          </View>
-        </ScrollView>
 
-        <Modal
-          isVisible={modal}
-          style={{padding: 0, margin: 0, backgroundColor: 'transparent'}}>
-          <Pressable
-            style={{backgroundColor: 'transparent', height: '80%'}}
-            onPress={() => setModal(false)}></Pressable>
-          <View
-            style={{
-              height: 'auto',
-              marginTop: 'auto',
-              width: '100%',
-              backgroundColor: '#FFFFFF',
-              padding: scale(25),
-              borderTopLeftRadius: scale(20),
-              borderTopRightRadius: scale(20),
-            }}>
             <View style={{rowGap: scale(15)}}>
-              {groupItems.map(item => {
-                return (
-                  <FlatList
-                    key={item?.label}
-                    ListHeaderComponentStyle={{marginBottom: scale(10)}}
-                    keyExtractor={item => item?.title}
-                    ListHeaderComponent={
-                      <View>
-                        <Text style={CommonStyles.font.bold16}>
-                          {item.label}
-                        </Text>
-                      </View>
-                    }
-                    data={item?.items}
-                    renderItem={({item}) => {
-                      return (
-                        <TouchableOpacity
-                          disabled={item.disabled}
-                          activeOpacity={item.disabled ? 1 : 0.7}
-                          onPress={item?.onPress}>
-                          <BaseRowIconLabel
-                            titleStyle={{
-                              color: item.disabled ? '#b0b0ac' : Colors.text,
-                            }}
-                            prefixIcon={item.prefixIcon}
-                            title={item.title}
-                          />
-                        </TouchableOpacity>
-                      );
-                    }}
-                    ItemSeparatorComponent={() => (
-                      <View style={{height: scale(15)}} />
-                    )}
+              <View style={{marginBottom: scale(10)}}>
+                <Text
+                  style={[CommonStyles.font.bold16, {marginBottom: scale(10)}]}>
+                  Personal Information
+                </Text>
+                <View style={{marginBottom: scale(10)}}>
+                  <DropDown
+                    value={!gender ? '' : gender === 1 ? 'Male' : 'Female'}
+                    onChange={(val: any) => onGenderChange(val)}
                   />
-                );
-              })}
+                  <DatePickerModal
+                    label={'Birthday'}
+                    visible={datePicker}
+                    setDatePicker={setDatePicker}
+                    setDate={setDate}
+                    value={date}
+                    onChange={(val: any) => setDate(val)}
+                  />
+                  <PhoneInput
+                    value={phone}
+                    onChange={(val: any) => setPhone(val)}
+                  />
+                  <AddressInput
+                    value={address}
+                    onChange={(val: any) => setAddress(val)}
+                  />
+                </View>
+              </View>
+              <View style={{height: scale(90)}} />
             </View>
-          </View>
-        </Modal>
-      </View>
-      <View
-        style={{
-          height: 'auto',
-          marginTop: 'auto',
-          width: '100%',
-          backgroundColor: '#fff',
-          shadowColor: 'black',
-          shadowOffset: {width: 1, height: 0.5},
-          shadowRadius: scale(20),
-          shadowOpacity: 0.1,
-          elevation: scale(5),
-          padding: scale(20),
-          paddingBottom: scale(68)+insets.bottom,
-          flexDirection: 'row',
-          borderTopLeftRadius: scale(20),
-          borderTopRightRadius: scale(20),
-          justifyContent: 'space-between',
-          gap: scale(10),
-        }}>
-        <Button
-          label={'Save Changes'}
-          onPress={onSubmit}
-          style={[{flex: 1, paddingHorizontal: 0}]}
-          labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
-          backgroundColor={'#50048A'}
-        />
-        <Button
-          label={'Cancel'}
-          onPress={navigationService.goBack}
-          style={[{flex: 1, paddingHorizontal: 0}]}
-          labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
-          backgroundColor={'white'}
-          outlineColor={'#50048A'}
-          color={'#50048A'}
-        />
-      </View>
+          </ScrollView>
+
+          <Modal
+            isVisible={modal}
+            style={{padding: 0, margin: 0, backgroundColor: 'transparent'}}>
+            <Pressable
+              style={{backgroundColor: 'transparent', height: '80%'}}
+              onPress={() => setModal(false)}></Pressable>
+            <View
+              style={{
+                height: 'auto',
+                marginTop: 'auto',
+                width: '100%',
+                backgroundColor: '#FFFFFF',
+                padding: scale(25),
+                borderTopLeftRadius: scale(20),
+                borderTopRightRadius: scale(20),
+              }}>
+              <View style={{rowGap: scale(15)}}>
+                {groupItems.map(item => {
+                  return (
+                    <FlatList
+                      key={item?.label}
+                      ListHeaderComponentStyle={{marginBottom: scale(10)}}
+                      keyExtractor={item => item?.title}
+                      ListHeaderComponent={
+                        <View>
+                          <Text style={CommonStyles.font.bold16}>
+                            {item.label}
+                          </Text>
+                        </View>
+                      }
+                      data={item?.items}
+                      renderItem={({item}) => {
+                        return (
+                          <TouchableOpacity
+                            disabled={item.disabled}
+                            activeOpacity={item.disabled ? 1 : 0.7}
+                            onPress={item?.onPress}>
+                            <BaseRowIconLabel
+                              titleStyle={{
+                                color: item.disabled ? '#b0b0ac' : Colors.text,
+                              }}
+                              prefixIcon={item.prefixIcon}
+                              title={item.title}
+                            />
+                          </TouchableOpacity>
+                        );
+                      }}
+                      ItemSeparatorComponent={() => (
+                        <View style={{height: scale(15)}} />
+                      )}
+                    />
+                  );
+                })}
+              </View>
+            </View>
+          </Modal>
+        </View>
+        <View
+          style={{
+            height: 'auto',
+            marginTop: 'auto',
+            width: '100%',
+            backgroundColor: '#fff',
+            shadowColor: 'black',
+            shadowOffset: {width: 1, height: 0.5},
+            shadowRadius: scale(20),
+            shadowOpacity: 0.1,
+            elevation: scale(5),
+            padding: scale(20),
+            paddingBottom: scale(68) + insets.bottom,
+            flexDirection: 'row',
+            borderTopLeftRadius: scale(20),
+            borderTopRightRadius: scale(20),
+            justifyContent: 'space-between',
+            gap: scale(10),
+          }}>
+          <Button
+            label={'Save Changes'}
+            onPress={onSubmit}
+            style={[{flex: 1, paddingHorizontal: 0}]}
+            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
+            backgroundColor={'#50048A'}
+          />
+          <Button
+            label={'Cancel'}
+            onPress={navigationService.goBack}
+            style={[{flex: 1, paddingHorizontal: 0}]}
+            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
+            backgroundColor={'white'}
+            outlineColor={'#50048A'}
+            color={'#50048A'}
+          />
+        </View>
       </KeyboardAvoidingView>
     </SafeViewForceInsets>
   );

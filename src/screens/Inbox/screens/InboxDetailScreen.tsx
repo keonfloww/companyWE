@@ -18,6 +18,7 @@ import CommonStyles from '@screens/styles';
 import useColors from '@utils/hooks/useColors';
 import {Colors} from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 const InboxDetailScreen: FC = () => {
   const {params} =
@@ -37,6 +38,10 @@ const InboxDetailScreen: FC = () => {
   return (
     <LayoutCustomHeader
       customHeader={<InboxDetailCustomHeader item={params?.item} />}>
+      <FocusAwareStatusBar
+        backgroundColor={'white'}
+        barStyle={'dark-content'}
+      />
       <AutoHeightWebView
         startInLoadingState={true}
         renderLoading={() => <ActivityIndicator />}

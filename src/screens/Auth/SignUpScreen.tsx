@@ -33,6 +33,7 @@ import navigationService from '@services/navigationService';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 import BaseModal from '@components/atoms/Modal/BaseModal';
 import useAuth from './hooks/useAuth';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 interface IFormData {
   email: string;
@@ -89,6 +90,11 @@ const SignUpScreen: FC<any> = () => {
 
   return (
     <LayoutBackgroundDefault>
+      <FocusAwareStatusBar
+        backgroundColor={'transparent'}
+        barStyle={'dark-content'}
+        translucent
+      />
       <View
         style={{
           // position: 'absolute',
@@ -169,18 +175,28 @@ const SignUpScreen: FC<any> = () => {
           // marginVertical: scale(10),
           marginHorizontal: scale(25),
         }}>
-        <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex:1}}></View>
+        <View
+          style={{
+            height: scale(1),
+            backgroundColor: '#EFEFEF',
+            flex: 1,
+          }}></View>
         <Text
           style={{
             // position: 'absolute',
             backgroundColor: 'transparent',
             borderRadius: scale(100),
             marginHorizontal: scale(10),
-            color: '#3C3C3C'
+            color: '#3C3C3C',
           }}>
           OR
         </Text>
-        <View style={{height: scale(1), backgroundColor: '#EFEFEF', flex: 1}}></View>
+        <View
+          style={{
+            height: scale(1),
+            backgroundColor: '#EFEFEF',
+            flex: 1,
+          }}></View>
       </View>
       <View style={{marginHorizontal: scale(25)}}>
         <ServiceButton
@@ -188,7 +204,7 @@ const SignUpScreen: FC<any> = () => {
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
           onPress={() => setTermModalShow(true)}
-          titleStyles={[CommonStyles.font.regular14,styles.connectText]}
+          titleStyles={[CommonStyles.font.regular14, styles.connectText]}
         />
       </View>
       <View style={{marginHorizontal: scale(25), marginVertical: scale(20)}}>
@@ -208,7 +224,10 @@ const SignUpScreen: FC<any> = () => {
         onClose={() => setTermModalShow(false)}
         onConfirm={() => {
           setTermModalShow(false);
-          setTimeout(() => signInOrSignUpByFirebase({isSignUp: true}), Platform.OS === 'ios' ? 100 : 400);
+          setTimeout(
+            () => signInOrSignUpByFirebase({isSignUp: true}),
+            Platform.OS === 'ios' ? 100 : 400,
+          );
         }}
         actionViewStyle={{height: scale(40)}}
         buttonContainerStyle={{paddingVertical: scale(0)}}

@@ -11,6 +11,8 @@ import SearchHistoryEmpty from './components/SearchHistoryEmpty';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SearchHistoryHeader from './components/SearchHistoryHeader';
 import MailRow from '@screens/Inbox/components/MailRow';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 const SearchScreen: FC<any> = () => {
   const {
@@ -24,7 +26,6 @@ const SearchScreen: FC<any> = () => {
     handleRemoveSearchHistory,
   } = useSearchScreen();
   const screen = useWindowDimensions();
-
   const BOTTOM_HEIGHT = scale(300);
 
   const isShowSearchResult = useMemo(() => {
@@ -44,6 +45,10 @@ const SearchScreen: FC<any> = () => {
           }}
         />
       }>
+      <FocusAwareStatusBar
+        backgroundColor={'white'}
+        barStyle={'dark-content'}
+      />
       <KeyboardAwareScrollView
         scrollEnabled={false}
         style={{flex: 1}}

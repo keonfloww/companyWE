@@ -1,5 +1,5 @@
 import SafeView from '@components/atoms/View/SafeView';
-import {StatusBar, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {scale} from '@utils/mixins';
 import React, {useCallback, useEffect, useState} from 'react';
 import usePagination from '@utils/hooks/usePagination';
@@ -16,6 +16,7 @@ import useInboxScreen from '../hooks/useInboxScreen';
 import useInboxScreenAction from '../hooks/useInboxScreenAction';
 import MailRow from '../components/MailRow';
 import DeleteMailFloatingButton from '../components/DeleteMailFloatingButton';
+import FocusAwareStatusBar from '@services/statusBarService';
 
 const InboxIndexScreen = () => {
   const navigation = useNavigation();
@@ -58,7 +59,10 @@ const InboxIndexScreen = () => {
 
   return (
     <SafeView>
-      <StatusBar translucent backgroundColor="transparent" />
+      <FocusAwareStatusBar
+        backgroundColor={'#50048A'}
+        barStyle={'light-content'}
+      />
       <View
         style={{
           marginHorizontal: scale(20),
