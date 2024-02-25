@@ -6,7 +6,7 @@ import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
 import {Screen} from './navigation.enums';
 import navigationService, {navigationRef} from '@services/navigationService';
 import {t} from 'i18next';
-import {Platform, View} from 'react-native';
+import {Platform, View, useWindowDimensions} from 'react-native';
 import IMAGES from '@assets/images/images';
 import CommonStyles from '@screens/styles';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -30,6 +30,13 @@ import {userSliceActions} from '@redux/slices/user.slice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistSliceActions} from '@redux/slices/persist.slice';
 import {LOCAL_STORAGE_KEYS} from '@utils/localStorageUtils';
+import InboxDetailScreen from '@screens/Inbox/screens/InboxDetailScreen';
+import {Text} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import {Email} from '@models/mail/modelMail';
+import DateUtils, {DateFormatUtils} from '@utils/dateUtils';
+import AvatarMailSender from '@components/mailComponents/AvatarMailSender';
+import SearchScreen from '@screens/SearchScreen/SearchScreen';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -61,6 +68,8 @@ const RootNavigator: FC = () => {
     CONFIG,
   };
 
+  const screen = useWindowDimensions();
+  // const headerLeftWidth = scale(10);
   return (
     <NavigationContainer ref={navigationRef} linking={linking}>
       <Stack.Navigator
@@ -106,15 +115,30 @@ const RootNavigator: FC = () => {
             component={StoryBookScreen}
             options={{title: t('Project Story Book'), headerShown: true}}
           />
+          <Stack.Screen
+            name={Screen.SearchScreen}
+            component={SearchScreen}
+            options={{title: t('SearchScreen'), headerShown: false}}
+          />
+          <Stack.Screen
+            name={Screen.InboxDetailScreen}
+            component={InboxDetailScreen}
+            options={() => ({
+              ...(Platform.OS == 'android' && {statusBarStyle: 'dark'}),
+              headerStyle: {
+                backgroundColor: 'white',
+              },
+              headerShown: false,
+            })}
+          />
         </Stack.Group>
         <Stack.Group>
           <Stack.Screen
             name={Screen.MainTabBar}
             component={TabBarNavigator}
             options={{
-              headerTitle: 'Test',
+              headerTitle: '',
               headerShown: false,
-              // gestureEnabled: false,
             }}
           />
         </Stack.Group>
@@ -127,7 +151,7 @@ export default RootNavigator;
 
 const TabBarNavigator: FC = () => {
   const {userState, mailCountUnread} = useInboxScreen();
-  console.log('mailCountUnread', mailCountUnread);
+  // console.log('mailCountUnread', mailCountUnread);
   // TODO: create hook for status bar on each screen style
   useEffect(() => {
     if (Platform.OS == 'android') {
@@ -149,7 +173,7 @@ const TabBarNavigator: FC = () => {
               console.log('onPressBookMark');
             }}
             onPressSearch={() => {
-              console.log('onPressSearch');
+              navigationService.navigate(Screen.SearchScreen);
             }}
           />
         );

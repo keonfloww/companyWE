@@ -19,7 +19,7 @@ const ProfileConnectedMailScreen = () => {
   const {} = useConnectMail({autoRedirectToHome: false});
 
   return (
-    <SafeView>
+    <SafeView unSafeBackgroundColor="white">
       <View style={CommonStyles.view.viewLayout}>
         <Text>
           {

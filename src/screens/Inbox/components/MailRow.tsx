@@ -4,12 +4,21 @@ import CommonStyles from '@screens/styles';
 import DateUtils from '@utils/dateUtils';
 import {scale} from '@utils/mixins';
 import {safeString} from '@utils/stringUtils';
-import React, {FC, useCallback, useEffect, useMemo, useState} from 'react';
+import React, {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {Pressable, StyleSheet, TextStyle} from 'react-native';
 import {Checkbox, Colors, Drawer, Text, View} from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
 import {ColorUtils} from '@utils/colorUtils';
 import useColors from '@utils/hooks/useColors';
+import navigationService from '@services/navigationService';
+import {Screen} from '@navigation/navigation.enums';
 
 interface Props {
   item: Email;
@@ -19,6 +28,8 @@ interface Props {
   onCancelSelectMode: () => void;
 
   onDelete: (_: string) => void;
+  isReadOnly: boolean;
+  isClearPaddingDefault: boolean;
 }
 const MailRow: FC<Props> = ({
   item,
@@ -28,11 +39,14 @@ const MailRow: FC<Props> = ({
   onCancelSelectMode = () => {},
 
   onDelete = (_: string) => {},
+  isReadOnly = false,
+  isClearPaddingDefault = false,
 }) => {
   const _styles = useColors(styles);
 
   const {
     isRead,
+    handleMarkAsReadToggle,
     handleMarkAsRead,
 
     isBookMark,
@@ -65,9 +79,9 @@ const MailRow: FC<Props> = ({
         <IMAGES.icMailOpen />
       ),
       background: Colors.success,
-      onPress: handleMarkAsRead,
+      onPress: handleMarkAsReadToggle,
     };
-  }, [isRead, handleMarkAsRead]);
+  }, [isRead, handleMarkAsReadToggle]);
 
   const rightItems = useMemo(() => {
     return [
@@ -110,106 +124,133 @@ const MailRow: FC<Props> = ({
     }
   }, [isSelectMode]);
 
-  return (
-    <Drawer
-      bounciness={1}
-      // useNativeAnimations={true}
-      disableHaptic={true}
-      fullSwipeLeft={false}
-      fullSwipeRight={false}
-      onDragStart={onCancelSelectMode}
-      leftItem={leftItem}
-      rightItems={rightItems}>
-      <Pressable onLongPress={onLongPressItem}>
-        <View style={_styles.container}>
-          {isSelectMode ? (
-            <View>
-              <Checkbox
-                color={Colors.primary}
-                iconColor={Colors.white}
-                outline
-                containerStyle={{
-                  width: scale(34),
-                  height: scale(34),
-                  backgroundColor: selected ? Colors.primary : Colors.white,
-                }}
-                borderRadius={99}
-                value={selected}
-                onValueChange={() => {
-                  setSelected(!selected);
-                  onSelect(item?.metadata_id);
-                }}
-              />
-            </View>
-          ) : (
-            <View
+  const renderByReadOnly = useCallback(
+    (children: ReactNode) => {
+      if (!isReadOnly) {
+        return (
+          <Drawer
+            bounciness={1}
+            // useNativeAnimations={true}
+            disableHaptic={true}
+            fullSwipeLeft={false}
+            fullSwipeRight={false}
+            onDragStart={onCancelSelectMode}
+            leftItem={leftItem}
+            rightItems={rightItems}>
+            {children}
+          </Drawer>
+        );
+      }
+
+      return <View>{children}</View>;
+    },
+    [isReadOnly],
+  );
+
+  return renderByReadOnly(
+    <Pressable
+      onLongPress={onLongPressItem}
+      onPress={() => {
+        handleMarkAsRead();
+        navigationService.navigate(Screen.InboxDetailScreen, {item});
+      }}>
+      <View
+        style={[
+          _styles.container,
+          isClearPaddingDefault
+            ? {
+                // OVERRIDE FOR VIEW MODE ONLY
+                paddingHorizontal: scale(0),
+                paddingBottom: scale(0),
+              }
+            : {},
+        ]}>
+        {isSelectMode ? (
+          <View>
+            <Checkbox
+              color={Colors.primary}
+              iconColor={Colors.white}
+              outline
+              containerStyle={{
+                width: scale(34),
+                height: scale(34),
+                backgroundColor: selected ? Colors.primary : Colors.white,
+              }}
+              borderRadius={99}
+              value={selected}
+              onValueChange={() => {
+                setSelected(!selected);
+                onSelect(item?.metadata_id);
+              }}
+            />
+          </View>
+        ) : (
+          <View
+            style={[
+              _styles.logoContainer,
+              {
+                backgroundColor: ColorUtils.getColorFromChar(item?.sender_name)
+                  .SecondaryColor,
+              },
+            ]}>
+            <Text
               style={[
-                _styles.logoContainer,
+                _styles.logoText,
                 {
-                  backgroundColor: ColorUtils.getColorFromChar(
-                    item?.sender_name,
-                  ).SecondaryColor,
+                  color: ColorUtils.getColorFromChar(item?.sender_name)
+                    .MainColor,
                 },
               ]}>
+              {safeString(item?.sender_name)?.[0]}
+            </Text>
+          </View>
+        )}
+        <View style={_styles.mailContent}>
+          <View style={_styles.mailFirstRowContainer}>
+            <View
+              style={{
+                flex: 3,
+                display: 'flex',
+                flexDirection: 'row',
+              }}>
+              {isBookMark && (
+                <IMAGES.icBookMark
+                  height={scale(18)}
+                  color={Colors.primary}
+                  fill={Colors.primary}
+                />
+              )}
               <Text
                 style={[
-                  _styles.logoText,
-                  {
-                    color: ColorUtils.getColorFromChar(item?.sender_name)
-                      .MainColor,
-                  },
-                ]}>
-                {safeString(item?.sender_name)?.[0]}
-              </Text>
-            </View>
-          )}
-          <View style={_styles.mailContent}>
-            <View style={_styles.mailFirstRowContainer}>
-              <View
-                style={{
-                  flex: 3,
-                  display: 'flex',
-                  flexDirection: 'row',
-                }}>
-                {isBookMark && (
-                  <IMAGES.icBookMark
-                    height={scale(18)}
-                    color={Colors.primary}
-                    fill={Colors.primary}
-                  />
-                )}
-                <Text
-                  style={[
-                    _styles.senderName,
-                    computedDisableStyle,
-                    computedBookmarkTextStyle,
-                  ]}
-                  numberOfLines={1}>
-                  {safeString(item?.sender_name)}
-                </Text>
-              </View>
-              <Text style={[_styles.dateTime, computedDisableStyle]}>
-                {DateUtils.unixToFormatDefault(item?.received_on_unix)}
-              </Text>
-            </View>
-            <View style={CommonStyles.space.s5} />
-            <View style={{flex: 1}}>
-              <Text
-                style={[_styles.subject, computedDisableStyle]}
+                  _styles.senderName,
+                  computedDisableStyle,
+                  computedBookmarkTextStyle,
+                ]}
                 numberOfLines={1}>
-                {safeString(item?.subject)}
-              </Text>
-              <View style={CommonStyles.space.s2} />
-              <Text
-                style={[_styles.shortBody, computedDisableStyle]}
-                numberOfLines={1}>
-                {safeString(item?.short_body)}
+                {safeString(item?.sender_name)}
               </Text>
             </View>
+            <Text style={[_styles.dateTime, computedDisableStyle]}>
+              {DateUtils.unixToFormatDefault(item?.received_on_unix)}
+            </Text>
+          </View>
+          <View style={CommonStyles.space.s5} />
+          <View style={{flex: 1}}>
+            <Text
+              style={[_styles.subject, computedDisableStyle]}
+              numberOfLines={1}>
+              {safeString(item?.subject)}
+            </Text>
+            <View style={CommonStyles.space.s2} />
+            <Text
+              style={[_styles.shortBody, computedDisableStyle]}
+              numberOfLines={1}>
+              {safeString(item?.short_body)}
+            </Text>
           </View>
         </View>
-      </Pressable>
-    </Drawer>
+      </View>
+    </Pressable>,
   );
 };
 

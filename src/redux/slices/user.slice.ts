@@ -25,6 +25,9 @@ const initialState: {
 
   // Action marker
   isAskedForDeleteMail?: boolean;
+
+  // Search screen status
+  searchHistories: string[];
 } = {
   user: null,
   userProfile: null,
@@ -37,6 +40,8 @@ const initialState: {
   mailDeletedMetadataIds: {},
 
   isAskedForDeleteMail: false,
+
+  searchHistories: [],
 };
 
 export const userSlice = createSlice({
@@ -143,14 +148,18 @@ export const userSlice = createSlice({
     },
 
     // UI State
-    mailMarkAsRead: (state, action: PayloadAction<{metadata_id: string}>) => {
+    mailMarkAsRead: (
+      state,
+      action: PayloadAction<{metadata_id: string; isToggle: boolean}>,
+    ) => {
       const itemUid = action.payload.metadata_id;
+      const isToggle = action.payload.isToggle;
 
       return {
         ...state,
         mailReadMetadataIds: {
           ...state?.mailReadMetadataIds,
-          [itemUid]: !state?.mailReadMetadataIds?.[itemUid],
+          [itemUid]: !isToggle ? true : !state?.mailReadMetadataIds?.[itemUid],
         },
       };
     },
@@ -200,6 +209,38 @@ export const userSlice = createSlice({
       return {
         ...state,
         isAskedForDeleteMail: action.payload.shouldAsk ?? false,
+      };
+    },
+
+    // Search func
+    searchAppendNewHistory: (
+      state,
+      action: PayloadAction<{
+        keyword: string;
+      }>,
+    ) => {
+      const newKeyword = action.payload.keyword;
+      return {
+        ...state,
+        searchHistories: [newKeyword].concat(
+          (state?.searchHistories ?? [])?.filter(
+            (s: string) => s != newKeyword && s,
+          ),
+        ),
+      };
+    },
+    searchRemoveHistory: (
+      state,
+      action: PayloadAction<{
+        keyword: string;
+      }>,
+    ) => {
+      const keyword = action.payload.keyword;
+      return {
+        ...state,
+        searchHistories: state?.searchHistories.filter(
+          (s: string) => s && s != keyword,
+        ),
       };
     },
   },

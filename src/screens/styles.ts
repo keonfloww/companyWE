@@ -4,7 +4,7 @@ import {StyleSheet} from 'react-native';
 const ViewStyles = StyleSheet.create({
   viewLayout: {
     marginVertical: scale(10),
-    marginHorizontal: scale(25),
+    marginHorizontal: scale(20),
   },
 });
 const SpaceStyles = StyleSheet.create({
@@ -97,9 +97,17 @@ const FontStyles = StyleSheet.create({
   },
 });
 const IconStyles = StyleSheet.create({
+  icon12: {
+    width: scale(12),
+    height: scale(12),
+  },
   icon15: {
     width: scale(15),
     height: scale(15),
+  },
+  icon16: {
+    width: scale(16),
+    height: scale(16),
   },
   icon20: {
     width: scale(20),

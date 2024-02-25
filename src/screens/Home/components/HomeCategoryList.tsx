@@ -26,9 +26,21 @@ const CategoryList: FC = () => {
                 alignItems: 'center',
                 flex: 1,
               }}>
-              {item?.icon()}
+              <View
+                style={{
+                  height: scale(52),
+                  width: scale(52),
+                  borderRadius: 99,
+                  borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {item?.icon()}
+              </View>
               <View style={{height: scale(8)}}></View>
-              <Text style={[CommonStyles.font.regular12, {color: '#3c3c3c'}]}>{item?.label}</Text>
+              <Text style={[CommonStyles.font.regular12, {color: '#3c3c3c'}]}>
+                {item?.label}
+              </Text>
             </View>
           );
         }}

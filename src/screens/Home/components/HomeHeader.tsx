@@ -1,5 +1,7 @@
 import IMAGES from '@assets/images/images';
 import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookmarkSearchActions';
+import {Screen} from '@navigation/navigation.enums';
+import navigationService from '@services/navigationService';
 import {scale} from '@utils/mixins';
 import React, {FC} from 'react';
 import {View} from 'react-native';
@@ -24,7 +26,7 @@ const HomeHeader: FC = () => {
           console.log('onPressBookMark');
         }}
         onPressSearch={() => {
-          console.log('onPressSearch');
+          navigationService.navigate(Screen.SearchScreen);
         }}
       />
     </View>

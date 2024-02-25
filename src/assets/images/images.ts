@@ -62,6 +62,7 @@ import icCamera from './svg/camera.svg';
 import icBack from './svg/ic_back.svg';
 import BackButton from './svg/backButton.svg';
 import icEmpty from './svg/empty.svg';
+import icClose from './svg/ic_close.svg';
 
 const IMAGES = {
   icEdit,
@@ -125,6 +126,7 @@ const IMAGES = {
   icEmpty,
   gifProgressSrc,
   icBackSrc,
+  icClose,
 };
 
 export default IMAGES;

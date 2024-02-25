@@ -1,5 +1,5 @@
 import IMAGES from '@assets/images/images';
-import moment, {duration} from 'moment';
+import moment from 'moment';
 
 const useHome = () => {
   const categoryList = [

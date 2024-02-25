@@ -6,8 +6,21 @@ import {useDispatch, useSelector} from 'react-redux';
 const useMailItem = ({item}: {item: Email}) => {
   const dispatch = useDispatch();
 
+  const handleMarkAsReadToggle = () =>
+    dispatch(
+      userSliceActions.mailMarkAsRead({
+        metadata_id: item?.metadata_id,
+        isToggle: true,
+      }),
+    );
   const handleMarkAsRead = () =>
-    dispatch(userSliceActions.mailMarkAsRead({metadata_id: item?.metadata_id}));
+    dispatch(
+      userSliceActions.mailMarkAsRead({
+        metadata_id: item?.metadata_id,
+        isToggle: false,
+      }),
+    );
+
   const handleMarkBookMark = () =>
     dispatch(
       userSliceActions.mailMarkBookmark({metadata_id: item?.metadata_id}),
@@ -28,6 +41,7 @@ const useMailItem = ({item}: {item: Email}) => {
 
   return {
     isRead,
+    handleMarkAsReadToggle,
     handleMarkAsRead,
 
     isBookMark,

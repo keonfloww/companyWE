@@ -15,3 +15,5 @@ export const moderateScale = (size: number, factor = 0.5) =>
 
 export const scaleFont = (size: number, factor = 0.5) =>
   size + (scale(size) - size) * factor;
+
+export const CUSTOM_HEADER_HEIGHT = scale(40);

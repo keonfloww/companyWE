@@ -1,3 +1,5 @@
+import {Email} from '@models/mail/modelMail';
+
 export enum Screen {
   StoryBookScreen = 'StoryBookScreen',
 
@@ -14,7 +16,11 @@ export enum Screen {
 
   MainTabBar = 'MainTabBar',
   HomeScreen = 'HomeScreen',
+
   InboxScreen = 'InboxScreen',
+  InboxIndexScreen = 'InboxIndexScreen',
+  InboxDetailScreen = 'InboxDetailScreen',
+
   SubscriptionScreen = 'SubscriptionScreen',
   ProfileScreen = 'ProfileScreen',
 
@@ -23,21 +29,16 @@ export enum Screen {
   ProfileConnectedMailScreen = 'ProfileConnectedMailScreen',
   EditProfileScreen = 'EditProfileScreen',
 
-  //
-  ContactListScreen = 'HOME_ContactListScreen',
-  ContactDetailScreen = 'HOME_ContactDetailScreen',
-  ContactCreateScreen = 'HOME_ContactCreateScreen',
+  // Global
+  SearchScreen = 'SearchScreen',
 }
 
 export type RootStackParamList = {
   HomeScreen: undefined;
   NotFound: undefined;
 
-  ContactListScreen: undefined;
-  ContactDetailScreen: {
-    userId: number;
-    screenTitle: string;
-    isCreate?: boolean;
+  InboxDetailScreen: {
+    item: Email;
   };
   // Feed: {sort: 'latest' | 'top'} | undefined;
 };
