@@ -13,7 +13,7 @@ import {Screen} from '@navigation/navigation.enums';
 import {persistSliceActions} from '@redux/slices/persist.slice';
 import BaseMailUtils from '@utils/baseMailUtils';
 import moment from 'moment';
-import DateUtils from '@utils/dateUtils';
+import {DateFormatUtils} from '@utils/dateUtils';
 
 const useAuth = () => {
   const dispatch = useDispatch();
@@ -86,8 +86,8 @@ const useAuth = () => {
         moment(userData.user.metadata.lastSignInTime);
       const oldUser =
         moment(userData.user.metadata.creationTime).format(
-          DateUtils.BACKEND_FORMAT,
-        ) < moment().format(DateUtils.BACKEND_FORMAT);
+          DateFormatUtils.BACKEND_FORMAT,
+        ) < moment().format(DateFormatUtils.BACKEND_FORMAT);
 
       if (isSignUp && !oldUser && !signedInBefore) {
         // API register

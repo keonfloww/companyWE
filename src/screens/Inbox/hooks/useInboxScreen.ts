@@ -10,7 +10,7 @@ import {
 } from '@redux/slices/api/mailApi.slice';
 import {userSliceActions} from '@redux/slices/user.slice';
 import {BaseState} from '@redux/stores';
-import DateUtils from '@utils/dateUtils';
+import {DateFormatUtils} from '@utils/dateUtils';
 import moment, {Moment} from 'moment';
 import {useMemo} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -110,8 +110,10 @@ const useInboxScreen = () => {
           // DEBUG
           start_date_string: moment
             ?.unix(Number.parseInt(computedStartDateUnix))
-            ?.format(DateUtils.FRONTEND_FORMAT_DEBUG),
-          end_date_string: endDate?.format(DateUtils.FRONTEND_FORMAT_DEBUG),
+            ?.format(DateFormatUtils.FRONTEND_FORMAT_DEBUG),
+          end_date_string: endDate?.format(
+            DateFormatUtils.FRONTEND_FORMAT_DEBUG,
+          ),
         };
         const res = await getMail(params).unwrap();
         // handle refresh token and retry here
@@ -148,9 +150,9 @@ const useInboxScreen = () => {
             '---- SYNCED',
             `${targetMail.email}, from ${moment
               ?.unix(Number.parseInt(computedStartDateUnix))
-              ?.format(DateUtils.FRONTEND_FORMAT_DEBUG)} to ${moment(
+              ?.format(DateFormatUtils.FRONTEND_FORMAT_DEBUG)} to ${moment(
               endDate,
-            )?.format(DateUtils.FRONTEND_FORMAT_DEBUG)}`,
+            )?.format(DateFormatUtils.FRONTEND_FORMAT_DEBUG)}`,
           );
 
           dispatch(
@@ -178,7 +180,7 @@ const useInboxScreen = () => {
                 next_page_token: next_page_token,
                 last_end_date_synced: latestEndDateSynced?.unix()?.toString(),
                 last_end_date_synced_string: latestEndDateSynced?.format(
-                  DateUtils.FRONTEND_FORMAT_DEBUG,
+                  DateFormatUtils.FRONTEND_FORMAT_DEBUG,
                 ),
               },
             }),
@@ -251,7 +253,7 @@ const useInboxScreen = () => {
           expiry_date: mail.expiry_date,
           refresh_token: mail.refresh_token,
 
-          end_date: endDate.format(DateUtils.BACKEND_FORMAT),
+          end_date: endDate.format(DateFormatUtils.BACKEND_FORMAT),
           end_date_unix: endDate.unix().toString(),
           delete_historical_mails: true,
         }).unwrap();

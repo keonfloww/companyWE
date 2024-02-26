@@ -113,6 +113,8 @@ const InboxIndexScreen = () => {
                 }
                 setSelectedIds(selectedIds?.concat(id));
               }}
+              isReadOnly={false}
+              isClearPaddingDefault={false}
             />
           );
         }}

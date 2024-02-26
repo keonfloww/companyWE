@@ -1,7 +1,14 @@
 import LayoutCustomHeader from '@layouts/default/LayoutCustomHeader';
 import {CUSTOM_HEADER_HEIGHT, scale} from '@utils/mixins';
-import React, {FC, useMemo} from 'react';
-import {FlatList, View, useWindowDimensions} from 'react-native';
+import React, {FC, useCallback, useMemo, useState} from 'react';
+import {
+  FlatList,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import CommonStyles from '../styles';
 import useSearchScreen from './hooks/useSearchScreen';
 import SearchHistoryItem from './components/SearchHistoryItem';
@@ -13,6 +20,11 @@ import SearchHistoryHeader from './components/SearchHistoryHeader';
 import MailRow from '@screens/Inbox/components/MailRow';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import FocusAwareStatusBar from '@services/statusBarService';
+import useInboxScreenAction from '@screens/Inbox/hooks/useInboxScreenAction';
+import BaseModal from '@components/atoms/Modal/BaseModal';
+import IMAGES from '@assets/images/images';
+import {t} from 'i18next';
+import DeleteMailFloatingButton from '@screens/Inbox/components/DeleteMailFloatingButton';
 
 const SearchScreen: FC<any> = () => {
   const {
@@ -26,28 +38,50 @@ const SearchScreen: FC<any> = () => {
     handleRemoveSearchHistory,
   } = useSearchScreen();
   const screen = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+
   const BOTTOM_HEIGHT = scale(300);
 
   const isShowSearchResult = useMemo(() => {
     return !!searchContent;
   }, [searchContent]);
+  const {handleMarkDeletedMany} = useInboxScreenAction();
+
+  const [
+    isShowModalConfirmDeleteSelectedMail,
+    setIsShowModalConfirmDeleteSelectedMail,
+  ] = useState<boolean>(false);
+  const [selectMode, setSelectMode] = useState<boolean>(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const resetSelectionMode = useCallback(() => {
+    setSelectMode(false);
+    setSelectedIds([]);
+  }, []);
 
   return (
     <LayoutCustomHeader
+      darkTheme={true}
       styleCustomHeader={{height: CUSTOM_HEADER_HEIGHT}}
       containerStyle={{alignItems: 'center'}}
       customHeader={
         <SearchScreenHeader
+          darkTheme={true}
           onSubmitSearch={(_: string) => {
             handleSearch({
               keyword: _,
             });
           }}
+          onClearSearch={() => {
+            handleSearch({
+              keyword: '',
+            });
+          }}
         />
       }>
       <FocusAwareStatusBar
-        backgroundColor={'white'}
-        barStyle={'dark-content'}
+        backgroundColor={'#50048A'}
+        barStyle={'light-content'}
       />
       <KeyboardAwareScrollView
         scrollEnabled={false}
@@ -65,6 +99,7 @@ const SearchScreen: FC<any> = () => {
               {
                 marginRight: 0,
                 height: screen.height - BOTTOM_HEIGHT,
+                // flex: 1,
               },
             ]}
             stickyHeaderHiddenOnScroll={true}
@@ -84,7 +119,7 @@ const SearchScreen: FC<any> = () => {
                 />
               );
             }}
-            ItemSeparatorComponent={() => <View style={{height: scale(10)}} />}
+            ItemSeparatorComponent={() => <View style={{height: scale(15)}} />}
             ListEmptyComponent={<SearchHistoryEmpty />}
           />
         )}
@@ -92,33 +127,52 @@ const SearchScreen: FC<any> = () => {
         {isShowSearchResult && (
           <FlatList
             showsVerticalScrollIndicator={false}
-            alwaysBounceVertical={false}
-            overScrollMode="never"
             style={[
-              CommonStyles.view.viewLayout,
-
               {
-                marginRight: 20,
-                height: screen.height - BOTTOM_HEIGHT,
+                height:
+                  screen.height -
+                  insets.bottom -
+                  scale(Platform.OS == 'android' ? 90 : 100),
               },
             ]}
             stickyHeaderHiddenOnScroll={true}
             stickyHeaderIndices={[0]}
             ListHeaderComponent={
-              <SearchHistoryHeader title={'Search Results'} />
+              <SearchHistoryHeader
+                title={'Search Results'}
+                containerStyle={{
+                  marginBottom: scale(10),
+                  paddingBottom: scale(5),
+                  paddingTop: scale(15),
+                  paddingHorizontal: scale(20),
+                }}
+              />
             }
             data={searchResultList}
             renderItem={({item}) => {
               return (
                 <MailRow
-                  isReadOnly={true}
-                  isClearPaddingDefault={true}
+                  isReadOnly={false}
+                  isClearPaddingDefault={false}
                   item={item}
-                  isSelectMode={false}
-                  onSelectMode={() => {}}
-                  onCancelSelectMode={() => {}}
-                  onSelect={(id: string) => {}}
-                  onDelete={() => {}}
+                  isSelectMode={selectMode}
+                  onDelete={(id: string) => {
+                    if (selectedIds?.includes(id)) {
+                      setSelectedIds(selectedIds?.filter(i => i != id));
+                      return;
+                    }
+                    setSelectedIds(selectedIds?.concat(id));
+                    setIsShowModalConfirmDeleteSelectedMail(true);
+                  }}
+                  onSelectMode={() => setSelectMode(true)}
+                  onCancelSelectMode={resetSelectionMode}
+                  onSelect={(id: string) => {
+                    if (selectedIds?.includes(id)) {
+                      setSelectedIds(selectedIds?.filter(i => i != id));
+                      return;
+                    }
+                    setSelectedIds(selectedIds?.concat(id));
+                  }}
                 />
               );
             }}
@@ -126,17 +180,75 @@ const SearchScreen: FC<any> = () => {
             ListEmptyComponent={<SearchHistoryEmpty />}
           />
         )}
-
-        <View
-          style={[
-            CommonStyles.view.viewLayout,
-            {marginTop: 0, marginRight: 0, height: BOTTOM_HEIGHT},
-          ]}>
-          <SearchScreenCategoryFooter categoryList={categoryList} />
-        </View>
+        <DeleteMailFloatingButton
+          visible={selectMode}
+          onDelete={() => {
+            setIsShowModalConfirmDeleteSelectedMail(true);
+          }}
+          onCancel={() => {
+            setSelectMode(false);
+            resetSelectionMode();
+          }}
+        />
+        <BaseModal
+          isShow={isShowModalConfirmDeleteSelectedMail}
+          headerIcon={<IMAGES.icTrash color={'#E74C3C'} />}
+          confirmTitle={t('Yes, I am sure')}
+          cancelTitle={t('No')}
+          actionViewStyle={{height: scale(40)}}
+          buttonContainerStyle={{paddingVertical: scale(0)}}
+          onClose={() => {
+            setIsShowModalConfirmDeleteSelectedMail(false);
+          }}
+          onConfirm={() => {
+            setIsShowModalConfirmDeleteSelectedMail(false);
+            console.log('selectedIds', selectedIds);
+            handleMarkDeletedMany(selectedIds);
+            resetSelectionMode();
+          }}>
+          <Text
+            style={{
+              ...CommonStyles.font.bold24,
+              ...style.text,
+              textAlign: 'center',
+            }}>
+            {t(`Are you sure you want to delete?`)}
+          </Text>
+          <View style={{height: scale(16)}} />
+          <Text
+            style={{
+              ...CommonStyles.font.regular14,
+              ...style.text,
+              textAlign: 'center',
+            }}>
+            {t(
+              `Deleting will remove this email from your Inbox. This action cannot be undone.`,
+            )}
+          </Text>
+        </BaseModal>
+        {!isShowSearchResult && (
+          <View
+            style={[
+              CommonStyles.view.viewLayout,
+              {marginTop: 0, marginRight: 0, height: BOTTOM_HEIGHT},
+            ]}>
+            <SearchScreenCategoryFooter categoryList={categoryList} />
+          </View>
+        )}
       </KeyboardAwareScrollView>
     </LayoutCustomHeader>
   );
 };
 
 export default React.memo(SearchScreen);
+
+const style = StyleSheet.create({
+  text: {
+    color: '#3c3c3c',
+  },
+  listEmptyStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
+});

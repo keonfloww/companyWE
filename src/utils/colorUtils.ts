@@ -29,7 +29,7 @@ export const ProfileColors: {
   O: {MainColor: '#eb872f', SecondaryColor: '#ffd5b0'},
   P: {MainColor: '#ffc0cb', SecondaryColor: '#FFCCCC'},
   Q: {MainColor: '#51414F', SecondaryColor: '#FFFFFF'},
-  R: {MainColor: '#F00', SecondaryColor: '#FF4040'},
+  R: {MainColor: 'white', SecondaryColor: '#FF4040'},
   S: {MainColor: '#0F52BA', SecondaryColor: '#6495ED'},
   T: {MainColor: '#25ba37', SecondaryColor: '#77e684'},
   U: {MainColor: '#0437F2', SecondaryColor: '#4169E1'},

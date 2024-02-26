@@ -3,7 +3,7 @@ import Modal from 'react-native-modal';
 import {scale} from '@utils/mixins';
 import CommonStyles from '@screens/styles';
 import moment from 'moment';
-import DateUtils from '@utils/dateUtils';
+import DateUtils, {DateFormatUtils} from '@utils/dateUtils';
 import {Colors} from 'react-native-ui-lib';
 import IMAGES from '@assets/images/images';
 import DateTimePicker from 'react-native-ui-datepicker';
@@ -81,7 +81,7 @@ const DatePickerModal = ({
               setDatePicker(false);
               setDate(
                 moment(params?.date?.toString()).format(
-                  DateUtils.BACKEND_FORMAT,
+                  DateFormatUtils.BACKEND_FORMAT,
                 ),
               );
             }}

@@ -11,6 +11,7 @@ interface Props extends PropsWithChildren {
   styleCustomHeader?: ViewStyle;
   containerStyle?: ViewStyle;
   isShowBack?: boolean;
+  darkTheme: boolean;
 }
 
 const LayoutCustomHeader: FC<Props> = ({
@@ -20,11 +21,12 @@ const LayoutCustomHeader: FC<Props> = ({
 
   styleCustomHeader = {},
   isShowBack = true,
+  darkTheme = false,
 }) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <SafeView unSafeBackgroundColor={'white'}>
+    <SafeView unSafeBackgroundColor={darkTheme ? '#50048A' : 'white'}>
       <View
         style={[
           {
@@ -36,13 +38,16 @@ const LayoutCustomHeader: FC<Props> = ({
             borderBottomColor: '#DADADA',
             borderBottomWidth: scale(1),
             paddingBottom: scale(10),
-            ...(Platform.OS == 'android' && {paddingTop: insets.top}),
+            backgroundColor: darkTheme ? '#50048A' : 'white',
+            ...(Platform.OS == 'android' && {
+              paddingTop: insets.top + scale(10),
+            }),
           },
           containerStyle,
         ]}>
         {isShowBack && (
           <TouchableOpacity onPress={navigationService.goBack}>
-            <IMAGES.icBack color={'#3C3C3C'} />
+            <IMAGES.icBack color={darkTheme ? 'white' : '#3C3C3C'} />
           </TouchableOpacity>
         )}
         <View style={[{flex: 1}, styleCustomHeader]}>{customHeader}</View>

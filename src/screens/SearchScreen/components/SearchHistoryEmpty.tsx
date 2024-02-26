@@ -14,7 +14,7 @@ const SearchHistoryEmpty = () => {
       }}>
       <IMAGES.icSearch color={'#8F8F8F'} {...CommonStyles.icon.icon20} />
       <Text style={[CommonStyles.font.bold16, {color: '#3C3C3C'}]}>
-        No active search
+        No result found
       </Text>
       <Text style={[CommonStyles.font.regular12, {color: '#3C3C3C'}]}>
         Type to start a search

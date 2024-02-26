@@ -20,23 +20,36 @@ const useSearchScreen = () => {
   const searchResultList = useMemo(() => {
     return (
       userState?.mailbox?.filter((mail: Email) => {
+        if (userState.mailDeletedMetadataIds?.[mail?.metadata_id]) {
+          return false;
+        }
         const foundSubject =
-          mail?.subject && mail?.subject?.indexOf(searchContent) != -1;
+          mail?.subject &&
+          mail?.subject?.toLowerCase()?.indexOf(searchContent?.toLowerCase()) !=
+            -1;
         const foundSenderName =
-          mail?.sender_name && mail?.sender_name?.indexOf(searchContent) != -1;
+          mail?.sender_name &&
+          mail?.sender_name
+            ?.toLowerCase()
+            ?.indexOf(searchContent?.toLowerCase()) != -1;
 
         const foundShortBody =
-          mail?.short_body && mail?.short_body?.indexOf(searchContent) != -1;
+          mail?.short_body &&
+          mail?.short_body
+            ?.toLowerCase()
+            ?.indexOf(searchContent?.toLowerCase()) != -1;
         const foundSenderEmail =
           mail?.sender_email &&
-          mail?.sender_email?.indexOf(searchContent) != -1;
+          mail?.sender_email
+            ?.toLowerCase()
+            ?.indexOf(searchContent?.toLowerCase()) != -1;
 
         return (
           foundSubject || foundSenderName || foundSenderEmail || foundShortBody
         );
       }) ?? []
     );
-  }, [searchContent]);
+  }, [searchContent, userState.mailDeletedMetadataIds]);
 
   const handleSearch = ({keyword}: {keyword: string}) => {
     if (!keyword) {
