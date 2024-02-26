@@ -418,34 +418,6 @@ const EditProfileScreen: FC = () => {
                   justifyContent: 'space-between',
                   marginBottom: scale(15),
                   alignItems: 'center',
-                  columnGap: scale(10),
-                }}>
-                <Text
-                  style={[
-                    CommonStyles.font.semiBold14,
-                    {marginRight: scale(10)},
-                  ]}>
-                  Email Address
-                </Text>
-                <Text
-                  numberOfLines={1}
-                  style={[
-                    CommonStyles.font.regular14,
-                    {
-                      color: '#8f8f8f',
-                      flex: 1,
-                      textAlign: 'right',
-                    },
-                  ]}>
-                  {userProfile?.email_address}
-                </Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginBottom: scale(15),
-                  alignItems: 'center',
                 }}>
                 <Text style={CommonStyles.font.semiBold14}>
                   Account connected

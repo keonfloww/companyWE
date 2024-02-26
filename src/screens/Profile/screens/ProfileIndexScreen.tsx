@@ -124,8 +124,9 @@ const ProfileIndexScreen = () => {
               />
               {loading && (
                 <ActivityIndicator
-                  color={'#ffffff'}
+                  color={'#50048A'}
                   style={{position: 'absolute'}}
+                  size={'large'}
                 />
               )}
             </View>
@@ -178,11 +179,10 @@ const ProfileIndexScreen = () => {
           </Text>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: 'column',
               justifyContent: 'space-between',
               marginBottom: scale(15),
-              alignItems: 'center',
-              columnGap: scale(10),
+              rowGap: scale(10),
             }}>
             <Text
               style={[CommonStyles.font.semiBold14, {marginRight: scale(10)}]}>
@@ -194,8 +194,6 @@ const ProfileIndexScreen = () => {
                 CommonStyles.font.regular14,
                 {
                   color: '#8f8f8f',
-                  flex: 1,
-                  textAlign: 'right',
                 },
               ]}>
               {userProfile?.email_address}
