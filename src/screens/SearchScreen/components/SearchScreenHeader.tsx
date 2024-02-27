@@ -47,9 +47,9 @@ const HeaderSearchInput: FC<Props> = ({
       <IMAGES.icSearch color={darkTheme ? 'white' : '#8F8F8F'} />
       <Controller
         control={control}
-        render={({field: {value}}) => (
+        render={({field: {value, onChange}}) => (
           <TextInput
-            onChangeText={handler}
+            onChangeText={onChange}
             returnKeyType={'search'}
             autoFocus={true}
             multiline={false}
