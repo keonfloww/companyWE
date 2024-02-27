@@ -1,6 +1,6 @@
 import LayoutCustomHeader from '@layouts/default/LayoutCustomHeader';
 import {CUSTOM_HEADER_HEIGHT, scale} from '@utils/mixins';
-import React, {FC, useCallback, useMemo, useState} from 'react';
+import React, {FC, useCallback, useMemo, useRef, useState} from 'react';
 import {
   FlatList,
   Platform,
@@ -13,7 +13,9 @@ import CommonStyles from '../styles';
 import useSearchScreen from './hooks/useSearchScreen';
 import SearchHistoryItem from './components/SearchHistoryItem';
 import SearchScreenCategoryFooter from './components/SearchScreenCategoryFooter';
-import SearchScreenHeader from './components/SearchScreenHeader';
+import SearchScreenHeader, {
+  ImperativeHeaderSearchInput,
+} from './components/SearchScreenHeader';
 import SearchHistoryEmpty from './components/SearchHistoryEmpty';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SearchHistoryHeader from './components/SearchHistoryHeader';
@@ -47,6 +49,8 @@ const SearchScreen: FC<any> = () => {
   }, [searchContent]);
   const {handleMarkDeletedMany} = useInboxScreenAction();
 
+  const refSearchScreenHeader = useRef<ImperativeHeaderSearchInput>(null);
+
   const [
     isShowModalConfirmDeleteSelectedMail,
     setIsShowModalConfirmDeleteSelectedMail,
@@ -66,6 +70,7 @@ const SearchScreen: FC<any> = () => {
       containerStyle={{alignItems: 'center'}}
       customHeader={
         <SearchScreenHeader
+          ref={refSearchScreenHeader}
           darkTheme={true}
           onSubmitSearch={(_: string) => {
             handleSearch({
@@ -112,7 +117,12 @@ const SearchScreen: FC<any> = () => {
               return (
                 <SearchHistoryItem
                   content={item}
-                  onPress={() => handleSearch({keyword: item})}
+                  onPress={() => {
+                    handleSearch({keyword: item});
+                    refSearchScreenHeader.current?.setValueFromQuickSearch(
+                      item,
+                    );
+                  }}
                   onRemoveSingleHistory={() => {
                     handleRemoveSearchHistory({keyword: item});
                   }}
@@ -143,7 +153,7 @@ const SearchScreen: FC<any> = () => {
                 containerStyle={{
                   marginBottom: scale(10),
                   paddingBottom: scale(5),
-                  paddingTop: scale(15),
+                  paddingTop: scale(10),
                   paddingHorizontal: scale(20),
                 }}
               />
