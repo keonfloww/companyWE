@@ -44,7 +44,7 @@ const InboxDetailScreen: FC = () => {
       />
       <AutoHeightWebView
         startInLoadingState={true}
-        renderLoading={() => <ActivityIndicator />}
+        renderLoading={() => <ActivityIndicator color={'#50048A'} />}
         showsVerticalScrollIndicator={false}
         originWhitelist={['*']}
         customStyle={`

@@ -323,7 +323,7 @@ const EditProfileScreen: FC = () => {
                   />
                   {loading && (
                     <ActivityIndicator
-                      color={'#ffffff'}
+                      color={'#50048A'}
                       style={{position: 'absolute'}}
                     />
                   )}

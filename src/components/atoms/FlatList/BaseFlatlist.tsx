@@ -28,7 +28,9 @@ const BaseFlatList = ({
   isEnd = false,
   ItemSeparatorComponent,
   refreshControl = <RefreshControl refreshing={false} onRefresh={onRefresh} />,
-  ListFooterComponent = <ActivityIndicator style={styles.bottomIndicator} />,
+  ListFooterComponent = (
+    <ActivityIndicator style={styles.bottomIndicator} color={'#50048A'} />
+  ),
   ListEmptyComponent = <EmptyDataText />,
   keyExtractor,
   renderItem,
