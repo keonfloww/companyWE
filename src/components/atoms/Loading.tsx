@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'black',
-    opacity: 0,
+    opacity: 0.5,
   },
 });

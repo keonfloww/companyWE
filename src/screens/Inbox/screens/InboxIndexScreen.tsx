@@ -1,5 +1,5 @@
 import SafeView from '@components/atoms/View/SafeView';
-import {Text, View} from 'react-native';
+import {RefreshControl, Text, View} from 'react-native';
 import {scale} from '@utils/mixins';
 import React, {useCallback, useEffect, useState} from 'react';
 import usePagination from '@utils/hooks/usePagination';
@@ -76,6 +76,9 @@ const InboxIndexScreen = () => {
       </View>
       <View style={{height: scale(10)}} />
       <Animated.FlatList
+        refreshControl={
+          <RefreshControl tintColor={'#50048A'} refreshing={refreshing} />
+        }
         contentContainerStyle={!data?.length ? style.listEmptyStyle : {}}
         itemLayoutAnimation={LinearTransition.damping(10)}
         onEndReachedThreshold={0.7}

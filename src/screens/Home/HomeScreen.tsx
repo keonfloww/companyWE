@@ -25,6 +25,7 @@ const HomeScreen: FC<any> = () => {
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
+            tintColor={'#50048A'}
             refreshing={refreshing}
             onRefresh={() => {
               setRefreshing(true);
