@@ -5,6 +5,7 @@ import {
 import {
   IGetMailParams,
   IMailAuth2Params,
+  IMoveMailToTrashParams,
   useGetMailMutation,
   useMoveToTrashMutation,
 } from '@redux/slices/api/mailApi.slice';
@@ -163,7 +164,7 @@ const useInboxScreen = () => {
           // TODO: If many mails is syncing. Wait to all syncing process done
           if (!options?.isPullToRefresh) {
             handleSetFlagAskForDelete({shouldAsk: true});
-            global?.props?.showDeleteMailModal();
+            global?.props?.showDeleteMailModal(targetMail.email);
             return;
           }
 
@@ -244,20 +245,29 @@ const useInboxScreen = () => {
     shouldAsk: boolean;
   }) => dispatch(userSliceActions.setFlagAskForDelete({shouldAsk}));
 
-  const handleMoveMailToTrash = () => {
+  const handleMoveMailToTrash = (targetEmail: string) => {
     try {
       const endDate = moment().add(1, 'day');
-      userState.connectedMails?.forEach((mail: FireBaseMailCredentials) => {
-        moveMailToTrash({
-          access_token: mail?.access_token,
-          expiry_date: mail.expiry_date,
-          refresh_token: mail.refresh_token,
+      const targetMailCredential = userState.connectedMails.find(
+        (mail: FireBaseMailCredentials) => mail.email == targetEmail,
+      );
+      if (!targetMailCredential) {
+        handleSetFlagAskForDelete({shouldAsk: false});
+        return;
+      }
+      const params: IMoveMailToTrashParams = {
+        access_token: targetMailCredential?.access_token,
+        expiry_date: targetMailCredential.expiry_date,
+        refresh_token: targetMailCredential.refresh_token,
 
-          end_date: endDate.format(DateFormatUtils.BACKEND_FORMAT),
-          end_date_unix: endDate.unix().toString(),
-          delete_historical_mails: true,
-        }).unwrap();
-      });
+        end_date: endDate.format(DateFormatUtils.BACKEND_FORMAT),
+        end_date_unix: endDate.unix().toString(),
+        delete_historical_mails: true,
+      };
+      moveMailToTrash(params).unwrap();
+      console.log('Delete promotional mailbox of', targetMailCredential.email);
+      console.log('IMoveMailToTrashParams', params);
+      // userState.connectedMails?.forEach((mail: FireBaseMailCredentials) => {});
       handleSetFlagAskForDelete({shouldAsk: false});
     } catch (error) {
       console.log('error', error);

@@ -28,8 +28,9 @@ let toasts: any;
 const AppProvider = ({children}: PropsWithChildren) => {
   const {handleMoveMailToTrash, handleSetFlagAskForDelete} = useInboxScreen();
 
-  const [isShowDeleteAfterSyncedMail, setIsShowDeleteAfterSyncedMail] =
-    useState(false);
+  const [targetMailToDelete, setTargetMailToDelete] = useState<string | null>(
+    null,
+  );
 
   // useEffect(() => {
   //   console.log(
@@ -41,7 +42,7 @@ const AppProvider = ({children}: PropsWithChildren) => {
   //   }
   //   if (computedIsShowDeleteAfterSyncedMail) {
   //     console.log('sohw');
-  //     setIsShowDeleteAfterSyncedMail(true);
+  //     setTargetMailToDelete(true);
   //   }
   // }, [computedIsShowDeleteAfterSyncedMail]);
 
@@ -107,14 +108,13 @@ const AppProvider = ({children}: PropsWithChildren) => {
       setLoading(false);
     },
     showToast,
-    showDeleteMailModal: () => {
-      if (isShowDeleteAfterSyncedMail) {
+    showDeleteMailModal: (targetEmail: string) => {
+      if (targetMailToDelete) {
         return;
       }
-      setIsShowDeleteAfterSyncedMail(true);
+      setTargetMailToDelete(targetEmail);
     },
   };
-
   return (
     <Context.Provider value={globals}>
       {children}
@@ -137,7 +137,7 @@ const AppProvider = ({children}: PropsWithChildren) => {
       </RootSiblingPortal>
       <RootSiblingPortal>
         <BaseModal
-          isShow={isShowDeleteAfterSyncedMail}
+          isShow={!!targetMailToDelete}
           headerIcon={<IMAGES.icTrash color={'#E74C3C'} />}
           confirmTitle={t('Yes, I am sure')}
           cancelTitle={t('No')}
@@ -145,11 +145,15 @@ const AppProvider = ({children}: PropsWithChildren) => {
           buttonContainerStyle={{paddingVertical: scale(0)}}
           onClose={() => {
             handleSetFlagAskForDelete({shouldAsk: false});
-            setIsShowDeleteAfterSyncedMail(false);
+            setTargetMailToDelete(null);
           }}
           onConfirm={() => {
-            setIsShowDeleteAfterSyncedMail(false);
-            handleMoveMailToTrash();
+            if (!targetMailToDelete) {
+              setTargetMailToDelete(null);
+              return;
+            }
+            handleMoveMailToTrash(targetMailToDelete);
+            setTargetMailToDelete(null);
           }}>
           <Text
             style={{

@@ -5,7 +5,7 @@ declare global {
 
     showToast: (message: string, isError: boolean) => void;
 
-    showDeleteMailModal: () => void;
+    showDeleteMailModal: (targetMail: string) => void;
   };
 }
 export default global;

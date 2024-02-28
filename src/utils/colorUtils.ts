@@ -50,7 +50,7 @@ const getColorFromChar = (
     return colorDefaullt;
   }
   if (!ProfileColors?.[char]) {
-    console.warn(`${char} is not found in color config`);
+    // console.info(`${char} is not found in color config`);
   }
   return ProfileColors?.[char] ?? colorDefaullt;
 };
