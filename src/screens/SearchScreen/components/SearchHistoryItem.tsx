@@ -29,7 +29,9 @@ const SearchHistoryItem: FC<Props> = ({
       }}
       titleNode={
         <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-          <Text numberOfLines={1}>{content}</Text>
+          <Text numberOfLines={1} style={CommonStyles.font.semiBold14}>
+            {content}
+          </Text>
         </TouchableOpacity>
       }
       suffixIcon={
