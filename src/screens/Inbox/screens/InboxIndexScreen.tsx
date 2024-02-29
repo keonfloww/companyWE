@@ -77,7 +77,18 @@ const InboxIndexScreen = () => {
       <View style={{height: scale(10)}} />
       <Animated.FlatList
         refreshControl={
-          <RefreshControl tintColor={'#50048A'} refreshing={refreshing} />
+          <RefreshControl
+            tintColor={'#50048A'}
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              handleInboxTriggerSyncNewItem();
+              // WARNING: NOTICE THE DUPLICATE PROCESS
+              setTimeout(() => {
+                setRefreshing(false);
+              }, 1000);
+            }}
+          />
         }
         contentContainerStyle={!data?.length ? style.listEmptyStyle : {}}
         itemLayoutAnimation={LinearTransition.damping(10)}
