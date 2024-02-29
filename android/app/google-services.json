@@ -47,10 +47,54 @@
               "client_type": 3
             },
             {
-              "client_id": "527645071665-8kag2l8pmv2pm9iirpl5371b80mstd7f.apps.googleusercontent.com",
+              "client_id": "527645071665-0fofk70o5pdl75vlorffd9h22tpq8ib3.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.troove.trooveApp"
+                "bundle_id": "com.troove.trooveAppV2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527645071665:android:4106f3532b138ea18d3810",
+        "android_client_info": {
+          "package_name": "com.troove.troove_app.staging_dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "527645071665-rktpmo2lim7sgstc6meq18ece4p5pn5g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.troove.troove_app.staging_dev",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "527645071665-2eqr8u8nb3rhjpe55p99kll6j0lk7ab6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnDPFgDWxqTI7M-dA6BWSlSFrFJr_E5Qw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "527645071665-2eqr8u8nb3rhjpe55p99kll6j0lk7ab6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "527645071665-0fofk70o5pdl75vlorffd9h22tpq8ib3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.troove.trooveAppV2"
               }
             }
           ]
