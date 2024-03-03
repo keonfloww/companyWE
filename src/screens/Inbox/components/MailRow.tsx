@@ -1,9 +1,9 @@
 import IMAGES from '@assets/images/images';
-import {Email} from '@models/mail/modelMail';
+import { Email } from '@models/mail/modelMail';
 import CommonStyles from '@screens/styles';
 import DateUtils from '@utils/dateUtils';
-import {scale} from '@utils/mixins';
-import {safeString} from '@utils/stringUtils';
+import { scale } from '@utils/mixins';
+import { safeString } from '@utils/stringUtils';
 import React, {
   FC,
   ReactNode,
@@ -12,13 +12,13 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import {Pressable, StyleSheet, TextStyle} from 'react-native';
-import {Checkbox, Colors, Drawer, Text, View} from 'react-native-ui-lib';
+import { Pressable, StyleSheet, TextStyle } from 'react-native';
+import { Checkbox, Colors, Drawer, Text, View } from 'react-native-ui-lib';
 import useMailItem from '../hooks/useMailItem';
-import {ColorUtils} from '@utils/colorUtils';
+import { ColorUtils } from '@utils/colorUtils';
 import useColors from '@utils/hooks/useColors';
 import navigationService from '@services/navigationService';
-import {Screen} from '@navigation/navigation.enums';
+import { Screen } from '@navigation/navigation.enums';
 
 interface Props {
   item: Email;
@@ -34,11 +34,11 @@ interface Props {
 const MailRow: FC<Props> = ({
   item,
   isSelectMode = false,
-  onSelect = (_: string) => {},
-  onSelectMode = () => {},
-  onCancelSelectMode = () => {},
+  onSelect = (_: string) => { },
+  onSelectMode = () => { },
+  onCancelSelectMode = () => { },
 
-  onDelete = (_: string) => {},
+  onDelete = (_: string) => { },
   isReadOnly = false,
   isClearPaddingDefault = false,
 }) => {
@@ -53,7 +53,7 @@ const MailRow: FC<Props> = ({
     handleMarkBookMark,
 
     handleMarkDeleted,
-  } = useMailItem({item});
+  } = useMailItem({ item });
   const [selected, setSelected] = useState(false);
 
   const computedDisableStyle = useMemo(() => {
@@ -152,17 +152,17 @@ const MailRow: FC<Props> = ({
       onLongPress={onLongPressItem}
       onPress={() => {
         handleMarkAsRead();
-        navigationService.navigate(Screen.InboxDetailScreen, {item});
+        navigationService.navigate(Screen.InboxDetailScreen, { item });
       }}>
       <View
         style={[
           _styles.container,
           isClearPaddingDefault
             ? {
-                // OVERRIDE FOR VIEW MODE ONLY
-                paddingHorizontal: scale(0),
-                paddingBottom: scale(0),
-              }
+              // OVERRIDE FOR VIEW MODE ONLY
+              paddingHorizontal: scale(0),
+              paddingBottom: scale(0),
+            }
             : {},
         ]}>
         {isSelectMode ? (
@@ -201,7 +201,7 @@ const MailRow: FC<Props> = ({
                     .MainColor,
                 },
               ]}>
-              {safeString(item?.sender_name)?.[0]}
+              {safeString(item?.sender_name)?.[0]?.toUpperCase()}
             </Text>
           </View>
         )}
@@ -235,7 +235,7 @@ const MailRow: FC<Props> = ({
             </Text>
           </View>
           <View style={CommonStyles.space.s5} />
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <Text
               style={[_styles.subject, computedDisableStyle]}
               numberOfLines={1}>
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     paddingTop: scale(2),
     paddingLeft: scale(0.5),
   },
-  mailContent: {flex: 1},
+  mailContent: { flex: 1 },
   mailFirstRowContainer: {
     display: 'flex',
     flexDirection: 'row',
