@@ -43,11 +43,9 @@ const useInboxScreen = () => {
       ),
     [userState?.mailbox?.length, userState.mailDeletedMetadataIds],
   );
-
   // MEMO ---------------------
   const mailCountUnread =
-    mailBoxFlatten?.length ??
-    0 - Object.values(userState?.mailReadMetadataIds)?.length ??
+    (mailBoxFlatten?.length ?? 0) - Object.values(userState?.mailReadMetadataIds)?.length ??
     0;
 
   const computedIsShowDeleteAfterSyncedMail = useMemo(
