@@ -3,7 +3,7 @@ import BaseRowIconLabel from '@components/atoms/Row/BaseRowIconLabel';
 import CommonStyles from '@screens/styles';
 import { scale } from '@utils/mixins';
 import React, { FC } from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, View } from 'react-native';
 import { Colors } from 'react-native-ui-lib';
 
 interface Props {
@@ -36,7 +36,9 @@ const SearchHistoryItem: FC<Props> = ({
       }
       suffixIcon={
         <TouchableOpacity activeOpacity={0.7} onPress={onRemoveSingleHistory}>
-          <IMAGES.icClose {...CommonStyles.icon.icon12} color={'#3C3C3C'} />
+          <View style={{ width: scale(40), height: scale(15), justifyContent: 'center', alignItems: 'flex-end' }}>
+            <IMAGES.icClose {...CommonStyles.icon.icon12} color={'#3C3C3C'} />
+          </View>
         </TouchableOpacity>
       }
     />
