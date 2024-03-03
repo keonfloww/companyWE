@@ -62,6 +62,11 @@ const FontStyles = StyleSheet.create({
     fontSize: FontSizeStyles.size14,
     fontFamily: FontFamilyStyles.semiBold,
   },
+  semiBold14Raw: {
+    fontSize: FontSizeStyles.size14,
+    // fontFamily: FontFamilyStyles.semiBold,
+    fontWeight: '600'
+  },
   semiBold16: {
     fontSize: FontSizeStyles.size16,
     fontFamily: FontFamilyStyles.semiBold,
