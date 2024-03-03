@@ -36,6 +36,7 @@ export enum Screen {
 export type RootStackParamList = {
   HomeScreen: undefined;
   NotFound: undefined;
+  Auth: {isShowBack?: boolean};
 
   InboxDetailScreen: {
     item: Email;

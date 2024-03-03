@@ -6,24 +6,25 @@
  */
 
 import React from 'react';
-import type {FC} from 'react';
-import {Pressable, StyleSheet, Text, View, useColorScheme} from 'react-native';
-import {scale} from '../../utils/mixins';
-import {Screen} from '@navigation/navigation.enums';
+import type { FC } from 'react';
+import { Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
+import { scale } from '../../utils/mixins';
+import { RootStackParamList, Screen } from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
 import CommonStyles from '@screens/styles';
-import {t} from 'i18next';
+import { t } from 'i18next';
 import IMAGES from '@assets/images/images';
 import FormItemController from '@components/atoms/Form/FormItemController';
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import ServiceButton, {
   EnumAuthProviderButton,
   EnumAuthProviderButtonType,
 } from '@components/atoms/ServiceButton/ServiceButton';
-import navigationService, {navigationRef} from '@services/navigationService';
+import navigationService, { navigationRef } from '@services/navigationService';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
 import useAuth from './hooks/useAuth';
 import FocusAwareStatusBar from '@services/statusBarService';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 interface IFormData {
   email: string;
@@ -31,6 +32,10 @@ interface IFormData {
 }
 
 const LoginScreen: FC<any> = () => {
+  const { params } =
+    useRoute<RouteProp<RootStackParamList, Screen.Auth>>();
+
+
   // TODO: Vipin move it to /utils/RegexUtils.ts
   const EMAIL_REGEX =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -38,12 +43,12 @@ const LoginScreen: FC<any> = () => {
   // TODO: Vipin define Enums
   const isDarkMode = useColorScheme() === 'dark';
 
-  const {signInOrSignUpByFirebase} = useAuth();
+  const { signInOrSignUpByFirebase } = useAuth();
 
   const {
     control,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm<IFormData>({
     defaultValues: {
       email: '',
@@ -52,7 +57,7 @@ const LoginScreen: FC<any> = () => {
   });
 
   const onSubmit = (data: IFormData) => {
-    console.log({data, errors});
+    console.log({ data, errors });
     // navigationService.navigateAndReset(Screen.ConnectMailScreen);
   };
 
@@ -73,7 +78,7 @@ const LoginScreen: FC<any> = () => {
           zIndex: 1111,
           paddingHorizontal: scale(30),
         }}>
-        <Pressable
+        {params?.isShowBack != false && <Pressable
           onPress={() => {
             try {
               if (navigationRef.current.canGoBack()) {
@@ -81,25 +86,25 @@ const LoginScreen: FC<any> = () => {
                 return;
               }
               navigationService.navigate(Screen.IntroScreen);
-            } catch (error) {}
+            } catch (error) { }
           }}
-          style={{height: scale(25), width: scale(25)}}>
+          style={{ height: scale(25), width: scale(25) }}>
           <IMAGES.arrowLeft />
-        </Pressable>
+        </Pressable>}
       </View>
-      <View style={{height: scale(80)}}></View>
+      <View style={{ height: scale(80) }}></View>
       <View style={styles.view}>
-        <Text style={[CommonStyles.font.bold30, {color: '#3c3c3c'}]}>
+        <Text style={[CommonStyles.font.bold30, { color: '#3c3c3c' }]}>
           Welcome back!
         </Text>
         <Text
           style={[
             CommonStyles.font.regular14,
-            {color: '#3c3c3c', marginTop: scale(10)},
+            { color: '#3c3c3c', marginTop: scale(10) },
           ]}>
           Please sign in to continue.
         </Text>
-        <View style={{marginTop: scale(20), marginBottom: scale(10)}}>
+        <View style={{ marginTop: scale(20), marginBottom: scale(10) }}>
           <FormItemController
             control={control}
             errors={errors}
@@ -174,20 +179,20 @@ const LoginScreen: FC<any> = () => {
             flex: 1,
           }}></View>
       </View>
-      <View style={{marginHorizontal: scale(25)}}>
+      <View style={{ marginHorizontal: scale(25) }}>
         <ServiceButton
           type={EnumAuthProviderButtonType.SIGN_IN}
           containerStyle={styles.baseButton}
           authProvider={EnumAuthProviderButton.GOOGLE}
-          onPress={() => signInOrSignUpByFirebase({isSignUp: false})}
+          onPress={() => signInOrSignUpByFirebase({ isSignUp: false })}
           titleStyles={[CommonStyles.font.regular14, styles.connectText]}
         />
       </View>
-      <View style={{marginHorizontal: scale(25), marginVertical: scale(20)}}>
-        <Text style={{color: '#3C3C3C'}}>
+      <View style={{ marginHorizontal: scale(25), marginVertical: scale(20) }}>
+        <Text style={{ color: '#3C3C3C' }}>
           Don't have an account?{' '}
           <Text
-            style={[CommonStyles.font.semiBold14, {color: '#50048A'}]}
+            style={[CommonStyles.font.semiBold14, { color: '#50048A' }]}
             onPress={() => navigationService.navigate(Screen.Auth)}>
             Sign up
           </Text>

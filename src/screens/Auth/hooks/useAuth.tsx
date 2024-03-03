@@ -1,19 +1,19 @@
-import {useDispatch, useSelector} from 'react-redux';
-import {BaseState} from '@redux/stores';
+import { useDispatch, useSelector } from 'react-redux';
+import { BaseState } from '@redux/stores';
 import {
   useUserRegisterMutation,
   useUserGetMutation,
 } from '@redux/slices/api/userApi.slice';
 import useAuthProvider from '@utils/hooks/useAuthProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LOCAL_STORAGE_KEYS, LocalUtils} from '@utils/localStorageUtils';
-import {userSliceActions} from '@redux/slices/user.slice';
+import { LOCAL_STORAGE_KEYS, LocalUtils } from '@utils/localStorageUtils';
+import { userSliceActions } from '@redux/slices/user.slice';
 import navigationService from '@services/navigationService';
-import {Screen} from '@navigation/navigation.enums';
-import {persistSliceActions} from '@redux/slices/persist.slice';
+import { Screen } from '@navigation/navigation.enums';
+import { persistSliceActions } from '@redux/slices/persist.slice';
 import BaseMailUtils from '@utils/baseMailUtils';
 import moment from 'moment';
-import {DateFormatUtils} from '@utils/dateUtils';
+import { DateFormatUtils } from '@utils/dateUtils';
 
 const useAuth = () => {
   const dispatch = useDispatch();
@@ -24,15 +24,15 @@ const useAuth = () => {
   );
   const authUser = useSelector((state: BaseState) => state.userReducer.user);
 
-  const {signInByGoogle, signOutFirebase} = useAuthProvider();
+  const { signInByGoogle, signOutFirebase } = useAuthProvider();
   const [userRegister] = useUserRegisterMutation();
   const [userGet] = useUserGetMutation();
 
-  const signInOrSignUpByFirebase = async ({isSignUp = false}) => {
+  const signInOrSignUpByFirebase = async ({ isSignUp = false }) => {
     try {
       global?.props?.showLoading();
 
-      const {userData, accessToken} = await signInByGoogle();
+      const { userData, accessToken } = await signInByGoogle();
       AsyncStorage.setItem(
         LOCAL_STORAGE_KEYS.USER,
         JSON.stringify(userData.user),
@@ -65,7 +65,7 @@ const useAuth = () => {
           is_email_address_verified: Boolean(userData.user.emailVerified),
           accessToken: accessToken,
         });
-        console.log({userVerifyData}, '----');
+        console.log({ userVerifyData }, '----');
         const userSignIn = {
           ...userVerifyData?.data,
           creationTime: userData.user.metadata.creationTime,
@@ -105,7 +105,7 @@ const useAuth = () => {
           phone_number: '',
           accessToken: accessToken,
         });
-        console.log('after singup', {data});
+        console.log('after singup', { data });
         userFromApi = {
           ...data?.data?.data,
           creationTime: userData.user.metadata.creationTime,
@@ -120,7 +120,7 @@ const useAuth = () => {
           is_email_address_verified: Boolean(userData.user.emailVerified),
           accessToken: accessToken,
         });
-        console.log('after login', {data});
+        console.log('after login', { data });
         userFromApi = {
           ...data?.data,
           creationTime: userData.user.metadata.creationTime,
@@ -141,7 +141,7 @@ const useAuth = () => {
             phone_number: '',
             accessToken: accessToken,
           });
-          console.log('after singin', {data});
+          console.log('after singin', { data });
           userFromApi = {
             ...data?.data?.data,
             creationTime: userData.user.metadata.creationTime,
@@ -149,7 +149,7 @@ const useAuth = () => {
           };
         }
       }
-      console.log({userFromApi});
+      console.log({ userFromApi });
       dispatch(userSliceActions.setUserProfile(userFromApi));
       if (userData.user.email && persistReducerState?.[userData.user.email]) {
         // email for debug and uid for final release
@@ -206,7 +206,7 @@ const useAuth = () => {
 
       AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.USER);
       // AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.IS_CONNECTED_MAILS);
-      navigationService.navigateAndReset(Screen.Login);
+      navigationService.navigateAndReset(Screen.Login, { isShowBack: false });
       global?.props?.hideLoading();
     }
   };

@@ -5,8 +5,8 @@
  * @format
  */
 
-import React, {useRef, useState} from 'react';
-import type {FC} from 'react';
+import React, { useRef, useState } from 'react';
+import type { FC } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -21,14 +21,14 @@ import {
 } from 'react-native';
 
 // import {Colors} from 'react-native-ui-lib';
-import {scale} from '../../utils/mixins';
-import {Screen} from '@navigation/navigation.enums';
+import { scale } from '../../utils/mixins';
+import { Screen } from '@navigation/navigation.enums';
 import BaseButton from '@components/atoms/Button/BaseButton';
 import CommonStyles from '@screens/styles';
-import {t} from 'i18next';
+import { t } from 'i18next';
 import IMAGES from '@assets/images/images';
 import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import navigationService from '@services/navigationService';
 import FocusAwareStatusBar from '@services/statusBarService';
 
@@ -39,12 +39,12 @@ interface IcarouselItems {
   buttonText: string;
 }
 
-const IntroScreen: FC<any> = ({navigation}) => {
+const IntroScreen: FC<any> = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
   const flatListRef = useRef<FlatList>();
   const [corouselIndex, setCorouselIndex] = useState(1);
 
-  const {width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
   const carouselItems: IcarouselItems[] = [
@@ -76,7 +76,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
           style={[
             styles.paginationDot,
             corouselIndex === index + 1
-              ? {backgroundColor: '#3C3C3C', width: scale(20)}
+              ? { backgroundColor: '#3C3C3C', width: scale(20) }
               : {},
           ]}
         />
@@ -89,7 +89,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
       navigation.navigate(Screen.Auth);
       return;
     }
-    console.log({index});
+    console.log({ index });
     if (index <= 2) {
       flatListRef?.current?.scrollToIndex({
         animated: true,
@@ -107,7 +107,7 @@ const IntroScreen: FC<any> = ({navigation}) => {
     }
   };
 
-  const _renderItem = ({item}: any) => (
+  const _renderItem = ({ item }: any) => (
     <View
       style={{
         width: Dimensions.get('screen').width,
@@ -130,11 +130,11 @@ const IntroScreen: FC<any> = ({navigation}) => {
         }}>
         <Image
           source={item.image}
-          style={{width: '100%', marginTop: scale(50)}}
+          style={{ width: '100%', marginTop: scale(50) }}
           resizeMode="contain"
         />
       </View>
-      <View style={{justifyContent: 'center', alignSelf: ''}}>
+      <View style={{ justifyContent: 'center', alignSelf: '' }}>
         <Text style={[CommonStyles.font.bold30, styles.text]}>
           {item.title}
         </Text>
@@ -197,25 +197,25 @@ const IntroScreen: FC<any> = ({navigation}) => {
         {corouselIndex !== 1 ? (
           <Pressable
             onPress={() => backPress(corouselIndex)}
-            style={{height: scale(25), width: scale(25)}}>
+            style={{ height: scale(25), width: scale(25) }}>
             <IMAGES.arrowLeft />
           </Pressable>
         ) : (
-          <View style={{height: scale(25), width: scale(25)}} />
+          <View style={{ height: scale(25), width: scale(25) }} />
         )}
         {corouselIndex !== 3 ? (
           <Text
-            onPress={() => navigationService.navigate(Screen.Login)}
-            style={[CommonStyles.font.semiBold14, {color: '#3c3c3c'}]}>
+            onPress={() => navigationService.navigate(Screen.Auth)}
+            style={[CommonStyles.font.semiBold14, { color: '#3c3c3c' }]}>
             Skip
           </Text>
         ) : (
           <Text />
         )}
       </View>
-      <View style={{flex: 5}}>{corousel}</View>
-      <View style={{flex: 1}}>{pagination}</View>
-      <View style={{height: insets.bottom}} />
+      <View style={{ flex: 5 }}>{corousel}</View>
+      <View style={{ flex: 1 }}>{pagination}</View>
+      <View style={{ height: insets.bottom }} />
     </LayoutBackgroundDefault>
   );
 };
