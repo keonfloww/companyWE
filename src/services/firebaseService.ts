@@ -1,9 +1,11 @@
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import firebase from '@react-native-firebase/app';
+import Config from 'react-native-config';
 
 const useFirebaseService = () => {
   const initFirebaseApp = async () => {
     console.log('------- initFirebaseApp -------');
+    console.log('Config.API_URL', Config.MODE, Config.API_URL);
 
     // TODO: toannt update into env
     const firebaseConfig = {

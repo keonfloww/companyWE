@@ -132,7 +132,7 @@ android {
         stg {
             dimension "enviroment"
             resValue 'string', 'app_name',  '[STG]Troove'
-            applicationIdSuffix ".staging"
+            applicationIdSuffix ".staging_dev"
         }
     }
 }
