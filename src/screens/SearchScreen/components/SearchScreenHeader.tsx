@@ -33,13 +33,17 @@ const HeaderSearchInput = forwardRef<ImperativeHeaderSearchInput, Props>(
       },
       [],
     );
-    // const handler = useCallback(
-    //   _.debounce(value => {
-    //     onSubmitSearch(value);
-    //     setValue('content', value);
-    //   }, 2000),
-    //   [onSubmitSearch, setValue],
-    // );
+    const handler = useCallback(
+      _.debounce(value => {
+        onSubmitSearch(value);
+      }, 2000),
+      [],
+    );
+
+    const onChange = (value: string) => {
+      setValue('content', value);
+      handler(value)
+    };
 
     return (
       <View
@@ -58,9 +62,9 @@ const HeaderSearchInput = forwardRef<ImperativeHeaderSearchInput, Props>(
         <IMAGES.icSearch color={darkTheme ? 'white' : '#8F8F8F'} />
         <Controller
           control={control}
-          render={({field: {value, onChange}}) => (
+          render={({field: {value}}) => (
             <TextInput
-              onChangeText={onChange}
+              onChangeText={value => onChange(value)}
               returnKeyType={'search'}
               autoFocus={true}
               multiline={false}
