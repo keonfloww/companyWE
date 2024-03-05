@@ -1,8 +1,13 @@
+import IMAGES from '@assets/images/images';
+import LayoutCustomHeader from '@layouts/default/LayoutCustomHeader';
 import {RootStackParamList, Screen} from '@navigation/navigation.enums';
 import {RouteProp, useRoute} from '@react-navigation/native';
+import CommonStyles from '@screens/styles';
+import FocusAwareStatusBar from '@services/statusBarService';
+import useColors from '@utils/hooks/useColors';
+import {scale, scaleHeight} from '@utils/mixins';
+import {Buffer} from 'buffer';
 import React, {FC, useMemo} from 'react';
-import {atob} from 'react-native-quick-base64';
-import AutoHeightWebView from 'react-native-autoheight-webview';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -10,15 +15,10 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import {scale, scaleHeight} from '@utils/mixins';
-import LayoutCustomHeader from '@layouts/default/LayoutCustomHeader';
-import InboxDetailCustomHeader from '../components/InboxDetailCustomHeader';
-import IMAGES from '@assets/images/images';
-import CommonStyles from '@screens/styles';
-import useColors from '@utils/hooks/useColors';
+import AutoHeightWebView from 'react-native-autoheight-webview';
 import {Colors} from 'react-native-ui-lib';
+import InboxDetailCustomHeader from '../components/InboxDetailCustomHeader';
 import useMailItem from '../hooks/useMailItem';
-import FocusAwareStatusBar from '@services/statusBarService';
 
 const InboxDetailScreen: FC = () => {
   const {params} =
@@ -30,7 +30,10 @@ const InboxDetailScreen: FC = () => {
     if (!params?.item?.body.data) {
       return '';
     }
-    const computedBody = atob(params?.item?.body.data);
+    const computedBody = Buffer.from(
+      params?.item?.body.data,
+      'base64',
+    ).toString('utf8');
     return computedBody;
   }, []);
   const {height, width} = useWindowDimensions();
