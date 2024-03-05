@@ -51,7 +51,13 @@ const useSearchScreen = () => {
     );
   }, [searchContent, userState.mailDeletedMetadataIds]);
 
-  const handleSearch = ({keyword}: {keyword: string}) => {
+  const handleSearch = ({
+    keyword,
+    shouldSaveHistory = true,
+  }: {
+    keyword: string;
+    shouldSaveHistory?: boolean;
+  }) => {
     if (!keyword) {
       setSearchContent('');
       return;
@@ -59,7 +65,8 @@ const useSearchScreen = () => {
 
     setSearchContent(keyword?.trim());
 
-    dispatch(userSliceActions.searchAppendNewHistory({keyword}));
+    shouldSaveHistory &&
+      dispatch(userSliceActions.searchAppendNewHistory({keyword}));
   };
   const handleRemoveSearchHistory = ({keyword}: {keyword: string}) => {
     dispatch(userSliceActions.searchRemoveHistory({keyword}));

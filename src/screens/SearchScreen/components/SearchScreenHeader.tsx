@@ -1,19 +1,19 @@
 import IMAGES from '@assets/images/images';
 import CommonStyles from '@screens/styles';
 import {CUSTOM_HEADER_HEIGHT, scale} from '@utils/mixins';
-import React, {FC, forwardRef, useCallback, useImperativeHandle} from 'react';
+import _ from 'lodash';
+import React, {forwardRef, useCallback, useImperativeHandle} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
-  View,
-  TextInput,
   NativeSyntheticEvent,
+  TextInput,
   TextInputSubmitEditingEventData,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import _ from 'lodash';
 
 interface Props {
-  onSubmitSearch: (_: string) => void;
+  onSubmitSearch: (_: string, shouldSaveHistory?: boolean) => void;
   onClearSearch: () => void;
   darkTheme: boolean;
 }
@@ -35,14 +35,14 @@ const HeaderSearchInput = forwardRef<ImperativeHeaderSearchInput, Props>(
     );
     const handler = useCallback(
       _.debounce(value => {
-        onSubmitSearch(value);
+        onSubmitSearch(value, false);
       }, 2000),
       [],
     );
 
     const onChange = (value: string) => {
       setValue('content', value);
-      handler(value)
+      handler(value);
     };
 
     return (

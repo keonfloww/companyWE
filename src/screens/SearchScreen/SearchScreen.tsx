@@ -1,6 +1,13 @@
+import IMAGES from '@assets/images/images';
+import BaseModal from '@components/atoms/Modal/BaseModal';
 import LayoutCustomHeader from '@layouts/default/LayoutCustomHeader';
-import { CUSTOM_HEADER_HEIGHT, scale } from '@utils/mixins';
-import React, { FC, useCallback, useMemo, useRef, useState } from 'react';
+import DeleteMailFloatingButton from '@screens/Inbox/components/DeleteMailFloatingButton';
+import MailRow from '@screens/Inbox/components/MailRow';
+import useInboxScreenAction from '@screens/Inbox/hooks/useInboxScreenAction';
+import FocusAwareStatusBar from '@services/statusBarService';
+import {CUSTOM_HEADER_HEIGHT, scale} from '@utils/mixins';
+import {t} from 'i18next';
+import React, {FC, useCallback, useMemo, useRef, useState} from 'react';
 import {
   FlatList,
   Platform,
@@ -9,24 +16,17 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CommonStyles from '../styles';
-import useSearchScreen from './hooks/useSearchScreen';
+import SearchHistoryEmpty from './components/SearchHistoryEmpty';
+import SearchHistoryHeader from './components/SearchHistoryHeader';
 import SearchHistoryItem from './components/SearchHistoryItem';
 import SearchScreenCategoryFooter from './components/SearchScreenCategoryFooter';
 import SearchScreenHeader, {
   ImperativeHeaderSearchInput,
 } from './components/SearchScreenHeader';
-import SearchHistoryEmpty from './components/SearchHistoryEmpty';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import SearchHistoryHeader from './components/SearchHistoryHeader';
-import MailRow from '@screens/Inbox/components/MailRow';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import FocusAwareStatusBar from '@services/statusBarService';
-import useInboxScreenAction from '@screens/Inbox/hooks/useInboxScreenAction';
-import BaseModal from '@components/atoms/Modal/BaseModal';
-import IMAGES from '@assets/images/images';
-import { t } from 'i18next';
-import DeleteMailFloatingButton from '@screens/Inbox/components/DeleteMailFloatingButton';
+import useSearchScreen from './hooks/useSearchScreen';
 
 const SearchScreen: FC<any> = () => {
   const {
@@ -47,7 +47,7 @@ const SearchScreen: FC<any> = () => {
   const isShowSearchResult = useMemo(() => {
     return !!searchContent;
   }, [searchContent]);
-  const { handleMarkDeletedMany } = useInboxScreenAction();
+  const {handleMarkDeletedMany} = useInboxScreenAction();
 
   const refSearchScreenHeader = useRef<ImperativeHeaderSearchInput>(null);
 
@@ -66,15 +66,16 @@ const SearchScreen: FC<any> = () => {
   return (
     <LayoutCustomHeader
       darkTheme={true}
-      styleCustomHeader={{ height: CUSTOM_HEADER_HEIGHT }}
-      containerStyle={{ alignItems: 'center' }}
+      styleCustomHeader={{height: CUSTOM_HEADER_HEIGHT}}
+      containerStyle={{alignItems: 'center'}}
       customHeader={
         <SearchScreenHeader
           ref={refSearchScreenHeader}
           darkTheme={true}
-          onSubmitSearch={(_: string) => {
+          onSubmitSearch={(_: string, shouldSaveHistory = true) => {
             handleSearch({
               keyword: _,
+              shouldSaveHistory,
             });
           }}
           onClearSearch={() => {
@@ -90,7 +91,7 @@ const SearchScreen: FC<any> = () => {
       />
       <KeyboardAwareScrollView
         scrollEnabled={false}
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         showsVerticalScrollIndicator={false}>
         {/* SEARCH HISTORIES */}
         {!isShowSearchResult && (
@@ -113,23 +114,23 @@ const SearchScreen: FC<any> = () => {
               <SearchHistoryHeader title={'Recent Searches'} />
             }
             data={searchHistoryList}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               return (
                 <SearchHistoryItem
                   content={item}
                   onPress={() => {
-                    handleSearch({ keyword: item });
+                    handleSearch({keyword: item});
                     refSearchScreenHeader.current?.setValueFromQuickSearch(
                       item,
                     );
                   }}
                   onRemoveSingleHistory={() => {
-                    handleRemoveSearchHistory({ keyword: item });
+                    handleRemoveSearchHistory({keyword: item});
                   }}
                 />
               );
             }}
-            ItemSeparatorComponent={() => <View style={{ height: scale(15) }} />}
+            ItemSeparatorComponent={() => <View style={{height: scale(15)}} />}
             ListEmptyComponent={<SearchHistoryEmpty isSearched={false} />}
           />
         )}
@@ -159,7 +160,7 @@ const SearchScreen: FC<any> = () => {
               />
             }
             data={searchResultList}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               return (
                 <MailRow
                   isReadOnly={false}
@@ -186,7 +187,7 @@ const SearchScreen: FC<any> = () => {
                 />
               );
             }}
-            ItemSeparatorComponent={() => <View style={{ height: scale(10) }} />}
+            ItemSeparatorComponent={() => <View style={{height: scale(10)}} />}
             ListEmptyComponent={<SearchHistoryEmpty isSearched={true} />}
           />
         )}
@@ -205,8 +206,8 @@ const SearchScreen: FC<any> = () => {
           headerIcon={<IMAGES.icTrash color={'#E74C3C'} />}
           confirmTitle={t('Yes, I am sure')}
           cancelTitle={t('No')}
-          actionViewStyle={{ height: scale(40) }}
-          buttonContainerStyle={{ paddingVertical: scale(0) }}
+          actionViewStyle={{height: scale(40)}}
+          buttonContainerStyle={{paddingVertical: scale(0)}}
           onClose={() => {
             setIsShowModalConfirmDeleteSelectedMail(false);
           }}
@@ -224,7 +225,7 @@ const SearchScreen: FC<any> = () => {
             }}>
             {t(`Are you sure you want to delete?`)}
           </Text>
-          <View style={{ height: scale(16) }} />
+          <View style={{height: scale(16)}} />
           <Text
             style={{
               ...CommonStyles.font.regular14,
@@ -240,7 +241,7 @@ const SearchScreen: FC<any> = () => {
           <View
             style={[
               CommonStyles.view.viewLayout,
-              { marginTop: 0, marginRight: 0, height: BOTTOM_HEIGHT },
+              {marginTop: 0, marginRight: 0, height: BOTTOM_HEIGHT},
             ]}>
             <SearchScreenCategoryFooter categoryList={categoryList} />
           </View>
