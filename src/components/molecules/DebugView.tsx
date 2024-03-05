@@ -1,8 +1,7 @@
-import {FAB} from '@rneui/base';
 import {scale} from '@utils/mixins';
 import {TVoidCallback, VoidCallBack} from '@utils/typeUtils';
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import NetworkLogger from 'react-native-network-logger';
 import {RootSiblingPortal} from 'react-native-root-siblings';
 
@@ -14,7 +13,7 @@ const DebugView = ({showNetwork, handleShowNetwork = VoidCallBack}: Props) => {
   return (
     <>
       <View style={styles.containerDebug}>
-        <FAB title={''} onPress={handleShowNetwork} size="small" />
+        {/* <FAB title={''} onPress={handleShowNetwork} size="small" /> */}
       </View>
       {showNetwork && (
         <RootSiblingPortal>

@@ -1,34 +1,23 @@
+import IMAGES from '@assets/images/images';
+import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
+import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookmarkSearchActions';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from '@screens/Home/HomeScreen';
-import IntroScreen from '@screens/Intro/IntroScreen';
-import React, {FC, PropsWithChildren, useEffect, useMemo} from 'react';
-import {Screen} from './navigation.enums';
-import navigationService, {navigationRef} from '@services/navigationService';
-import {t} from 'i18next';
-import {Platform, StatusBar, View, useWindowDimensions} from 'react-native';
-import IMAGES from '@assets/images/images';
-import CommonStyles from '@screens/styles';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet} from 'react-native';
-import {scale} from '@utils/mixins';
-import SignUpScreen from '@screens/Auth/SignUpScreen';
-import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
-import InboxScreen from '@screens/Inbox/InboxScreen';
-import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookmarkSearchActions';
-import ConnectMailScreen from '@screens/ConnectMail/ConnectMailScreen';
 import LoginScreen from '@screens/Auth/LoginScreen';
-import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
-import {Colors} from 'react-native-ui-lib';
+import SignUpScreen from '@screens/Auth/SignUpScreen';
 import SplashScreen from '@screens/Splash/SplashScreen';
-import ProfileScreen from '@screens/Profile/ProfileScreen';
-import ProgressCircle from './components/ProgressCircle';
-import EmptyContent from '@components/atoms/EmptyDataText/EmptyDataText';
-import {useDispatch} from 'react-redux';
-import {userSliceActions} from '@redux/slices/user.slice';
-import InboxDetailScreen from '@screens/Inbox/screens/InboxDetailScreen';
-import SearchScreen from '@screens/SearchScreen/SearchScreen';
+import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
+import CommonStyles from '@screens/styles';
+import navigationService, {navigationRef} from '@services/navigationService';
 import FocusAwareStatusBar from '@services/statusBarService';
+import {scale} from '@utils/mixins';
+import {t} from 'i18next';
+import React, {FC, PropsWithChildren, useMemo} from 'react';
+import {StyleSheet, View, useWindowDimensions} from 'react-native';
+import {Colors} from 'react-native-ui-lib';
+import {useDispatch} from 'react-redux';
+import {Screen} from './navigation.enums';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -37,23 +26,6 @@ const RootNavigator: FC = () => {
   // TODO: Need to use insets to handle status bar
   // const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    // console.log('Config.LOCAL_STORAGE_VERSION', Config.LOCAL_STORAGE_VERSION);
-    // LocalUtils.shouldClearLocalStorageOnFirstTime({
-    //   key: '1' ?? Config.LOCAL_STORAGE_VERSION ?? '1', // update it into env
-    //   onYes: () => {
-    // console.info('RECOGNIZED NEW APP INSTALL');
-    // dispatch(userSliceActions.init());
-    // dispatch(persistSliceActions.init());
-    // AsyncStorage.removeItem(LOCAL_STORAGE_KEYS.USER);
-    // navigationService.navigateAndReset(Screen.Login);
-    // global?.props?.hideLoading();
-    // console.clear();
-    //   },
-    // });
-    dispatch(userSliceActions.connectedMailMarkSyncedAll());
-  }, []);
 
   const linking = {
     prefixes: ['reactnative://'],
@@ -83,11 +55,6 @@ const RootNavigator: FC = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name={Screen.IntroScreen}
-            component={IntroScreen}
-            options={{title: t('screen:intro'), headerShown: false}}
-          />
-          <Stack.Screen
             name={Screen.Auth}
             component={SignUpScreen}
             options={{title: t('screen:auth'), headerShown: false}}
@@ -97,38 +64,11 @@ const RootNavigator: FC = () => {
             component={LoginScreen}
             options={{title: t('screen:auth'), headerShown: false}}
           />
-          <Stack.Screen
-            name={Screen.ConnectMailScreen}
-            component={ConnectMailScreen}
-            options={{headerShown: false}}
-          />
+
           <Stack.Screen
             name={Screen.StoryBookScreen}
             component={StoryBookScreen}
             options={{title: t('Project Story Book'), headerShown: true}}
-          />
-          <Stack.Screen
-            name={Screen.SearchScreen}
-            component={SearchScreen}
-            options={{
-              title: t('SearchScreen'),
-              headerShown: false,
-              // ...(Platform.OS == 'android' && {
-              //   statusBarStyle: 'dark',
-              //   statusBarColor: 'white',
-              // }),
-            }}
-          />
-          <Stack.Screen
-            name={Screen.InboxDetailScreen}
-            component={InboxDetailScreen}
-            options={() => ({
-              // ...(Platform.OS == 'android' && {statusBarStyle: 'dark'}),
-              headerStyle: {
-                backgroundColor: 'white',
-              },
-              headerShown: false,
-            })}
           />
         </Stack.Group>
         <Stack.Group>
@@ -149,16 +89,6 @@ const RootNavigator: FC = () => {
 export default RootNavigator;
 
 const TabBarNavigator: FC = () => {
-  const {userState, mailCountUnread} = useInboxScreen();
-  // console.log('mailCountUnread', mailCountUnread);
-  // TODO: create hook for status bar on each screen style
-  // useEffect(() => {
-  //   if (Platform.OS == 'android') {
-  //     StatusBar.setBackgroundColor('white');
-  //   }
-  //   StatusBar.setBarStyle('dark-content');
-  // }, []);
-
   const styleHeader = useMemo(() => {
     return {
       headerStyle: {
@@ -186,25 +116,6 @@ const TabBarNavigator: FC = () => {
     };
   }, []);
 
-  const inBoxTabBarOptions = {
-    ...styleHeader,
-    title: t('screen:inboxScreen'),
-    tabBarBadge: mailCountUnread,
-    tabBarBadgeStyle: {display: mailCountUnread == 0 ? 'none' : 'flex'},
-    tabBarIcon: ({color, focused}: any) =>
-      userState.connectedMails.length === userState.syncedMailAddress.length ? (
-        <TabBarIconWrapper>
-          {focused ? (
-            <IMAGES.IcInboxFilled color={color} />
-          ) : (
-            <IMAGES.IcInbox color={color} />
-          )}
-        </TabBarIconWrapper>
-      ) : (
-        <ProgressCircle />
-      ),
-  };
-
   return (
     <Tab.Navigator
       screenOptions={{
@@ -214,7 +125,7 @@ const TabBarNavigator: FC = () => {
       }}>
       <Tab.Screen
         name={Screen.HomeScreen}
-        component={HomeScreen}
+        component={FakeScreen}
         options={{
           title: t('screen:Home'),
           headerShown: false,
@@ -225,41 +136,45 @@ const TabBarNavigator: FC = () => {
               </TabBarIconWrapper>
             );
           },
-          // ...(Platform.OS == 'android' && {
-          //   statusBarStyle: 'dark',
-          //   statusBarColor: 'white',
-          // }),
         }}
       />
       <Tab.Screen
         name={Screen.InboxScreen}
-        component={InboxScreen}
-        options={inBoxTabBarOptions}
+        component={FakeScreen}
+        options={
+          {
+            ...styleHeader,
+            title: t('screen:InboxScreen'),
+            tabBarIcon: ({color}: any) => (
+              <TabBarIconWrapper>
+                <IMAGES.IcStar color={color} fill={color} />
+              </TabBarIconWrapper>
+            ),
+          } as any
+        }
       />
       <Tab.Screen
         name={Screen.SubscriptionScreen}
         component={FakeScreen}
-        options={{
-          ...styleHeader,
-          title: t('screen:subscriptionScreen'),
-          tabBarIcon: ({color}: any) => (
-            <TabBarIconWrapper>
-              <IMAGES.IcStar color={color} fill={color} />
-            </TabBarIconWrapper>
-          ),
-        }}
+        options={
+          {
+            ...styleHeader,
+            title: t('screen:subscriptionScreen'),
+            tabBarIcon: ({color}: any) => (
+              <TabBarIconWrapper>
+                <IMAGES.IcStar color={color} fill={color} />
+              </TabBarIconWrapper>
+            ),
+          } as any
+        }
       />
       <Tab.Screen
         name={Screen.ProfileScreen}
-        component={ProfileScreen}
+        component={FakeScreen}
         options={{
           headerShown: false,
           title: t('screen:ProfileScreen'),
           headerTitleStyle: styles.bottomTabTitle,
-          // ...(Platform.OS == 'android' && {
-          //   statusBarStyle: 'dark',
-          //   statusBarColor: 'white',
-          // }),
           tabBarIcon: ({color}: any) => (
             <TabBarIconWrapper>
               <IMAGES.IcProfile color={color} fill={color} />

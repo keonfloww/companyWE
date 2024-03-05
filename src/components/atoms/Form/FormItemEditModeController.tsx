@@ -1,11 +1,17 @@
 import IMAGES from '@assets/images/images';
-import {ListItem, Text} from '@rneui/base';
 import CommonStyles from '@screens/styles';
 import {scale} from '@utils/mixins';
 import React, {useEffect, useRef, useState} from 'react';
 import {Controller} from 'react-hook-form';
-import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {ListItem} from 'react-native-ui-lib';
 
 const FormItemEditModeController = ({
   name = '',
@@ -29,13 +35,13 @@ const FormItemEditModeController = ({
   return (
     <View style={[styles.container]}>
       <ListItem>
-        <ListItem.Content>
+        <ListItem.Part>
           {/* View only value */}
           <TouchableOpacity
             onPress={() => setIsEdit(prev => !prev)}
             disabled={!editAble}
             activeOpacity={0.6}>
-            <ListItem.Title>
+            <ListItem.Part>
               {editAble && (
                 <View style={styles.titleActions}>
                   <FastImage
@@ -45,14 +51,14 @@ const FormItemEditModeController = ({
                 </View>
               )}
               <Text style={styles.label}>{label}</Text>
-            </ListItem.Title>
+            </ListItem.Part>
             <View style={CommonStyles.space.s5}></View>
           </TouchableOpacity>
           {!isEdit && (
             <View style={styles.labelValue}>
-              <ListItem.Title>
+              <ListItem.Part>
                 <Text numberOfLines={1}>{computedValue || value}</Text>
-              </ListItem.Title>
+              </ListItem.Part>
             </View>
           )}
 
@@ -86,7 +92,7 @@ const FormItemEditModeController = ({
           {errors?.[name] && (
             <Text style={style.errorText}>{errors?.[name]?.message}</Text>
           )}
-        </ListItem.Content>
+        </ListItem.Part>
       </ListItem>
     </View>
   );

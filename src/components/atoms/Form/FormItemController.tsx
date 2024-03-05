@@ -1,7 +1,6 @@
-import {Text} from '@rneui/base';
 import React from 'react';
 import {Controller} from 'react-hook-form';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 
 const FormItemController = ({
   name = '',
@@ -12,14 +11,14 @@ const FormItemController = ({
   rules = {},
   containerStyle = {},
   labelStyle = {},
-  textContentType = 'emailAddress'
+  textContentType = 'emailAddress',
 }: any) => {
   return (
     <View style={[styles.container, containerStyle ? containerStyle : {}]}>
       <Text style={[styles.label, labelStyle ? labelStyle : {}]}>{label}</Text>
       <Controller
         control={control}
-        render={({field: {onChange, onBlur, value,}}) => (
+        render={({field: {onChange, onBlur, value}}) => (
           <>
             <TextInput
               style={[styles.input, style, errors?.[name] ? styles.error : {}]}
