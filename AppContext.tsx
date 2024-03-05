@@ -7,12 +7,7 @@ import React, {
 } from 'react';
 import {RootSiblingPortal} from 'react-native-root-siblings';
 // import DebugView from '@components/molecules/DebugView';
-import IMAGES from '@assets/images/images';
-import BaseModal from '@components/atoms/Modal/BaseModal';
-import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
-import CommonStyles from '@screens/styles';
 import {scale} from '@utils/mixins';
-import {t} from 'i18next';
 import {StyleSheet, Text, View} from 'react-native';
 import Toast from 'react-native-easy-toast';
 
@@ -25,12 +20,6 @@ const Context = createContext({});
  */
 let toasts: any;
 const AppProvider = ({children}: PropsWithChildren) => {
-  const {
-    handleMoveMailToTrash,
-    handleSetFlagAskForDelete,
-    handleMarkMailAddressAutoClearGmailBox,
-  } = useInboxScreen();
-
   const [targetMailToDelete, setTargetMailToDelete] = useState<string | null>(
     null,
   );
@@ -137,49 +126,6 @@ const AppProvider = ({children}: PropsWithChildren) => {
       />
       <RootSiblingPortal>
         <Loading show={loading} />
-      </RootSiblingPortal>
-      <RootSiblingPortal>
-        <BaseModal
-          isShow={!!targetMailToDelete}
-          headerIcon={<IMAGES.icTrash color={'#E74C3C'} />}
-          confirmTitle={t('Yes, I am sure')}
-          cancelTitle={t('No')}
-          actionViewStyle={{height: scale(40)}}
-          buttonContainerStyle={{paddingVertical: scale(0)}}
-          onClose={() => {
-            handleSetFlagAskForDelete({shouldAsk: false});
-            setTargetMailToDelete(null);
-          }}
-          onConfirm={() => {
-            if (!targetMailToDelete) {
-              setTargetMailToDelete(null);
-              return;
-            }
-            handleMoveMailToTrash(targetMailToDelete);
-            handleMarkMailAddressAutoClearGmailBox({
-              mailAddress: targetMailToDelete,
-            });
-            setTargetMailToDelete(null);
-          }}>
-          <Text
-            style={{
-              ...CommonStyles.font.bold24,
-              ...style.text,
-              textAlign: 'center',
-            }}>
-            {`Want to delete promotional emails from your mail inbox?`}
-          </Text>
-          <View style={{height: scale(16)}} />
-          <Text
-            style={{
-              ...CommonStyles.font.regular14,
-              ...style.text,
-              textAlign: 'center',
-            }}>
-            It will move all the promotional emails to the trash folder. You can
-            restore them later.
-          </Text>
-        </BaseModal>
       </RootSiblingPortal>
 
       {/* TODO: implement show debug button on dev env only */}

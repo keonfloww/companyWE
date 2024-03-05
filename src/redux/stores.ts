@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {configureStore, createListenerMiddleware} from '@reduxjs/toolkit';
 import {persistCombineReducers, persistStore} from 'redux-persist';
-import {MailApiMiddleware} from './middleware/mailApiMiddleware';
 import {userApi} from './slices/api/userApi.slice';
 import {persistSlice} from './slices/persist.slice';
 import {userSlice} from './slices/user.slice';
@@ -51,4 +50,4 @@ export {persistor, store};
 
 // Middlewares
 
-MailApiMiddleware.start(listenerMiddleware);
+// MailApiMiddleware.start(listenerMiddleware);

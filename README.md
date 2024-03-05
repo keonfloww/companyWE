@@ -16,29 +16,11 @@ yarn && yarn android
 yarn && yarn ios
 ```
 
-### TODO:
-
-- ✅ MVVM - MVP architecture with DDD approach
-- ✅ Atomics design
-- ✅ Navigation service to use outside context
-- ✅ Debug view for development
-- ✅ Handle theme provider
-- ✅ Separate basic env
-- ✅ Base Form Item
-- ✅ Eslint, Prettier
-- ✅ Babel alias config
-- ✅ Global props
-- ✅ Localization by namespace
-- ✅ Setup Redux and Redux Persist store
-- [ ] Handle theme provider from rneui for StyleSheet
-- [ ] MKKV mix Redux Persit
-- [ ] Form items validation utils
-- ✅ Splash screen with react native bootsplash
-- [ ] Init react-native-modalize common component(modal, bottom sheet)
-- [ ] Fastlane CI/CD to distribute IPA to testflight, apk to Slack/Firebase project
-- [ ] Create common component in Troove design
-- [ ] Install patch-package for custom the library
-- [ ] Create hook for Troove websocket event
+yarn react-native generate-bootsplash ./logo.png \
+ --platforms=android,ios \
+ --logo-width=149 \
+ --assets-output=assets \
+ --flavor=main
 
 # Follow MVVM - MVP for this project:
 

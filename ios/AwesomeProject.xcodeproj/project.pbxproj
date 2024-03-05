@@ -12,7 +12,6 @@
 		0963B8012B93879800C2CF20 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		0963B8052B93879800C2CF20 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		0963B8062B93879800C2CF20 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		0963B8072B93879800C2CF20 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6E3D77F2B5A854E000405BF /* Images.xcassets */; };
 		0963B8082B93879800C2CF20 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6E3D7812B5A8582000405BF /* BootSplash.storyboard */; };
 		0963B8092B93879800C2CF20 /* Gilroy-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 88B86FC0658D4DF4A7DA3E40 /* Gilroy-Bold.ttf */; };
 		0963B80A2B93879800C2CF20 /* Gilroy-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D0EF22624B94A939AD9F742 /* Gilroy-Medium.ttf */; };
@@ -29,7 +28,6 @@
 		6F005980B4CF846967CC2336 /* Pods_AwesomeProject_Staging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF16AED888362B58865DAEF5 /* Pods_AwesomeProject_Staging.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B1E3F783A05B42A088D41051 /* Gilroy-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8ACAA757C574B95A4B15C90 /* Gilroy-SemiBold.ttf */; };
-		D6E3D7802B5A8550000405BF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6E3D77F2B5A854E000405BF /* Images.xcassets */; };
 		D6E3D7822B5A8582000405BF /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6E3D7812B5A8582000405BF /* BootSplash.storyboard */; };
 		E59B22CFFBBE44229DAB2848 /* Gilroy-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D0EF22624B94A939AD9F742 /* Gilroy-Medium.ttf */; };
 /* End PBXBuildFile section */
@@ -76,7 +74,6 @@
 		AF16AED888362B58865DAEF5 /* Pods_AwesomeProject_Staging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwesomeProject_Staging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3F68F1F9B5E1040BF56D875 /* Pods-AwesomeProject-AwesomeProjectTests.debugstg.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProject-AwesomeProjectTests.debugstg.xcconfig"; path = "Target Support Files/Pods-AwesomeProject-AwesomeProjectTests/Pods-AwesomeProject-AwesomeProjectTests.debugstg.xcconfig"; sourceTree = "<group>"; };
 		C4AAD93B8EDF9405A05B13D4 /* Pods-AwesomeProject.releasestg.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AwesomeProject.releasestg.xcconfig"; path = "Target Support Files/Pods-AwesomeProject/Pods-AwesomeProject.releasestg.xcconfig"; sourceTree = "<group>"; };
-		D6E3D77F2B5A854E000405BF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = AwesomeProject/Images.xcassets; sourceTree = "<group>"; };
 		D6E3D7812B5A8582000405BF /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = AwesomeProject/BootSplash.storyboard; sourceTree = "<group>"; };
 		E8ACAA757C574B95A4B15C90 /* Gilroy-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Gilroy-SemiBold.ttf"; path = "../src/assets/fonts/Gilroy-SemiBold.ttf"; sourceTree = "<group>"; };
 		EC6E8BFEC98ABF92D628B9AF /* Pods_AwesomeProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AwesomeProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,7 +132,6 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				D6E3D77F2B5A854E000405BF /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				0963B8192B93979300C2CF20 /* Info-Staging.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -344,7 +340,6 @@
 			files = (
 				0963B8052B93879800C2CF20 /* LaunchScreen.storyboard in Resources */,
 				0963B8062B93879800C2CF20 /* Images.xcassets in Resources */,
-				0963B8072B93879800C2CF20 /* Images.xcassets in Resources */,
 				0963B8082B93879800C2CF20 /* BootSplash.storyboard in Resources */,
 				0963B8092B93879800C2CF20 /* Gilroy-Bold.ttf in Resources */,
 				0963B81A2B93979300C2CF20 /* Info-Staging.plist in Resources */,
@@ -360,7 +355,6 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				D6E3D7802B5A8550000405BF /* Images.xcassets in Resources */,
 				D6E3D7822B5A8582000405BF /* BootSplash.storyboard in Resources */,
 				11E7FD6146194FAD8616A937 /* Gilroy-Bold.ttf in Resources */,
 				E59B22CFFBBE44229DAB2848 /* Gilroy-Medium.ttf in Resources */,
