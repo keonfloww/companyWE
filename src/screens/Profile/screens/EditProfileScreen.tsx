@@ -1,45 +1,41 @@
 import IMAGES from '@assets/images/images';
 import Avatar from '@components/atoms/Avatar/Avatar';
 import BaseRowIconLabel from '@components/atoms/Row/BaseRowIconLabel';
+import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
+import storage from '@react-native-firebase/storage';
+import { useUserUpdateMutation } from '@redux/slices/api/userApi.slice';
+import { userSliceActions } from '@redux/slices/user.slice';
+import { BaseState } from '@redux/stores';
 import CommonStyles from '@screens/styles';
 import navigationService from '@services/navigationService';
-import {useUserUpdateMutation} from '@redux/slices/api/userApi.slice';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {scale, scaleHeight} from '@utils/mixins';
-import {t} from 'i18next';
-import {Button, Colors} from 'react-native-ui-lib';
+import FocusAwareStatusBar from '@services/statusBarService';
+import { ColorUtils, EnumProfileColors, ProfileColors } from '@utils/colorUtils';
+import ImageUtils from '@utils/imageUtils';
+import { scale, scaleHeight } from '@utils/mixins';
+import { safeString } from '@utils/stringUtils';
+import { t } from 'i18next';
+import { FC, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   KeyboardAvoidingView,
   Linking,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
+  View,
 } from 'react-native';
-import {View} from 'react-native';
-import {Text} from 'react-native-ui-lib';
+import ImagePicker, { Image } from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
-import {FC, useEffect, useState} from 'react';
-import {ColorUtils, EnumProfileColors, ProfileColors} from '@utils/colorUtils';
-import {safeString} from '@utils/stringUtils';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Button, Colors, Text } from 'react-native-ui-lib';
+import { useDispatch, useSelector } from 'react-redux';
 import DatePickerModal from '../components/DatePickerModal';
-import PhoneInput from '../components/PhoneInput';
-import AddressInput from '../components/AddressInput';
-import {useDispatch, useSelector} from 'react-redux';
-import {BaseState} from '@redux/stores';
-import {userSliceActions} from '@redux/slices/user.slice';
 import DropDown from '../components/DropDown';
-import ImageUtils from '@utils/imageUtils';
-import {Alert} from 'react-native';
-import {Image} from 'react-native-image-crop-picker';
-import ImagePicker from 'react-native-image-crop-picker';
-import storage from '@react-native-firebase/storage';
-import SafeViewForceInsets from '@components/atoms/View/SafeViewForceInsets';
-import FocusAwareStatusBar from '@services/statusBarService';
+import PhoneInput from '../components/PhoneInput';
 
 /**
  * TODO: Vipin
@@ -67,7 +63,7 @@ const EditProfileScreen: FC = () => {
   const [date, setDate] = useState(userProfile?.date_of_birth || '');
   const [gender, setGender] = useState(userProfile?.gender_id || null);
   const [modal, setModal] = useState(false);
-  const [address, setAddress] = useState(userProfile?.user_address || '');
+  // const [address, setAddress] = useState(userProfile?.user_address || '');
   const [phone, setPhone] = useState(userProfile?.phone_number || '');
   const [error, setError] = useState(false);
   const insets = useSafeAreaInsets();
@@ -183,7 +179,7 @@ const EditProfileScreen: FC = () => {
       await ImageUtils.handleGalleryPermission({
         onBlocked: () => {
           Alert.alert(
-            t('Gallery Permission', {key: t('Gallery')}),
+            t('Gallery Permission', { key: t('Gallery') }),
             t('Gallery Permission is required for image upload', {
               key: t('Gallery'),
             }),
@@ -209,8 +205,8 @@ const EditProfileScreen: FC = () => {
       let path = image.path;
       let uploadpath =
         Platform.OS === 'ios' ? path.replace('file://', '') : path;
-      const data = await ImageUtils.openCropper({path: uploadpath});
-      console.log({data});
+      const data = await ImageUtils.openCropper({ path: uploadpath });
+      console.log({ data });
       path = data.path;
       await uploadImage(path);
     } catch (e) {
@@ -232,8 +228,8 @@ const EditProfileScreen: FC = () => {
          */
         let uploadpath =
           Platform.OS === 'ios' ? path.replace('file://', '') : path;
-        const data = await ImageUtils.openCropper({path: uploadpath});
-        console.log({data});
+        const data = await ImageUtils.openCropper({ path: uploadpath });
+        console.log({ data });
         path = data.path;
         await uploadImage(path);
       })
@@ -248,15 +244,15 @@ const EditProfileScreen: FC = () => {
        */
       global?.props?.showLoading();
       const data = await userUpdate({
-        id: userProfile?.id,
-        user_name: userProfile?.user_name,
-        email_address: userProfile?.email_address,
-        user_address: address,
+        id: userProfile?.id ?? '',
+        user_name: userProfile?.user_name ?? '',
+        email_address: userProfile?.email_address ?? '',
+        // user_address: address,
         user_profile_picture: profileUrl,
         date_of_birth: date,
         phone_number: phone,
         gender_id: gender,
-        accessToken: userProfile?.accessToken,
+        accessToken: userProfile?.accessToken ?? '',
       });
       console.log(data);
       dispatch(
@@ -266,7 +262,7 @@ const EditProfileScreen: FC = () => {
             id: userProfile?.id,
             user_name: userProfile?.user_name,
             email_address: userProfile?.email_address,
-            user_address: address,
+            // user_address: address,
             user_profile_picture: profileUrl,
             date_of_birth: date,
             phone_number: phone,
@@ -277,7 +273,7 @@ const EditProfileScreen: FC = () => {
       );
       global?.props?.hideLoading();
       navigationService.goBack();
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -287,16 +283,16 @@ const EditProfileScreen: FC = () => {
         barStyle={'dark-content'}
       />
       <KeyboardAvoidingView
-        {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}>
+        {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
         <View
           style={[
             CommonStyles.view.viewLayout,
-            {marginTop: 0, marginBottom: scaleHeight(25)},
+            { marginTop: 0, marginBottom: scaleHeight(25) },
           ]}>
           <ScrollView
             automaticallyAdjustKeyboardInsets={true}
             keyboardDismissMode="interactive"
-            style={{display: 'flex'}}
+            style={{ display: 'flex' }}
             showsVerticalScrollIndicator={false}>
             <View
               style={{
@@ -316,7 +312,7 @@ const EditProfileScreen: FC = () => {
                     borderRadius: scale(130),
                   }}>
                   <Avatar
-                    source={{uri: profileUrl}}
+                    source={{ uri: profileUrl }}
                     size={scale(130)}
                     setLoading={setLoading}
                     setError={setError}
@@ -324,7 +320,7 @@ const EditProfileScreen: FC = () => {
                   {loading && (
                     <ActivityIndicator
                       color={'#50048A'}
-                      style={{position: 'absolute'}}
+                      style={{ position: 'absolute' }}
                     />
                   )}
                   <Pressable
@@ -352,9 +348,9 @@ const EditProfileScreen: FC = () => {
                       {
                         backgroundColor: safeString(userProfile?.user_name)?.[0]
                           ? ColorUtils.getColorFromChar(userProfile?.user_name)
-                              ?.SecondaryColor
+                            ?.SecondaryColor
                           : ProfileColors?.[EnumProfileColors.DEFAULT]
-                              ?.SecondaryColor,
+                            ?.SecondaryColor,
                       },
                     ]}>
                     <Text
@@ -364,10 +360,10 @@ const EditProfileScreen: FC = () => {
                           textAlignVertical: 'center',
                           color: safeString(userProfile?.user_name)?.[0]
                             ? ColorUtils.getColorFromChar(
-                                userProfile?.user_name,
-                              )?.MainColor
+                              userProfile?.user_name,
+                            )?.MainColor
                             : ProfileColors?.[EnumProfileColors.DEFAULT]
-                                ?.MainColor,
+                              ?.MainColor,
                         },
                         CommonStyles.font.bold30,
                       ]}>
@@ -397,19 +393,19 @@ const EditProfileScreen: FC = () => {
                   </Pressable>
                 </View>
               )}
-              <View style={{height: scale(20)}} />
+              <View style={{ height: scale(20) }} />
               <Text
                 style={[
                   CommonStyles.font.bold24,
-                  {overflow: 'hidden', flexWrap: 'nowrap'},
+                  { overflow: 'hidden', flexWrap: 'nowrap' },
                 ]}>
                 {userProfile?.user_name}
               </Text>
-              <View style={{height: scale(20)}} />
+              <View style={{ height: scale(20) }} />
             </View>
-            <View style={{marginBottom: scale(10)}}>
+            <View style={{ marginBottom: scale(10) }}>
               <Text
-                style={[CommonStyles.font.bold16, {marginBottom: scale(10)}]}>
+                style={[CommonStyles.font.bold16, { marginBottom: scale(10) }]}>
                 Account Information
               </Text>
               <View
@@ -422,7 +418,7 @@ const EditProfileScreen: FC = () => {
                 <Text
                   style={[
                     CommonStyles.font.semiBold14,
-                    {marginRight: scale(10)},
+                    { marginRight: scale(10) },
                   ]}>
                   Email Address
                 </Text>
@@ -448,19 +444,19 @@ const EditProfileScreen: FC = () => {
                   Account connected
                 </Text>
                 <Text
-                  style={[CommonStyles.font.semiBold14, {color: '#8f8f8f'}]}>
+                  style={[CommonStyles.font.semiBold14, { color: '#8f8f8f' }]}>
                   Google
                 </Text>
               </View>
             </View>
 
-            <View style={{rowGap: scale(15)}}>
-              <View style={{marginBottom: scale(10)}}>
+            <View style={{ rowGap: scale(15) }}>
+              <View style={{ marginBottom: scale(10) }}>
                 <Text
-                  style={[CommonStyles.font.bold16, {marginBottom: scale(10)}]}>
+                  style={[CommonStyles.font.bold16, { marginBottom: scale(10) }]}>
                   Personal Information
                 </Text>
-                <View style={{marginBottom: scale(10)}}>
+                <View style={{ marginBottom: scale(10) }}>
                   <DropDown
                     value={!gender ? '' : gender === 1 ? 'Male' : 'Female'}
                     onChange={(val: any) => onGenderChange(val)}
@@ -477,21 +473,21 @@ const EditProfileScreen: FC = () => {
                     value={phone}
                     onChange={(val: any) => setPhone(val)}
                   />
-                  <AddressInput
+                  {/* <AddressInput
                     value={address}
                     onChange={(val: any) => setAddress(val)}
-                  />
+                  /> */}
                 </View>
               </View>
-              <View style={{height: scale(90)}} />
+              <View style={{ height: scale(90) }} />
             </View>
           </ScrollView>
 
           <Modal
             isVisible={modal}
-            style={{padding: 0, margin: 0, backgroundColor: 'transparent'}}>
+            style={{ padding: 0, margin: 0, backgroundColor: 'transparent' }}>
             <Pressable
-              style={{backgroundColor: 'transparent', height: '80%'}}
+              style={{ backgroundColor: 'transparent', height: '80%' }}
               onPress={() => setModal(false)}></Pressable>
             <View
               style={{
@@ -503,12 +499,12 @@ const EditProfileScreen: FC = () => {
                 borderTopLeftRadius: scale(20),
                 borderTopRightRadius: scale(20),
               }}>
-              <View style={{rowGap: scale(15)}}>
+              <View style={{ rowGap: scale(15) }}>
                 {groupItems.map(item => {
                   return (
                     <FlatList
                       key={item?.label}
-                      ListHeaderComponentStyle={{marginBottom: scale(10)}}
+                      ListHeaderComponentStyle={{ marginBottom: scale(10) }}
                       keyExtractor={item => item?.title}
                       ListHeaderComponent={
                         <View>
@@ -518,7 +514,7 @@ const EditProfileScreen: FC = () => {
                         </View>
                       }
                       data={item?.items}
-                      renderItem={({item}) => {
+                      renderItem={({ item }) => {
                         return (
                           <TouchableOpacity
                             disabled={item.disabled}
@@ -535,7 +531,7 @@ const EditProfileScreen: FC = () => {
                         );
                       }}
                       ItemSeparatorComponent={() => (
-                        <View style={{height: scale(15)}} />
+                        <View style={{ height: scale(15) }} />
                       )}
                     />
                   );
@@ -551,7 +547,7 @@ const EditProfileScreen: FC = () => {
             width: '100%',
             backgroundColor: '#fff',
             shadowColor: 'black',
-            shadowOffset: {width: 1, height: 0.5},
+            shadowOffset: { width: 1, height: 0.5 },
             shadowRadius: scale(20),
             shadowOpacity: 0.1,
             elevation: scale(5),
@@ -566,15 +562,15 @@ const EditProfileScreen: FC = () => {
           <Button
             label={'Save Changes'}
             onPress={onSubmit}
-            style={[{flex: 1, paddingHorizontal: 0}]}
-            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
+            style={[{ flex: 1, paddingHorizontal: 0 }]}
+            labelStyle={[CommonStyles.font.regular14, { overflow: 'visible' }]}
             backgroundColor={'#50048A'}
           />
           <Button
             label={'Cancel'}
             onPress={navigationService.goBack}
-            style={[{flex: 1, paddingHorizontal: 0}]}
-            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
+            style={[{ flex: 1, paddingHorizontal: 0 }]}
+            labelStyle={[CommonStyles.font.regular14, { overflow: 'visible' }]}
             backgroundColor={'white'}
             outlineColor={'#50048A'}
             color={'#50048A'}
@@ -611,7 +607,7 @@ const styles = StyleSheet.create({
     paddingTop: scale(2),
     paddingLeft: scale(0.5),
   },
-  modalText: {textAlign: 'center', padding: scale(5), color: '#3C3C3C'},
+  modalText: { textAlign: 'center', padding: scale(5), color: '#3C3C3C' },
   view: {
     marginHorizontal: scale(25),
     marginVertical: scale(20),
