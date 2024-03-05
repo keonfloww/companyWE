@@ -17,6 +17,7 @@ const initialState: {
   // Inbox
   syncedMailAddress: string[];
   mailbox: Email[];
+  mailAddressAutoDeleteMailbox: {[key in string]: boolean};
 
   // mail status
   mailReadMetadataIds: {[key in string]: boolean};
@@ -34,6 +35,7 @@ const initialState: {
   connectedMails: [],
   syncedMailAddress: [],
   mailbox: [],
+  mailAddressAutoDeleteMailbox: {}, // Once user confirm delete, then future the synced mail will move to trash in gmail
 
   mailReadMetadataIds: {},
   mailBookmarkMetadataIds: {},
@@ -243,6 +245,23 @@ export const userSlice = createSlice({
         searchHistories: state?.searchHistories.filter(
           (s: string) => s && s != keyword,
         ),
+      };
+    },
+
+    // User Configuration
+    appendMailAddressAutoDeleteMailbox: (
+      state,
+      action: PayloadAction<{
+        mailAddress: string;
+      }>,
+    ) => {
+      const mailAdress = action.payload.mailAddress;
+      return {
+        ...state,
+        mailAddressAutoDeleteMailbox: {
+          ...state.mailAddressAutoDeleteMailbox,
+          [mailAdress]: true,
+        },
       };
     },
   },

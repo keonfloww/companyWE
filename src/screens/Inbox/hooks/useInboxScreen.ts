@@ -45,8 +45,8 @@ const useInboxScreen = () => {
   );
   // MEMO ---------------------
   const mailCountUnread =
-    (mailBoxFlatten?.length ?? 0) - Object.values(userState?.mailReadMetadataIds)?.length ??
-    0;
+    (mailBoxFlatten?.length ?? 0) -
+      Object.values(userState?.mailReadMetadataIds)?.length ?? 0;
 
   const computedIsShowDeleteAfterSyncedMail = useMemo(
     () =>
@@ -141,10 +141,22 @@ const useInboxScreen = () => {
         }
 
         const isEndOfMatchedMail = next_page_token == res.next_page_token;
-        const isOufOfMail = !res.next_page_token;
-        const isEnd = isEndOfMatchedMail || isOufOfMail;
+        const isOutOfMail = !res.next_page_token;
+        const isEnd = isEndOfMatchedMail || isOutOfMail;
         // End of sync the current address mail
         if (isEnd) {
+          // Auto move all mail in gmail into trash
+          const isSavedAsAutoMoveGmailMailboxToTrash =
+            userState.mailAddressAutoDeleteMailbox?.[targetMail.email];
+
+          if (isSavedAsAutoMoveGmailMailboxToTrash && targetMail.email) {
+            console.log(
+              'Trigger move mail to trash by user setting from modal confirm: ',
+              targetMail.email,
+            );
+            handleMoveMailToTrash(targetMail.email);
+          }
+
           console.log(
             '---- SYNCED',
             `${targetMail.email}, from ${moment
@@ -271,6 +283,18 @@ const useInboxScreen = () => {
       console.log('error', error);
     }
   };
+
+  const handleMarkMailAddressAutoClearGmailBox = ({
+    mailAddress,
+  }: {
+    mailAddress: string;
+  }) => {
+    dispatch(
+      userSliceActions.appendMailAddressAutoDeleteMailbox({
+        mailAddress,
+      }),
+    );
+  };
   // EFFECT ---------------------
 
   // TEST log mail
@@ -291,6 +315,8 @@ const useInboxScreen = () => {
 
     handleGetByFireBaseMail,
     handleInboxTriggerSyncNewItem,
+
+    handleMarkMailAddressAutoClearGmailBox,
   };
 };
 

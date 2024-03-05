@@ -1,3 +1,4 @@
+import Loading from '@components/atoms/Loading';
 import React, {
   PropsWithChildren,
   createContext,
@@ -5,17 +6,15 @@ import React, {
   useState,
 } from 'react';
 import {RootSiblingPortal} from 'react-native-root-siblings';
-import Loading from '@components/atoms/Loading';
 // import DebugView from '@components/molecules/DebugView';
-import Toast from 'react-native-easy-toast';
+import IMAGES from '@assets/images/images';
 import BaseModal from '@components/atoms/Modal/BaseModal';
 import useInboxScreen from '@screens/Inbox/hooks/useInboxScreen';
-import IMAGES from '@assets/images/images';
 import CommonStyles from '@screens/styles';
 import {scale} from '@utils/mixins';
 import {t} from 'i18next';
 import {StyleSheet, Text, View} from 'react-native';
-import DebugView from '@components/molecules/DebugView';
+import Toast from 'react-native-easy-toast';
 
 const Context = createContext({});
 
@@ -26,7 +25,11 @@ const Context = createContext({});
  */
 let toasts: any;
 const AppProvider = ({children}: PropsWithChildren) => {
-  const {handleMoveMailToTrash, handleSetFlagAskForDelete} = useInboxScreen();
+  const {
+    handleMoveMailToTrash,
+    handleSetFlagAskForDelete,
+    handleMarkMailAddressAutoClearGmailBox,
+  } = useInboxScreen();
 
   const [targetMailToDelete, setTargetMailToDelete] = useState<string | null>(
     null,
@@ -153,6 +156,9 @@ const AppProvider = ({children}: PropsWithChildren) => {
               return;
             }
             handleMoveMailToTrash(targetMailToDelete);
+            handleMarkMailAddressAutoClearGmailBox({
+              mailAddress: targetMailToDelete,
+            });
             setTargetMailToDelete(null);
           }}>
           <Text
