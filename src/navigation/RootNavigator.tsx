@@ -14,10 +14,19 @@ import FocusAwareStatusBar from '@services/statusBarService';
 import {scale} from '@utils/mixins';
 import {t} from 'i18next';
 import React, {FC, PropsWithChildren, useMemo} from 'react';
-import {StyleSheet, View, useWindowDimensions} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import {Colors} from 'react-native-ui-lib';
 import {useDispatch} from 'react-redux';
 import {Screen} from './navigation.enums';
+import FormScreen from '@screens/Form';
+import {colors} from 'src/themes';
+import Icon from '@components/atoms/Icon/Icon';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -37,23 +46,50 @@ const RootNavigator: FC = () => {
   return (
     <NavigationContainer ref={navigationRef} linking={linking}>
       <Stack.Navigator
-        initialRouteName={Screen.SplashScreen}
-        // initialRouteName={Screen.StoryBookScreen}
-        screenOptions={{
-          fullScreenGestureEnabled: false,
-          headerBackVisible: true,
-          headerStyle: {
-            backgroundColor: Colors.primary,
-          },
-        }}>
+      // initialRouteName={Screen.SplashScreen}
+      // initialRouteName={Screen.StoryBookScreen}
+      >
         {/* Global */}
-
-        <Stack.Group>
+        <Stack.Screen
+          name={Screen.Login}
+          component={LoginScreen}
+          options={{title: t('screen:auth'), headerShown: false}}
+        />
+        {/* <Stack.Screen
+          name={Screen.FormScreen}
+          component={FormScreen}
+          options={{
+            headerShown: true,
+            headerShadowVisible: false,
+            headerTitle: '도도익산',
+            headerStyle: {
+              backgroundColor: colors.underlayColor,
+            },
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  // navigationService.goBack();
+                }}>
+                <IMAGES.icBack color={colors.black} />
+              </TouchableOpacity>
+            ),
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => {
+                  // navigationService.goBack();
+                }}>
+                <IMAGES.icMoreOptions color={colors.black} />
+              </TouchableOpacity>
+            ),
+          }}
+        /> */}
+        {/* <Stack.Group>
           <Stack.Screen
             name={Screen.SplashScreen}
             component={SplashScreen}
             options={{headerShown: false}}
           />
+
           <Stack.Screen
             name={Screen.Auth}
             component={SignUpScreen}
@@ -73,6 +109,11 @@ const RootNavigator: FC = () => {
         </Stack.Group>
         <Stack.Group>
           <Stack.Screen
+            name={Screen.FormScreen}
+            component={FormScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
             name={Screen.MainTabBar}
             component={TabBarNavigator}
             options={{
@@ -80,7 +121,7 @@ const RootNavigator: FC = () => {
               headerShown: false,
             }}
           />
-        </Stack.Group>
+        </Stack.Group> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

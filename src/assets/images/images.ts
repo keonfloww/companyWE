@@ -11,6 +11,14 @@ const icTrashSrc = require('../images/png/ic_trash.png');
 const icCloseSrc = require('../images/png/ic_close.png');
 const gifProgressSrc = require('../images/gif/loading_progress.json');
 const icBackSrc = require('../images/png/ic_back.png');
+const icCarbonMap = require('../images/ic_carbon_map.png');
+const icCalendar = require('../images/ic_calendar.png');
+const icAutoFit = require('../images/ic_auto_fit.png');
+const icToolbox = require('../images/ic_toolbox.png');
+const icArrowsBidirectional = require('../images/ic_arrows_bidirectional.png');
+const icAppIcon = require('../images/ic_app_icon.png');
+const icSecure = require('../images/ic_secure.png');
+const icUnsecure = require('../images/ic_unsecure.png');
 
 // SVG
 import IcHome from './svg/ic_home.svg';
@@ -66,6 +74,7 @@ import icClose from './svg/ic_close.svg';
 import icShare from './svg/ic_share.svg';
 import icGlobe from './svg/ic_globe.svg';
 import icMeatBall from './svg/ic_meatball.svg';
+import icMoreOptions from './svg/ic_more_options.svg';
 
 const IMAGES = {
   icEdit,
@@ -93,6 +102,7 @@ const IMAGES = {
   DeleteDisable,
   icMail,
   BackButton,
+  icMoreOptions,
 
   // MOCK,
   icM1,
@@ -133,6 +143,14 @@ const IMAGES = {
   icShare,
   icGlobe,
   icMeatBall,
+  icCarbonMap,
+  icCalendar,
+  icAutoFit,
+  icArrowsBidirectional,
+  icToolbox,
+  icAppIcon,
+  icSecure,
+  icUnsecure,
 };
 
 export default IMAGES;

@@ -1,3 +1,4 @@
+import TextInputComponent from '@components/molecules/textInput';
 import React from 'react';
 import {Controller} from 'react-hook-form';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
@@ -11,6 +12,8 @@ const FormItemController = ({
   rules = {},
   containerStyle = {},
   labelStyle = {},
+  placeholder = '',
+  secureTextEntry = false,
   textContentType = 'emailAddress',
 }: any) => {
   return (
@@ -20,12 +23,11 @@ const FormItemController = ({
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
           <>
-            <TextInput
-              style={[styles.input, style, errors?.[name] ? styles.error : {}]}
-              onBlur={onBlur}
+            <TextInputComponent
               onChangeText={value => onChange(value)}
               value={value}
-              textContentType={textContentType}
+              placeholder={placeholder}
+              secureTextEntry={secureTextEntry}
             />
           </>
         )}

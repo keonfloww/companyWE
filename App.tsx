@@ -10,13 +10,17 @@ import AppProvider, {AppConsumer} from 'AppContext';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import useFirebaseService from '@services/firebaseService';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-
+import BootSplash from 'react-native-bootsplash';
 // WARNING: Be careful when change the value of below code.
 // It will lead us to some dependencies conflict, example webview package
 enableFreeze(true);
 
 const App = () => {
   const {initFirebaseApp} = useFirebaseService();
+
+  useEffect(() => {
+    BootSplash.hide({fade: true});
+  }, []);
 
   useEffect(() => {
     initFirebaseApp();

@@ -115,7 +115,7 @@ const openCropper = ({path}: {path: string}) => {
     // cropperStatusBarColor: 'red',
     cropperToolbarColor: '#24D4F7',
     // cropperToolbarWidgetColor
-    cropperToolbarTitle: 'Troove Cropper',
+    cropperToolbarTitle: 'Cropper',
     cropperStatusBarColor: '#24D4F7',
     // cropperTintColor: 'red',
     // cropperCircleOverlay: true,

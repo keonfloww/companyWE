@@ -80,16 +80,16 @@ def share_pods
   )
 end
 
-target 'AwesomeProject' do
+target 'companyWE' do
   share_pods
 
-  target 'AwesomeProjectTests' do
+  target 'companyWETests' do
     inherit! :complete
     # Pods for testing
   end
 end
 
-target 'AwesomeProject Staging' do
+target 'companyWE Staging' do
   share_pods
 end
 

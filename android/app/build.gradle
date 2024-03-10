@@ -84,14 +84,14 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     // Do need to change the namespace of android project
-    namespace "com.troove.troove_app"
+    namespace "com.companyWE.companyWEApp"
     defaultConfig {
-        applicationId "com.troove.troove_app"
+        applicationId "com.companyWE.companyWEApp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        resValue "string", "build_config_package", "com.troove.troove_app"
+        resValue "string", "build_config_package", "com.companyWE.companyWEApp"
         vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {

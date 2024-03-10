@@ -4496,7 +4496,7 @@ index 0000000..24b298b
 +++ b/node_modules/react-native-bootsplash/android/build/intermediates/lint_model_metadata/release/lint-model-metadata.properties
 @@ -0,0 +1,2 @@
 +mavenArtifactId=react-native-bootsplash
-+mavenGroupId=AwesomeProject
++mavenGroupId=companyWE
 \ No newline at end of file
 diff --git a/node_modules/react-native-bootsplash/android/build/intermediates/local_aar_for_lint/release/out.aar b/node_modules/react-native-bootsplash/android/build/intermediates/local_aar_for_lint/release/out.aar
 new file mode 100644

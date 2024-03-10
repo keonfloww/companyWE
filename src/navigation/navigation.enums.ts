@@ -31,6 +31,7 @@ export enum Screen {
 
   // Global
   SearchScreen = 'SearchScreen',
+  FormScreen = 'FormScreen',
 }
 
 export type RootStackParamList = {

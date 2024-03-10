@@ -5,233 +5,127 @@
  * @format
  */
 
-import React from 'react';
-import type { FC } from 'react';
-import { Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
-import { scale } from '../../utils/mixins';
-import { RootStackParamList, Screen } from '@navigation/navigation.enums';
-import BaseButton from '@components/atoms/Button/BaseButton';
+import React, {useEffect, useState} from 'react';
+import type {FC} from 'react';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import {scale} from '../../utils/mixins';
 import CommonStyles from '@screens/styles';
-import { t } from 'i18next';
 import IMAGES from '@assets/images/images';
 import FormItemController from '@components/atoms/Form/FormItemController';
-import { useForm } from 'react-hook-form';
-import ServiceButton, {
-  EnumAuthProviderButton,
-  EnumAuthProviderButtonType,
-} from '@components/atoms/ServiceButton/ServiceButton';
-import navigationService, { navigationRef } from '@services/navigationService';
-import LayoutBackgroundDefault from '@layouts/default/LayoutBackgroundDefault';
+import {useForm} from 'react-hook-form';
 import useAuth from './hooks/useAuth';
-import FocusAwareStatusBar from '@services/statusBarService';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-
+import {SafeAreaView} from 'react-native-safe-area-context';
+import CheckBox from '@react-native-community/checkbox';
+import {colors} from 'src/themes';
+import AppButton from '@components/atoms/AppButton';
+import {SCREEN_WIDTH} from 'src/themes/mixins';
 interface IFormData {
-  email: string;
-  password: string;
+  account?: string;
+  password?: string;
 }
 
 const LoginScreen: FC<any> = () => {
-  const { params } =
-    useRoute<RouteProp<RootStackParamList, Screen.Auth>>();
-
-
-  // TODO: Vipin move it to /utils/RegexUtils.ts
-  const EMAIL_REGEX =
-    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-  // TODO: Vipin define Enums
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const { signInOrSignUpByFirebase } = useAuth();
+  const {signInOrSignUpByFirebase} = useAuth();
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
+    getValues,
+    watch,
   } = useForm<IFormData>({
     defaultValues: {
-      email: '',
+      account: '',
       password: '',
     },
   });
 
+  const [formData, setFormData] = useState<IFormData>({
+    account: '',
+    password: '',
+  });
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  useEffect(() => {
+    const subscription = watch(value => setFormData(value));
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   const onSubmit = (data: IFormData) => {
-    console.log({ data, errors });
+    console.log({data, errors});
     // navigationService.navigateAndReset(Screen.ConnectMailScreen);
   };
 
   return (
-    <LayoutBackgroundDefault>
-      <FocusAwareStatusBar
-        backgroundColor={'transparent'}
-        barStyle={'dark-content'}
-        translucent
-      />
-      <View
-        style={{
-          // position: 'absolute',
-          marginTop: scale(30),
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          width: '100%',
-          zIndex: 1111,
-          paddingHorizontal: scale(30),
-        }}>
-        {params?.isShowBack != false && <Pressable
-          onPress={() => {
-            try {
-              if (navigationRef.current.canGoBack()) {
-                navigationService.goBack();
-                return;
-              }
-              navigationService.navigate(Screen.IntroScreen);
-            } catch (error) { }
+    <SafeAreaView style={styles.container}>
+      <View style={{marginTop: scale(20), marginBottom: scale(10)}}>
+        <Image source={IMAGES.icAppIcon} style={styles.logo} />
+        <FormItemController
+          control={control}
+          errors={errors}
+          label={'Your account'}
+          textContentType="emailAddress"
+          rules={{
+            required: 'Please enter a valid email address',
           }}
-          style={{ height: scale(25), width: scale(25) }}>
-          <IMAGES.arrowLeft />
-        </Pressable>}
-      </View>
-      <View style={{ height: scale(80) }}></View>
-      <View style={styles.view}>
-        <Text style={[CommonStyles.font.bold30, { color: '#3c3c3c' }]}>
-          Welcome back!
-        </Text>
-        <Text
-          style={[
-            CommonStyles.font.regular14,
-            { color: '#3c3c3c', marginTop: scale(10) },
-          ]}>
-          Please sign in to continue.
-        </Text>
-        <View style={{ marginTop: scale(20), marginBottom: scale(10) }}>
-          <FormItemController
-            control={control}
-            errors={errors}
-            label={'Email Address'}
-            textContentType="emailAddress"
-            rules={{
-              required: 'Please enter a valid email address',
-              pattern: {
-                value: EMAIL_REGEX,
-                message: 'Please enter a valid email address',
-              },
-            }}
-            style={styles.inputStyle}
-            containerStyle={styles.inputContainerStyle}
-            labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
-          />
-          <FormItemController
-            control={control}
-            errors={errors}
-            label={'Password'}
-            textContentType="password"
-            rules={{
-              required: 'Password is required',
-              minLength: {
-                value: 8,
-                message: 'Password should be at least 8 characters long',
-              },
-            }}
-            style={styles.inputStyle}
-            containerStyle={styles.inputContainerStyle}
-            labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
-          />
-        </View>
-        <BaseButton
-          title={t('Login')}
-          titleStyle={CommonStyles.font.regular14}
-          onPress={handleSubmit(onSubmit)}
-          size="lg"
-          containerStyle={{}}
+          style={styles.inputStyle}
+          containerStyle={styles.inputContainerStyle}
+          labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
+          placeholder={'Enter your account'}
+          name={'account'}
+        />
+        <FormItemController
+          control={control}
+          errors={errors}
+          label={'Password'}
+          textContentType="password"
+          rules={{
+            required: 'Password is required',
+            minLength: {
+              value: 8,
+              message: 'Password should be at least 8 characters long',
+            },
+          }}
+          style={styles.inputStyle}
+          containerStyle={styles.inputContainerStyle}
+          labelStyle={[CommonStyles.font.semiBold14, styles.labelStyle]}
+          placeholder={'Enter your password'}
+          secureTextEntry={true}
+          name={'password'}
         />
       </View>
-      <View
-        style={{
-          // height: scale(1),
-          flexDirection: 'row',
-          backgroundColor: 'transparent',
-          alignItems: 'center',
-          justifyContent: 'center',
-          // marginVertical: scale(10),
-          marginHorizontal: scale(25),
-        }}>
-        <View
-          style={{
-            height: scale(1),
-            backgroundColor: '#EFEFEF',
-            flex: 1,
-          }}></View>
-        <Text
-          style={{
-            // position: 'absolute',
-            backgroundColor: 'transparent',
-            borderRadius: scale(100),
-            marginHorizontal: scale(10),
-            color: '#3C3C3C',
-          }}>
-          OR
-        </Text>
-        <View
-          style={{
-            height: scale(1),
-            backgroundColor: '#EFEFEF',
-            flex: 1,
-          }}></View>
-      </View>
-      <View style={{ marginHorizontal: scale(25) }}>
-        <ServiceButton
-          type={EnumAuthProviderButtonType.SIGN_IN}
-          containerStyle={styles.baseButton}
-          authProvider={EnumAuthProviderButton.GOOGLE}
-          onPress={() => signInOrSignUpByFirebase({ isSignUp: false })}
-          titleStyles={[CommonStyles.font.regular14, styles.connectText]}
+      <View style={styles.checkBoxContainer}>
+        <CheckBox
+          disabled={formData.account ? false : true}
+          value={toggleCheckBox}
+          onValueChange={newValue => setToggleCheckBox(newValue)}
+          boxType={'square'}
+          animationDuration={0}
+          style={styles.checkBox}
+          onCheckColor={colors.white}
+          onTintColor={colors.appColor}
+          onFillColor={colors.appColor}
         />
+        <Text style={styles.checkBoxText}>자동로그인</Text>
       </View>
-      <View style={{ marginHorizontal: scale(25), marginVertical: scale(20) }}>
-        <Text style={{ color: '#3C3C3C' }}>
-          Don't have an account?{' '}
-          <Text
-            style={[CommonStyles.font.semiBold14, { color: '#50048A' }]}
-            onPress={() => navigationService.navigate(Screen.Auth)}>
-            Sign up
-          </Text>
+      <View style={styles.buttonContainer}>
+        <AppButton
+          text="로그인"
+          disabled={formData.account && formData.password ? false : true}
+        />
+        <Text style={styles.contactText}>
+          계정 분실 시 관리자에게 문의바랍니다
         </Text>
       </View>
-    </LayoutBackgroundDefault>
+    </SafeAreaView>
   );
 };
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  text: {
-    color: '#3C3C3C',
-    marginBottom: scale(10),
-  },
-  connectText: {
-    color: '#50048A',
-    fontWeight: '400',
-  },
-  view: {
-    marginHorizontal: scale(25),
-    marginVertical: scale(20),
-  },
-  paginationDot: {
-    borderRadius: scale(6),
-    width: scale(6),
-    height: scale(6),
-    margin: scale(5),
-    backgroundColor: 'lightgray',
-  },
-  pagination: {
-    // width: Dimensions.get('screen').width,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    marginTop: scale(10),
-    marginBottom: scale(40),
-    marginHorizontal: scale(20),
-    //  backgroundColor: 'red'
+  container: {
+    paddingHorizontal: scale(20),
+    backgroundColor: colors.white,
+    flex: 1,
   },
   inputStyle: {
     borderWidth: 1,
@@ -247,13 +141,24 @@ const styles = StyleSheet.create({
   labelStyle: {
     color: '#3C3C3C',
   },
-  baseButton: {
-    backgroundColor: 'white',
-    height: scale(42),
-    paddingVertical: 0,
-    marginTop: scale(15),
-    borderRadius: 99,
-    borderWidth: 1,
-    borderColor: '#50048A',
+  logo: {alignSelf: 'center', marginVertical: scale(60)},
+  checkBoxContainer: {flexDirection: 'row'},
+  checkBoxText: {
+    fontWeight: '400',
+    fontSize: 14,
   },
+  checkBox: {
+    width: scale(16),
+    height: scale(16),
+    marginRight: scale(8),
+    borderWidth: 1,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: scale(30),
+    left: 0,
+    right: 0,
+    paddingHorizontal: scale(20),
+  },
+  contactText: {alignSelf: 'center', marginTop: scale(20)},
 });
