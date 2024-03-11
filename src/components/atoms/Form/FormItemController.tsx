@@ -14,11 +14,10 @@ const FormItemController = ({
   labelStyle = {},
   placeholder = '',
   secureTextEntry = false,
-  textContentType = 'emailAddress',
 }: any) => {
   return (
-    <View style={[styles.container, containerStyle ? containerStyle : {}]}>
-      <Text style={[styles.label, labelStyle ? labelStyle : {}]}>{label}</Text>
+    <View style={[styles.container, containerStyle]}>
+      <Text style={[styles.label, labelStyle]}>{label}</Text>
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (

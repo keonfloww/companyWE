@@ -19,7 +19,12 @@ const icArrowsBidirectional = require('../images/ic_arrows_bidirectional.png');
 const icAppIcon = require('../images/ic_app_icon.png');
 const icSecure = require('../images/ic_secure.png');
 const icUnsecure = require('../images/ic_unsecure.png');
-
+const icArrowUp = require('../images/ic_arrow_up.png');
+const icArrowDown = require('../images/ic_arrow_down.png');
+const icInverter = require('../images/ic_inverter.png');
+const icSubtractSquare = require('../images/ic_subtract_square.png');
+const icAddSquare = require('../images/ic_add_square.png');
+const icEqual = require('../images/ic_equal.png');
 // SVG
 import IcHome from './svg/ic_home.svg';
 import IcInbox from './svg/ic_inbox.svg';
@@ -151,6 +156,12 @@ const IMAGES = {
   icAppIcon,
   icSecure,
   icUnsecure,
+  icArrowUp,
+  icArrowDown,
+  icInverter,
+  icSubtractSquare,
+  icAddSquare,
+  icEqual,
 };
 
 export default IMAGES;

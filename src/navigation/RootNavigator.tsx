@@ -50,12 +50,12 @@ const RootNavigator: FC = () => {
       // initialRouteName={Screen.StoryBookScreen}
       >
         {/* Global */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name={Screen.Login}
           component={LoginScreen}
           options={{title: t('screen:auth'), headerShown: false}}
-        />
-        {/* <Stack.Screen
+        /> */}
+        <Stack.Screen
           name={Screen.FormScreen}
           component={FormScreen}
           options={{
@@ -82,7 +82,7 @@ const RootNavigator: FC = () => {
               </TouchableOpacity>
             ),
           }}
-        /> */}
+        />
         {/* <Stack.Group>
           <Stack.Screen
             name={Screen.SplashScreen}

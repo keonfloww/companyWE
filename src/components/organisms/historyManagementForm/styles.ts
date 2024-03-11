@@ -18,6 +18,7 @@ export default StyleSheet.create({
     marginHorizontal: scale(20),
     marginTop: scale(20),
     borderRadius: 12,
+    marginBottom: scale(24),
   },
   touchButton: {
     position: 'absolute',
@@ -40,11 +41,9 @@ export default StyleSheet.create({
   },
   dropdown: {
     width: scale(150),
-    borderColor: '#D1D1D1',
-    borderWidth: 1,
     borderRadius: 4,
     alignSelf: 'flex-end',
-
+    backgroundColor: colors.white,
     justifyContent: 'center',
   },
   datePicker: {
@@ -65,7 +64,7 @@ export default StyleSheet.create({
   },
   dateText: {
     color: '#9E9E9E',
-    marginLeft: 12,
+    marginLeft: scale(12),
     justifyContent: 'center',
     alignItems: 'center',
   },

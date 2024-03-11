@@ -1,7 +1,5 @@
-import metrics from 'src/themes/metrics';
 import {scale} from '@utils/mixins';
 import {StyleSheet} from 'react-native';
-import {colors} from 'src/themes';
 
 export default StyleSheet.create({
   container: {
@@ -45,7 +43,6 @@ export default StyleSheet.create({
   renderItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    zIndex: 1,
   },
   optionsContainer: {
     flexDirection: 'row',

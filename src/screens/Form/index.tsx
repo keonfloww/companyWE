@@ -1,86 +1,121 @@
-import React from 'react';
-import {Text, SafeAreaView, View, useWindowDimensions} from 'react-native';
+import React, {useState} from 'react';
+import {Text, SafeAreaView, View, TouchableOpacity, Image} from 'react-native';
 import styles from './styles';
-import {useForm} from 'react-hook-form';
-import {yupResolver} from '@hookform/resolvers/yup';
-import formSchema from '@utils/schemas/form';
-import {TabView, SceneMap} from 'react-native-tab-view';
 import LowPressureEquipmentForm from '@components/organisms/lowPressureEquipmentForm';
-import CustomTabBar from '@components/organisms/customTabBar';
 import IMAGES from '@assets/images/images';
+import BasicForm from '@components/organisms/basicForm';
+import HistoryManagementForm from '@components/organisms/historyManagementForm';
+import HighPressureEquipmentForm from '@components/organisms/highPressureEquipmentForm';
+import OtherInspectionForm from '@components/organisms/otherInspectionForm';
+import Collapsible from 'react-native-collapsible';
+import {colors} from 'src/themes';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import InverterForm from '@components/organisms/inverterForm';
+import MonthHistoryForm from '@components/organisms/monthHistoryForm';
+import CustomerComponent from '@components/organisms/customer';
+import ImageShow from '@components/organisms/imageShow';
+import {t} from 'i18next';
+
 const FormScreen: React.FC = () => {
-  const formScm = formSchema();
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    control,
-    reset,
-    getValues,
-    formState: {errors},
-  } = useForm({
-    mode: 'onSubmit',
-    resolver: yupResolver(formScm.loginSchema),
-  });
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
-
-  const SecondRoute = () => (
-    <View style={{flex: 1, backgroundColor: '#ff4081'}}>
-      <Text>jojo</Text>
-    </View>
-  );
-  const ThirdRoute = () => (
-    <View style={{flex: 1, backgroundColor: '#ff4081'}}>
-      <Text>jojo</Text>
-    </View>
-  );
-
-  const renderScene = SceneMap({
-    first: () => <LowPressureEquipmentForm control={control} errors={errors} />,
-    second: SecondRoute,
-    third: ThirdRoute,
-  });
-
-  const layout = useWindowDimensions();
-
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {key: 'first', title: '저압설비', image: IMAGES.icAutoFit},
-    {key: 'second', title: '고압설비', image: IMAGES.icArrowsBidirectional},
-    {key: 'third', title: '기타점검', image: IMAGES.icToolbox},
-  ]);
-
-  const handleIndexChange = newIndex => {
-    setIndex(newIndex);
-  };
+  const [openLowPressure, setOpenLowPressure] = useState(true);
+  const [openHighPressure, setOpenHighPressure] = useState(true);
+  const [openOtherInspection, setOpenOtherInspection] = useState(true);
+  const [openInverter, setOpenInverter] = useState(true);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <HistoryManagementForm control={control} errors={errors} />
-        <BasicForm
-          control={control}
-          ruleEmail={ruleEmail}
-          ruleRequire={ruleRequire}
-          errors={errors}
-        />
-        <MonthHistoryForm control={control} errors={errors} /> */}
+      <KeyboardAwareScrollView>
+        <HistoryManagementForm />
+        <BasicForm />
+        <MonthHistoryForm />
 
-      <TabView
-        navigationState={{index, routes}}
-        renderScene={renderScene}
-        overScrollMode={'always'}
-        onIndexChange={setIndex}
-        style={styles.viewForm}
-        renderTabBar={props => (
-          <CustomTabBar {...props} onIndexChange={handleIndexChange} />
-        )}
-      />
-      {/* <HistoryManagementForm control={control} errors={errors} /> */}
-      {/* <TouchableOpacity onPress={handleSubmit(onSubmit)}>
-        <Text>Submit</Text>
-      </TouchableOpacity> */}
+        <View style={styles.tabBarContainer}>
+          <TouchableOpacity
+            onPress={() => setOpenLowPressure(!openLowPressure)}>
+            <View style={styles.collapsibleContainer}>
+              <View style={styles.flexRow}>
+                <Image source={IMAGES.icAutoFit} tintColor={colors.black} />
+                <Text>{t('저압설비')}</Text>
+              </View>
+              {!openLowPressure ? (
+                <Image source={IMAGES.icArrowDown} />
+              ) : (
+                <Image source={IMAGES.icArrowUp} />
+              )}
+            </View>
+          </TouchableOpacity>
+          <Collapsible collapsed={!openLowPressure}>
+            <LowPressureEquipmentForm />
+          </Collapsible>
+        </View>
+
+        <View style={styles.tabBarContainer}>
+          <TouchableOpacity
+            onPress={() => setOpenHighPressure(!openHighPressure)}>
+            <View style={styles.collapsibleContainer}>
+              <View style={styles.flexRow}>
+                <Image
+                  source={IMAGES.icArrowsBidirectional}
+                  tintColor={colors.black}
+                />
+                <Text>{t('고압설비')}</Text>
+              </View>
+              {!openHighPressure ? (
+                <Image source={IMAGES.icArrowDown} />
+              ) : (
+                <Image source={IMAGES.icArrowUp} />
+              )}
+            </View>
+          </TouchableOpacity>
+          <Collapsible collapsed={!openHighPressure}>
+            <View>
+              <HighPressureEquipmentForm />
+            </View>
+          </Collapsible>
+        </View>
+
+        <View style={styles.tabBarContainer}>
+          <TouchableOpacity
+            onPress={() => setOpenOtherInspection(!openOtherInspection)}>
+            <View style={styles.collapsibleContainer}>
+              <View style={styles.flexRow}>
+                <Image source={IMAGES.icToolbox} tintColor={colors.black} />
+                <Text>{t('기타점검')}</Text>
+              </View>
+              {!openOtherInspection ? (
+                <Image source={IMAGES.icArrowDown} />
+              ) : (
+                <Image source={IMAGES.icArrowUp} />
+              )}
+            </View>
+          </TouchableOpacity>
+          <Collapsible collapsed={!openOtherInspection}>
+            <OtherInspectionForm />
+          </Collapsible>
+        </View>
+
+        <View style={styles.tabBarContainer}>
+          <TouchableOpacity onPress={() => setOpenInverter(!openInverter)}>
+            <View style={styles.collapsibleContainer}>
+              <View style={styles.flexRow}>
+                <Image source={IMAGES.icInverter} tintColor={colors.black} />
+                <Text>{t('인버터')}</Text>
+              </View>
+              {!openInverter ? (
+                <Image source={IMAGES.icArrowDown} />
+              ) : (
+                <Image source={IMAGES.icArrowUp} />
+              )}
+            </View>
+          </TouchableOpacity>
+          <Collapsible collapsed={!openInverter}>
+            <InverterForm />
+          </Collapsible>
+        </View>
+
+        <CustomerComponent />
+        <ImageShow />
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
