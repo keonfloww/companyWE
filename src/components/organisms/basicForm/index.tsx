@@ -1,145 +1,83 @@
 import React from 'react';
-import i18next from 'i18next';
 import styles from './styles';
 import {Text, View} from 'react-native';
-import {Control} from 'react-hook-form';
-import CustomController from 'src/components/molecules/customController';
 import TextInputComponent from '@components/molecules/textInput';
 import TextInputRightTextComponent from '@components/molecules/textInputRightText';
-
-interface FormInputProps {
-  control: Control<any>;
-  ruleEmail: any;
-  ruleRequire: any;
-  errors: any;
-}
-
-const BasicForm: React.FC<FormInputProps> = props => {
-  const {control, errors} = props;
+import {t} from 'i18next';
+const BasicForm: React.FC = () => {
+  const mockData = {
+    classification: '히텍스트',
+    equipmentName: '히텍스트',
+    capacity: {
+      kv: '22.9',
+      in: '22.9',
+      kw: '22.9',
+    },
+    inverterNumber: '2',
+    powerPlantAddress: '히텍스트',
+  };
 
   return (
     <View style={styles.viewForm}>
-      <Text style={styles.labelText}>기본정보</Text>
-      <CustomController
-        control={control}
-        render={({field: {onChange, value}}) => {
-          return (
-            <TextInputComponent
-              placeholder={'태양광발전설비'}
-              onChangeText={onChange}
-              value={value}
-              keyboardType="phone-pad"
-              secureTextEntry={false}
-              title="이메일"
-            />
-          );
-        }}
-        name={'classification'}
-        error={errors.phone}
+      <Text style={styles.labelText}>{t('기본정보')}</Text>
+
+      <TextInputComponent
+        placeholder={mockData.classification}
+        secureTextEntry={false}
+        title={t('이메일')}
+        editable={false}
+        value={undefined}
       />
-      <CustomController
-        control={control}
-        render={({field: {onChange, value}}) => {
-          return (
-            <TextInputComponent
-              placeholder={'컴퍼니위 에너지'}
-              onChangeText={onChange}
-              value={value}
-              secureTextEntry={false}
-              title="설비명(상호)"
-            />
-          );
-        }}
-        name={'equipmentName'}
-        error={errors.phone}
+
+      <TextInputComponent
+        placeholder={mockData.equipmentName}
+        value={undefined}
+        secureTextEntry={false}
+        title={t('설비명(상호)')}
+        editable={false}
       />
-      <Text style={styles.titleText}>발전설비 전압/용량</Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          width: '100%',
-        }}>
-        <CustomController
-          control={control}
-          render={({field: {onChange, value}}) => {
-            return (
-              <TextInputRightTextComponent
-                placeholder={'0'}
-                onChangeText={onChange}
-                value={value}
-                secureTextEntry={false}
-                textRight={'KV'}
-              />
-            );
-          }}
-          name={'powerGenerationKv'}
-          error={errors.password}
+
+      <Text style={styles.titleText}>{t('발전설비 전압/용량')}</Text>
+      <View style={styles.textRightContainer}>
+        <TextInputRightTextComponent
+          placeholder={mockData.capacity.kv}
+          value={undefined}
+          secureTextEntry={false}
+          textRight={t('KV')}
+          editable={false}
         />
-        <CustomController
-          control={control}
-          render={({field: {onChange, value}}) => {
-            return (
-              <TextInputRightTextComponent
-                placeholder={'0'}
-                onChangeText={onChange}
-                value={value}
-                secureTextEntry={false}
-                textRight={'IN'}
-              />
-            );
-          }}
-          name={'powerGenerationIn'}
-          error={errors.password}
+
+        <TextInputRightTextComponent
+          placeholder={mockData.capacity.in}
+          value={undefined}
+          secureTextEntry={false}
+          textRight={t('IN')}
+          editable={false}
         />
-        <CustomController
-          control={control}
-          render={({field: {onChange, value}}) => {
-            return (
-              <TextInputRightTextComponent
-                placeholder={'0'}
-                onChangeText={onChange}
-                value={value}
-                secureTextEntry={false}
-                textRight={'KW'}
-              />
-            );
-          }}
-          name={'powerGenerationKw'}
-          error={errors.password}
+
+        <TextInputRightTextComponent
+          placeholder={mockData.capacity.kw}
+          value={undefined}
+          secureTextEntry={false}
+          textRight={t('KW')}
+          editable={false}
         />
       </View>
-      <CustomController
-        control={control}
-        render={({field: {onChange, value}}) => {
-          return (
-            <TextInputComponent
-              placeholder={'2'}
-              onChangeText={onChange}
-              value={value}
-              secureTextEntry={false}
-              title="인버터 대수"
-            />
-          );
-        }}
-        name={'inverterNumber'}
-        error={errors.phone}
+
+      <TextInputComponent
+        placeholder={mockData.inverterNumber}
+        value={undefined}
+        secureTextEntry={false}
+        title={t('인버터 대수')}
+        editable={false}
       />
-      <CustomController
-        control={control}
-        render={({field: {onChange, value}}) => {
-          return (
-            <TextInputComponent
-              placeholder={'전라북도 전주시 덕진구 견훤로 256'}
-              onChangeText={onChange}
-              value={value}
-              secureTextEntry={false}
-              title="발전소 주소"
-            />
-          );
-        }}
-        name={'powerPlantAddress'}
-        error={errors.phone}
+
+      <TextInputComponent
+        placeholder={mockData.powerPlantAddress}
+        value={undefined}
+        secureTextEntry={false}
+        title={t('발전소 주소')}
+        editable={false}
       />
     </View>
   );

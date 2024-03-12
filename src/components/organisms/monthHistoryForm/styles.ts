@@ -1,89 +1,68 @@
-import metrics from 'src/themes/metrics';
 import {scale} from '@utils/mixins';
 import {StyleSheet} from 'react-native';
 import {colors} from 'src/themes';
 
 export default StyleSheet.create({
-  textError: {
-    color: colors.redText,
-    marginTop: scale(5),
-    fontSize: scale(12),
-    fontWeight: 'bold',
-  },
-  errorView: {
-    marginBottom: scale(30),
-    marginTop: scale(5),
-  },
-  viewForm: {
-    marginTop: scale(20),
-    marginHorizontal: scale(20),
+  container: {
+    flex: 1,
     backgroundColor: colors.white,
-    paddingVertical: scale(20),
+    marginTop: scale(24),
+    marginHorizontal: scale(20),
+    padding: scale(12),
     borderRadius: 12,
-    paddingHorizontal: scale(12),
   },
-  touchButton: {
-    position: 'absolute',
-  },
-  iconShowHide: {height: scale(20), width: scale(20)},
-  labelText: {
-    fontWeight: '600',
-    fontSize: 16,
-    lineHeight: 24,
-    color: '#0B0B0C',
-    marginRight: scale(16),
-    marginBottom: scale(8),
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: scale(12),
   },
   titleText: {
     fontWeight: '600',
     fontSize: 14,
-    lineHeight: 24,
-    color: '#0B0B0C',
-    marginBottom: scale(8),
+    lineHeight: 20,
   },
-  dropdown: {
-    width: scale(150),
-    borderColor: '#D1D1D1',
+  viewParam: {
+    paddingVertical: scale(8),
     borderWidth: 1,
     borderRadius: 4,
-    alignSelf: 'flex-end',
-
-    justifyContent: 'center',
-  },
-  datePicker: {
-    width: scale(150),
-    borderColor: '#D1D1D1',
-    borderWidth: 1,
-    borderRadius: 4,
-    height: scale(45),
-    alignItems: 'center',
-    backgroundColor: colors.white,
+    paddingLeft: scale(8),
+    borderColor: '#E0E0E0',
+    marginTop: scale(8),
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
-  headerContainer: {flexDirection: 'row', marginBottom: scale(8)},
-  dateContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  dateText: {
-    color: '#9E9E9E',
-    marginLeft: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  dropdownContainer: {
-    position: 'absolute',
-    zIndex: 999,
-    borderWidth: 0,
-  },
-  divide: {
+  width40: {width: '40%'},
+  blackLine: {
+    width: '30%',
     height: 1,
     backgroundColor: 'black',
-    width: 16,
-    justifyContent: 'flex-end',
-    alignSelf: 'flex-end',
-    marginBottom: '13%',
-    marginHorizontal: 10,
+    alignSelf: 'center',
+    marginTop: scale(25),
   },
+  blackLineContainer: {
+    width: '20%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  imageContainer: {marginTop: scale(5)},
+  width100: {width: scale(100)},
+  resultContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconText: {
+    color: '#616161',
+    marginHorizontal: scale(12),
+    marginTop: scale(10),
+  },
+  kwhContainer: {marginLeft: scale(12), width: scale(100)},
+  xText: {
+    color: '#616161',
+    paddingHorizontal: scale(20),
+  },
+  drainageContainer: {
+    width: scale(100),
+  },
+  textRight: {marginLeft: scale(30)},
+  height16: {height: scale(16)},
 });

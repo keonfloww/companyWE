@@ -39,4 +39,9 @@ export default StyleSheet.create({
     color: '#0B0B0C',
     marginBottom: scale(8),
   },
+  textRightContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
 });

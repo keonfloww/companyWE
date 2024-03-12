@@ -9,7 +9,7 @@ interface itemOption {
   results: boolean;
 }
 
-const LowPressureEquipmentForm: React.FC = () => {
+const HighPressureEquipmentForm: React.FC = () => {
   const mockData = [
     {id: 1, title: '인입구 배선', results: true},
     {id: 2, title: '배분전반', results: false},
@@ -75,4 +75,4 @@ const LowPressureEquipmentForm: React.FC = () => {
   );
 };
 
-export default memo(LowPressureEquipmentForm);
+export default memo(HighPressureEquipmentForm);
