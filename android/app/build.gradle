@@ -127,12 +127,12 @@ android {
     productFlavors {
         dev {
             dimension "enviroment"
-            resValue 'string', 'app_name',  '[DEV]Troove'
+            resValue 'string', 'app_name',  '[DEV]CompanyWE'
             applicationIdSuffix ""
         }
         stg {
             dimension "enviroment"
-            resValue 'string', 'app_name',  '[STG]Troove'
+            resValue 'string', 'app_name',  '[STG]CompanyWE'
             applicationIdSuffix ".staging_dev"
         }
     }

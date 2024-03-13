@@ -24,8 +24,9 @@ interface TextInputProps {
   editable?: boolean;
   onPressIn?: () => void;
   textInputRef?: any;
-  iconRight?: any;
+  iconLeft?: any;
   title?: string;
+  styleInputProps?: any;
 }
 
 const TextInputComponent: React.FC<TextInputProps> = ({
@@ -35,6 +36,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   keyboardType = 'default',
   secureTextEntry = false,
   styleProps,
+  styleInputProps,
   placeholderTextColor = '#4C4C4C',
   multiline = false,
   numberOfLines = 1,
@@ -43,7 +45,7 @@ const TextInputComponent: React.FC<TextInputProps> = ({
   editable = true,
   onPressIn,
   textInputRef,
-  iconRight,
+  iconLeft,
   title,
 }) => {
   const [hidePassword, setHidePassword] = useState(secureTextEntry);
@@ -60,11 +62,11 @@ const TextInputComponent: React.FC<TextInputProps> = ({
     <View style={styleProps}>
       {title && <Text style={styles.labelText}>{title}</Text>}
 
-      <View style={styles.input}>
-        <View style={{flexDirection: 'row'}}>
-          {iconRight && (
+      <View style={[styles.input, styleInputProps]}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {iconLeft && (
             <TouchableOpacity onPress={actionPassword}>
-              <Icon source={iconRight} style={styles.iconRight} />
+              <Icon source={iconLeft} style={styles.iconLeft} />
             </TouchableOpacity>
           )}
           <TextInput

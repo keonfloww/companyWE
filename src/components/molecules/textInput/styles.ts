@@ -25,7 +25,7 @@ export default StyleSheet.create({
   },
   iconDropDown: {height: scale(16), width: scale(16)},
   iconShowHide: {height: scale(20), width: scale(20)},
-  iconRight: {height: scale(20), width: scale(20), marginRight: scale(10)},
+  iconLeft: {height: scale(20), width: scale(20), marginRight: scale(10)},
 
   inputPassword: {
     paddingRight: scale(40),

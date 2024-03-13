@@ -25,6 +25,18 @@ const icInverter = require('../images/ic_inverter.png');
 const icSubtractSquare = require('../images/ic_subtract_square.png');
 const icAddSquare = require('../images/ic_add_square.png');
 const icEqual = require('../images/ic_equal.png');
+const icBottomHome = require('../images/ic_bottom_home.png');
+const icBottomCalendar = require('../images/ic_bottom_calendar.png');
+const icBottomMore = require('../images/ic_bottom_more.png');
+const icBottomNote = require('../images/ic_bottom_note.png');
+const icBottomShield = require('../images/ic_bottom_shield.png');
+const icHomeSearch = require('../images/ic_search.png');
+const icHomeBackground = require('../images/ic_home_background.png');
+const icAlert = require('../images/ic_alert.png');
+const icSettingsChat = require('../images/ic_settings_chat.png');
+const icCalendarStar = require('../images/ic_calendar_star.png');
+const icBuildingMultiple = require('../images/ic_building_multiple.png');
+
 // SVG
 import IcHome from './svg/ic_home.svg';
 import IcInbox from './svg/ic_inbox.svg';
@@ -80,6 +92,11 @@ import icShare from './svg/ic_share.svg';
 import icGlobe from './svg/ic_globe.svg';
 import icMeatBall from './svg/ic_meatball.svg';
 import icMoreOptions from './svg/ic_more_options.svg';
+import icCompanyDetailBack from './svg/ic_company_detail_back.svg';
+import icAlertGlobal from './svg/ic_alert.svg';
+import icHeadset from './svg/ic_headset.svg';
+import icCloud from './svg/ic_cloud.svg';
+import icPersonSupport from './svg/ic_person_support.svg';
 
 const IMAGES = {
   icEdit,
@@ -162,6 +179,22 @@ const IMAGES = {
   icSubtractSquare,
   icAddSquare,
   icEqual,
+  icBottomCalendar,
+  icBottomHome,
+  icBottomMore,
+  icBottomNote,
+  icBottomShield,
+  icHomeSearch,
+  icHomeBackground,
+  icAlert,
+  icSettingsChat,
+  icCalendarStar,
+  icBuildingMultiple,
+  icCompanyDetailBack,
+  icAlertGlobal,
+  icHeadset,
+  icCloud,
+  icPersonSupport,
 };
 
 export default IMAGES;

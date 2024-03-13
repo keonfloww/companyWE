@@ -4,10 +4,6 @@ import BaseBookmarkSearchActions from '@components/atoms/HeaderActions/BaseBookm
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import LoginScreen from '@screens/Auth/LoginScreen';
-import SignUpScreen from '@screens/Auth/SignUpScreen';
-import SplashScreen from '@screens/Splash/SplashScreen';
-import StoryBookScreen from '@screens/StoryBook/StoryBookScreen';
 import CommonStyles from '@screens/styles';
 import navigationService, {navigationRef} from '@services/navigationService';
 import FocusAwareStatusBar from '@services/statusBarService';
@@ -26,7 +22,7 @@ import {useDispatch} from 'react-redux';
 import {Screen} from './navigation.enums';
 import FormScreen from '@screens/Form';
 import {colors} from 'src/themes';
-import Icon from '@components/atoms/Icon/Icon';
+import HomeScreenNavigator from './HomeNavigator';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -49,70 +45,7 @@ const RootNavigator: FC = () => {
       // initialRouteName={Screen.SplashScreen}
       // initialRouteName={Screen.StoryBookScreen}
       >
-        {/* Global */}
-        {/* <Stack.Screen
-          name={Screen.Login}
-          component={LoginScreen}
-          options={{title: t('screen:auth'), headerShown: false}}
-        /> */}
-        <Stack.Screen
-          name={Screen.FormScreen}
-          component={FormScreen}
-          options={{
-            headerShown: true,
-            headerShadowVisible: false,
-            headerTitle: '도도익산',
-            headerStyle: {
-              backgroundColor: colors.underlayColor,
-            },
-            headerLeft: () => (
-              <TouchableOpacity
-                onPress={() => {
-                  // navigationService.goBack();
-                }}>
-                <IMAGES.icBack color={colors.black} />
-              </TouchableOpacity>
-            ),
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => {
-                  // navigationService.goBack();
-                }}>
-                <IMAGES.icMoreOptions color={colors.black} />
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        {/* <Stack.Group>
-          <Stack.Screen
-            name={Screen.SplashScreen}
-            component={SplashScreen}
-            options={{headerShown: false}}
-          />
-
-          <Stack.Screen
-            name={Screen.Auth}
-            component={SignUpScreen}
-            options={{title: t('screen:auth'), headerShown: false}}
-          />
-          <Stack.Screen
-            name={Screen.Login}
-            component={LoginScreen}
-            options={{title: t('screen:auth'), headerShown: false}}
-          />
-
-          <Stack.Screen
-            name={Screen.StoryBookScreen}
-            component={StoryBookScreen}
-            options={{title: t('Project Story Book'), headerShown: true}}
-          />
-        </Stack.Group>
         <Stack.Group>
-          <Stack.Screen
-            name={Screen.FormScreen}
-            component={FormScreen}
-            options={{headerShown: false}}
-          />
           <Stack.Screen
             name={Screen.MainTabBar}
             component={TabBarNavigator}
@@ -121,7 +54,35 @@ const RootNavigator: FC = () => {
               headerShown: false,
             }}
           />
-        </Stack.Group> */}
+          <Stack.Screen
+            name={Screen.FormScreen}
+            component={FormScreen}
+            options={{
+              headerShown: true,
+              headerShadowVisible: false,
+              headerTitle: '도도익산',
+              headerStyle: {
+                backgroundColor: colors.underlayColor,
+              },
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigationService.goBack();
+                  }}>
+                  <IMAGES.icBack color={colors.black} />
+                </TouchableOpacity>
+              ),
+              headerRight: () => (
+                <TouchableOpacity
+                  onPress={() => {
+                    // navigationService.goBack();
+                  }}>
+                  <IMAGES.icMoreOptions color={colors.black} />
+                </TouchableOpacity>
+              ),
+            }}
+          />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -161,34 +122,43 @@ const TabBarNavigator: FC = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: true,
-        tabBarActiveTintColor: Colors.primary,
+        tabBarActiveTintColor: colors.appColor,
         tabBarAllowFontScaling: true,
+        tabBarStyle: {
+          backgroundColor: colors.white,
+          borderTopEndRadius: scale(12),
+          borderTopStartRadius: scale(12),
+        },
+        tabBarLabelStyle: {
+          marginBottom: scale(3),
+        },
       }}>
       <Tab.Screen
-        name={Screen.HomeScreen}
-        component={FakeScreen}
+        name={Screen.HomeScreenNavigator}
+        component={HomeScreenNavigator}
         options={{
-          title: t('screen:Home'),
+          title: t('홈'),
           headerShown: false,
           tabBarIcon: ({color}: any) => {
             return (
               <TabBarIconWrapper>
-                <IMAGES.IcHome color={color} fill={color} />
+                <Image source={IMAGES.icBottomHome} tintColor={color} />
               </TabBarIconWrapper>
             );
           },
         }}
       />
+
       <Tab.Screen
         name={Screen.InboxScreen}
         component={FakeScreen}
         options={
           {
             ...styleHeader,
-            title: t('screen:InboxScreen'),
+            title: t('리스트'),
             tabBarIcon: ({color}: any) => (
               <TabBarIconWrapper>
-                <IMAGES.IcStar color={color} fill={color} />
+                <Image source={IMAGES.icBottomNote} tintColor={color} />
               </TabBarIconWrapper>
             ),
           } as any
@@ -200,10 +170,10 @@ const TabBarNavigator: FC = () => {
         options={
           {
             ...styleHeader,
-            title: t('screen:subscriptionScreen'),
+            title: t('점검요청'),
             tabBarIcon: ({color}: any) => (
               <TabBarIconWrapper>
-                <IMAGES.IcStar color={color} fill={color} />
+                <Image source={IMAGES.icBottomShield} tintColor={color} />
               </TabBarIconWrapper>
             ),
           } as any
@@ -214,11 +184,25 @@ const TabBarNavigator: FC = () => {
         component={FakeScreen}
         options={{
           headerShown: false,
-          title: t('screen:ProfileScreen'),
+          title: t('점검이력'),
           headerTitleStyle: styles.bottomTabTitle,
           tabBarIcon: ({color}: any) => (
             <TabBarIconWrapper>
-              <IMAGES.IcProfile color={color} fill={color} />
+              <Image source={IMAGES.icBottomCalendar} tintColor={color} />
+            </TabBarIconWrapper>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name={Screen.ConnectMailScreen}
+        component={FakeScreen}
+        options={{
+          headerShown: false,
+          title: t('더보기'),
+          headerTitleStyle: styles.bottomTabTitle,
+          tabBarIcon: ({color}: any) => (
+            <TabBarIconWrapper>
+              <Image source={IMAGES.icBottomMore} tintColor={color} />
             </TabBarIconWrapper>
           ),
         }}
