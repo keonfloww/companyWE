@@ -1,4 +1,4 @@
-package com.troove.troove_app;
+package com.companyWE.companyWEApp;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

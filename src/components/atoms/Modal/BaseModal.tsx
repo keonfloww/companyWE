@@ -1,4 +1,5 @@
 import CommonStyles from '@screens/styles';
+import {colors} from 'src/themes';
 import {scale} from '@utils/mixins';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
@@ -56,20 +57,22 @@ const BaseModal = ({
               {flex: 1, paddingHorizontal: 0},
               buttonContainerStyle ? buttonContainerStyle : {},
             ]}
-            labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
+            labelStyle={[
+              CommonStyles.font.regular14,
+              {overflow: 'visible', color: colors.appColor},
+            ]}
             backgroundColor={'white'}
-            outlineColor={'#50048A'}
             color={'#50048A'}
           />
           <Button
             label={confirmTitle}
             onPress={onConfirm}
             style={[
-              {flex: 1, paddingHorizontal: 0},
+              {flex: 1, paddingHorizontal: 0, borderRadius: 8},
               buttonContainerStyle ? buttonContainerStyle : {},
             ]}
             labelStyle={[CommonStyles.font.regular14, {overflow: 'visible'}]}
-            backgroundColor={'#50048A'}
+            backgroundColor={colors.appColor}
           />
         </View>
       </View>
@@ -102,5 +105,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     columnGap: scale(8),
+    height: scale(40),
   },
 });

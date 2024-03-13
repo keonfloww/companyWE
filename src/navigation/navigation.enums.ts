@@ -16,6 +16,7 @@ export enum Screen {
 
   MainTabBar = 'MainTabBar',
   HomeScreen = 'HomeScreen',
+  HomeScreenNavigator = 'HomeScreenNavigator',
 
   InboxScreen = 'InboxScreen',
   InboxIndexScreen = 'InboxIndexScreen',
@@ -32,6 +33,7 @@ export enum Screen {
   // Global
   SearchScreen = 'SearchScreen',
   FormScreen = 'FormScreen',
+  CompanyDetailScreen = 'CompanyDetailScreen',
 }
 
 export type RootStackParamList = {
