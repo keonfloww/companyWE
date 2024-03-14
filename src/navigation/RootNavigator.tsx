@@ -13,6 +13,7 @@ import React, {FC, PropsWithChildren, useMemo} from 'react';
 import {
   Image,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
   useWindowDimensions,
@@ -23,6 +24,7 @@ import {Screen} from './navigation.enums';
 import FormScreen from '@screens/Form';
 import {colors} from 'src/themes';
 import HomeScreenNavigator from './HomeNavigator';
+import SettingScreen from '@screens/Setting';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -194,8 +196,8 @@ const TabBarNavigator: FC = () => {
         }}
       />
       <Tab.Screen
-        name={Screen.ConnectMailScreen}
-        component={FakeScreen}
+        name={Screen.SettingScreen}
+        component={SettingScreen}
         options={{
           headerShown: false,
           title: t('더보기'),
@@ -245,4 +247,9 @@ const styles = StyleSheet.create({
     fontSize: CommonStyles.fontSize.size30,
     fontFamily: CommonStyles.fontFamily.medium,
   },
+  headerRightContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  marginLeft8: {marginLeft: scale(8)},
 });

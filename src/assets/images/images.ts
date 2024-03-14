@@ -97,6 +97,7 @@ import icAlertGlobal from './svg/ic_alert.svg';
 import icHeadset from './svg/ic_headset.svg';
 import icCloud from './svg/ic_cloud.svg';
 import icPersonSupport from './svg/ic_person_support.svg';
+import icSignOut from './svg/ic_sign_out.svg';
 
 const IMAGES = {
   icEdit,
@@ -195,6 +196,7 @@ const IMAGES = {
   icHeadset,
   icCloud,
   icPersonSupport,
+  icSignOut,
 };
 
 export default IMAGES;

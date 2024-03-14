@@ -8,6 +8,7 @@ import {Screen} from './navigation.enums';
 import HomeScreen from '@screens/Home';
 import {scale} from '@utils/mixins';
 import CompanyDetailScreen from '@screens/CompanyDetail';
+import {t} from 'i18next';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,7 +48,7 @@ const HomeScreenNavigator: FC = () => {
                   fontWeight: '700',
                   lineHeight: 28,
                 }}>
-                도도익산
+                {t('도도익산')}
               </Text>
             </View>
           ),
