@@ -33,7 +33,7 @@ const colors = {
   line: '#3ED160',
   windowTint: 'rgba(0, 0, 0, 0.4)',
   blueButton: '#EDF2F7',
-  divider: '#CFCFD0',
+  divider: '#DBDBDE',
   inactiveIcon: '#718096',
   liked: '#ED8E64',
   placeholder: '#C7C7CD',
