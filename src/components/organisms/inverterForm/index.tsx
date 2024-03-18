@@ -80,13 +80,7 @@ const InverterForm: React.FC = () => {
       <View style={styles.headerContainer}>
         <View style={styles.addSquareContainer}>
           <Text style={styles.addSquareText}>{t('인버터 임,출력 확인')}</Text>
-          <TouchableOpacity onPress={handleAddData}>
-            <Image source={IMAGES.icAddSquare} />
-          </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={handleSubtractData}>
-          <Image source={IMAGES.icSubtractSquare} />
-        </TouchableOpacity>
       </View>
       <View
         style={{

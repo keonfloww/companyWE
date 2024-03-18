@@ -25,6 +25,7 @@ import FormScreen from '@screens/Form';
 import {colors} from 'src/themes';
 import HomeScreenNavigator from './HomeNavigator';
 import SettingScreen from '@screens/Setting';
+import InspectionHistoryScreen from '@screens/InspectionHistory';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const CONFIG = {};
@@ -182,8 +183,8 @@ const TabBarNavigator: FC = () => {
         }
       />
       <Tab.Screen
-        name={Screen.ProfileScreen}
-        component={FakeScreen}
+        name={Screen.InspectionHistory}
+        component={InspectionHistoryScreen}
         options={{
           headerShown: false,
           title: t('점검이력'),

@@ -61,7 +61,11 @@ const HomeScreen: FC<any> = () => {
             <Text style={styles.titleText}>{t('용량')}</Text>
             <Text style={styles.titleText}>{t('점검 예정')}</Text>
           </View>
-          <FlatList data={mockData.listCompany} renderItem={renderItem} />
+          <FlatList
+            data={mockData.listCompany}
+            renderItem={renderItem}
+            scrollEnabled={false}
+          />
         </View>
       </View>
     </View>

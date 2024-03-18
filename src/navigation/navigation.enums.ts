@@ -35,6 +35,7 @@ export enum Screen {
   FormScreen = 'FormScreen',
   CompanyDetailScreen = 'CompanyDetailScreen',
   SettingScreen = 'SettingScreen',
+  InspectionHistory = 'InspectionHistory',
 }
 
 export type RootStackParamList = {
