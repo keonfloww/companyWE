@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import type {FC} from 'react';
 import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import styles from './styles';
 import {t} from 'i18next';
 import IMAGES from '@assets/images/images';
 import {colors} from 'src/themes';
-import {Dividers, Switch} from 'react-native-ui-lib';
+import {Switch} from 'react-native-ui-lib';
 import Divider from '@components/atoms/Divider/Divider';
-import {scale} from '@utils/mixins';
 import DeviceInfo from 'react-native-device-info';
 
 const SettingScreen: FC<any> = () => {

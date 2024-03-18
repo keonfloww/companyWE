@@ -8,7 +8,7 @@ import {
   ISituationTranslationColor,
   ISituationTranslationText,
 } from 'src/models/situationCompany/situationCompany';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import BaseModal from '@components/atoms/Modal/BaseModal';
 import {scale} from '@utils/mixins';
 import IMAGES from '@assets/images/images';
@@ -135,26 +135,32 @@ const CompanyDetailScreen: FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CardCompanyDetail data={mockData} />
-      <Text style={styles.recentInspectionText}>
-        {t('최근 점검 현황')}({mockData.recentInspection.length})
-      </Text>
-      <FlatList data={mockData.recentInspection} renderItem={renderItem} />
-      <BaseModal
-        isShow={modalVisible}
-        headerShown={false}
-        backdropOpacity={0.7}
-        onClose={() => setModalVisible(false)}
-        onConfirm={() => {
-          setModalVisible(false);
-          Linking.openURL(`tel:${mockData.phoneCustomer}`);
-          //
-        }}
-        buttonContainerStyle={{paddingVertical: scale(0)}}
-        children={modalChildren}
-        cancelTitle={t('아니요')}
-        confirmTitle={t('네')}
-      />
+      <ScrollView>
+        <CardCompanyDetail data={mockData} />
+        <Text style={styles.recentInspectionText}>
+          {t('최근 점검 현황')}({mockData.recentInspection.length})
+        </Text>
+        <FlatList
+          data={mockData.recentInspection}
+          renderItem={renderItem}
+          scrollEnabled={false}
+        />
+        <BaseModal
+          isShow={modalVisible}
+          headerShown={false}
+          backdropOpacity={0.7}
+          onClose={() => setModalVisible(false)}
+          onConfirm={() => {
+            setModalVisible(false);
+            Linking.openURL(`tel:${mockData.phoneCustomer}`);
+            //
+          }}
+          buttonContainerStyle={{paddingVertical: scale(0)}}
+          children={modalChildren}
+          cancelTitle={t('아니요')}
+          confirmTitle={t('네')}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
