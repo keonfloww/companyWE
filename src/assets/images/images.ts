@@ -1,0 +1,149 @@
+const icEdit = require('../images/ic_edit.png');
+const icAddContact = require('../images/ic_add_contact.png');
+const icTrashSrc = require('../images/png/ic_trash.png');
+const icCloseSrc = require('../images/png/ic_close.png');
+const gifProgressSrc = require('../images/gif/loading_progress.json');
+const icBackSrc = require('../images/png/ic_back.png');
+const icCarbonMap = require('../images/ic_carbon_map.png');
+const icCalendar = require('../images/ic_calendar.png');
+const icAutoFit = require('../images/ic_auto_fit.png');
+const icToolbox = require('../images/ic_toolbox.png');
+const icArrowsBidirectional = require('../images/ic_arrows_bidirectional.png');
+const icAppIcon = require('../images/ic_app_icon.png');
+const icSecure = require('../images/ic_secure.png');
+const icUnsecure = require('../images/ic_unsecure.png');
+const icArrowUp = require('../images/ic_arrow_up.png');
+const icArrowDown = require('../images/ic_arrow_down.png');
+const icInverter = require('../images/ic_inverter.png');
+const icSubtractSquare = require('../images/ic_subtract_square.png');
+const icAddSquare = require('../images/ic_add_square.png');
+const icEqual = require('../images/ic_equal.png');
+const icBottomHome = require('../images/ic_bottom_home.png');
+const icBottomCalendar = require('../images/ic_bottom_calendar.png');
+const icBottomMore = require('../images/ic_bottom_more.png');
+const icBottomNote = require('../images/ic_bottom_note.png');
+const icBottomShield = require('../images/ic_bottom_shield.png');
+const icHomeSearch = require('../images/ic_search.png');
+const icHomeBackground = require('../images/ic_home_background.png');
+const icAlert = require('../images/ic_alert.png');
+const icSettingsChat = require('../images/ic_settings_chat.png');
+const icCalendarStar = require('../images/ic_calendar_star.png');
+const icBuildingMultiple = require('../images/ic_building_multiple.png');
+
+// SVG
+import IcHome from './svg/ic_home.svg';
+import IcInbox from './svg/ic_inbox.svg';
+import IcInboxFilled from './svg/ic_inbox_filled.svg';
+import IcStar from './svg/ic_star.svg';
+import IcProfile from './svg/ic_profile.svg';
+import IcConnected from './svg/ic_connected.svg';
+import IcContact from './svg/ic_contact.svg';
+import IcPrivacy from './svg/ic_privacy.svg';
+import IcTerms from './svg/ic_terms.svg';
+import ArrowDown from './svg/arrow_down.svg';
+import Photo from './svg/photo.svg';
+import Upload from './svg/upload.svg';
+import Delete from './svg/delete.svg';
+import DeleteDisable from './svg/delete_disable.svg';
+import icAppLogo from './svg/ic_app_logo.svg';
+import icAppLogoText from './svg/ic_app_logo_text.svg';
+import icBookMark from './svg/ic_bookmark.svg';
+import icBookMarkAction from './svg/ic_bookmark_action.svg';
+import icSearch from './svg/ic_search.svg';
+import dateIcon from './svg/date_profile.svg';
+import icUnBookmark from './svg/ic_unbookmark.svg';
+import icMailOpen from './svg/ic_mail_open.svg';
+import icMail from './svg/ic_mail.svg';
+import icTrash from './svg/ic_trash.svg';
+import icLogout from './svg/ic_logout.svg';
+import icCamera from './svg/camera.svg';
+import icBack from './svg/ic_back.svg';
+import BackButton from './svg/backButton.svg';
+import icEmpty from './svg/empty.svg';
+import icClose from './svg/ic_close.svg';
+import icShare from './svg/ic_share.svg';
+import icGlobe from './svg/ic_globe.svg';
+import icMeatBall from './svg/ic_meatball.svg';
+import icMoreOptions from './svg/ic_more_options.svg';
+import icCompanyDetailBack from './svg/ic_company_detail_back.svg';
+import icAlertGlobal from './svg/ic_alert.svg';
+import icHeadset from './svg/ic_headset.svg';
+import icCloud from './svg/ic_cloud.svg';
+import icPersonSupport from './svg/ic_person_support.svg';
+import icSignOut from './svg/ic_sign_out.svg';
+
+const IMAGES = {
+  icEdit,
+  icAddContact,
+  IcHome,
+  IcInbox,
+  IcInboxFilled,
+  IcStar,
+  IcProfile,
+  icAppLogo,
+  icAppLogoText,
+  icBookMark,
+  icBookMarkAction,
+  icSearch,
+  IcConnected,
+  IcContact,
+  IcTerms,
+  IcPrivacy,
+  icCamera,
+  ArrowDown,
+  Photo,
+  Upload,
+  Delete,
+  DeleteDisable,
+  icMail,
+  BackButton,
+  icMoreOptions,
+  icUnBookmark,
+  icMailOpen,
+  dateIcon,
+  icTrash,
+  icLogout,
+  icTrashSrc,
+  icCloseSrc,
+  icBack,
+  icEmpty,
+  gifProgressSrc,
+  icBackSrc,
+  icClose,
+  icShare,
+  icGlobe,
+  icMeatBall,
+  icCarbonMap,
+  icCalendar,
+  icAutoFit,
+  icArrowsBidirectional,
+  icToolbox,
+  icAppIcon,
+  icSecure,
+  icUnsecure,
+  icArrowUp,
+  icArrowDown,
+  icInverter,
+  icSubtractSquare,
+  icAddSquare,
+  icEqual,
+  icBottomCalendar,
+  icBottomHome,
+  icBottomMore,
+  icBottomNote,
+  icBottomShield,
+  icHomeSearch,
+  icHomeBackground,
+  icAlert,
+  icSettingsChat,
+  icCalendarStar,
+  icBuildingMultiple,
+  icCompanyDetailBack,
+  icAlertGlobal,
+  icHeadset,
+  icCloud,
+  icPersonSupport,
+  icSignOut,
+};
+
+export default IMAGES;

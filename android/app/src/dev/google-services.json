@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "382266184129",
+    "project_id": "companywedemo",
+    "storage_bucket": "companywedemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382266184129:android:59c97886c5a5d7dcc31f40",
+        "android_client_info": {
+          "package_name": "com.companyWE.companyWEApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU5C1BS8r_R3sw_EQ5xPRvM88VamH8t4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382266184129:android:9df013f32cf569f5c31f40",
+        "android_client_info": {
+          "package_name": "com.companyWE.companyWEAppStg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU5C1BS8r_R3sw_EQ5xPRvM88VamH8t4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

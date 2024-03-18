@@ -1,0 +1,2036 @@
+diff --git a/node_modules/react-native-calendars/src/calendar/day/basic/index.js b/node_modules/react-native-calendars/src/calendar/day/basic/index.js
+index 6e1e36a..cee4e76 100644
+--- a/node_modules/react-native-calendars/src/calendar/day/basic/index.js
++++ b/node_modules/react-native-calendars/src/calendar/day/basic/index.js
+@@ -1,113 +1,164 @@
+-import React, { Fragment, useCallback, useRef } from 'react';
+-import { TouchableOpacity, Text, View } from 'react-native';
+-import { xdateToData } from '../../../interface';
++import React, {Fragment, useCallback, useRef} from 'react';
++import {TouchableOpacity, Text, View} from 'react-native';
++import {xdateToData} from '../../../interface';
+ import styleConstructor from './style';
+ import Marking from '../marking';
+-const BasicDay = (props) => {
+-    const { theme, date, onPress, onLongPress, markingType, marking, state, disableAllTouchEventsForDisabledDays, disableAllTouchEventsForInactiveDays, accessibilityLabel, children, testID } = props;
+-    const style = useRef(styleConstructor(theme));
+-    const _marking = marking || {};
+-    const isSelected = _marking.selected || state === 'selected';
+-    const isDisabled = typeof _marking.disabled !== 'undefined' ? _marking.disabled : state === 'disabled';
+-    const isInactive = _marking?.inactive;
+-    const isToday = state === 'today';
+-    const isMultiDot = markingType === Marking.markings.MULTI_DOT;
+-    const isMultiPeriod = markingType === Marking.markings.MULTI_PERIOD;
+-    const isCustom = markingType === Marking.markings.CUSTOM;
+-    const dateData = date ? xdateToData(date) : undefined;
+-    const shouldDisableTouchEvent = () => {
+-        const { disableTouchEvent } = _marking;
+-        let disableTouch = false;
+-        if (typeof disableTouchEvent === 'boolean') {
+-            disableTouch = disableTouchEvent;
+-        }
+-        else if (typeof disableAllTouchEventsForDisabledDays === 'boolean' && isDisabled) {
+-            disableTouch = disableAllTouchEventsForDisabledDays;
+-        }
+-        else if (typeof disableAllTouchEventsForInactiveDays === 'boolean' && isInactive) {
+-            disableTouch = disableAllTouchEventsForInactiveDays;
+-        }
+-        return disableTouch;
+-    };
+-    const getContainerStyle = () => {
+-        const { customStyles, selectedColor } = _marking;
+-        const styles = [style.current.base];
+-        if (isSelected) {
+-            styles.push(style.current.selected);
+-            if (selectedColor) {
+-                styles.push({ backgroundColor: selectedColor });
+-            }
+-        }
+-        else if (isToday) {
+-            styles.push(style.current.today);
+-        }
+-        //Custom marking type
+-        if (isCustom && customStyles && customStyles.container) {
+-            if (customStyles.container.borderRadius === undefined) {
+-                customStyles.container.borderRadius = 16;
+-            }
+-            styles.push(customStyles.container);
+-        }
+-        return styles;
+-    };
+-    const getTextStyle = () => {
+-        const { customStyles, selectedTextColor } = _marking;
+-        const styles = [style.current.text];
+-        if (isSelected) {
+-            styles.push(style.current.selectedText);
+-            if (selectedTextColor) {
+-                styles.push({ color: selectedTextColor });
+-            }
+-        }
+-        else if (isDisabled) {
+-            styles.push(style.current.disabledText);
+-        }
+-        else if (isToday) {
+-            styles.push(style.current.todayText);
+-        }
+-        else if (isInactive) {
+-            styles.push(style.current.inactiveText);
+-        }
+-        //Custom marking type
+-        if (isCustom && customStyles && customStyles.text) {
+-            styles.push(customStyles.text);
+-        }
+-        return styles;
+-    };
+-    const _onPress = useCallback(() => {
+-        onPress?.(dateData);
+-    }, [onPress, date]);
+-    const _onLongPress = useCallback(() => {
+-        onLongPress?.(dateData);
+-    }, [onLongPress, date]);
+-    const renderMarking = () => {
+-        const { marked, dotColor, dots, periods } = _marking;
+-        return (<Marking type={markingType} theme={theme} marked={isMultiDot ? true : marked} selected={isSelected} disabled={isDisabled} inactive={isInactive} today={isToday} dotColor={dotColor} dots={dots} periods={periods}/>);
+-    };
+-    const renderText = () => {
+-        return (<Text allowFontScaling={false} style={getTextStyle()}>
++const BasicDay = props => {
++  const {
++    theme,
++    date,
++    onPress,
++    onLongPress,
++    markingType,
++    marking,
++    state,
++    disableAllTouchEventsForDisabledDays,
++    disableAllTouchEventsForInactiveDays,
++    accessibilityLabel,
++    children,
++    testID,
++  } = props;
++  console.log('🚀 ~ BasicDay ~ state:', state);
++  const style = useRef(styleConstructor(theme));
++  const _marking = marking || {};
++  const isSelected = _marking.selected || state === 'selected';
++  const isSunday = state === 'sunday';
++  const isDisabled =
++    typeof _marking.disabled !== 'undefined'
++      ? _marking.disabled
++      : state === 'disabled';
++  const isInactive = _marking?.inactive;
++  const isToday = state === 'today';
++  const isMultiDot = markingType === Marking.markings.MULTI_DOT;
++  const isMultiPeriod = markingType === Marking.markings.MULTI_PERIOD;
++  const isCustom = markingType === Marking.markings.CUSTOM;
++  const dateData = date ? xdateToData(date) : undefined;
++  const shouldDisableTouchEvent = () => {
++    const {disableTouchEvent} = _marking;
++    let disableTouch = false;
++    if (typeof disableTouchEvent === 'boolean') {
++      disableTouch = disableTouchEvent;
++    } else if (
++      typeof disableAllTouchEventsForDisabledDays === 'boolean' &&
++      isDisabled
++    ) {
++      disableTouch = disableAllTouchEventsForDisabledDays;
++    } else if (
++      typeof disableAllTouchEventsForInactiveDays === 'boolean' &&
++      isInactive
++    ) {
++      disableTouch = disableAllTouchEventsForInactiveDays;
++    }
++    return disableTouch;
++  };
++  const getContainerStyle = () => {
++    const {customStyles, selectedColor} = _marking;
++    const styles = [style.current.base];
++    if (isSelected) {
++      styles.push(style.current.selected);
++      if (selectedColor) {
++        styles.push({backgroundColor: selectedColor});
++      }
++    } else if (isToday) {
++      styles.push(style.current.today);
++    }
++    //Custom marking type
++    if (isCustom && customStyles && customStyles.container) {
++      if (customStyles.container.borderRadius === undefined) {
++        customStyles.container.borderRadius = 16;
++      }
++      styles.push(customStyles.container);
++    }
++    return styles;
++  };
++  const getTextStyle = () => {
++    const {customStyles, selectedTextColor} = _marking;
++    const styles = [style.current.text];
++    if (isSelected) {
++      styles.push(style.current.selectedText);
++      if (selectedTextColor) {
++        styles.push({color: selectedTextColor});
++      }
++    } else if (isDisabled) {
++      styles.push(style.current.disabledText);
++    } else if (isInactive) {
++      styles.push(style.current.inactiveText);
++    } else if (isSunday) {
++      styles.push({
++        color: 'red',
++      });
++    }
++
++    //Custom marking type
++    if (isCustom && customStyles && customStyles.text) {
++      styles.push(customStyles.text);
++    }
++    return styles;
++  };
++  const _onPress = useCallback(() => {
++    onPress?.(dateData);
++  }, [onPress, date]);
++  const _onLongPress = useCallback(() => {
++    onLongPress?.(dateData);
++  }, [onLongPress, date]);
++  const renderMarking = () => {
++    const {marked, dotColor, dots, periods} = _marking;
++    return (
++      <Marking
++        type={markingType}
++        theme={theme}
++        marked={isMultiDot ? true : marked}
++        selected={isSelected}
++        disabled={isDisabled}
++        inactive={isInactive}
++        today={isToday}
++        dotColor={dotColor}
++        dots={dots}
++        periods={periods}
++      />
++    );
++  };
++  const renderText = () => {
++    return (
++      <Text allowFontScaling={false} style={getTextStyle()}>
+         {String(children)}
+-      </Text>);
+-    };
+-    const renderContent = () => {
+-        return (<Fragment>
++      </Text>
++    );
++  };
++  const renderContent = () => {
++    return (
++      <Fragment>
+         {renderText()}
+         {renderMarking()}
+-      </Fragment>);
+-    };
+-    const renderContainer = () => {
+-        const { activeOpacity } = _marking;
+-        return (<TouchableOpacity testID={testID} style={getContainerStyle()} disabled={shouldDisableTouchEvent()} activeOpacity={activeOpacity} onPress={!shouldDisableTouchEvent() ? _onPress : undefined} onLongPress={!shouldDisableTouchEvent() ? _onLongPress : undefined} accessible accessibilityRole={isDisabled ? undefined : 'button'} accessibilityLabel={accessibilityLabel}>
++      </Fragment>
++    );
++  };
++  const renderContainer = () => {
++    const {activeOpacity} = _marking;
++    return (
++      <TouchableOpacity
++        testID={testID}
++        style={getContainerStyle()}
++        disabled={true}
++        activeOpacity={activeOpacity}
++        onPress={!shouldDisableTouchEvent() ? _onPress : undefined}
++        onLongPress={!shouldDisableTouchEvent() ? _onLongPress : undefined}
++        accessible
++        accessibilityRole={isDisabled ? undefined : 'button'}
++        accessibilityLabel={accessibilityLabel}>
+         {isMultiPeriod ? renderText() : renderContent()}
+-      </TouchableOpacity>);
+-    };
+-    const renderPeriodsContainer = () => {
+-        return (<View style={style.current.container}>
++      </TouchableOpacity>
++    );
++  };
++  const renderPeriodsContainer = () => {
++    return (
++      <View style={style.current.container}>
+         {renderContainer()}
+         {renderMarking()}
+-      </View>);
+-    };
+-    return isMultiPeriod ? renderPeriodsContainer() : renderContainer();
++      </View>
++    );
++  };
++  return isMultiPeriod ? renderPeriodsContainer() : renderContainer();
+ };
+ export default BasicDay;
+ BasicDay.displayName = 'BasicDay';
+diff --git a/node_modules/react-native-calendars/src/calendar/day/basic/style.js b/node_modules/react-native-calendars/src/calendar/day/basic/style.js
+index edafbd3..2265d3f 100644
+--- a/node_modules/react-native-calendars/src/calendar/day/basic/style.js
++++ b/node_modules/react-native-calendars/src/calendar/day/basic/style.js
+@@ -1,71 +1,71 @@
+-import { StyleSheet } from 'react-native';
++import {StyleSheet} from 'react-native';
+ import * as defaultStyle from '../../../style';
+ import constants from '../../../commons/constants';
+ export default function styleConstructor(theme = {}) {
+-    const appStyle = { ...defaultStyle, ...theme };
+-    return StyleSheet.create({
+-        container: {
+-            alignSelf: 'stretch',
+-            alignItems: 'center'
+-        },
+-        base: {
+-            width: 32,
+-            height: 32,
+-            alignItems: 'center'
+-        },
+-        text: {
+-            marginTop: constants.isAndroid ? 4 : 6,
+-            fontSize: appStyle.textDayFontSize,
+-            fontFamily: appStyle.textDayFontFamily,
+-            fontWeight: appStyle.textDayFontWeight,
+-            color: appStyle.dayTextColor,
+-            backgroundColor: 'rgba(255, 255, 255, 0)',
+-            ...appStyle.textDayStyle
+-        },
+-        alignedText: {
+-            marginTop: constants.isAndroid ? 4 : 6
+-        },
+-        selected: {
+-            backgroundColor: appStyle.selectedDayBackgroundColor,
+-            borderRadius: 16
+-        },
+-        today: {
+-            backgroundColor: appStyle.todayBackgroundColor,
+-            borderRadius: 16
+-        },
+-        todayText: {
+-            color: appStyle.todayTextColor
+-        },
+-        selectedText: {
+-            color: appStyle.selectedDayTextColor
+-        },
+-        disabledText: {
+-            color: appStyle.textDisabledColor
+-        },
+-        inactiveText: {
+-            color: appStyle.textInactiveColor
+-        },
+-        dot: {
+-            width: 4,
+-            height: 4,
+-            marginTop: 1,
+-            borderRadius: 2,
+-            opacity: 0,
+-            ...appStyle.dotStyle
+-        },
+-        visibleDot: {
+-            opacity: 1,
+-            backgroundColor: appStyle.dotColor
+-        },
+-        selectedDot: {
+-            backgroundColor: appStyle.selectedDotColor
+-        },
+-        disabledDot: {
+-            backgroundColor: appStyle.disabledDotColor || appStyle.dotColor
+-        },
+-        todayDot: {
+-            backgroundColor: appStyle.todayDotColor || appStyle.dotColor
+-        },
+-        ...(theme['stylesheet.day.basic'] || {})
+-    });
++  const appStyle = {...defaultStyle, ...theme};
++  return StyleSheet.create({
++    container: {
++      alignSelf: 'stretch',
++      alignItems: 'center',
++    },
++    base: {
++      width: 32,
++      height: 32,
++      alignItems: 'center',
++    },
++    text: {
++      marginTop: constants.isAndroid ? 4 : 6,
++      fontSize: appStyle.textDayFontSize,
++      fontFamily: appStyle.textDayFontFamily,
++      fontWeight: appStyle.textDayFontWeight,
++      color: appStyle.dayTextColor,
++      backgroundColor: 'rgba(255, 255, 255, 0)',
++      ...appStyle.textDayStyle,
++    },
++    alignedText: {
++      marginTop: constants.isAndroid ? 4 : 6,
++    },
++    selected: {
++      backgroundColor: appStyle.selectedDayBackgroundColor,
++      borderRadius: 16,
++    },
++    today: {
++      backgroundColor: appStyle.todayBackgroundColor,
++      borderRadius: 16,
++    },
++    todayText: {
++      color: appStyle.todayTextColor,
++    },
++    selectedText: {
++      color: appStyle.selectedDayTextColor,
++    },
++    disabledText: {
++      color: appStyle.textDisabledColor,
++    },
++    inactiveText: {
++      color: appStyle.textInactiveColor,
++    },
++    dot: {
++      width: 4,
++      height: 4,
++      marginTop: 1,
++      borderRadius: 2,
++      opacity: 0,
++      ...appStyle.dotStyle,
++    },
++    visibleDot: {
++      opacity: 1,
++      backgroundColor: appStyle.dotColor,
++    },
++    selectedDot: {
++      backgroundColor: appStyle.selectedDotColor,
++    },
++    disabledDot: {
++      backgroundColor: appStyle.disabledDotColor || appStyle.dotColor,
++    },
++    todayDot: {
++      backgroundColor: appStyle.todayDotColor || appStyle.dotColor,
++    },
++    ...(theme['stylesheet.day.basic'] || {}),
++  });
+ }
+diff --git a/node_modules/react-native-calendars/src/calendar/day/index.js b/node_modules/react-native-calendars/src/calendar/day/index.js
+index 24a1ce1..21a04af 100644
+--- a/node_modules/react-native-calendars/src/calendar/day/index.js
++++ b/node_modules/react-native-calendars/src/calendar/day/index.js
+@@ -2,64 +2,76 @@ import omit from 'lodash/omit';
+ import isEqual from 'lodash/isEqual';
+ import some from 'lodash/some';
+ import XDate from 'xdate';
+-import React, { useMemo } from 'react';
+-import { formatNumbers, isToday } from '../../dateutils';
+-import { getDefaultLocale } from '../../services';
+-import { xdateToData } from '../../interface';
++import React, {useMemo} from 'react';
++import {formatNumbers, isToday} from '../../dateutils';
++import {getDefaultLocale} from '../../services';
++import {xdateToData} from '../../interface';
+ import BasicDay from './basic';
+ import PeriodDay from './period';
+ function areEqual(prevProps, nextProps) {
+-    const prevPropsWithoutMarkDates = omit(prevProps, 'marking');
+-    const nextPropsWithoutMarkDates = omit(nextProps, 'marking');
+-    const didPropsChange = some(prevPropsWithoutMarkDates, function (value, key) {
+-        return value !== nextPropsWithoutMarkDates[key];
+-    });
+-    const isMarkingEqual = isEqual(prevProps.marking, nextProps.marking);
+-    return !didPropsChange && isMarkingEqual;
++  const prevPropsWithoutMarkDates = omit(prevProps, 'marking');
++  const nextPropsWithoutMarkDates = omit(nextProps, 'marking');
++  const didPropsChange = some(prevPropsWithoutMarkDates, function (value, key) {
++    return value !== nextPropsWithoutMarkDates[key];
++  });
++  const isMarkingEqual = isEqual(prevProps.marking, nextProps.marking);
++  return !didPropsChange && isMarkingEqual;
+ }
+-const Day = React.memo((props) => {
+-    const { date, marking, dayComponent, markingType } = props;
+-    const _date = date ? new XDate(date) : undefined;
+-    const _isToday = isToday(_date);
+-    const markingAccessibilityLabel = useMemo(() => {
+-        let label = '';
+-        if (marking) {
+-            if (marking.accessibilityLabel) {
+-                return marking.accessibilityLabel;
+-            }
+-            if (marking.selected) {
+-                label += 'selected ';
+-                if (!marking.marked) {
+-                    label += 'You have no entries for this day ';
+-                }
+-            }
+-            if (marking.marked) {
+-                label += 'You have entries for this day ';
+-            }
+-            if (marking.startingDay) {
+-                label += 'period start ';
+-            }
+-            if (marking.endingDay) {
+-                label += 'period end ';
+-            }
+-            if (marking.disabled || marking.disableTouchEvent) {
+-                label += 'disabled ';
+-            }
++const Day = React.memo(props => {
++  const {date, marking, dayComponent, markingType} = props;
++  const _date = date ? new XDate(date) : undefined;
++  const _isToday = isToday(_date);
++  const markingAccessibilityLabel = useMemo(() => {
++    let label = '';
++    if (marking) {
++      if (marking.accessibilityLabel) {
++        return marking.accessibilityLabel;
++      }
++      if (marking.selected) {
++        label += 'selected ';
++        if (!marking.marked) {
++          label += 'You have no entries for this day ';
+         }
+-        return label;
+-    }, [marking]);
+-    const getAccessibilityLabel = useMemo(() => {
+-        const today = getDefaultLocale().today || 'today';
+-        const formatAccessibilityLabel = getDefaultLocale().formatAccessibilityLabel || 'dddd d MMMM yyyy';
+-        return `${_isToday ? today : ''} ${_date?.toString(formatAccessibilityLabel)} ${markingAccessibilityLabel}`;
+-    }, [_date, marking, _isToday]);
+-    const Component = dayComponent || (markingType === 'period' ? PeriodDay : BasicDay);
+-    const dayComponentProps = dayComponent ? { date: xdateToData(date || new XDate()) } : undefined;
+-    return (
++      }
++      if (marking.marked) {
++        label += 'You have entries for this day ';
++      }
++      if (marking.startingDay) {
++        label += 'period start ';
++      }
++      if (marking.endingDay) {
++        label += 'period end ';
++      }
++      if (marking.disabled || marking.disableTouchEvent) {
++        label += 'disabled ';
++      }
++    }
++    return label;
++  }, [marking]);
++  const getAccessibilityLabel = useMemo(() => {
++    const today = getDefaultLocale().today || 'today';
++    console.log('🚀 ~ getAccessibilityLabel ~ today:', today);
++
++    const formatAccessibilityLabel =
++      getDefaultLocale().formatAccessibilityLabel || 'dddd d MMMM yyyy';
++    return `${_isToday ? today : ''} ${_date?.toString(
++      formatAccessibilityLabel,
++    )} ${markingAccessibilityLabel}`;
++  }, [_date, marking, _isToday]);
++  const Component =
++    dayComponent || (markingType === 'period' ? PeriodDay : BasicDay);
++  const dayComponentProps = dayComponent
++    ? {date: xdateToData(date || new XDate())}
++    : undefined;
++  return (
+     //@ts-expect-error
+-    <Component {...props} accessibilityLabel={getAccessibilityLabel} {...dayComponentProps}>
++    <Component
++      {...props}
++      accessibilityLabel={getAccessibilityLabel}
++      {...dayComponentProps}>
+       {formatNumbers(_date?.getDate())}
+-    </Component>);
++    </Component>
++  );
+ }, areEqual);
+ export default Day;
+ Day.displayName = 'Day';
+diff --git a/node_modules/react-native-calendars/src/calendar/day/period/style.js b/node_modules/react-native-calendars/src/calendar/day/period/style.js
+index 51e2082..c155c21 100644
+--- a/node_modules/react-native-calendars/src/calendar/day/period/style.js
++++ b/node_modules/react-native-calendars/src/calendar/day/period/style.js
+@@ -1,64 +1,65 @@
+-import { StyleSheet } from 'react-native';
++import {StyleSheet} from 'react-native';
+ import * as defaultStyle from '../../../style';
+ const FILLER_HEIGHT = 34;
+ export default function styleConstructor(theme = {}) {
+-    const appStyle = { ...defaultStyle, ...theme };
+-    return StyleSheet.create({
+-        wrapper: {
+-            alignItems: 'center',
+-            alignSelf: 'stretch',
+-            marginLeft: -1
+-        },
+-        base: {
+-            width: 38,
+-            height: FILLER_HEIGHT,
+-            alignItems: 'center',
+-            justifyContent: 'center'
+-        },
+-        fillers: {
+-            position: 'absolute',
+-            height: FILLER_HEIGHT,
+-            flexDirection: 'row',
+-            left: 0,
+-            right: 0
+-        },
+-        leftFiller: {
+-            backgroundColor: appStyle.calendarBackground,
+-            height: FILLER_HEIGHT,
+-            flex: 1
+-        },
+-        rightFiller: {
+-            backgroundColor: appStyle.calendarBackground,
+-            height: FILLER_HEIGHT,
+-            flex: 1
+-        },
+-        text: {
+-            fontSize: appStyle.textDayFontSize,
+-            fontFamily: appStyle.textDayFontFamily,
+-            fontWeight: appStyle.textDayFontWeight,
+-            color: appStyle.dayTextColor,
+-            backgroundColor: 'rgba(255, 255, 255, 0)'
+-        },
+-        dotContainer: {
+-            position: 'absolute',
+-            bottom: 3
+-        },
+-        today: {
+-            backgroundColor: appStyle.todayBackgroundColor
+-        },
+-        todayText: {
+-            fontWeight: '500',
+-            color: theme.todayTextColor || appStyle.dayTextColor
+-        },
+-        selectedText: {
+-            color: appStyle.selectedDayTextColor
+-        },
+-        disabledText: {
+-            color: appStyle.textDisabledColor
+-        },
+-        inactiveText: {
+-            color: appStyle.textInactiveColor
+-        },
+-        ...(theme['stylesheet.day.period'] || {})
+-    });
++  const appStyle = {...defaultStyle, ...theme};
++  return StyleSheet.create({
++    wrapper: {
++      alignItems: 'center',
++      alignSelf: 'stretch',
++      marginLeft: -1,
++    },
++    base: {
++      width: 38,
++      height: FILLER_HEIGHT,
++      alignItems: 'center',
++      justifyContent: 'center',
++    },
++    fillers: {
++      position: 'absolute',
++      height: FILLER_HEIGHT,
++      flexDirection: 'row',
++      left: 0,
++      right: 0,
++    },
++    leftFiller: {
++      backgroundColor: appStyle.calendarBackground,
++      height: FILLER_HEIGHT,
++      flex: 1,
++    },
++    rightFiller: {
++      backgroundColor: appStyle.calendarBackground,
++      height: FILLER_HEIGHT,
++      flex: 1,
++    },
++    text: {
++      fontSize: appStyle.textDayFontSize,
++      fontFamily: appStyle.textDayFontFamily,
++      fontWeight: appStyle.textDayFontWeight,
++      color: appStyle.dayTextColor,
++      backgroundColor: 'rgba(255, 255, 255, 0)',
++    },
++    dotContainer: {
++      position: 'absolute',
++      bottom: 3,
++    },
++    today: {
++      backgroundColor: appStyle.todayBackgroundColor,
++    },
++    todayText: {
++      fontWeight: '500',
++      color: theme.todayTextColor || appStyle.dayTextColor,
++    },
++    selectedText: {
++      color: appStyle.selectedDayTextColor,
++    },
++    disabledText: {
++      color: appStyle.textDisabledColor,
++    },
++
++    inactiveText: {
++      color: appStyle.textInactiveColor,
++    },
++    ...(theme['stylesheet.day.period'] || {}),
++  });
+ }
+diff --git a/node_modules/react-native-calendars/src/calendar/header/index.js b/node_modules/react-native-calendars/src/calendar/header/index.js
+index bd75364..7f62b02 100644
+--- a/node_modules/react-native-calendars/src/calendar/header/index.js
++++ b/node_modules/react-native-calendars/src/calendar/header/index.js
+@@ -1,129 +1,253 @@
+ import includes from 'lodash/includes';
+ import XDate from 'xdate';
+-import React, { Fragment, useCallback, useMemo, forwardRef, useImperativeHandle, useRef } from 'react';
+-import { ActivityIndicator, Platform, View, Text, TouchableOpacity, Image } from 'react-native';
+-import { formatNumbers, weekDayNames } from '../../dateutils';
++import React, {
++  Fragment,
++  useCallback,
++  useMemo,
++  forwardRef,
++  useImperativeHandle,
++  useRef,
++} from 'react';
++import {
++  ActivityIndicator,
++  Platform,
++  View,
++  Text,
++  TouchableOpacity,
++  Image,
++} from 'react-native';
++import {formatNumbers, weekDayNames} from '../../dateutils';
+ import styleConstructor from './style';
+ const accessibilityActions = [
+-    { name: 'increment', label: 'increment' },
+-    { name: 'decrement', label: 'decrement' }
++  {name: 'increment', label: 'increment'},
++  {name: 'decrement', label: 'decrement'},
+ ];
+ const CalendarHeader = forwardRef((props, ref) => {
+-    const { theme, style: propsStyle, addMonth: propsAddMonth, month, monthFormat, firstDay, hideDayNames, showWeekNumbers, hideArrows, renderArrow, onPressArrowLeft, onPressArrowRight, arrowsHitSlop = 20, disableArrowLeft, disableArrowRight, disabledDaysIndexes, displayLoadingIndicator, customHeaderTitle, renderHeader, webAriaLevel, testID, accessibilityElementsHidden, importantForAccessibility, numberOfDays, current = '', timelineLeftInset } = props;
+-    const numberOfDaysCondition = useMemo(() => {
+-        return numberOfDays && numberOfDays > 1;
+-    }, [numberOfDays]);
+-    const style = useRef(styleConstructor(theme));
+-    const headerStyle = useMemo(() => {
+-        return [style.current.header, numberOfDaysCondition ? style.current.partialHeader : undefined];
+-    }, [numberOfDaysCondition]);
+-    const partialWeekStyle = useMemo(() => {
+-        return [style.current.partialWeek, { paddingLeft: timelineLeftInset }];
+-    }, [timelineLeftInset]);
+-    const dayNamesStyle = useMemo(() => {
+-        return [style.current.week, numberOfDaysCondition ? partialWeekStyle : undefined];
+-    }, [numberOfDaysCondition, partialWeekStyle]);
+-    const hitSlop = useMemo(() => typeof arrowsHitSlop === 'number'
+-        ? { top: arrowsHitSlop, left: arrowsHitSlop, bottom: arrowsHitSlop, right: arrowsHitSlop }
+-        : arrowsHitSlop, [arrowsHitSlop]);
+-    useImperativeHandle(ref, () => ({
+-        onPressLeft,
+-        onPressRight
+-    }));
+-    const addMonth = useCallback(() => {
+-        propsAddMonth?.(1);
+-    }, [propsAddMonth]);
+-    const subtractMonth = useCallback(() => {
+-        propsAddMonth?.(-1);
+-    }, [propsAddMonth]);
+-    const onPressLeft = useCallback(() => {
+-        if (typeof onPressArrowLeft === 'function') {
+-            return onPressArrowLeft(subtractMonth, month);
+-        }
+-        return subtractMonth();
+-    }, [onPressArrowLeft, subtractMonth, month]);
+-    const onPressRight = useCallback(() => {
+-        if (typeof onPressArrowRight === 'function') {
+-            return onPressArrowRight(addMonth, month);
+-        }
+-        return addMonth();
+-    }, [onPressArrowRight, addMonth, month]);
+-    const onAccessibilityAction = useCallback((event) => {
+-        switch (event.nativeEvent.actionName) {
+-            case 'decrement':
+-                onPressLeft();
+-                break;
+-            case 'increment':
+-                onPressRight();
+-                break;
+-            default:
+-                break;
+-        }
+-    }, [onPressLeft, onPressRight]);
+-    const renderWeekDays = useMemo(() => {
+-        const dayOfTheWeek = new XDate(current).getDay();
+-        const weekDaysNames = numberOfDaysCondition ? weekDayNames(dayOfTheWeek) : weekDayNames(firstDay);
+-        const dayNames = numberOfDaysCondition ? weekDaysNames.slice(0, numberOfDays) : weekDaysNames;
+-        return dayNames.map((day, index) => {
+-            const dayStyle = [style.current.dayHeader];
+-            if (includes(disabledDaysIndexes, index)) {
+-                dayStyle.push(style.current.disabledDayHeader);
+-            }
+-            const dayTextAtIndex = `dayTextAtIndex${index}`;
+-            if (style.current[dayTextAtIndex]) {
+-                dayStyle.push(style.current[dayTextAtIndex]);
+-            }
+-            return (<Text allowFontScaling={false} key={index} style={dayStyle} numberOfLines={1} accessibilityLabel={''}>
++  const {
++    theme,
++    style: propsStyle,
++    addMonth: propsAddMonth,
++    month,
++    monthFormat,
++    firstDay,
++    hideDayNames,
++    showWeekNumbers,
++    hideArrows,
++    renderArrow,
++    onPressArrowLeft,
++    onPressArrowRight,
++    arrowsHitSlop = 20,
++    disableArrowLeft,
++    disableArrowRight,
++    disabledDaysIndexes,
++    displayLoadingIndicator,
++    customHeaderTitle,
++    renderHeader,
++    webAriaLevel,
++    testID,
++    accessibilityElementsHidden,
++    importantForAccessibility,
++    numberOfDays,
++    current = '',
++    timelineLeftInset,
++  } = props;
++  const numberOfDaysCondition = useMemo(() => {
++    return numberOfDays && numberOfDays > 1;
++  }, [numberOfDays]);
++  const style = useRef(styleConstructor(theme));
++  const headerStyle = useMemo(() => {
++    return [
++      style.current.header,
++      numberOfDaysCondition ? style.current.partialHeader : undefined,
++    ];
++  }, [numberOfDaysCondition]);
++  const partialWeekStyle = useMemo(() => {
++    return [style.current.partialWeek, {paddingLeft: timelineLeftInset}];
++  }, [timelineLeftInset]);
++  const dayNamesStyle = useMemo(() => {
++    return [
++      style.current.week,
++      numberOfDaysCondition ? partialWeekStyle : undefined,
++    ];
++  }, [numberOfDaysCondition, partialWeekStyle]);
++  const hitSlop = useMemo(
++    () =>
++      typeof arrowsHitSlop === 'number'
++        ? {
++            top: arrowsHitSlop,
++            left: arrowsHitSlop,
++            bottom: arrowsHitSlop,
++            right: arrowsHitSlop,
++          }
++        : arrowsHitSlop,
++    [arrowsHitSlop],
++  );
++  useImperativeHandle(ref, () => ({
++    onPressLeft,
++    onPressRight,
++  }));
++  const addMonth = useCallback(() => {
++    propsAddMonth?.(1);
++  }, [propsAddMonth]);
++  const subtractMonth = useCallback(() => {
++    propsAddMonth?.(-1);
++  }, [propsAddMonth]);
++  const onPressLeft = useCallback(() => {
++    if (typeof onPressArrowLeft === 'function') {
++      return onPressArrowLeft(subtractMonth, month);
++    }
++    return subtractMonth();
++  }, [onPressArrowLeft, subtractMonth, month]);
++  const onPressRight = useCallback(() => {
++    if (typeof onPressArrowRight === 'function') {
++      return onPressArrowRight(addMonth, month);
++    }
++    return addMonth();
++  }, [onPressArrowRight, addMonth, month]);
++  const onAccessibilityAction = useCallback(
++    event => {
++      switch (event.nativeEvent.actionName) {
++        case 'decrement':
++          onPressLeft();
++          break;
++        case 'increment':
++          onPressRight();
++          break;
++        default:
++          break;
++      }
++    },
++    [onPressLeft, onPressRight],
++  );
++  const renderWeekDays = useMemo(() => {
++    const dayOfTheWeek = new XDate(current).getDay();
++    const weekDaysNames = numberOfDaysCondition
++      ? weekDayNames(dayOfTheWeek)
++      : weekDayNames(firstDay);
++    const dayNames = numberOfDaysCondition
++      ? weekDaysNames.slice(0, numberOfDays)
++      : weekDaysNames;
++    return dayNames.map((day, index) => {
++      const dayStyle = [style.current.dayHeader];
++      //   if (includes(disabledDaysIndexes, index)) {
++      //     dayStyle.push(style.current.disabledDayHeader);
++      //   }
++      const dayTextAtIndex = `dayTextAtIndex${index}`;
++      if (style.current[dayTextAtIndex]) {
++        dayStyle.push(style.current[dayTextAtIndex]);
++      }
++      return (
++        <Text
++          allowFontScaling={false}
++          key={index}
++          style={[
++            ...dayStyle,
++            {color: '#616161', fontSize: 14, fontWeight: '600'},
++          ]}
++          numberOfLines={1}
++          accessibilityLabel={''}>
+           {day}
+-        </Text>);
+-        });
+-    }, [firstDay, current, numberOfDaysCondition, numberOfDays, disabledDaysIndexes]);
+-    const _renderHeader = () => {
+-        const webProps = Platform.OS === 'web' ? { 'aria-level': webAriaLevel } : {};
+-        if (renderHeader) {
+-            return renderHeader(month);
+-        }
+-        if (customHeaderTitle) {
+-            return customHeaderTitle;
+-        }
+-        return (<Fragment>
+-        <Text allowFontScaling={false} style={style.current.monthText} testID={`${testID}.title`} {...webProps}>
++        </Text>
++      );
++    });
++  }, [
++    firstDay,
++    current,
++    numberOfDaysCondition,
++    numberOfDays,
++    disabledDaysIndexes,
++  ]);
++  const _renderHeader = () => {
++    const webProps = Platform.OS === 'web' ? {'aria-level': webAriaLevel} : {};
++    if (renderHeader) {
++      return renderHeader(month);
++    }
++    if (customHeaderTitle) {
++      return customHeaderTitle;
++    }
++    return (
++      <Fragment>
++        <Text
++          allowFontScaling={false}
++          style={style.current.monthText}
++          testID={`${testID}.title`}
++          {...webProps}>
+           {formatNumbers(month?.toString(monthFormat))}
+         </Text>
+-      </Fragment>);
+-    };
+-    const _renderArrow = (direction) => {
+-        if (hideArrows) {
+-            return <View />;
+-        }
+-        const isLeft = direction === 'left';
+-        const arrowId = isLeft ? 'leftArrow' : 'rightArrow';
+-        const shouldDisable = isLeft ? disableArrowLeft : disableArrowRight;
+-        const onPress = !shouldDisable ? isLeft ? onPressLeft : onPressRight : undefined;
+-        const imageSource = isLeft ? require('../img/previous.png') : require('../img/next.png');
+-        const renderArrowDirection = isLeft ? 'left' : 'right';
+-        return (<TouchableOpacity onPress={onPress} disabled={shouldDisable} style={style.current.arrow} hitSlop={hitSlop} testID={`${testID}.${arrowId}`}>
+-        {renderArrow ? (renderArrow(renderArrowDirection)) : (<Image source={imageSource} style={shouldDisable ? style.current.disabledArrowImage : style.current.arrowImage}/>)}
+-      </TouchableOpacity>);
+-    };
+-    const renderIndicator = () => {
+-        if (displayLoadingIndicator) {
+-            return (<ActivityIndicator color={theme?.indicatorColor} testID={`${testID}.loader`}/>);
+-        }
+-    };
+-    const renderWeekNumbersSpace = () => {
+-        return showWeekNumbers && <View style={style.current.dayHeader}/>;
+-    };
+-    const renderDayNames = () => {
+-        if (!hideDayNames) {
+-            return (<View style={dayNamesStyle} testID={`${testID}.dayNames`}>
++      </Fragment>
++    );
++  };
++  const _renderArrow = direction => {
++    if (hideArrows) {
++      return <View />;
++    }
++    const isLeft = direction === 'left';
++    const arrowId = isLeft ? 'leftArrow' : 'rightArrow';
++    const shouldDisable = isLeft ? disableArrowLeft : disableArrowRight;
++    const onPress = !shouldDisable
++      ? isLeft
++        ? onPressLeft
++        : onPressRight
++      : undefined;
++    const imageSource = isLeft
++      ? require('../img/previous.png')
++      : require('../img/next.png');
++    const renderArrowDirection = isLeft ? 'left' : 'right';
++    return (
++      <TouchableOpacity
++        onPress={onPress}
++        disabled={shouldDisable}
++        style={style.current.arrow}
++        hitSlop={hitSlop}
++        testID={`${testID}.${arrowId}`}>
++        {renderArrow ? (
++          renderArrow(renderArrowDirection)
++        ) : (
++          <Image
++            source={imageSource}
++            style={
++              shouldDisable
++                ? style.current.disabledArrowImage
++                : style.current.arrowImage
++            }
++          />
++        )}
++      </TouchableOpacity>
++    );
++  };
++  const renderIndicator = () => {
++    if (displayLoadingIndicator) {
++      return (
++        <ActivityIndicator
++          color={theme?.indicatorColor}
++          testID={`${testID}.loader`}
++        />
++      );
++    }
++  };
++  const renderWeekNumbersSpace = () => {
++    return showWeekNumbers && <View style={style.current.dayHeader} />;
++  };
++  const renderDayNames = () => {
++    if (!hideDayNames) {
++      return (
++        <View style={dayNamesStyle} testID={`${testID}.dayNames`}>
+           {renderWeekNumbersSpace()}
+           {renderWeekDays}
+-        </View>);
+-        }
+-    };
+-    return (<View testID={testID} style={propsStyle} accessible accessibilityRole={'adjustable'} accessibilityActions={accessibilityActions} onAccessibilityAction={onAccessibilityAction} accessibilityElementsHidden={accessibilityElementsHidden} // iOS
+-     importantForAccessibility={importantForAccessibility} // Android
++        </View>
++      );
++    }
++  };
++  return (
++    <View
++      testID={testID}
++      style={propsStyle}
++      accessible
++      accessibilityRole={'adjustable'}
++      accessibilityActions={accessibilityActions}
++      onAccessibilityAction={onAccessibilityAction}
++      accessibilityElementsHidden={accessibilityElementsHidden} // iOS
++      importantForAccessibility={importantForAccessibility} // Android
+     >
+       <View style={headerStyle}>
+         {_renderArrow('left')}
+@@ -134,12 +258,13 @@ const CalendarHeader = forwardRef((props, ref) => {
+         {_renderArrow('right')}
+       </View>
+       {renderDayNames()}
+-    </View>);
++    </View>
++  );
+ });
+ export default CalendarHeader;
+ CalendarHeader.displayName = 'CalendarHeader';
+ CalendarHeader.defaultProps = {
+-    monthFormat: 'MMMM yyyy',
+-    webAriaLevel: 1,
+-    arrowsHitSlop: 20
++  monthFormat: 'MMMM yyyy',
++  webAriaLevel: 1,
++  arrowsHitSlop: 20,
+ };
+diff --git a/node_modules/react-native-calendars/src/calendar/index.js b/node_modules/react-native-calendars/src/calendar/index.js
+index 6f46e8a..57ded29 100644
+--- a/node_modules/react-native-calendars/src/calendar/index.js
++++ b/node_modules/react-native-calendars/src/calendar/index.js
+@@ -1,188 +1,287 @@
+ import PropTypes from 'prop-types';
+ import XDate from 'xdate';
+ import isEmpty from 'lodash/isEmpty';
+-import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
+-import { View } from 'react-native';
++import React, {useRef, useState, useEffect, useCallback, useMemo} from 'react';
++import {View} from 'react-native';
+ // @ts-expect-error
+-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
++import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+ import constants from '../commons/constants';
+-import { page, isGTE, isLTE, sameMonth } from '../dateutils';
+-import { xdateToData, parseDate, toMarkingFormat } from '../interface';
+-import { getState } from '../day-state-manager';
+-import { extractHeaderProps, extractDayProps } from '../componentUpdater';
+-import { useDidUpdate } from '../hooks';
++import {page, isGTE, isLTE, sameMonth} from '../dateutils';
++import {xdateToData, parseDate, toMarkingFormat} from '../interface';
++import {getState} from '../day-state-manager';
++import {extractHeaderProps, extractDayProps} from '../componentUpdater';
++import {useDidUpdate} from '../hooks';
+ import styleConstructor from './style';
+ import CalendarHeader from './header';
+ import Day from './day/index';
+ import BasicDay from './day/basic';
++import {isSunday} from '../dateutils';
++
+ /**
+  * @description: Calendar component
+  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/calendars.js
+  * @gif: https://github.com/wix/react-native-calendars/blob/master/demo/assets/calendar.gif
+  */
+-const Calendar = (props) => {
+-    const { initialDate, current, theme, markedDates, minDate, maxDate, allowSelectionOutOfRange, onDayPress, onDayLongPress, onMonthChange, onVisibleMonthsChange, disableMonthChange, enableSwipeMonths, hideExtraDays, firstDay, showSixWeeks, displayLoadingIndicator, customHeader, headerStyle, accessibilityElementsHidden, importantForAccessibility, testID, style: propsStyle } = props;
+-    const [currentMonth, setCurrentMonth] = useState(current || initialDate ? parseDate(current || initialDate) : new XDate());
+-    const style = useRef(styleConstructor(theme));
+-    const header = useRef();
+-    const weekNumberMarking = useRef({ disabled: true, disableTouchEvent: true });
+-    useEffect(() => {
+-        if (initialDate) {
+-            setCurrentMonth(parseDate(initialDate));
++const Calendar = props => {
++  const {
++    initialDate,
++    current,
++    theme,
++    markedDates,
++    minDate,
++    maxDate,
++    allowSelectionOutOfRange,
++    onDayPress,
++    onDayLongPress,
++    onMonthChange,
++    onVisibleMonthsChange,
++    disableMonthChange,
++    enableSwipeMonths,
++    hideExtraDays,
++    firstDay,
++    showSixWeeks,
++    displayLoadingIndicator,
++    customHeader,
++    headerStyle,
++    accessibilityElementsHidden,
++    importantForAccessibility,
++    testID,
++    style: propsStyle,
++  } = props;
++  const [currentMonth, setCurrentMonth] = useState(
++    current || initialDate ? parseDate(current || initialDate) : new XDate(),
++  );
++  const style = useRef(styleConstructor(theme));
++  const header = useRef();
++  const weekNumberMarking = useRef({disabled: true, disableTouchEvent: true});
++  useEffect(() => {
++    if (initialDate) {
++      setCurrentMonth(parseDate(initialDate));
++    }
++  }, [initialDate]);
++  useDidUpdate(() => {
++    const _currentMonth = currentMonth.clone();
++    onMonthChange?.(xdateToData(_currentMonth));
++    onVisibleMonthsChange?.([xdateToData(_currentMonth)]);
++  }, [currentMonth]);
++  const updateMonth = useCallback(
++    newMonth => {
++      if (sameMonth(newMonth, currentMonth)) {
++        return;
++      }
++      setCurrentMonth(newMonth);
++    },
++    [currentMonth],
++  );
++  const addMonth = useCallback(
++    count => {
++      const newMonth = currentMonth.clone().addMonths(count, true);
++      updateMonth(newMonth);
++    },
++    [currentMonth, updateMonth],
++  );
++  const handleDayInteraction = useCallback(
++    (date, interaction) => {
++      const day = new XDate(date.dateString);
++      if (
++        allowSelectionOutOfRange ||
++        (!(minDate && !isGTE(day, new XDate(minDate))) &&
++          !(maxDate && !isLTE(day, new XDate(maxDate))))
++      ) {
++        if (!disableMonthChange) {
++          updateMonth(day);
+         }
+-    }, [initialDate]);
+-    useDidUpdate(() => {
+-        const _currentMonth = currentMonth.clone();
+-        onMonthChange?.(xdateToData(_currentMonth));
+-        onVisibleMonthsChange?.([xdateToData(_currentMonth)]);
+-    }, [currentMonth]);
+-    const updateMonth = useCallback((newMonth) => {
+-        if (sameMonth(newMonth, currentMonth)) {
+-            return;
++        if (interaction) {
++          interaction(date);
+         }
+-        setCurrentMonth(newMonth);
+-    }, [currentMonth]);
+-    const addMonth = useCallback((count) => {
+-        const newMonth = currentMonth.clone().addMonths(count, true);
+-        updateMonth(newMonth);
+-    }, [currentMonth, updateMonth]);
+-    const handleDayInteraction = useCallback((date, interaction) => {
+-        const day = new XDate(date.dateString);
+-        if (allowSelectionOutOfRange || !(minDate && !isGTE(day, new XDate(minDate))) && !(maxDate && !isLTE(day, new XDate(maxDate)))) {
+-            if (!disableMonthChange) {
+-                updateMonth(day);
+-            }
+-            if (interaction) {
+-                interaction(date);
+-            }
+-        }
+-    }, [minDate, maxDate, allowSelectionOutOfRange, disableMonthChange, updateMonth]);
+-    const _onDayPress = useCallback((date) => {
+-        if (date)
+-            handleDayInteraction(date, onDayPress);
+-    }, [handleDayInteraction, onDayPress]);
+-    const onLongPressDay = useCallback((date) => {
+-        if (date)
+-            handleDayInteraction(date, onDayLongPress);
+-    }, [handleDayInteraction, onDayLongPress]);
+-    const onSwipeLeft = useCallback(() => {
+-        // @ts-expect-error
+-        header.current?.onPressRight();
+-    }, [header]);
+-    const onSwipeRight = useCallback(() => {
+-        // @ts-expect-error
+-        header.current?.onPressLeft();
+-    }, [header]);
+-    const onSwipe = useCallback((gestureName) => {
+-        const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+-        switch (gestureName) {
+-            case SWIPE_UP:
+-            case SWIPE_DOWN:
+-                break;
+-            case SWIPE_LEFT:
+-                constants.isRTL ? onSwipeRight() : onSwipeLeft();
+-                break;
+-            case SWIPE_RIGHT:
+-                constants.isRTL ? onSwipeLeft() : onSwipeRight();
+-                break;
+-        }
+-    }, [onSwipeLeft, onSwipeRight]);
+-    const renderWeekNumber = (weekNumber) => {
+-        return (<View style={style.current.dayContainer} key={`week-container-${weekNumber}`}>
+-        <BasicDay key={`week-${weekNumber}`} marking={weekNumberMarking.current} 
+-        // state='disabled'
+-        theme={theme} testID={`${testID}.weekNumber_${weekNumber}`}>
++      }
++    },
++    [
++      minDate,
++      maxDate,
++      allowSelectionOutOfRange,
++      disableMonthChange,
++      updateMonth,
++    ],
++  );
++  const _onDayPress = useCallback(
++    date => {
++      if (date) handleDayInteraction(date, onDayPress);
++    },
++    [handleDayInteraction, onDayPress],
++  );
++  const onLongPressDay = useCallback(
++    date => {
++      if (date) handleDayInteraction(date, onDayLongPress);
++    },
++    [handleDayInteraction, onDayLongPress],
++  );
++  const onSwipeLeft = useCallback(() => {
++    // @ts-expect-error
++    header.current?.onPressRight();
++  }, [header]);
++  const onSwipeRight = useCallback(() => {
++    // @ts-expect-error
++    header.current?.onPressLeft();
++  }, [header]);
++  const onSwipe = useCallback(
++    gestureName => {
++      const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
++      switch (gestureName) {
++        case SWIPE_UP:
++        case SWIPE_DOWN:
++          break;
++        case SWIPE_LEFT:
++          constants.isRTL ? onSwipeRight() : onSwipeLeft();
++          break;
++        case SWIPE_RIGHT:
++          constants.isRTL ? onSwipeLeft() : onSwipeRight();
++          break;
++      }
++    },
++    [onSwipeLeft, onSwipeRight],
++  );
++  const renderWeekNumber = weekNumber => {
++    return (
++      <View
++        style={style.current.dayContainer}
++        key={`week-container-${weekNumber}`}>
++        <BasicDay
++          key={`week-${weekNumber}`}
++          marking={weekNumberMarking.current}
++          // state='disabled'
++          theme={theme}
++          testID={`${testID}.weekNumber_${weekNumber}`}>
+           {weekNumber}
++          customTextStyle={style.current.weekNumberText}
+         </BasicDay>
+-      </View>);
+-    };
+-    const renderDay = (day, id) => {
+-        const dayProps = extractDayProps(props);
+-        if (!sameMonth(day, currentMonth) && hideExtraDays) {
+-            return <View key={id} style={style.current.emptyDayContainer}/>;
+-        }
+-        const dateString = toMarkingFormat(day);
+-        const isControlled = isEmpty(props.context);
+-        return (<View style={style.current.dayContainer} key={id}>
+-        <Day {...dayProps} testID={`${testID}.day_${dateString}`} date={dateString} state={getState(day, currentMonth, props, isControlled)} marking={markedDates?.[dateString]} onPress={_onDayPress} onLongPress={onLongPressDay}/>
+-      </View>);
+-    };
+-    const renderWeek = (days, id) => {
+-        const week = [];
+-        days.forEach((day, id2) => {
+-            week.push(renderDay(day, id2));
+-        }, this);
+-        if (props.showWeekNumbers) {
+-            week.unshift(renderWeekNumber(days[days.length - 1].getWeek()));
+-        }
+-        return (<View style={style.current.week} key={id}>
++      </View>
++    );
++  };
++  const renderDay = (day, id) => {
++    const dayProps = extractDayProps(props);
++    if (!sameMonth(day, currentMonth) && hideExtraDays) {
++      return <View key={id} style={style.current.emptyDayContainer} />;
++    }
++    const dateString = toMarkingFormat(day);
++    const isControlled = isEmpty(props.context);
++    return (
++      <View style={style.current.dayContainer} key={id}>
++        <Day
++          {...dayProps}
++          testID={`${testID}.day_${dateString}`}
++          date={dateString}
++          state={getState(day, currentMonth, props, isControlled)}
++          marking={markedDates?.[dateString]}
++          onPress={_onDayPress}
++          onLongPress={onLongPressDay}
++        />
++      </View>
++    );
++  };
++  const renderWeek = (days, id) => {
++    const week = [];
++    days.forEach((day, id2) => {
++      week.push(renderDay(day, id2));
++    }, this);
++    if (props.showWeekNumbers) {
++      week.unshift(renderWeekNumber(days[days.length - 1].getWeek()));
++    }
++    return (
++      <View style={style.current.week} key={id}>
+         {week}
+-      </View>);
+-    };
+-    const renderMonth = () => {
+-        const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
+-        const days = page(currentMonth, firstDay, shouldShowSixWeeks);
+-        const weeks = [];
+-        while (days.length) {
+-            weeks.push(renderWeek(days.splice(0, 7), weeks.length));
+-        }
+-        return <View style={style.current.monthView}>{weeks}</View>;
+-    };
+-    const shouldDisplayIndicator = useMemo(() => {
+-        if (currentMonth) {
+-            const lastMonthOfDay = toMarkingFormat(currentMonth.clone().addMonths(1, true).setDate(1).addDays(-1));
+-            if (displayLoadingIndicator && !markedDates?.[lastMonthOfDay]) {
+-                return true;
+-            }
+-        }
+-        return false;
+-    }, [currentMonth, displayLoadingIndicator, markedDates]);
+-    const renderHeader = () => {
+-        const headerProps = extractHeaderProps(props);
+-        const ref = customHeader ? undefined : header;
+-        const CustomHeader = customHeader;
+-        const HeaderComponent = customHeader ? CustomHeader : CalendarHeader;
+-        return (<HeaderComponent {...headerProps} testID={`${testID}.header`} style={headerStyle} ref={ref} month={currentMonth} addMonth={addMonth} displayLoadingIndicator={shouldDisplayIndicator}/>);
+-    };
+-    const GestureComponent = enableSwipeMonths ? GestureRecognizer : View;
+-    const swipeProps = {
+-        onSwipe: (direction) => onSwipe(direction)
+-    };
+-    const gestureProps = enableSwipeMonths ? swipeProps : undefined;
+-    return (<GestureComponent {...gestureProps}>
+-      <View style={[style.current.container, propsStyle]} testID={testID} accessibilityElementsHidden={accessibilityElementsHidden} // iOS
+-     importantForAccessibility={importantForAccessibility} // Android
+-    >
++      </View>
++    );
++  };
++  const renderMonth = () => {
++    const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
++    const days = page(currentMonth, firstDay, shouldShowSixWeeks);
++    const weeks = [];
++    while (days.length) {
++      weeks.push(renderWeek(days.splice(0, 7), weeks.length));
++    }
++    return <View style={style.current.monthView}>{weeks}</View>;
++  };
++  const shouldDisplayIndicator = useMemo(() => {
++    if (currentMonth) {
++      const lastMonthOfDay = toMarkingFormat(
++        currentMonth.clone().addMonths(1, true).setDate(1).addDays(-1),
++      );
++      if (displayLoadingIndicator && !markedDates?.[lastMonthOfDay]) {
++        return true;
++      }
++    }
++    return false;
++  }, [currentMonth, displayLoadingIndicator, markedDates]);
++  const renderHeader = () => {
++    const headerProps = extractHeaderProps(props);
++    const ref = customHeader ? undefined : header;
++    const CustomHeader = customHeader;
++    const HeaderComponent = customHeader ? CustomHeader : CalendarHeader;
++    return (
++      <HeaderComponent
++        {...headerProps}
++        testID={`${testID}.header`}
++        style={headerStyle}
++        ref={ref}
++        month={currentMonth}
++        addMonth={addMonth}
++        displayLoadingIndicator={shouldDisplayIndicator}
++      />
++    );
++  };
++  const GestureComponent = enableSwipeMonths ? GestureRecognizer : View;
++  const swipeProps = {
++    onSwipe: direction => onSwipe(direction),
++  };
++  const gestureProps = enableSwipeMonths ? swipeProps : undefined;
++  return (
++    <GestureComponent {...gestureProps}>
++      <View
++        style={[style.current.container, propsStyle]}
++        testID={testID}
++        accessibilityElementsHidden={accessibilityElementsHidden} // iOS
++        importantForAccessibility={importantForAccessibility} // Android
++      >
+         {renderHeader()}
+         {renderMonth()}
+       </View>
+-    </GestureComponent>);
++    </GestureComponent>
++  );
+ };
+ export default Calendar;
+ Calendar.displayName = 'Calendar';
+ Calendar.propTypes = {
+-    ...CalendarHeader.propTypes,
+-    ...Day.propTypes,
+-    theme: PropTypes.object,
+-    firstDay: PropTypes.number,
+-    displayLoadingIndicator: PropTypes.bool,
+-    showWeekNumbers: PropTypes.bool,
+-    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.number]),
+-    current: PropTypes.string,
+-    initialDate: PropTypes.string,
+-    minDate: PropTypes.string,
+-    maxDate: PropTypes.string,
+-    markedDates: PropTypes.object,
+-    hideExtraDays: PropTypes.bool,
+-    showSixWeeks: PropTypes.bool,
+-    onDayPress: PropTypes.func,
+-    onDayLongPress: PropTypes.func,
+-    onMonthChange: PropTypes.func,
+-    onVisibleMonthsChange: PropTypes.func,
+-    disableMonthChange: PropTypes.bool,
+-    enableSwipeMonths: PropTypes.bool,
+-    disabledByDefault: PropTypes.bool,
+-    headerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
+-    customHeader: PropTypes.any,
+-    allowSelectionOutOfRange: PropTypes.bool
++  ...CalendarHeader.propTypes,
++  ...Day.propTypes,
++  theme: PropTypes.object,
++  firstDay: PropTypes.number,
++  displayLoadingIndicator: PropTypes.bool,
++  showWeekNumbers: PropTypes.bool,
++  style: PropTypes.oneOfType([
++    PropTypes.object,
++    PropTypes.array,
++    PropTypes.number,
++  ]),
++  current: PropTypes.string,
++  initialDate: PropTypes.string,
++  minDate: PropTypes.string,
++  maxDate: PropTypes.string,
++  markedDates: PropTypes.object,
++  hideExtraDays: PropTypes.bool,
++  showSixWeeks: PropTypes.bool,
++  onDayPress: PropTypes.func,
++  onDayLongPress: PropTypes.func,
++  onMonthChange: PropTypes.func,
++  onVisibleMonthsChange: PropTypes.func,
++  disableMonthChange: PropTypes.bool,
++  enableSwipeMonths: PropTypes.bool,
++  disabledByDefault: PropTypes.bool,
++  headerStyle: PropTypes.oneOfType([
++    PropTypes.object,
++    PropTypes.number,
++    PropTypes.array,
++  ]),
++  customHeader: PropTypes.any,
++  allowSelectionOutOfRange: PropTypes.bool,
+ };
+diff --git a/node_modules/react-native-calendars/src/calendar/style.js b/node_modules/react-native-calendars/src/calendar/style.js
+index 735afb5..6643270 100644
+--- a/node_modules/react-native-calendars/src/calendar/style.js
++++ b/node_modules/react-native-calendars/src/calendar/style.js
+@@ -1,28 +1,28 @@
+-import { StyleSheet } from 'react-native';
++import {StyleSheet} from 'react-native';
+ import * as defaultStyle from '../style';
+ export default function getStyle(theme = {}) {
+-    const appStyle = { ...defaultStyle, ...theme };
+-    return StyleSheet.create({
+-        container: {
+-            paddingLeft: 5,
+-            paddingRight: 5,
+-            backgroundColor: appStyle.calendarBackground
+-        },
+-        dayContainer: {
+-            flex: 1,
+-            alignItems: 'center'
+-        },
+-        emptyDayContainer: {
+-            flex: 1
+-        },
+-        monthView: {
+-            backgroundColor: appStyle.calendarBackground
+-        },
+-        week: {
+-            marginVertical: appStyle.weekVerticalMargin,
+-            flexDirection: 'row',
+-            justifyContent: 'space-around'
+-        },
+-        ...(theme['stylesheet.calendar.main'] || {})
+-    });
++  const appStyle = {...defaultStyle, ...theme};
++  return StyleSheet.create({
++    container: {
++      paddingLeft: 5,
++      paddingRight: 5,
++      backgroundColor: appStyle.calendarBackground,
++    },
++    dayContainer: {
++      flex: 1,
++      alignItems: 'center',
++    },
++    emptyDayContainer: {
++      flex: 1,
++    },
++    monthView: {
++      backgroundColor: appStyle.calendarBackground,
++    },
++    week: {
++      marginVertical: appStyle.weekVerticalMargin,
++      flexDirection: 'row',
++      justifyContent: 'space-around',
++    },
++    ...(theme['stylesheet.calendar.main'] || {}),
++  });
+ }
+diff --git a/node_modules/react-native-calendars/src/dateutils.d.ts b/node_modules/react-native-calendars/src/dateutils.d.ts
+index def3781..a5e5ec8 100644
+--- a/node_modules/react-native-calendars/src/dateutils.d.ts
++++ b/node_modules/react-native-calendars/src/dateutils.d.ts
+@@ -1,23 +1,51 @@
+ /// <reference types="xdate" />
+ export declare function sameMonth(a?: XDate, b?: XDate): boolean;
+ export declare function sameDate(a?: XDate, b?: XDate): boolean;
+-export declare function onSameDateRange({ firstDay, secondDay, numberOfDays, firstDateInRange, }: {
+-    firstDay: string;
+-    secondDay: string;
+-    numberOfDays: number;
+-    firstDateInRange: string;
++export declare function onSameDateRange({
++  firstDay,
++  secondDay,
++  numberOfDays,
++  firstDateInRange,
++}: {
++  firstDay: string;
++  secondDay: string;
++  numberOfDays: number;
++  firstDateInRange: string;
+ }): boolean;
+-export declare function sameWeek(a: string, b: string, firstDayOfWeek: number): boolean | undefined;
++export declare function sameWeek(
++  a: string,
++  b: string,
++  firstDayOfWeek: number,
++): boolean | undefined;
+ export declare function isPastDate(date: string): boolean;
+ export declare function isToday(date?: XDate | string): boolean;
+ export declare function isGTE(a: XDate, b: XDate): boolean | undefined;
+ export declare function isLTE(a: XDate, b: XDate): boolean | undefined;
+ export declare function formatNumbers(date: any): any;
+-export declare function month(date: XDate): import("xdate")[];
++export declare function month(date: XDate): import('xdate')[];
+ export declare function weekDayNames(firstDayOfWeek?: number): any;
+-export declare function page(date: XDate, firstDayOfWeek?: number, showSixWeeks?: boolean): import("xdate")[];
+-export declare function isDateNotInRange(date: XDate, minDate: string, maxDate: string): boolean | "";
+-export declare function getWeekDates(date: string, firstDay?: number, format?: string): import("xdate")[] | string[] | undefined;
+-export declare function getPartialWeekDates(date?: string, numberOfDays?: number): string[];
+-export declare function generateDay(originDate: string | XDate, daysOffset?: number): any;
++export declare function page(
++  date: XDate,
++  firstDayOfWeek?: number,
++  showSixWeeks?: boolean,
++): import('xdate')[];
++export declare function isDateNotInRange(
++  date: XDate,
++  minDate: string,
++  maxDate: string,
++): boolean | '';
++export declare function getWeekDates(
++  date: string,
++  firstDay?: number,
++  format?: string,
++): import('xdate')[] | string[] | undefined;
++export declare function getPartialWeekDates(
++  date?: string,
++  numberOfDays?: number,
++): string[];
++export declare function generateDay(
++  originDate: string | XDate,
++  daysOffset?: number,
++): any;
+ export declare function getLocale(): any;
++export declare function isSunday(date?: XDate | string): boolean;
+diff --git a/node_modules/react-native-calendars/src/dateutils.js b/node_modules/react-native-calendars/src/dateutils.js
+index d0d69e1..c7b69c4 100644
+--- a/node_modules/react-native-calendars/src/dateutils.js
++++ b/node_modules/react-native-calendars/src/dateutils.js
+@@ -1,176 +1,201 @@
+ const XDate = require('xdate');
+-const { toMarkingFormat } = require('./interface');
++const {toMarkingFormat} = require('./interface');
+ const latinNumbersPattern = /[0-9]/g;
+ function isValidXDate(date) {
+-    return date && (date instanceof XDate);
++  return date && date instanceof XDate;
+ }
+ export function sameMonth(a, b) {
+-    if (!isValidXDate(a) || !isValidXDate(b)) {
+-        return false;
+-    }
+-    else {
+-        return a?.getFullYear() === b?.getFullYear() && a?.getMonth() === b?.getMonth();
+-    }
++  if (!isValidXDate(a) || !isValidXDate(b)) {
++    return false;
++  } else {
++    return (
++      a?.getFullYear() === b?.getFullYear() && a?.getMonth() === b?.getMonth()
++    );
++  }
+ }
+ export function sameDate(a, b) {
+-    if (!isValidXDate(a) || !isValidXDate(b)) {
+-        return false;
+-    }
+-    else {
+-        return a?.getFullYear() === b?.getFullYear() && a?.getMonth() === b?.getMonth() && a?.getDate() === b?.getDate();
+-    }
+-}
+-export function onSameDateRange({ firstDay, secondDay, numberOfDays, firstDateInRange, }) {
+-    const aDate = new XDate(firstDay);
+-    const bDate = new XDate(secondDay);
+-    const firstDayDate = new XDate(firstDateInRange);
+-    const aDiff = aDate.getTime() - firstDayDate.getTime();
+-    const bDiff = bDate.getTime() - firstDayDate.getTime();
+-    const aTotalDays = Math.ceil(aDiff / (1000 * 3600 * 24));
+-    const bTotalDays = Math.ceil(bDiff / (1000 * 3600 * 24));
+-    const aWeek = Math.floor(aTotalDays / numberOfDays);
+-    const bWeek = Math.floor(bTotalDays / numberOfDays);
+-    return aWeek === bWeek;
++  if (!isValidXDate(a) || !isValidXDate(b)) {
++    return false;
++  } else {
++    return (
++      a?.getFullYear() === b?.getFullYear() &&
++      a?.getMonth() === b?.getMonth() &&
++      a?.getDate() === b?.getDate()
++    );
++  }
++}
++export function onSameDateRange({
++  firstDay,
++  secondDay,
++  numberOfDays,
++  firstDateInRange,
++}) {
++  const aDate = new XDate(firstDay);
++  const bDate = new XDate(secondDay);
++  const firstDayDate = new XDate(firstDateInRange);
++  const aDiff = aDate.getTime() - firstDayDate.getTime();
++  const bDiff = bDate.getTime() - firstDayDate.getTime();
++  const aTotalDays = Math.ceil(aDiff / (1000 * 3600 * 24));
++  const bTotalDays = Math.ceil(bDiff / (1000 * 3600 * 24));
++  const aWeek = Math.floor(aTotalDays / numberOfDays);
++  const bWeek = Math.floor(bTotalDays / numberOfDays);
++  return aWeek === bWeek;
+ }
+ export function sameWeek(a, b, firstDayOfWeek) {
+-    const weekDates = getWeekDates(a, firstDayOfWeek, 'yyyy-MM-dd');
+-    const element = weekDates instanceof XDate ? new XDate(b) : b;
+-    return weekDates?.includes(element);
++  const weekDates = getWeekDates(a, firstDayOfWeek, 'yyyy-MM-dd');
++  const element = weekDates instanceof XDate ? new XDate(b) : b;
++  return weekDates?.includes(element);
+ }
+ export function isPastDate(date) {
+-    const today = new XDate();
+-    const d = new XDate(date);
+-    if (today.getFullYear() > d.getFullYear()) {
++  const today = new XDate();
++  const d = new XDate(date);
++  if (today.getFullYear() > d.getFullYear()) {
++    return true;
++  }
++  if (today.getFullYear() === d.getFullYear()) {
++    if (today.getMonth() > d.getMonth()) {
++      return true;
++    }
++    if (today.getMonth() === d.getMonth()) {
++      if (today.getDate() > d.getDate()) {
+         return true;
++      }
+     }
+-    if (today.getFullYear() === d.getFullYear()) {
+-        if (today.getMonth() > d.getMonth()) {
+-            return true;
+-        }
+-        if (today.getMonth() === d.getMonth()) {
+-            if (today.getDate() > d.getDate()) {
+-                return true;
+-            }
+-        }
+-    }
+-    return false;
++  }
++  return false;
+ }
+ export function isToday(date) {
+-    const d = date instanceof XDate ? date : new XDate(date);
+-    return sameDate(d, XDate.today());
++  const d = date instanceof XDate ? date : new XDate(date);
++  return sameDate(d, XDate.today());
+ }
+ export function isGTE(a, b) {
+-    if (a && b) {
+-        return b.diffDays(a) > -1;
+-    }
++  if (a && b) {
++    return b.diffDays(a) > -1;
++  }
+ }
+ export function isLTE(a, b) {
+-    if (a && b) {
+-        return a.diffDays(b) > -1;
+-    }
++  if (a && b) {
++    return a.diffDays(b) > -1;
++  }
+ }
+ export function formatNumbers(date) {
+-    const numbers = getLocale().numbers;
+-    return numbers ? date.toString().replace(latinNumbersPattern, (char) => numbers[+char]) : date;
++  const numbers = getLocale().numbers;
++  return numbers
++    ? date.toString().replace(latinNumbersPattern, char => numbers[+char])
++    : date;
+ }
+ function fromTo(a, b) {
+-    const days = [];
+-    let from = +a;
+-    const to = +b;
+-    for (; from <= to; from = new XDate(from, true).addDays(1).getTime()) {
+-        days.push(new XDate(from, true));
+-    }
+-    return days;
++  const days = [];
++  let from = +a;
++  const to = +b;
++  for (; from <= to; from = new XDate(from, true).addDays(1).getTime()) {
++    days.push(new XDate(from, true));
++  }
++  return days;
+ }
+ export function month(date) {
+-    const year = date.getFullYear(), month = date.getMonth();
+-    const days = new XDate(year, month + 1, 0).getDate();
+-    const firstDay = new XDate(year, month, 1, 0, 0, 0, true);
+-    const lastDay = new XDate(year, month, days, 0, 0, 0, true);
+-    return fromTo(firstDay, lastDay);
++  const year = date.getFullYear(),
++    month = date.getMonth();
++  const days = new XDate(year, month + 1, 0).getDate();
++  const firstDay = new XDate(year, month, 1, 0, 0, 0, true);
++  const lastDay = new XDate(year, month, days, 0, 0, 0, true);
++  return fromTo(firstDay, lastDay);
+ }
+ export function weekDayNames(firstDayOfWeek = 0) {
+-    let weekDaysNames = getLocale().dayNamesShort;
+-    const dayShift = firstDayOfWeek % 7;
+-    if (dayShift) {
+-        weekDaysNames = weekDaysNames.slice(dayShift).concat(weekDaysNames.slice(0, dayShift));
+-    }
+-    return weekDaysNames;
++  let weekDaysNames = getLocale().dayNamesShort;
++  const dayShift = firstDayOfWeek % 7;
++  if (dayShift) {
++    weekDaysNames = weekDaysNames
++      .slice(dayShift)
++      .concat(weekDaysNames.slice(0, dayShift));
++  }
++  return weekDaysNames;
+ }
+ export function page(date, firstDayOfWeek = 0, showSixWeeks = false) {
+-    const days = month(date);
+-    let before = [];
+-    let after = [];
+-    const fdow = (7 + firstDayOfWeek) % 7 || 7;
+-    const ldow = (fdow + 6) % 7;
+-    firstDayOfWeek = firstDayOfWeek || 0;
+-    const from = days[0].clone();
+-    const daysBefore = from.getDay();
+-    if (from.getDay() !== fdow) {
+-        from.addDays(-(from.getDay() + 7 - fdow) % 7);
+-    }
+-    const to = days[days.length - 1].clone();
+-    const day = to.getDay();
+-    if (day !== ldow) {
+-        to.addDays((ldow + 7 - day) % 7);
+-    }
+-    const daysForSixWeeks = (daysBefore + days.length) / 6 >= 6;
+-    if (showSixWeeks && !daysForSixWeeks) {
+-        to.addDays(7);
+-    }
+-    if (isLTE(from, days[0])) {
+-        before = fromTo(from, days[0]);
+-    }
+-    if (isGTE(to, days[days.length - 1])) {
+-        after = fromTo(days[days.length - 1], to);
+-    }
+-    return before.concat(days.slice(1, days.length - 1), after);
++  const days = month(date);
++  let before = [];
++  let after = [];
++  const fdow = (7 + firstDayOfWeek) % 7 || 7;
++  const ldow = (fdow + 6) % 7;
++  firstDayOfWeek = firstDayOfWeek || 0;
++  const from = days[0].clone();
++  const daysBefore = from.getDay();
++  if (from.getDay() !== fdow) {
++    from.addDays(-(from.getDay() + 7 - fdow) % 7);
++  }
++  const to = days[days.length - 1].clone();
++  const day = to.getDay();
++  if (day !== ldow) {
++    to.addDays((ldow + 7 - day) % 7);
++  }
++  const daysForSixWeeks = (daysBefore + days.length) / 6 >= 6;
++  if (showSixWeeks && !daysForSixWeeks) {
++    to.addDays(7);
++  }
++  if (isLTE(from, days[0])) {
++    before = fromTo(from, days[0]);
++  }
++  if (isGTE(to, days[days.length - 1])) {
++    after = fromTo(days[days.length - 1], to);
++  }
++  return before.concat(days.slice(1, days.length - 1), after);
+ }
+ export function isDateNotInRange(date, minDate, maxDate) {
+-    return (minDate && !isGTE(date, new XDate(minDate))) || (maxDate && !isLTE(date, new XDate(maxDate)));
++  return (
++    (minDate && !isGTE(date, new XDate(minDate))) ||
++    (maxDate && !isLTE(date, new XDate(maxDate)))
++  );
+ }
+ export function getWeekDates(date, firstDay = 0, format) {
+-    const d = new XDate(date);
+-    if (date && d.valid()) {
+-        const daysArray = [d];
+-        let dayOfTheWeek = d.getDay() - firstDay;
+-        if (dayOfTheWeek < 0) {
+-            // to handle firstDay > 0
+-            dayOfTheWeek = 7 + dayOfTheWeek;
+-        }
+-        let newDate = d;
+-        let index = dayOfTheWeek - 1;
+-        while (index >= 0) {
+-            newDate = newDate.clone().addDays(-1);
+-            daysArray.unshift(newDate);
+-            index -= 1;
+-        }
+-        newDate = d;
+-        index = dayOfTheWeek + 1;
+-        while (index < 7) {
+-            newDate = newDate.clone().addDays(1);
+-            daysArray.push(newDate);
+-            index += 1;
+-        }
+-        if (format) {
+-            return daysArray.map(d => d.toString(format));
+-        }
+-        return daysArray;
+-    }
++  const d = new XDate(date);
++  if (date && d.valid()) {
++    const daysArray = [d];
++    let dayOfTheWeek = d.getDay() - firstDay;
++    if (dayOfTheWeek < 0) {
++      // to handle firstDay > 0
++      dayOfTheWeek = 7 + dayOfTheWeek;
++    }
++    let newDate = d;
++    let index = dayOfTheWeek - 1;
++    while (index >= 0) {
++      newDate = newDate.clone().addDays(-1);
++      daysArray.unshift(newDate);
++      index -= 1;
++    }
++    newDate = d;
++    index = dayOfTheWeek + 1;
++    while (index < 7) {
++      newDate = newDate.clone().addDays(1);
++      daysArray.push(newDate);
++      index += 1;
++    }
++    if (format) {
++      return daysArray.map(d => d.toString(format));
++    }
++    return daysArray;
++  }
+ }
+ export function getPartialWeekDates(date, numberOfDays = 7) {
+-    let index = 0;
+-    const partialWeek = [];
+-    while (index < numberOfDays) {
+-        partialWeek.push(generateDay(date || new XDate(), index));
+-        index++;
+-    }
+-    return partialWeek;
++  let index = 0;
++  const partialWeek = [];
++  while (index < numberOfDays) {
++    partialWeek.push(generateDay(date || new XDate(), index));
++    index++;
++  }
++  return partialWeek;
+ }
+ export function generateDay(originDate, daysOffset = 0) {
+-    const baseDate = originDate instanceof XDate ? originDate : new XDate(originDate);
+-    return toMarkingFormat(baseDate.clone().addDays(daysOffset));
++  const baseDate =
++    originDate instanceof XDate ? originDate : new XDate(originDate);
++  return toMarkingFormat(baseDate.clone().addDays(daysOffset));
+ }
+ export function getLocale() {
+-    return XDate.locales[XDate.defaultLocale];
++  return XDate.locales[XDate.defaultLocale];
++}
++
++export function isSunday(date) {
++  if (!isValidXDate(date)) {
++    return false;
++  }
++  return date.getDay() === 0;
+ }
+diff --git a/node_modules/react-native-calendars/src/day-state-manager.js b/node_modules/react-native-calendars/src/day-state-manager.js
+index 514e854..ca24e43 100644
+--- a/node_modules/react-native-calendars/src/day-state-manager.js
++++ b/node_modules/react-native-calendars/src/day-state-manager.js
+@@ -1,22 +1,23 @@
+-const { isToday, isDateNotInRange, sameMonth } = require('./dateutils');
+-const { toMarkingFormat } = require('./interface');
++const {isToday, isDateNotInRange, sameMonth, isSunday} = require('./dateutils');
++const {toMarkingFormat} = require('./interface');
+ export function getState(day, current, props, disableDaySelection) {
+-    const { minDate, maxDate, disabledByDefault, context } = props;
+-    let state = '';
+-    if (!disableDaySelection && ((context?.date ?? toMarkingFormat(current)) === toMarkingFormat(day))) {
+-        state = 'selected';
+-    }
+-    else if (isToday(day)) {
+-        state = 'today';
+-    }
+-    else if (disabledByDefault) {
+-        state = 'disabled';
+-    }
+-    else if (isDateNotInRange(day, minDate, maxDate)) {
+-        state = 'disabled';
+-    }
+-    else if (!sameMonth(day, current)) {
+-        state = 'disabled';
+-    }
+-    return state;
++  const {minDate, maxDate, disabledByDefault, context} = props;
++  let state = '';
++  if (
++    !disableDaySelection &&
++    (context?.date ?? toMarkingFormat(current)) === toMarkingFormat(day)
++  ) {
++    state = 'selected';
++  } else if (isToday(day)) {
++    state = 'today';
++  } else if (disabledByDefault) {
++    state = 'disabled';
++  } else if (isDateNotInRange(day, minDate, maxDate)) {
++    state = 'disabled';
++  } else if (!sameMonth(day, current)) {
++    state = 'disabled';
++  } else if (isSunday(day)) {
++    state = 'sunday';
++  }
++  return state;
+ }
